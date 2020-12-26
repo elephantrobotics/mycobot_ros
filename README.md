@@ -1,6 +1,9 @@
 # myCobotROS
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
+> Make sure that the top is flashed into `Atom2.lalpha` and the base is flashed into `Transponder`.<br>
+> ubuntu: 16.04LTS<br>
+> ros version: 1.12.17
 
 ## 1. Installation
 
