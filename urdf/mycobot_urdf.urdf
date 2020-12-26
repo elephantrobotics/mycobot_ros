@@ -8,7 +8,7 @@
     <visual>
       <geometry>
 	     <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_ros/urdf/joint1.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint1.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
 	<material name = "white">
@@ -21,7 +21,7 @@
     <visual>
       <geometry>
        
-       <mesh filename="package://mycobot_ros/urdf/joint2.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint2.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   <material name = "white">
@@ -35,7 +35,7 @@
     <visual>
       <geometry>
        
-       <mesh filename="package://mycobot_ros/urdf/joint3.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint3.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   <material name = "white">
@@ -49,7 +49,7 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_ros/urdf/joint4.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint4.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   <material name = "white">
@@ -65,7 +65,7 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_ros/urdf/joint5.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint5.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   <material name = "white">
@@ -79,7 +79,7 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_ros/urdf/joint6.dae"/>
+       <mesh filename="package://myCobotROS/urdf/joint6.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   <material name = "white">
