@@ -1,7 +1,7 @@
 # myCobotROS
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
-> Make sure that the top is flashed into `Atom2.lalpha` and the basic is flashed into `Transponder`.<br>
+> Make sure that `Atom2.lalpha` is flashed into the top Atom and `Transponder` is flashed into the base Basic .<br>
 > ubuntu: 16.04LTS<br>
 > ros version: 1.12.17
 
