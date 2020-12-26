@@ -1,7 +1,7 @@
 # myCobotROS
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
-> Make sure that `Atom2.lalpha` is flashed into the top Atom and `Transponder` is flashed into the base Basic .<br>
+> Make sure that `Atom2.1alpha` is flashed into the top Atom and `Transponder` is flashed into the base Basic .<br>
 > ubuntu: 16.04LTS<br>
 > ros version: 1.12.17
 
@@ -60,7 +60,7 @@ rocore #open another tab
 a) For display or marker control, in second terminal, run:
 
 ```bash
-roslaunch myCobotROS display.launch
+roslaunch myCobotROS mycobot.launch
 ```
 
 b) For slider bar control, in second terminal, run:

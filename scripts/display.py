@@ -61,6 +61,11 @@ def talker():
         marker_.scale.z = 0.04
 
         #marker position initial 
+        # print(coords)
+        if not coords:
+            coords = [0,0,0,0,0,0]
+            rospy.loginfo('error [101]: can not get coord values')
+	
         marker_.pose.position.x =  coords[1] / 1000 * -1
         marker_.pose.position.y =  coords[0] / 1000 
         marker_.pose.position.z =  coords[2] / 1000
