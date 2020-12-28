@@ -24,6 +24,15 @@ $ cd ~/catkin_ws
 $ catkin_make
 ```
 
+### 1.3 Test API
+
+```bash
+cd ~/catkin_ws/src/myCobotRos
+python3 scripts/test.py
+```
+
+If the myCobot color change to red, it's mean the API is working normally.
+
 ## 2. Package Modules
 
 ### 2.1 Nodes
