@@ -173,6 +173,9 @@ def listener():
     menu_handler.insert('First Entry', callback=processFeedback)
     menu_handler.insert('Second Entry', callback=processFeedback)
 
+    if not coords:
+        coords = [0,0,0,0,0,0]
+        rospy.loginfo('error [101]: can not get coord values')	
     # initial position
     position = Point(coords[1] / -1000, coords[0] / 1000, coords[2] / 1000)
     # orientation = Quaternion(coords[4] / 100, coords[3] / 100, coords[5] / 100, 1)

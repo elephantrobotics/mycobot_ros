@@ -50,6 +50,9 @@ class MyCobot():
     def power_off(self):
         self._write('fe fe 02 11 fa')
 
+    def set_free_mode(self):
+        self._write('fefe0213fa')
+
     def get_angles(self):
         '''Get all angle return a list
 
