@@ -11,8 +11,9 @@
 
 ### 1.1 Pre-Requriements
 
-For using this package, the [pymycobot]() library should be installed first.(demo comes with)
+For using this package, the [api]() library should be installed first.(demo comes with)
 
+If you want to use api alone, you can look here [https://github.com/elephantrobotics/myCobotROS/mian/script/pythonAPI/README.md](https://github.com/elephantrobotics/myCobotROS/mian/script/pythonAPI/README.md)
 ### 1.2 Package Download and Install
 
 Install ros package in your src folder of your Catkin workspace.
