@@ -3,6 +3,7 @@
 **Notes**:
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
+
 > Make sure that `Atom2.1alpha` is flashed into the top Atom and `Transponder` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
 > ubuntu: 16.04LTS<br>
 > ros version: 1.12.17
@@ -13,7 +14,8 @@
 
 For using this package, the [api]() library should be installed first.(demo comes with)
 
-If you want to use api alone, you can look here [https://github.com/elephantrobotics/myCobotROS/mian/script/pythonAPI/README.md](https://github.com/elephantrobotics/myCobotROS/mian/script/pythonAPI/README.md)
+If you want to use api alone, you can look here [https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md](https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md)
+
 ### 1.2 Package Download and Install
 
 Install ros package in your src folder of your Catkin workspace.
@@ -57,7 +59,7 @@ If the myCobot color change to red, it's mean the API is working normally.
 
 - Visualization -- display.launch: This function will display robot arm movement in realtime when you manually move mycobot.
 
-- Control -- control.launch: This function will allow you use slider bar to control movement of the robot arm. 
+- Control -- control.launch: This function will allow you use slider bar to control movement of the robot arm.
 
 ### 3.2 Lanuch and Run
 
@@ -107,5 +109,8 @@ c) For marker control
 rosrun myCobots control_marker.py
 ```
 
+## Q & A
 
+**Q: error[101]**
 
+**A:** Make sure that the serial port is not occupied, and that the correct firmware is burned in for atom and basic
