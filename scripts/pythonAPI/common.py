@@ -9,5 +9,10 @@ class Angle(enum.Enum):
     J6 = '05'
 
 
-class Coords(enum.Enum):
-    ...
+class Coord(enum.Enum):
+    X = '00'
+    Y = '01'
+    Z = '02'
+    Rx = '03'
+    Ry = '04'
+    Rz = '05'

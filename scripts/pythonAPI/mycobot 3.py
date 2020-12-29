@@ -26,8 +26,9 @@ class MyCobot():
     '''
 
     def __init__(self):
-        _prot = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                        shell=True)
+        _prot = subprocess.run(['echo -n /dev/ttyUSB*'], 
+                                    stdout=subprocess.PIPE, 
+                                    shell=True).stdout.decode('utf-8')
         _boudrate = '115200'
         _timeout = 0.1
 
@@ -44,10 +45,10 @@ class MyCobot():
             exit(0)
 
     def power_on(self):
-        self._write('fefe0210fa')
+        self._write('fe fe 02 10 fa')
 
     def power_off(self):
-        self._write('fefe0211fa')
+        self._write('fe fe 02 11 fa')
 
     def set_free_mode(self):
         self._write('fefe0213fa')
@@ -148,7 +149,7 @@ class MyCobot():
             data_list (list): [x, y, z, rx, ry, rz] (mm)
 
         '''
-        command = 'fefe0223fa'
+        command = 'fe fe 02 23 fa'
         self._write(command)
         if self.serial_port.inWaiting() > 0:
             data = self._read()
@@ -185,17 +186,17 @@ class MyCobot():
         if len(coords) != 6:
             print('The lenght of coords is not right')
             return
-        command = 'fefe1025'
+        command = 'fefe1025 '
         speed = hex(speed)[2:]
         speed = self._complement_zero(speed, digit=2)
         mode = self._complement_zero(hex(mode)[2:], digit=2)
         for coord in coords:
             _hex = self._coord_to_hex(coord)
 
-            command += (_hex)
+            command += (_hex + ' ')
 
         command += '{}{}fa'.format(speed, mode)
-        print(command)
+        # print(command)
         self._write(command)
 
     def is_servo_enable(self):
@@ -211,12 +212,12 @@ class MyCobot():
             rgs (str): example 'ff0000'
 
         '''
-        command = 'fefe056a{}fa'.format(rgb)
+        command = 'fe fe 05 6a {} fa'.format(rgb)
         # print(command)
         self._write(command)
 
     def is_moving(self):
-        command = 'fefe022bfa'
+        command = 'fe fe 02 2b fa'
         self._write(command)
         data = self._read(2)
         # print(data)
@@ -229,16 +230,16 @@ class MyCobot():
             return False
 
     def pause(self):
-        self._write('fefe0226fa')
+        self._write('fe fe 02 26 fa')
     
     def resume(self):
-        self._write('fefe0228fa')
+        self._write('fe fe 02 28 fa')
 
     def stop(self):
-        self._write('fefe0229fa')
+        self._write('fe fe 02 29 fa')
 
     def is_paused(self):
-        self._write('fefe0227fa')
+        self._write('fe fe 02 27 fa')
         data = self._read()
         flag = int(data.hex(), 16)
         return False if flag else True
@@ -247,11 +248,11 @@ class MyCobot():
         if len(coords) != 6:
             print('The lenght of coords is not right')
             return
-        command = 'fefe0d2a'
+        command = 'fe fe 0d 2a '
         for coord in coords:
             _hex = self._coord_to_hex(coord)
 
-            command += (_hex)
+            command += (_hex + ' ')
 
         command += 'fa'
         print(command)
@@ -261,7 +262,7 @@ class MyCobot():
         return False if flag else True
 
     def get_speed(self):
-        self._write('fefe0240fa')
+        self._write('fe fe 02 40 fa')
         data = self._read()
         if data:
             return int(data.hex(), 16)
@@ -276,11 +277,11 @@ class MyCobot():
         if not 0 <= speed <= 100:
             raise Exception('speed value out of range (0 ~ 100)')
         _hex = str(hex(speed))[2:]
-        self._write('fefe0341{}fa'.format(_hex))
+        self._write('fe fe 03 41 {} fa'.format(_hex))
 
     def _parse_data(self, data, name):
         data_list = []
-        data = data.encode('hex')
+        data = data.hex()
         # print(data)
         if name == 'get_angles':
             data = data[-26:-2]
@@ -305,17 +306,17 @@ class MyCobot():
 
         return (data_list)
 
-    def _hex_to_degree(self, _hex):
+    def _hex_to_degree(self, _hex: str):
         _int = self._hex_to_int(_hex)
         return  _int * 18 / 314
     
-    def _hex_to_int(self, _hex):
+    def _hex_to_int(self, _hex: str):
         _int = int(_hex, 16)
         if _int > 0x8000:
             _int -= 0x10000
         return _int
 
-    def _angle_to_hex(self, _degree, is_degree=True):
+    def _angle_to_hex(self, _degree: float, is_degree=True):
         if is_degree:
             radian = (_degree * (3140 / 180))
         else:
@@ -324,7 +325,7 @@ class MyCobot():
         if radian < 0:
             radian += 0x10000
         radian = round(radian)
-        s = str(hex(int(radian)))[2:] 
+        s = str(hex(radian))[2:] 
         s = self._complement_zero(s)
         return  s
 
@@ -333,7 +334,7 @@ class MyCobot():
         coord = int(coord)
         if coord < 0:
             coord += 0x10000
-        s = str(hex(int(coord)))[2:]
+        s = str(hex(coord))[2:]
         s = self._complement_zero(s)
         return s
     
@@ -345,12 +346,12 @@ class MyCobot():
         s = ''.join(['0' for _ in range(need_len)] + [s])
         return  s
 
-    def _write(self, data):
+    def _write(self, data: str):
         # print(data)
-        data = data.decode('hex')
+        data = bytes.fromhex(data)
         self.serial_port.write(data)
         time.sleep(0.05)
 
-    def _read(self, size=1024):
+    def _read(self, size: int=1024):
         data = self.serial_port.read(size)
         return data
