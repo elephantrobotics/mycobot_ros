@@ -94,7 +94,8 @@ class MyCobot():
 
         '''
         _hex = self._angle_to_hex(degree)
-        command = 'fefe0621{}{}{}fa'.format(id, _hex, hex(speed)[2:])
+        speed = self._complement_zero(hex(speed)[2:], digit=2)
+        command = 'fefe0621{}{}{}fa'.format(id, _hex, speed)
         # print(command)  
         self._write(command)
 
