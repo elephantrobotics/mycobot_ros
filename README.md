@@ -30,7 +30,7 @@ $ catkin_make
 ### 1.3 Test API
 
 ```bash
-cd ~/catkin_ws/src/myCobotRos
+cd ~/catkin_ws/src/myCobotROS
 python3 scripts/test.py
 ```
 
@@ -66,7 +66,7 @@ If the myCobot color change to red, it's mean the API is working normally.
 -**Step 1**: In one terminal, open the core.
 
 ```bash
-rocore #open another tab
+roscore #open another tab
 ```
 
 -**Step 2**: Launch
@@ -94,19 +94,19 @@ rosrun rviz rviz
 a) For display
 
 ```bash
-rosrun myCobotRos display.py
+rosrun myCobotROS display.py
 ```
 
 b) For slider bar.
 
 ```bash
-rosrun myCobotRos control_slider.py
+rosrun myCobotROS control_slider.py
 ```
 
 c) For marker control
 
 ```bash
-rosrun myCobots control_marker.py
+rosrun myCobotROS control_marker.py
 ```
 
 ## Q & A
