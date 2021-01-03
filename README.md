@@ -89,6 +89,12 @@ roslaunch myCobotROS control.launch
 rosrun rviz rviz
 ```
 
+If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
+
+```bash
+rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
+```
+
 -**Step 4**: Run python script
 
 a) For display
