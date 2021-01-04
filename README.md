@@ -1,5 +1,7 @@
 # myCobotROS
 
+![Demo](./Screenshot-1.png)
+
 **Notes**:
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
