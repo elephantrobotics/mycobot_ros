@@ -1,5 +1,9 @@
 # myCobotROS
 
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](READMEcn.md)
+
+[English](README.md) | [中文](READMEcn.md)
+
 ![Demo](./Screenshot-1.png)
 
 **Notes**:
@@ -29,20 +33,18 @@ $ cd ~/catkin_ws
 $ catkin_make
 ```
 
-### 1.3 Test API
+### 1.3 Test Python API
 
 ```bash
 cd ~/catkin_ws/src/myCobotROS
 python3 scripts/test.py
 ```
 
-If the myCobot color change to red, it's mean the API is working normally.
-
 ## 2. Package Modules
 
 ### 2.1 Nodes
 
-- `display` is a display node. When the node is running, When the node is running, the model of ROS will show the movement of mycobot synchronously.
+- `display` is a display node. When the node is running, the model of ROS will show the movement of mycobot synchronously.
 - `control_slider` is the node which slider bar control.
 - `control_marker` is the node which use interactive marker control.
 
