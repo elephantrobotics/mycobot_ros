@@ -13,6 +13,8 @@
 > 请确保顶部的 Atom 烧入 `Atom2.1alpha`，底部的 Basic 烧入 `Transponder`。烧录工具的下载地址: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
 > 该包的测试环境：<br> &nbsp;&nbsp;&nbsp;&nbsp; ubuntu: 16.04LTS<br> &nbsp;&nbsp;&nbsp;&nbsp; ros version: 1.12.17
 
+ROS 下载地址：[http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
+
 ## 1. 安装
 
 ### 1.1 前提

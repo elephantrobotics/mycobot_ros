@@ -14,6 +14,8 @@
 > ubuntu: 16.04LTS<br>
 > ros version: 1.12.17
 
+Download ROS [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
+
 ## 1. Installation
 
 ### 1.1 Pre-Requriements
