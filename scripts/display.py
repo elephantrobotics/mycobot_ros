@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # license removed for brevity
-import time
+import time, subprocess
 
 import rospy
 from sensor_msgs.msg import JointState
@@ -77,7 +77,9 @@ def talker():
         rate.sleep()
 
 if __name__ == '__main__':
-    mycobot = MyCobot()
+    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
+                                    shell=True)
+    mycobot = MyCobot(port)
     try:
         talker()
     except rospy.ROSInterruptException:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # from std_msgs.msg import String
-import time
+import time, subprocess
 
 import rospy
 from interactive_markers.interactive_marker_server import *
@@ -210,21 +210,24 @@ def listener():
         joint_state_send.header.stamp = rospy.Time.now()
 
         angles = mycobot.get_angles_of_radian()
-        data_list = []
-        for index, value in enumerate(angles):
-            if index != 2:
-                value *= -1
-            data_list.append(value)
+        rospy.loginfo(angles)
+        if angles:
+            data_list = []
+            for index, value in enumerate(angles):
+                if index != 2:
+                    value *= -1
+                data_list.append(value)
 
-        rospy.loginfo(data_list)
-        
-        joint_state_send.position = data_list
+            
+            joint_state_send.position = data_list
 
-        pub.publish(joint_state_send)
+            pub.publish(joint_state_send)
 
         rate.sleep()
 
 
 if __name__ == '__main__':
-    mycobot = MyCobot()
+    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
+                                    shell=True)
+    mycobot = MyCobot(port)
     listener()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # from std_msgs.msg import String
-import time
+import time, subprocess
 
 import rospy
 from sensor_msgs.msg import JointState
@@ -29,5 +29,7 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
-    mc = MyCobot()
+    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
+                                    shell=True)
+    mc = MyCobot(port)
     listener()
