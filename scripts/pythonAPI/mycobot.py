@@ -1,6 +1,6 @@
 import sys
 sys.path.append('.')
-import time, subprocess, serial, struct
+import time, serial, struct
 
 class MyCobot():
     '''MyCobot Python API
@@ -16,6 +16,9 @@ class MyCobot():
         set_color()             :
         get_coords()            :
         send_coords()           :
+        jog_angle()             :
+        jog_coord()             :
+        jog_stop()              :
         is_moving()             :
         pause()                 :
         resume()                :
@@ -25,9 +28,10 @@ class MyCobot():
         set_speed()             :
     '''
 
-    def __init__(self):
-        _prot = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                        shell=True)
+    def __init__(self, port):
+        # _prot = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
+        #                                 shell=True)
+        _prot = port
         _boudrate = '115200'
         _timeout = 0.1
 
@@ -196,8 +200,41 @@ class MyCobot():
             command += (_hex)
 
         command += '{}{}fa'.format(speed, mode)
-        print(command)
+        # print(command)
         self._write(command)
+
+    def jog_angle(joint_id, direction, speed):
+        '''Joint control
+
+            joint_id: string
+            direction: int [0, 1]
+            speed: int (0 - 100)
+        '''
+        command = 'fefe0530'
+        direction = hex(direction)[2:]
+        direction = self._complement_zero(direction, digit=2)
+        speed = hex(speed)[2:]
+        speed = self._complement_zero(speed, digit=2)
+        command += '{}{}{}fa'.format(joint_id, direction, speed)
+        self._write(command)
+        
+    def jog_coord(coord, direction, speed):
+        '''Coord control 
+
+            coord: string
+            direction: int [0, 1]
+            speed: int (0 - 100)
+        '''
+        command = 'fefe0532'
+        direction = hex(direction)[2:]
+        direction = self._complement_zero(direction, digit=2)
+        speed = hex(speed)[2:]
+        speed = self._complement_zero(speed, digit=2)
+        command += '{}{}{}fa'.format(coord, direction, speed)
+        self._write(command)
+
+    def jog_stop(self):
+        self._write('fefe0234fa')
 
     def is_servo_enable(self):
         pass
@@ -282,7 +319,10 @@ class MyCobot():
     def _parse_data(self, data, name):
         data_list = []
         data = data.encode('hex')
-        # print(data)
+        data = data[-28:]
+        print(data)
+        if not (data.startswith('20') and data.endswith('fa')):
+            return []
         if name == 'get_angles':
             data = data[-26:-2]
             for i in range(6):
@@ -294,14 +334,14 @@ class MyCobot():
             data = data[-26:-2]
             for i in range(6):
                 _hex = data[i * 4: (i * 4) + 4]
-                _coord = self._hex_to_int(_hex) / 10
+                _coord = self._hex_to_int(_hex) / 10.0
                 data_list.append(_coord)
 
         elif name == 'get_angles_of_radian':
             data = data[-26:-2]
             for i in range(6):
                 _hex = data[i * 4: (i * 4) + 4]
-                _radian = self._hex_to_int(_hex) / 1000
+                _radian = self._hex_to_int(_hex) / 1000.0
                 data_list.append(_radian)
 
         return (data_list)
