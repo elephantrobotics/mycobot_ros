@@ -203,7 +203,7 @@ class MyCobot():
         # print(command)
         self._write(command)
 
-    def jog_angle(joint_id, direction, speed):
+    def jog_angle(self, joint_id, direction, speed):
         '''Joint control
 
             joint_id: string
@@ -218,7 +218,7 @@ class MyCobot():
         command += '{}{}{}fa'.format(joint_id, direction, speed)
         self._write(command)
         
-    def jog_coord(coord, direction, speed):
+    def jog_coord(self, coord, direction, speed):
         '''Coord control 
 
             coord: string
