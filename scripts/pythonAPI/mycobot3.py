@@ -293,7 +293,7 @@ class MyCobot():
             command += (_hex + ' ')
 
         command += 'fa'
-        print(command)
+        # print(command)
         self._write(command)
         data = self._read()
         flag = int(data.hex(), 16)

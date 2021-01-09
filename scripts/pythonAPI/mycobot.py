@@ -260,7 +260,7 @@ class MyCobot():
         # print(data)
         if not data:
             return True
-        flag = int(data.hex(), 16)
+        flag = int(data.encode('hex'), 16)
         if flag:
             return True
         else:
@@ -278,7 +278,7 @@ class MyCobot():
     def is_paused(self):
         self._write('fefe0227fa')
         data = self._read()
-        flag = int(data.hex(), 16)
+        flag = int(data.encode('hex'), 16)
         return False if flag else True
     
     def is_in_position(self, coords):
@@ -292,17 +292,17 @@ class MyCobot():
             command += (_hex)
 
         command += 'fa'
-        print(command)
+        # print(command)
         self._write(command)
         data = self._read()
-        flag = int(data.hex(), 16)
+        flag = int(data.encode('hex'), 16)
         return False if flag else True
 
     def get_speed(self):
         self._write('fefe0240fa')
         data = self._read()
         if data:
-            return int(data.hex(), 16)
+            return int(data.encode('hex'), 16)
 
     def set_speed(self, speed):
         '''Set speed value
@@ -320,7 +320,7 @@ class MyCobot():
         data_list = []
         data = data.encode('hex')
         data = data[-28:]
-        print(data)
+        # print(data)
         if not (data.startswith('20') and data.endswith('fa')):
             return []
         if name == 'get_angles':
