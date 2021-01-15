@@ -1,7 +1,7 @@
 import time, random, subprocess
-from pythonAPI.mycobot import MyCobot
+from pymycobot.mycobot import MyCobot
 # from pythonAPI.mycobot3 import MyCobot as MyCobot3
-from pythonAPI.common import Angle, Coord
+from pymycobot.common import Angle, Coord
 
 if __name__ == '__main__': 
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 

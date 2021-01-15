@@ -5,7 +5,7 @@ import time, subprocess
 import rospy
 from sensor_msgs.msg import JointState
 
-from pythonAPI.mycobot import MyCobot
+from pymycobot.mycobot import MyCobot
 
 
 def callback(data):

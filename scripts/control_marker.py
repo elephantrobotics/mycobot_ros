@@ -12,7 +12,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
 
-from pythonAPI.mycobot import MyCobot
+from pymycobot.mycobot import MyCobot
 
 
 server = None
