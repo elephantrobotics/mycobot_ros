@@ -20,7 +20,7 @@ Download ROS [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Inst
 
 ### 1.1 Pre-Requriements
 
-For using this package, the [api]() library should be installed first.(demo comes with)
+For using this package, the [api](https://github.com/elephantrobotics/pymycobot.git) library should be installed first.
 
 If you want to use api alone, you can look here [https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md](https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md)
 
