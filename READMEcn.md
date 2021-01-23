@@ -19,9 +19,13 @@ ROS 下载地址：[http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/RO
 
 ### 1.1 前提
 
-要使用该包，请确保 [python api]() 已正确安装（已自带）。
+要使用该包，请确保 [python api](https://github.com/elephantrobotics/pymycobot.git) 已正确安装。
 
-如果你仅仅想单独使用 api, 你可以去到这里 [https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md](https://github.com/elephantrobotics/myCobotROS/blob/main/scripts/pythonAPI/README.md)
+如果你仅仅想单独使用 api, 你可以去到这里 [https://github.com/elephantrobotics/pymycobot.git](https://github.com/elephantrobotics/pymycobot.git)
+
+```bash
+pip install pymycobot==1.0.7
+```
 
 ### 1.2 Ros 包的下载和安装
 
