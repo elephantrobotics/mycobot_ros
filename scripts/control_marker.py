@@ -209,7 +209,7 @@ def listener():
     while not rospy.is_shutdown():
         joint_state_send.header.stamp = rospy.Time.now()
 
-        angles = mycobot.get_angles_of_radian()
+        angles = mycobot.get_radians()
         rospy.loginfo(angles)
         if angles:
             data_list = []
@@ -228,6 +228,6 @@ def listener():
 
 if __name__ == '__main__':
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
+                                    shell=True).decode()
     mycobot = MyCobot(port)
     listener()

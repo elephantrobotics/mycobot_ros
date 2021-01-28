@@ -10,8 +10,10 @@
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
 
-> 请确保顶部的 Atom 烧入 `Atom2.1alpha`，底部的 Basic 烧入 `Transponder`。烧录工具的下载地址: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
+> 请确保顶部的 Atom 烧入 `Atom`，底部的 Basic 烧入 `Transponder`。烧录工具的下载地址: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
 > 该包的测试环境：<br> &nbsp;&nbsp;&nbsp;&nbsp; ubuntu: 16.04LTS<br> &nbsp;&nbsp;&nbsp;&nbsp; ros version: 1.12.17
+
+**If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)**
 
 ROS 下载地址：[http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
 
@@ -24,7 +26,7 @@ ROS 下载地址：[http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/RO
 如果你仅仅想单独使用 api, 你可以去到这里 [https://github.com/elephantrobotics/pymycobot.git](https://github.com/elephantrobotics/pymycobot.git)
 
 ```bash
-pip install pymycobot==1.0.7
+pip install pymycobot --user
 ```
 
 ### 1.2 Ros 包的下载和安装
