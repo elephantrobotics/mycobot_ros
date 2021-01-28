@@ -17,7 +17,7 @@ def callback(data):
             value *= -1
         data_list.append(value)
 
-    mc.send_angles_by_radian(data_list, 80)
+    mc.send_radians(data_list, 80)
     # time.sleep(0.5)
     
 def listener():
@@ -30,6 +30,6 @@ def listener():
 
 if __name__ == '__main__':
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
+                                    shell=True).decode()
     mc = MyCobot(port)
     listener()
