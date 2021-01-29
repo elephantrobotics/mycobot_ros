@@ -25,7 +25,7 @@ Download ROS [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Inst
 For using this package, the [Python api](https://github.com/elephantrobotics/pymycobot.git) library should be installed first.
 
 ```bash
-pip install pymycobot --user
+pip install pymycobot==1.0.7 --user
 ```
 
 ### 1.2 Package Download and Install
