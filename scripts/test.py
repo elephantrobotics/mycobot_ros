@@ -17,9 +17,9 @@ if __name__ == '__main__':
 
     color_name = ['red', 'green', 'blue']
     color_code = ['ff0000', '00ff00', '0000ff']
-    print('::ser_color()')
+    print('::ser_led_color()')
     i = random.randint(0, len(color_code) - 1)
-    mycobot.set_color(color_code[i])
+    mycobot.set_led_color(color_code[i])
     print('==>set color {}\n'.format(color_name[i]))
     time.sleep(0.5)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print('==> send coords [160,160,160,0,0,0], speed 70, mode 0\n')
     time.sleep(3.0)
 
-    print(mycobot.is_in_position(coord_list))
+    print(mycobot.is_in_position(coord_list, 1))
     time.sleep(1)
 
     print('::send_coord()')
