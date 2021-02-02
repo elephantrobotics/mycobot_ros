@@ -5,7 +5,7 @@ from pymycobot.genre import Angle, Coord
 
 if __name__ == '__main__': 
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
+                                    shell=True).decode()
     mycobot = MyCobot(port)
 
     # port = subprocess.run(['echo -n /dev/ttyUSB*'], 
