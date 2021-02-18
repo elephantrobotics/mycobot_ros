@@ -1,18 +1,12 @@
 # myCobotROS
 
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](READMEcn.md)
-
-[English](README.md) | [中文](READMEcn.md)
-
-![Demo](./Screenshot-1.png)
-
 **Notes**:
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
 
 > Make sure that `Atom` is flashed into the top Atom and `Transponder` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
-> ubuntu: 16.04LTS<br>
-> ros version: 1.12.17
+> ubuntu: 20.04LTS<br>
+> ros version: ROS2 Foxy
 
 **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)**
 
@@ -25,7 +19,7 @@ Download ROS [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Inst
 For using this package, the [Python api](https://github.com/elephantrobotics/pymycobot.git) library should be installed first.
 
 ```bash
-pip install pymycobot --user
+pip3 install pymycobot --user
 ```
 
 ### 1.2 Package Download and Install
@@ -33,10 +27,12 @@ pip install pymycobot --user
 Install ros package in your src folder of your Catkin workspace.
 
 ```bash
-$ cd ~/catkin_ws/src
-$ git clone https://github.com/elephantrobotics/myCobotROS.git
-$ cd ~/catkin_ws
-$ catkin_make
+$ cd ~/ros2_ws/src
+$ git clone -b https://github.com/nisshan-x/myCobotROS.git
+$ cd ~/ros2_ws
+$ rosdep update
+$ rosdep install -r -y -i --from-paths src
+$ colcon build
 ```
 
 ### 1.3 Test Python API
@@ -73,56 +69,22 @@ python scripts/test.py
 
 ### 3.2 Lanuch and Run
 
--**Step 1**: In one terminal, open the core.
-
-```bash
-roscore #open another tab
-```
-
--**Step 2**: Launch
-
 a) For display or marker control, in second terminal, run:
 
 ```bash
-roslaunch myCobotROS mycobot.launch
+ros2 launch myCobotROS control_marker.launch.py
 ```
 
 b) For slider bar control, in second terminal, run:
 
 ```
-roslaunch myCobotROS control.launch
+ros2 launch myCobotROS control_slider.launch.py
 ```
 
--**Step 3**: Open rviz to view robot
+c) Just see myCobot pose in rviz
 
-```bash
-rosrun rviz rviz
 ```
-
-If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
-
-```bash
-rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
-```
-
--**Step 4**: Run python script
-
-a) For display
-
-```bash
-rosrun myCobotROS display.py
-```
-
-b) For slider bar.
-
-```bash
-rosrun myCobotROS control_slider.py
-```
-
-c) For marker control
-
-```bash
-rosrun myCobotROS control_marker.py
+ros2 launch myCobotROS display.launch.py
 ```
 
 ## Q & A

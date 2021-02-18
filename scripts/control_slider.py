@@ -1,35 +1,38 @@
-#!/usr/bin/env python2
-# from std_msgs.msg import String
-import time, subprocess
+#!/usr/bin/env python3
+import subprocess
 
-import rospy
+import rclpy
+from rclpy.node import Node
 from sensor_msgs.msg import JointState
 
 from pymycobot.mycobot import MyCobot
 
+class ControlSlider(Node):
+    def __init__(self):
+        super().__init__('control_slider')
+        port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
+                                    shell=True).decode()
+        self.mc = MyCobot(port)
+        self.sub = self.create_subscription(JointState, "joint_states", self.callback)
 
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    # print(data.position)
-    data_list = []
-    for index, value in enumerate(data.position):
-        if index != 2:
-            value *= -1
-        data_list.append(value)
+    def callback(self, data):
+        self.get_logger().info("%s", data.position)
+        data_list = []
+        for index, value in enumerate(data.position):
+            if index != 2:
+                value *= -1
+            data_list.append(value)
 
-    mc.send_radians(data_list, 80)
-    # time.sleep(0.5)
-    
-def listener():
-    rospy.init_node('control_slider', anonymous=True)
+        self.mc.send_radians(data_list, 80)
 
-    rospy.Subscriber("joint_states", JointState, callback)
-
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+def main(args=None):
+    rclpy.init(args=args)
+    try:
+        control_slider = ControlSlider()
+        rclpy.spin(control_slider)
+    finally:
+        control_slider.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True).decode()
-    mc = MyCobot(port)
-    listener()
+    main()

@@ -1,17 +1,11 @@
 import time, random, subprocess
 from pymycobot.mycobot import MyCobot
-# from pythonAPI.mycobot3 import MyCobot as MyCobot3
 from pymycobot.genre import Angle, Coord
 
 if __name__ == '__main__': 
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
                                     shell=True).decode()
     mycobot = MyCobot(port)
-
-    # port = subprocess.run(['echo -n /dev/ttyUSB*'], 
-    #                             stdout=subprocess.PIPE, 
-    #                             shell=True).stdout.decode('utf-8')
-    # mycobot = MyCobot3(port)
 
     print('Start check api\n')
 
