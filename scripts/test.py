@@ -1,11 +1,11 @@
 import time, random, subprocess
 from pymycobot.mycobot import MyCobot
 # from pythonAPI.mycobot3 import MyCobot as MyCobot3
-from pymycobot.common import Angle, Coord
+from pymycobot.genre import Angle, Coord
 
 if __name__ == '__main__': 
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
+                                    shell=True).decode()
     mycobot = MyCobot(port)
 
     # port = subprocess.run(['echo -n /dev/ttyUSB*'], 
@@ -17,9 +17,9 @@ if __name__ == '__main__':
 
     color_name = ['red', 'green', 'blue']
     color_code = ['ff0000', '00ff00', '0000ff']
-    print('::ser_color()')
+    print('::ser_led_color()')
     i = random.randint(0, len(color_code) - 1)
-    mycobot.set_color(color_code[i])
+    mycobot.set_led_color(color_code[i])
     print('==>set color {}\n'.format(color_name[i]))
     time.sleep(0.5)
 
@@ -27,18 +27,18 @@ if __name__ == '__main__':
     print('==> degrees: {}\n'.format(mycobot.get_angles()))
     time.sleep(0.5)
 
-    print('::get_angles_of_radian()')
-    print('==> radians: {}\n'.format(mycobot.get_angles_of_radian()))
+    print('::get_radians()')
+    print('==> radians: {}\n'.format(mycobot.get_radians()))
     time.sleep(0.5)
-    
+
     print('::send_angles()')
     mycobot.send_angles([0,0,0,0,0,0], 80)
     print('==> set angles [0,0,0,0,0,0], speed 80\n')
     print('Is moving: {}'.format(mycobot.is_moving()))
     time.sleep(3)
 
-    print('::send_angles_by_radian')
-    mycobot.send_angles_by_radian([1,1,1,1,1,1], 70)
+    print('::send_radians')
+    mycobot.send_radians([1,1,1,1,1,1], 70)
     print('==> set raidans [1,1,1,1,1,1], speed 70\n')
     time.sleep(1.5)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print('==> send coords [160,160,160,0,0,0], speed 70, mode 0\n')
     time.sleep(3.0)
 
-    print(mycobot.is_in_position(coord_list))
+    print(mycobot.is_in_position(coord_list, 1))
     time.sleep(1)
 
     print('::send_coord()')

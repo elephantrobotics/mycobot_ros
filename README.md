@@ -43,7 +43,7 @@ $ catkin_make
 
 ```bash
 cd ~/catkin_ws/src/myCobotROS
-python3 scripts/test.py
+python scripts/test.py
 ```
 
 ## 2. Package Modules
