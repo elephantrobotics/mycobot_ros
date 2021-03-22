@@ -73,57 +73,40 @@ python scripts/test.py
 
 ### 3.2 Lanuch and Run
 
--**Step 1**: In one terminal, open the core.
+- **Use slide bar to control**
 
-```bash
-roscore #open another tab
-```
+    - lanuch ros and rviz
 
--**Step 2**: Launch
+    ```
+    roslanuch myCobotRos control_slider.lanuch
+    ```
 
-a) For display or marker control, in second terminal, run:
+    - run python script
 
-```bash
-roslaunch myCobotROS mycobot.launch
-```
+    ```
+    rosrun myCobotROS control_slider.py
+    ```
 
-b) For slider bar control, in second terminal, run:
+- **The model moves with the real manipulator**
 
-```
-roslaunch myCobotROS control.launch
-```
+    - lanuch ros and rviz
 
--**Step 3**: Open rviz to view robot
+    ```
+    roslanuch myCobotRos mycobot.lanuch
+    ```
 
-```bash
-rosrun rviz rviz
-```
+    - run python script
 
-If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
+    ```
+    rosrun myCobotROS display.py
+    ```
+
+
+<!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 
 ```bash
 rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
-```
-
--**Step 4**: Run python script
-
-a) For display
-
-```bash
-rosrun myCobotROS display.py
-```
-
-b) For slider bar.
-
-```bash
-rosrun myCobotROS control_slider.py
-```
-
-c) For marker control
-
-```bash
-rosrun myCobotROS control_marker.py
-```
+``` -->
 
 ## Q & A
 

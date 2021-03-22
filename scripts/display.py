@@ -41,8 +41,6 @@ def talker():
         angles = mycobot.get_radians()
         data_list = []
         for index, value in enumerate(angles):
-            if index != 2:
-                value *= -1
             data_list.append(value)
 
         joint_state_send.position = data_list

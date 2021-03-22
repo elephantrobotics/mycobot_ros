@@ -8,20 +8,7 @@ if __name__ == '__main__':
                                     shell=True).decode()
     mycobot = MyCobot(port)
 
-    # port = subprocess.run(['echo -n /dev/ttyUSB*'], 
-    #                             stdout=subprocess.PIPE, 
-    #                             shell=True).stdout.decode('utf-8')
-    # mycobot = MyCobot3(port)
-
     print('Start check api\n')
-
-    color_name = ['red', 'green', 'blue']
-    color_code = ['ff0000', '00ff00', '0000ff']
-    print('::ser_led_color()')
-    i = random.randint(0, len(color_code) - 1)
-    mycobot.set_led_color(color_code[i])
-    print('==>set color {}\n'.format(color_name[i]))
-    time.sleep(0.5)
 
     print('::get_angles()')
     print('==> degrees: {}\n'.format(mycobot.get_angles()))
