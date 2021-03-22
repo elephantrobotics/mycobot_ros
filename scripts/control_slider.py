@@ -9,12 +9,11 @@ from pymycobot.mycobot import MyCobot
 
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
+    #rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
     # print(data.position)
     data_list = []
+    print(data.position)
     for index, value in enumerate(data.position):
-        if index != 2:
-            value *= -1
         data_list.append(value)
 
     mc.send_radians(data_list, 80)
@@ -29,7 +28,10 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
+    print('sart')
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
                                     shell=True).decode()
+    print(port)
     mc = MyCobot(port)
+    print(mc)
     listener()

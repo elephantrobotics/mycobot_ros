@@ -124,7 +124,7 @@
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
-    <axis xyz="0 1  0"/>
+    <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint6"/>
     <child link="joint6_flange"/>
