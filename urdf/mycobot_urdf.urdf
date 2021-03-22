@@ -11,9 +11,6 @@
        <mesh filename="package://myCobotROS/urdf/joint1.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-	<material name = "white">
-		<color rgba = "0.1 0.1 0.9 1"/>
-	</material>
     </visual>
   </link>
 
@@ -24,9 +21,6 @@
        <mesh filename="package://myCobotROS/urdf/joint2.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-  <material name = "white">
-    <color rgba = "0.4 0.4 0.4 1"/>
-  </material>
     </visual>
   </link>
 
@@ -38,9 +32,6 @@
        <mesh filename="package://myCobotROS/urdf/joint3.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-  <material name = "white">
-    <color rgba = "0.4 0.4 0.4 1"/>
-  </material>
     </visual>
   </link>
 
@@ -52,9 +43,6 @@
        <mesh filename="package://myCobotROS/urdf/joint4.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-  <material name = "white">
-    <color rgba = "0.4 0.4 0.4 1"/>
-  </material>
     </visual>
   </link>
 
@@ -68,9 +56,6 @@
        <mesh filename="package://myCobotROS/urdf/joint5.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-  <material name = "white">
-    <color rgba = "0.4 0.4 0.4 1"/>
-  </material>
     </visual>
   </link>
 
@@ -82,9 +67,6 @@
        <mesh filename="package://myCobotROS/urdf/joint6.dae"/>
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
-  <material name = "white">
-    <color rgba = "0.4 0.4 0.4 1"/>
-  </material>
     </visual>
   </link>
 
@@ -92,13 +74,10 @@
   <link name="joint6_flange">
     <visual>
       <geometry>
-
-        <cylinder length="0.005" radius="0.02"/>
+       <!--- 0.0 0 -0.04 -->
+       <mesh filename="package://myCobotROS/urdf/joint7.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 0 " rpy = " 1.57075 0 0"/>
-  <material name = "white">
-    <color rgba = "0.9 0.9 0.9 1"/>
-  </material>
+    <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
     </visual>
   </link>
 
@@ -141,7 +120,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint5"/>
     <child link="joint6"/>
-    <origin xyz= "0.0288 0 0.02976" rpy = "0 0 0"/>  
+    <origin xyz= "0.0298 0 0.02876" rpy = "0 0 0"/>  
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
@@ -149,7 +128,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint6"/>
     <child link="joint6_flange"/>
-    <origin xyz= "0 0.0456 0.03792 " rpy = "0 0 0"/>  
+    <origin xyz= "0 0.0351 0.03792" rpy = "-1.570795 0 0"/>  
   </joint>
 
 
