@@ -75,10 +75,10 @@ python scripts/test.py
 
 - **Use slide bar to control**
 
-    - lanuch ros and rviz
+    - launch ros and rviz
 
     ```
-    roslanuch myCobotRos control_slider.lanuch
+    roslaunch myCobotROS control_slider.lanuch
     ```
 
     - run python script
@@ -89,10 +89,10 @@ python scripts/test.py
 
 - **The model moves with the real manipulator**
 
-    - lanuch ros and rviz
+    - launch ros and rviz
 
     ```
-    roslanuch myCobotRos mycobot.lanuch
+    roslanuch myCobotROS mycobot.lanuch
     ```
 
     - run python script
