@@ -78,7 +78,7 @@ python scripts/test.py
     - launch ros and rviz
 
     ```
-    roslaunch myCobotROS control_slider.lanuch
+    roslaunch myCobotROS control_slider.launch
     ```
 
     - run python script
@@ -92,7 +92,7 @@ python scripts/test.py
     - launch ros and rviz
 
     ```
-    roslanuch myCobotROS mycobot.lanuch
+    roslanuch myCobotROS mycobot.launch
     ```
 
     - run python script
