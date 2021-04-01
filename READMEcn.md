@@ -72,57 +72,33 @@ python scripts/test.py
 
 ### 3.2 启动和运行
 
--**步骤 1**: 在 terminal 中打开 roscore
+- 使用滑块控制
 
-```bash
-roscore #open another tab
-```
+  - 启动 ros 和 rviz
 
--**步骤 2**: 启动
+  ```
+  roslaunch myCobotROS control_slider.launch
+  ```
 
-a) 如果是展示或者用可交互标记控制, 在第二个 terminal 中运行:
+  - 运行 python 脚本
 
-```bash
-roslaunch myCobotROS mycobot.launch
-```
+  ```
+  rosrun myCobotROS control_slider.py
+  ```
 
-b) 如果是滑块控制, 在第二个 terminal 中运行:
+- 仿真模型同步机械臂
 
-```
-roslaunch myCobotROS control.launch
-```
+  - 启动 ros 和 rviz
 
--**步骤 3**: 打开 rviz（第三个 terminal）
+  ```
+  roslanuch myCobotROS mycobot.launch
+  ```
 
-```bash
-rosrun rviz rviz
-```
+  - 运行 python 脚本
 
-如果使用上面的命令，你将打开一个空白的 rviz，需要手动添加模块。当然，你也可以使用下面的命令打开 rviz 的同时加载一个保存好的 myCobot 模型。
-
-```bash
-rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
-```
-
--**步骤 4**: 运行 python 脚本（第四个 terminal）
-
-a) 展示脚本
-
-```bash
-rosrun myCobotROS display.py
-```
-
-b) 滑块控制脚本
-
-```bash
-rosrun myCobotROS control_slider.py
-```
-
-c) 可交互标记控制脚本
-
-```bash
-rosrun myCobotROS control_marker.py
-```
+  ```
+  rosrun myCobotROS display.py
+  ```
 
 ## Q & A
 

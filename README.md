@@ -75,32 +75,31 @@ python scripts/test.py
 
 - **Use slide bar to control**
 
-    - launch ros and rviz
+  - launch ros and rviz
 
-    ```
-    roslaunch myCobotROS control_slider.launch
-    ```
+  ```
+  roslaunch myCobotROS control_slider.launch
+  ```
 
-    - run python script
+  - run python script
 
-    ```
-    rosrun myCobotROS control_slider.py
-    ```
+  ```
+  rosrun myCobotROS control_slider.py
+  ```
 
 - **The model moves with the real manipulator**
 
-    - launch ros and rviz
+  - launch ros and rviz
 
-    ```
-    roslanuch myCobotROS mycobot.launch
-    ```
+  ```
+  roslanuch myCobotROS mycobot.launch
+  ```
 
-    - run python script
+  - run python script
 
-    ```
-    rosrun myCobotROS display.py
-    ```
-
+  ```
+  rosrun myCobotROS display.py
+  ```
 
 <!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 
