@@ -1,6 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # from std_msgs.msg import String
-import time, subprocess
+import time
+import subprocess
 
 import rospy
 from interactive_markers.interactive_marker_server import *
@@ -23,8 +24,10 @@ center_x_changed = 0
 center_y_changed = 0
 center_z_changed = 0
 
-# marker box 
-def processFeedback( feedback ):#
+# marker box
+
+
+def processFeedback(feedback):
     global center_x_changed, center_y_changed, center_z_changed
     current_x = feedback.pose.position.x
     current_y = feedback.pose.position.y
@@ -38,23 +41,24 @@ def processFeedback( feedback ):#
     center_y_changed = current_y
     center_z_changed = current_z
     print(center_x_changed, center_y_changed, center_z_changed,
-         _x, _y, _z)
+          _x, _y, _z)
 
     coords = [
-                current_y * 1000, 
-                current_x * -1000, 
-                current_z * 1000, 
-                _x * 100,
-                _y * 100,
-                _z * 100,
-             ]
+        current_y * 1000,
+        current_x * -1000,
+        current_z * 1000,
+        _x * 100,
+        _y * 100,
+        _z * 100,
+    ]
     speed = 80
     mode = 0
     mycobot.send_coords(coords, speed, mode)
 
     server.applyChanges()
 
-def makeBox( msg ):#
+
+def makeBox(msg):
     marker = Marker()
 
     marker.type = Marker.SPHERE
@@ -68,17 +72,19 @@ def makeBox( msg ):#
 
     return marker
 
-def makeBoxControl( msg ):#
-    control =  InteractiveMarkerControl()
+
+def makeBoxControl(msg):
+    control = InteractiveMarkerControl()
     control.always_visible = True
-    control.markers.append( makeBox(msg) )
-    msg.controls.append( control )
+    control.markers.append(makeBox(msg))
+    msg.controls.append(control)
     return control
 
-def make6DofMarker(fixed, interaction_mode, position, orientation, show_6dof = False):#
+
+def make6DofMarker(fixed, interaction_mode, position, orientation, show_6dof=False):
     int_marker = InteractiveMarker()
-    int_marker.header.frame_id = "/joint1"
-    int_marker.pose.position = position	# Defined the position of the marker
+    int_marker.header.frame_id = "joint1"
+    int_marker.pose.position = position  # Defined the position of the marker
     int_marker.pose.orientation = orientation
     int_marker.scale = 0.1
 
@@ -89,7 +95,7 @@ def make6DofMarker(fixed, interaction_mode, position, orientation, show_6dof = F
     makeBoxControl(int_marker)
     int_marker.controls[0].interaction_mode = interaction_mode
 
-    if show_6dof: 
+    if show_6dof:
         control = InteractiveMarkerControl()
         control.orientation.w = 1
         control.orientation.x = 1
@@ -111,7 +117,7 @@ def make6DofMarker(fixed, interaction_mode, position, orientation, show_6dof = F
         if fixed:
             control.orientation_mode = InteractiveMarkerControl.FIXED
         int_marker.controls.append(control)
-      
+
         control = InteractiveMarkerControl()
         control.orientation.w = 1
         control.orientation.x = 0
@@ -157,9 +163,10 @@ def make6DofMarker(fixed, interaction_mode, position, orientation, show_6dof = F
         int_marker.controls.append(control)
 
     server.insert(int_marker, processFeedback)
-    menu_handler.apply( server, int_marker.name )
+    menu_handler.apply(server, int_marker.name)
 
 # marker box finish
+
 
 def listener():
     global server
@@ -174,31 +181,31 @@ def listener():
     menu_handler.insert('Second Entry', callback=processFeedback)
 
     if not coords:
-        coords = [0,0,0,0,0,0]
-        rospy.loginfo('error [101]: can not get coord values')	
+        coords = [0, 0, 0, 0, 0, 0]
+        rospy.loginfo('error [101]: can not get coord values')
     # initial position
     position = Point(coords[1] / -1000, coords[0] / 1000, coords[2] / 1000)
     # orientation = Quaternion(coords[4] / 100, coords[3] / 100, coords[5] / 100, 1)
     orientation = Quaternion(0, 0, 0, 1)
-    make6DofMarker(True, InteractiveMarkerControl.NONE, 
+    make6DofMarker(True, InteractiveMarkerControl.NONE,
                    position, orientation, True)
     server.applyChanges()
 
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    rate = rospy.Rate(30) # 10hz
+    rate = rospy.Rate(30)  # 10hz
 
     # pub joint state
     joint_state_send = JointState()
     joint_state_send.header = Header()
 
     joint_state_send.name = [
-                            'joint2_to_joint1', 
-                            'joint3_to_joint2', 
-                            'joint4_to_joint3', 
-                            'joint5_to_joint4', 
-                            'joint6_to_joint5', 
-                            'joint6output_to_joint6'
-                            ]
+        'joint2_to_joint1',
+        'joint3_to_joint2',
+        'joint4_to_joint3',
+        'joint5_to_joint4',
+        'joint6_to_joint5',
+        'joint6output_to_joint6'
+    ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
 
@@ -218,7 +225,6 @@ def listener():
                     value *= -1
                 data_list.append(value)
 
-            
             joint_state_send.position = data_list
 
             pub.publish(joint_state_send)
@@ -227,7 +233,7 @@ def listener():
 
 
 if __name__ == '__main__':
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True).decode()
+    port = subprocess.check_output(['echo -n /dev/ttyUSB*'],
+                                   shell=True).decode()
     mycobot = MyCobot(port)
     listener()

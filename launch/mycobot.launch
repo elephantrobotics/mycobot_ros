@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
-	<arg name="model" default="$(find myCobotROS)/urdf/mycobot_urdf.urdf"/>
-	<arg name="rvizconfig" default="$(find myCobotROS)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot.rviz" />
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
-	<node name="control_slider" pkg="myCobotROS" type="control_slider.py"/> 
+	<node name="control_slider" pkg="mycobot_ros" type="control_slider.py"/> 
 	
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 </launch>
