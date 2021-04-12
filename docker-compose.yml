@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  ros:
+    image: elephantrobotics/myCobotROS
+    command: ["roslaunch myCobotROS control_slider.launch"]
+    privileged: true
+    environment:
+      PYTHONUNBUFFERED: 1
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: :1
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    build:
+      context: .
+      args:
+        UBUNTU_VERSION: "16.04"
+        ROS_DISTRO: "kinetic"
+        PYMYCOBOT_VERSION: ">=2<3"
