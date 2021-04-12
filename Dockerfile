@@ -1,22 +1,20 @@
+
 ARG UBUNTU_VERSION
+
 FROM nvidia/opengl:1.1-glvnd-runtime-ubuntu${UBUNTU_VERSION}
 
-# Add ROS ppa
-RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 lsb-release && \
-    echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list && \
-    apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-
-# DEBIAN_FRONTEND is so tzdata doesn't require user input during the apt install
-ENV DEBIAN_FRONTEND=noninteractive
-ARG ROS_DISTRO
-RUN apt-get update && \
-    apt-get install -y ros-${ROS_DISTRO}-desktop-full --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+# For this build, we pull the entire ros image, and then merge the filesystem
+# with the nvidia/opengl image, so that displaying to the screen on GPU
+# (or without GPU) works through docker.
+# I was unable to use the ROS_DISTRO variable here due to this issue:
+# https://github.com/docker/for-mac/issues/2155
+COPY --from=osrf/ros:kinetic-desktop-full / /
 
 # Add ROS env vars to the bashrc
 ENV BASH_ENV="/root/launch.sh"
 SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
+ARG ROS_DISTRO
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> $BASH_ENV
 
 # Install build dependencies
