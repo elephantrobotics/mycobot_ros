@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.xacro"/>
   <arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot_marker.rviz" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
