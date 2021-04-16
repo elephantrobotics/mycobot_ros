@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>myCobotROS</name>
+  <name>mycobot_ros</name>
   <version>0.1.0</version>
   <description>The myCobotROS package</description>
 
@@ -14,12 +14,12 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>serial</build_depend>
+  <build_depend>rosserial_python</build_depend>
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>serial</exec_depend>
+  <exec_depend>rosserial_python</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
