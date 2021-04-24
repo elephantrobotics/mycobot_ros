@@ -1,7 +1,6 @@
+ARG BASE_IMAGE
 
-ARG UBUNTU_VERSION
-
-FROM nvidia/opengl:1.1-glvnd-runtime-ubuntu${UBUNTU_VERSION}
+FROM ${BASE_IMAGE}
 
 # For this build, we pull the entire ros image, and then merge the filesystem
 # with the nvidia/opengl image, so that displaying to the screen on GPU

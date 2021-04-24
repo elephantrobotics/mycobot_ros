@@ -29,11 +29,11 @@ is new enough.
 Once docker is installed, run the following command, and the project should show up:
 
 ```
-docker-compose build && xhost +local:root && docker-compose up
+docker-compose build ros && xhost +local:root && docker-compose up ros
 ```
 
 This command does three things:
-1) `docker-compose build`
+1) `docker-compose build ros`
    
    This builds the project in a container. That means nothing is installed on your host machine!
    The first time this runs, this command will take a long while. After running it once, caching 
@@ -43,7 +43,7 @@ This command does three things:
 
    This command gives X the ability to display GUI's from within the docker container
 
-3) `docker-compose up`
+3) `docker-compose up ros`
 
    This runs the image specified in the `docker-compose.yml`, which by default runs
    the command `roslaunch myCobotROS control_slider.launch` within the container.
