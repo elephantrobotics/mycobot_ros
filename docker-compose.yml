@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-app: &common
-  command: [ "roslaunch myCobotROS control_slider.launch" ]
+  command: [ "roslaunch mycobot_ros control_slider.launch" ]
   privileged: true
   environment:
     PYTHONUNBUFFERED: 1
@@ -12,9 +12,9 @@ x-app: &common
   build:
     context: .
     args: &common-args
-      ROS_DISTRO: "kinetic"
+      ROS_DISTRO: "noetic"
       PYMYCOBOT_VERSION: ">=2<3"
-      BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
+      BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu20.04
 
 
 services:
@@ -28,4 +28,4 @@ services:
       context: .
       args:
         <<: *common-args
-        BASE_IMAGE: ubuntu:18.04
+        BASE_IMAGE: ubuntu:20.04
