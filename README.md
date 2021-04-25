@@ -11,8 +11,8 @@
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
 
 > Make sure that `Atom` is flashed into the top Atom and `Transponder` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
-> ubuntu: 16.04LTS<br>
-> ros version: 1.12.17
+> ubuntu: 20.04LTS<br>
+> ros version: noetic
 
 **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)**
 
@@ -36,6 +36,8 @@ Install ros package in your src folder of your Catkin workspace.
 $ cd ~/catkin_ws/src
 $ git clone https://github.com/elephantrobotics/myCobotROS.git
 $ cd ~/catkin_ws
+$ rosdep update
+$ rosdep install -i -y --from-paths src
 $ catkin_make
 ```
 
@@ -73,18 +75,28 @@ python scripts/test.py
 
 ### 3.2 Lanuch and Run
 
+- Connect myCobot to your computer via USB. 
+
+    - **And change the permission of USB device** (change the port to match your environment):
+
+    ```
+    sudo chmod 666 /dev/ttyUSB0
+    ```
+    
 - **Use slide bar to control**
 
   - launch ros and rviz
 
   ```
-  roslaunch myCobotROS control_slider.launch
+  roslaunch mycobot_ros control_slider.launch
   ```
 
-  - run python script
+- **Use marker on RViz to control**
+
+  - launch ros and rviz
 
   ```
-  rosrun myCobotROS control_slider.py
+  roslaunch mycobot_ros control_marker.launch
   ```
 
 - **The model moves with the real manipulator**
@@ -92,19 +104,19 @@ python scripts/test.py
   - launch ros and rviz
 
   ```
-  roslanuch myCobotROS mycobot.launch
+  roslanuch mycobot_ros mycobot.launch
   ```
 
   - run python script
 
   ```
-  rosrun myCobotROS display.py
+  rosrun mycobot_ros display.py
   ```
 
 <!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 
 ```bash
-rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
+rosrun rviz rviz -d rospack find mycobot_ros/config/mycobot.rviz
 ``` -->
 
 ## Q & A
