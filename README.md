@@ -67,6 +67,7 @@ $ cd ~/catkin_ws/src
 $ git clone https://github.com/elephantrobotics/myCobotROS.git
 $ cd ~/catkin_ws
 $ catkin_make
+$ source ~/catkin_ws/devel/setup.bash
 ```
 
 #### 1.3 Test Python API
