@@ -46,7 +46,6 @@ def set_angles(req):
 def get_angles(req):
     if mc:
         angles = mc.get_angles()
-        print(angles)
         return GetAnglesResponse(*angles)
 
 
