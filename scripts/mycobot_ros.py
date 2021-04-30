@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+import time
 import rospy
 from myCobotROS.srv import *
 
@@ -7,7 +8,7 @@ from pymycobot.mycobot import MyCobot
 mc = None
 
 
-def mycobot_services():
+def create_handle():
     global mc
     rospy.init_node('mycobot_services')
     rospy.loginfo('start ...')
@@ -16,6 +17,8 @@ def mycobot_services():
     rospy.loginfo("%s,%s" % (port, baud))
     mc = MyCobot(port, baud)
 
+
+def create_services():
     rospy.Service('set_joint_angles', SetAngles, set_angles)
     rospy.Service('get_joint_angles', GetAngles, get_angles)
     rospy.Service('set_joint_coords', SetCoords, set_coords)
@@ -79,6 +82,48 @@ def switch_status(req):
             mc.set_gripper_state(1, 80)
 
 
+robot_msg = '''
+MyCobot Status
+--------------------------------
+Joint Limit:
+    joint 1: -170 ~ +170
+    joint 2: -170 ~ +170
+    joint 3: -170 ~ +170
+    joint 4: -170 ~ +170
+    joint 5: -170 ~ +170
+    joint 6: -180 ~ +180
+
+Connect Status: %s
+
+Servo Infomation: %s
+
+Servo Temperature: %s
+
+Atom Version: %s
+'''
+
+
+def output_robot_message():
+    connect_status = False
+    servo_infomation = 'unknown'
+    servo_temperature = 'unknown'
+    atom_version = 'unknown'
+
+    if mc:
+        cn = mc.is_controller_connected()
+        if cn == 1:
+            connect_status = True
+        time.sleep(.1)
+        si = mc.is_all_servo_enable()
+        if si == 1:
+            servo_infomation = 'all connected'
+
+    print(robot_msg % (connect_status, servo_infomation,
+          servo_temperature, atom_version))
+
+
 if __name__ == '__main__':
     # print(MyCobot.__dict__)
-    mycobot_services()
+    create_handle()
+    output_robot_message()
+    create_services()
