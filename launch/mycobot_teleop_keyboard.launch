@@ -14,8 +14,8 @@
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
     <include file="$(find myCobotROS)/launch/communication_service.launch">
-		<param name="port" type="string" value="$(arg PORT)" />	
-		<param name="baud" type="int" value="$(arg BAUD)" />	
+		<arg name="PORT" value="$(arg PORT)" />	
+		<arg name="BAUD" value="$(arg BAUD)" />	
     </include>
 	<node name="real_listener" pkg="myCobotROS" type="listen_real.py" />
 </launch>
