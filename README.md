@@ -132,6 +132,46 @@ python scripts/test.py
   rosrun myCobotROS display.py
   ```
 
+- **Open the keyboard controller**
+
+  - launch
+
+  ```
+  roslaunch myCobotROS mycobot_teleop_keyboard.launch PORT:=/dev/ttyUSB0
+  ```
+
+  - open another terminal run script
+
+  ```
+  rosrun myCobotROS teleop_keyboard.py _speed:=60 _change_size:=10
+  ```
+
+  Then you will see this:
+
+  ```
+  Mycobot Teleop Keyboard Controller
+  ---------------------------
+  Movimg options(control coord [x,y,z,rx,ry,rz]):
+                w(x+)
+  
+      a(y-)     s(x-)     d(y+)
+  
+  u(rx+)   i(ry+)   o(rz+)
+  j(rx-)   k(ry-)   l(rz-)
+  
+  Gripper control:
+      g - open
+      h - close
+  
+  Other:
+      1 - Go to init pose
+      2 -
+      3 -
+      q - Quit
+  
+  currently:      speed 50        change size 10 
+  ```
+
 <!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 
 ```bash
