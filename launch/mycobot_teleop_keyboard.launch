@@ -1,18 +1,21 @@
 <launch>
+	<arg name="PORT" default="/dev/ttyUSB0" />
+	<arg name="BAUD" default="115200" />
+
 	<arg name="model" default="$(find myCobotROS)/urdf/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find myCobotROS)/config/mycobot.rviz" />
-	<arg name="gui" default="true" />
+	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
 	<!-- Combinejoin values to TF -->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
-	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"> 
-		<param name="use_gui" value="$(arg gui)" />	
-		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
-	</node>
-	<!-- Open control script -->
-	<node name="control_slider" pkg="myCobotROS" type="control_slider.py"/> 
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <include file="$(find myCobotROS)/launch/communication_service.launch">
+		<param name="port" type="string" value="$(arg PORT)" />	
+		<param name="baud" type="int" value="$(arg BAUD)" />	
+    </include>
+	<node name="real_listener" pkg="myCobotROS" type="listen_real.py" />
 </launch>
