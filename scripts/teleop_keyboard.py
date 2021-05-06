@@ -17,10 +17,12 @@ roslib.load_manifest('mycobot_ros')
 msg = """
 Mycobot Teleop Keyboard Controller
 ---------------------------
-Movimg options(control coord [x,y,z,rx,ry,rz]):
+Movimg options(control coordinations [x,y,z,rx,ry,rz]):
               w(x+)
 
     a(y-)     s(x-)     d(y+)
+
+    z(z-) x(z+)
 
 u(rx+)   i(ry+)   o(rz+)
 j(rx-)   k(ry-)   l(rz-)
@@ -31,8 +33,8 @@ Gripper control:
 
 Other:
     1 - Go to init pose
-    2 -
-    3 -
+    2 - Go to home pose
+    3 - Resave home pose
     q - Quit
 """
 
@@ -88,7 +90,7 @@ def teleop_keyboard():
 
     while True:
         res = get_coords()
-        if res.x > 5:
+        if res.x > 1:
             break
         time.sleep(.1)
 
@@ -102,6 +104,7 @@ def teleop_keyboard():
         print(vels(speed, change_size))
         while(1):
             try:
+                print("\r current coords: %s" % record_coords, end="")
                 key = getKey(key_timeout)
                 if key == 'q':
                     break
@@ -158,6 +161,7 @@ def teleop_keyboard():
                     home_pose[5] = rep.joint_5
                 else:
                     continue
+
             except Exception as e:
                 # print(e)
                 continue
