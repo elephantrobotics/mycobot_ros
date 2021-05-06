@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg 
   message_generation 
   serial
+  actionlib
+  moveit_msgs
 )
 
 add_message_files(FILES
@@ -28,7 +30,9 @@ add_service_files(FILES
 generate_messages(DEPENDENCIES std_msgs)
 
 ## Declare a catkin package
-catkin_package(CATKIN_DEPENDS message_runtime std_msgs)
+catkin_package(
+  CATKIN_DEPENDS message_runtime std_msgs actionlib moveit_msgs
+)
 
 ## Build talker and listener
 include_directories(include ${catkin_INCLUDE_DIRS}) 
@@ -43,6 +47,10 @@ catkin_install_python(PROGRAMS
   scripts/client.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  PATTERN "setup_assistant.launch" EXCLUDE)
+install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 
 

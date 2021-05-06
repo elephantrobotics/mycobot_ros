@@ -4,12 +4,24 @@
   <version>0.1.0</version>
   <description>The mycobot_ros package</description>
 
-  <maintainer email="lijun.zhang@elephantrobotics.com">ZhangLijun</maintainer>
-  <license>BSD</license>
-  <url type="website"></url>
   <author email="lijun.zhang@elephantrobotics.com">ZhangLijun</author>
+  <maintainer email="lijun.zhang@elephantrobotics.com">ZhangLijun</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website"></url>
 
   <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_fake_controller_manager</exec_depend>
+  <exec_depend>moveit_kinematics</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_ros_visualization</exec_depend>
+  <exec_depend>moveit_setup_assistant</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
@@ -22,6 +34,12 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>serial</exec_depend>
   <exec_depend>message_runtime</exec_depend>
+
+  <build_depend>actionlib</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>moveit_msgs</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
