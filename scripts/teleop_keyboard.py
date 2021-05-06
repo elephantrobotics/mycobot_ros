@@ -11,7 +11,7 @@ import copy
 import time
 
 import roslib
-roslib.load_manifest('myCobotROS')
+roslib.load_manifest('mycobot_ros')
 
 
 msg = """

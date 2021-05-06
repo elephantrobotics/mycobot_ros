@@ -1,4 +1,4 @@
-# myCobotROS
+# mycobot_ros
 
 [![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)](README.md)
 
@@ -33,7 +33,7 @@ pip install pymycobot --user
 
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/elephantrobotics/myCobotROS.git
+$ git clone https://github.com/elephantrobotics/mycobot_ros.git
 $ cd ~/catkin_ws
 $ catkin_make
 ```
@@ -41,7 +41,7 @@ $ catkin_make
 ### 1.3 你可以选择测试 Python API
 
 ```bash
-cd ~/catkin_ws/src/myCobotROS
+cd ~/catkin_ws/src/mycobot_ros
 python scripts/test.py
 ```
 
@@ -77,13 +77,13 @@ python scripts/test.py
   - 启动 ros 和 rviz
 
   ```
-  roslaunch myCobotROS control_slider.launch
+  roslaunch mycobot_ros control_slider.launch
   ```
 
   - 运行 python 脚本
 
   ```
-  rosrun myCobotROS control_slider.py
+  rosrun mycobot_ros control_slider.py
   ```
 
 - 仿真模型同步机械臂
@@ -91,13 +91,13 @@ python scripts/test.py
   - 启动 ros 和 rviz
 
   ```
-  roslanuch myCobotROS mycobot.launch
+  roslanuch mycobot_ros mycobot.launch
   ```
 
   - 运行 python 脚本
 
   ```
-  rosrun myCobotROS display.py
+  rosrun mycobot_ros display.py
   ```
 
 ## Q & A

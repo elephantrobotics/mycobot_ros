@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>myCobotROS</name>
+  <name>mycobot_ros</name>
   <version>0.1.0</version>
-  <description>The myCobotROS package</description>
+  <description>The mycobot_ros package</description>
 
   <maintainer email="lijun.zhang@elephantrobotics.com">ZhangLijun</maintainer>
   <license>BSD</license>
