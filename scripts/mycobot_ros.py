@@ -74,10 +74,8 @@ def get_coords(req):
 def switch_status(req):
     if mc:
         if req.Status:
-            print(1)
             mc.set_gripper_state(0, 80)
         else:
-            print(2)
             mc.set_gripper_state(1, 80)
 
 

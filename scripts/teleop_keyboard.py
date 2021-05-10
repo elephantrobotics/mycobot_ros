@@ -39,19 +39,21 @@ Other:
 """
 
 
-def getKey(key_timeout):
-    tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
-    if rlist:
-        key = sys.stdin.read(1)
-    else:
-        key = ''
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
-
-
 def vels(speed, turn):
     return "currently:\tspeed %s\tchange size %s " % (speed, turn)
+
+
+class Raw(object):
+    def __init__(self,stream):
+        self.stream = stream
+        self.fd = self.stream.fileno()
+
+    def __enter__(self):
+        self.original_stty = termios.tcgetattr(self.stream)
+        tty.setcbreak(self.stream)
+
+    def __exit__(self, type, value, traceback):
+        termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
 
 
 def teleop_keyboard():
@@ -105,7 +107,8 @@ def teleop_keyboard():
         while(1):
             try:
                 print("\r current coords: %s" % record_coords, end="")
-                key = getKey(key_timeout)
+                with Raw(sys.stdin):
+                    key = sys.stdin.read(1)
                 if key == 'q':
                     break
                 elif key in ['w', 'W']:
@@ -168,8 +171,6 @@ def teleop_keyboard():
 
     except Exception as e:
         print(e)
-    finally:
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
 
 if __name__ == "__main__":
