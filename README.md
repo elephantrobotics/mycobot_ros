@@ -155,6 +155,8 @@ python scripts/test.py
                 w(x+)
   
       a(y-)     s(x-)     d(y+)
+
+      z(z-) x(z+)
   
   u(rx+)   i(ry+)   o(rz+)
   j(rx-)   k(ry-)   l(rz-)
@@ -171,6 +173,20 @@ python scripts/test.py
   
   currently:      speed 50        change size 10 
   ```
+
+## MoveIT
+
+### Execute plan with actual robot.
+
+```
+roslaunch mycobot_ros demo.launch
+```
+
+Open a new terminal and run:
+
+```
+rosrun mycobot_ros sync_signal.py
+```
 
 <!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 

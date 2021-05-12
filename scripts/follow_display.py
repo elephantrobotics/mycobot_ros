@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 # license removed for brevity
 import time
-import subprocess
 
 import rospy
 from sensor_msgs.msg import JointState
@@ -12,9 +11,28 @@ from pymycobot.mycobot import MyCobot
 
 
 def talker():
+    rospy.init_node('display', anonymous=True)
+
+    print('Try connect real mycobot...')
+    port = rospy.get_param('~port', '/dev/ttyUSB0')
+    baud = rospy.get_param('~baud', 115200)
+    print('port: {}, baud: {}\n'.format(port, baud))
+    try:
+        mycobot = MyCobot(port, baud)
+    except Exception as e:
+        print(e)
+        print('''\
+            \rTry connect mycobot failed!
+            \rPlease check wether connected with mycobot.
+            \rPlease chckt wether the port or baud is right.
+        ''')
+        exit(1)
+    mycobot.release_all_servos()
+    time.sleep(.1)
+    print('Rlease all servos over.\n')
+
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
     pub_marker = rospy.Publisher('visualization_marker', Marker, queue_size=10)
-    rospy.init_node('display', anonymous=True)
     rate = rospy.Rate(30)  # 30hz
 
     # pub joint state
@@ -36,6 +54,7 @@ def talker():
     marker_.header.frame_id = '/joint1'
     marker_.ns = 'my_namespace'
 
+    print('publishing ...')
     while not rospy.is_shutdown():
         joint_state_send.header.stamp = rospy.Time.now()
 
@@ -44,7 +63,7 @@ def talker():
         for index, value in enumerate(angles):
             data_list.append(value)
 
-        rospy.loginfo('{}'.format(data_list))
+        # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list
 
         pub.publish(joint_state_send)
@@ -77,9 +96,6 @@ def talker():
 
 
 if __name__ == '__main__':
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'],
-                                   shell=True).decode()
-    mycobot = MyCobot(port)
     try:
         talker()
     except rospy.ROSInterruptException:

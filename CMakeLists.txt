@@ -9,9 +9,10 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs 
   genmsg 
   message_generation 
-  serial
   actionlib
   moveit_msgs
+  image_transport
+  cv_bridge
 )
 
 add_message_files(FILES
@@ -35,16 +36,17 @@ catkin_package(
 )
 
 ## Build talker and listener
-include_directories(include ${catkin_INCLUDE_DIRS}) 
+include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}) 
 
 catkin_install_python(PROGRAMS 
-  scripts/display.py 
-  scripts/control_slider.py 
+  scripts/follow_display.py 
+  scripts/slider_control.py 
   scripts/control_marker.py
   scripts/mycobot_ros.py
   scripts/listen_real.py
   scripts/teleop_keyboard.py
   scripts/client.py
+  scripts/camera.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -52,5 +54,10 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN "setup_assistant.launch" EXCLUDE)
 install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
+find_package(OpenCV REQUIRED)
+add_executable(opencv_camera src/opencv_camera)
+target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+add_executable(camera_display src/camera_display)
+target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
