@@ -36,7 +36,7 @@ RUN pip install "pymycobot $PYMYCOBOT_VERSION" --user
 
 # Build the project
 WORKDIR /catkin_ws/src
-ADD . myCobotROS
+ADD . mycobot_ros
 WORKDIR /catkin_ws
 RUN catkin_make
 

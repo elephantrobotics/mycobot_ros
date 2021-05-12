@@ -109,13 +109,13 @@ python scripts/test.py
   - launch ros and rviz
 
   ```
-  roslaunch mycobot_ros control_slider.launch
+  roslaunch mycobot_ros mycobot_slider.launch
   ```
 
   - run python script
 
   ```
-  rosrun mycobot_ros control_slider.py
+  rosrun mycobot_ros slider_control.py
   ```
 
 - **The model moves with the real manipulator**
@@ -123,13 +123,13 @@ python scripts/test.py
   - launch ros and rviz
 
   ```
-  roslanuch mycobot_ros mycobot.launch
+  roslanuch mycobot_ros mycobot_follow.launch
   ```
 
   - run python script
 
   ```
-  rosrun mycobot_ros display.py
+  rosrun mycobot_ros follow_display.py
   ```
 
 - **Open the keyboard controller**
