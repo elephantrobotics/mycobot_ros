@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 import sys
 import rospy
-from myCobotROS.srv import *
+from mycobot_ros.srv import *
 
 
 def test():

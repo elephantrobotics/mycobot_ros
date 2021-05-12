@@ -3,7 +3,7 @@
 	<arg name="BAUD" default="115200" />
 
 	<!-- Open communication service -->
-	<node name="mycobot_services" pkg="myCobotROS" type="mycobot_ros.py" output="screen">
+	<node name="mycobot_services" pkg="mycobot_ros" type="mycobot_services.py" output="screen">
 		<param name="port" type="string" value="$(arg PORT)" />
 		<param name="baud" type="int" value="$(arg BAUD)" />
     </node>

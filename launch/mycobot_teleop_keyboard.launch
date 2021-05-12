@@ -2,8 +2,8 @@
 	<arg name="PORT" default="/dev/ttyUSB0" />
 	<arg name="BAUD" default="115200" />
 
-	<arg name="model" default="$(find myCobotROS)/urdf/mycobot_urdf.urdf"/>
-	<arg name="rvizconfig" default="$(find myCobotROS)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -13,9 +13,9 @@
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find myCobotROS)/launch/communication_service.launch">
+    <include file="$(find mycobot_ros)/launch/communication_service.launch">
 		<arg name="PORT" value="$(arg PORT)" />	
 		<arg name="BAUD" value="$(arg BAUD)" />	
     </include>
-	<node name="real_listener" pkg="myCobotROS" type="listen_real.py" />
+	<node name="real_listener" pkg="mycobot_ros" type="listen_real.py" />
 </launch>

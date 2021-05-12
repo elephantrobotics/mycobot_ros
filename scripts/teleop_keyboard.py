@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from myCobotROS.srv import (
+from mycobot_ros.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
 import rospy
 import sys
@@ -11,16 +11,18 @@ import copy
 import time
 
 import roslib
-roslib.load_manifest('myCobotROS')
+roslib.load_manifest('mycobot_ros')
 
 
 msg = """
 Mycobot Teleop Keyboard Controller
 ---------------------------
-Movimg options(control coord [x,y,z,rx,ry,rz]):
+Movimg options(control coordinations [x,y,z,rx,ry,rz]):
               w(x+)
 
     a(y-)     s(x-)     d(y+)
+
+    z(z-) x(z+)
 
 u(rx+)   i(ry+)   o(rz+)
 j(rx-)   k(ry-)   l(rz-)
@@ -31,25 +33,27 @@ Gripper control:
 
 Other:
     1 - Go to init pose
-    2 -
-    3 -
+    2 - Go to home pose
+    3 - Resave home pose
     q - Quit
 """
 
 
-def getKey(key_timeout):
-    tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
-    if rlist:
-        key = sys.stdin.read(1)
-    else:
-        key = ''
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
-
-
 def vels(speed, turn):
     return "currently:\tspeed %s\tchange size %s " % (speed, turn)
+
+
+class Raw(object):
+    def __init__(self,stream):
+        self.stream = stream
+        self.fd = self.stream.fileno()
+
+    def __enter__(self):
+        self.original_stty = termios.tcgetattr(self.stream)
+        tty.setcbreak(self.stream)
+
+    def __exit__(self, type, value, traceback):
+        termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
 
 
 def teleop_keyboard():
@@ -88,7 +92,7 @@ def teleop_keyboard():
 
     while True:
         res = get_coords()
-        if res.x > 5:
+        if res.x > 1:
             break
         time.sleep(.1)
 
@@ -102,7 +106,9 @@ def teleop_keyboard():
         print(vels(speed, change_size))
         while(1):
             try:
-                key = getKey(key_timeout)
+                print("\r current coords: %s" % record_coords, end="")
+                with Raw(sys.stdin):
+                    key = sys.stdin.read(1)
                 if key == 'q':
                     break
                 elif key in ['w', 'W']:
@@ -158,14 +164,13 @@ def teleop_keyboard():
                     home_pose[5] = rep.joint_5
                 else:
                     continue
+
             except Exception as e:
                 # print(e)
                 continue
 
     except Exception as e:
         print(e)
-    finally:
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
 
 if __name__ == "__main__":

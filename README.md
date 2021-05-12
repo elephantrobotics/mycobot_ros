@@ -1,4 +1,4 @@
-# myCobotROS
+# mycobot_ros
 
 [![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](READMEcn.md)
 
@@ -46,7 +46,7 @@ This command does three things:
 3) `docker-compose up ros`
 
    This runs the image specified in the `docker-compose.yml`, which by default runs
-   the command `roslaunch myCobotROS control_slider.launch` within the container.
+   the command `roslaunch mycobot_ros control_slider.launch` within the container.
    
 
 ### Option 2: Local
@@ -64,7 +64,7 @@ Install ros package in your src folder of your Catkin workspace.
 
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/elephantrobotics/myCobotROS.git
+$ git clone https://github.com/elephantrobotics/mycobot_ros.git
 $ cd ~/catkin_ws
 $ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
@@ -73,7 +73,7 @@ $ source ~/catkin_ws/devel/setup.bash
 #### 1.3 Test Python API
 
 ```bash
-cd ~/catkin_ws/src/myCobotROS
+cd ~/catkin_ws/src/mycobot_ros
 python scripts/test.py
 ```
 
@@ -109,13 +109,13 @@ python scripts/test.py
   - launch ros and rviz
 
   ```
-  roslaunch myCobotROS control_slider.launch
+  roslaunch mycobot_ros control_slider.launch
   ```
 
   - run python script
 
   ```
-  rosrun myCobotROS control_slider.py
+  rosrun mycobot_ros control_slider.py
   ```
 
 - **The model moves with the real manipulator**
@@ -123,13 +123,13 @@ python scripts/test.py
   - launch ros and rviz
 
   ```
-  roslanuch myCobotROS mycobot.launch
+  roslanuch mycobot_ros mycobot.launch
   ```
 
   - run python script
 
   ```
-  rosrun myCobotROS display.py
+  rosrun mycobot_ros display.py
   ```
 
 - **Open the keyboard controller**
@@ -137,13 +137,13 @@ python scripts/test.py
   - launch
 
   ```
-  roslaunch myCobotROS mycobot_teleop_keyboard.launch PORT:=/dev/ttyUSB0
+  roslaunch mycobot_ros mycobot_teleop_keyboard.launch PORT:=/dev/ttyUSB0
   ```
 
   - open another terminal run script
 
   ```
-  rosrun myCobotROS teleop_keyboard.py _speed:=60 _change_size:=10
+  rosrun mycobot_ros teleop_keyboard.py _speed:=60 _change_size:=10
   ```
 
   Then you will see this:
@@ -155,6 +155,8 @@ python scripts/test.py
                 w(x+)
   
       a(y-)     s(x-)     d(y+)
+
+      z(z-) x(z+)
   
   u(rx+)   i(ry+)   o(rz+)
   j(rx-)   k(ry-)   l(rz-)
@@ -172,10 +174,24 @@ python scripts/test.py
   currently:      speed 50        change size 10 
   ```
 
+## MoveIT
+
+### Execute plan with actual robot.
+
+```
+roslaunch mycobot_ros demo.launch
+```
+
+Open a new terminal and run:
+
+```
+rosrun mycobot_ros sync_signal.py
+```
+
 <!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
 
 ```bash
-rosrun rviz rviz -d rospack find myCobotROS/config/mycobot.rviz
+rosrun rviz rviz -d rospack find mycobot_ros/config/mycobot.rviz
 ``` -->
 
 ## Q & A
