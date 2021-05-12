@@ -6,7 +6,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from myCobotROS.srv import GetAngles
+from mycobot_ros.srv import GetAngles
 
 
 def talker():

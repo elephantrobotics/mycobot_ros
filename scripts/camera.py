@@ -7,7 +7,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 from visualization_msgs.msg import Marker
 import tf_conversions
-from myCobotROS.srv import (
+from mycobot_ros.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
 
 

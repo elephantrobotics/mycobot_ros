@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from myCobotROS.srv import (
+from mycobot_ros.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
 import rospy
 import sys
