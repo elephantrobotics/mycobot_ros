@@ -45,6 +45,7 @@ catkin_install_python(PROGRAMS
   scripts/mycobot_services.py
   scripts/listen_real.py
   scripts/teleop_keyboard.py
+  scripts/sync_plan.py
   scripts/client.py
   scripts/camera.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

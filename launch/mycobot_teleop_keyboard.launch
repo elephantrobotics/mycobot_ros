@@ -1,6 +1,6 @@
 <launch>
-	<arg name="PORT" default="/dev/ttyUSB0" />
-	<arg name="BAUD" default="115200" />
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
 
 	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot.rviz" />
@@ -14,8 +14,8 @@
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
     <include file="$(find mycobot_ros)/launch/communication_service.launch">
-		<arg name="PORT" value="$(arg PORT)" />	
-		<arg name="BAUD" value="$(arg BAUD)" />	
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
     </include>
 	<node name="real_listener" pkg="mycobot_ros" type="listen_real.py" />
 </launch>

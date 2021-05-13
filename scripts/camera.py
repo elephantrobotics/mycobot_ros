@@ -73,25 +73,25 @@ class image_converter:
         cv.imshow("Image", cv_image)
 
 
-        # marker = Marker()
-        # marker.header.frame_id = '/joint1'
-        # marker.header.stamp = rospy.Time.now()
-        # marker.type = marker.SPHERE
-        # marker.action = marker.ADD
-        # marker.scale.x = 0.04
-        # marker.scale.y = 0.04
-        # marker.scale.z = 0.04
+        marker = Marker()
+        marker.header.frame_id = '/joint1'
+        marker.header.stamp = rospy.Time.now()
+        marker.type = marker.SPHERE
+        marker.action = marker.ADD
+        marker.scale.x = 0.04
+        marker.scale.y = 0.04
+        marker.scale.z = 0.04
 
-        # marker.pose.position.x = center_x / 100
-        # marker.pose.position.y = center_y / 100
-        # marker.pose.position.z = 0
+        marker.pose.position.x = 0
+        marker.pose.position.y = 0
+        marker.pose.position.z = 0
 
-        # marker.color.a = 1.0
-        # marker.color.g = 1.0
+        marker.color.a = 1.0
+        marker.color.g = 1.0
 
         cv.waitKey(3)
         try:
-            # self.mark_pub.publish(marker)
+            self.mark_pub.publish(marker)
             pass
         except CvBridgeError as e:
             print e

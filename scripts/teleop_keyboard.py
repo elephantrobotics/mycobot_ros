@@ -40,7 +40,7 @@ Other:
 
 
 def vels(speed, turn):
-    return "currently:\tspeed %s\tchange size %s " % (speed, turn)
+    return "currently:\tspeed: %s\tchange percent: %s  " % (speed, turn)
 
 
 class Raw(object):
@@ -57,17 +57,14 @@ class Raw(object):
 
 
 def teleop_keyboard():
-    global settings
-    settings = termios.tcgetattr(sys.stdin)
-
     rospy.init_node('teleop_keyboard')
 
     model = 0
     speed = rospy.get_param("~speed", 50)
-    change_size = rospy.get_param("~change_size", 10)
-    key_timeout = rospy.get_param("~key_timeout", 0.0)
-    if key_timeout == 0.0:
-        key_timeout = None
+    change_percent= rospy.get_param("~change_percent", 5)
+
+    change_angle = 180 *  change_percent / 100
+    change_len = 250 * change_percent / 100
 
     rospy.wait_for_service('get_joint_angles')
     rospy.wait_for_service('set_joint_angles')
@@ -103,49 +100,49 @@ def teleop_keyboard():
 
     try:
         print(msg)
-        print(vels(speed, change_size))
+        print(vels(speed, change_percent))
         while(1):
             try:
-                print("\r current coords: %s" % record_coords, end="")
+                # print("\r current coords: %s" % record_coords, end="")
                 with Raw(sys.stdin):
                     key = sys.stdin.read(1)
                 if key == 'q':
                     break
                 elif key in ['w', 'W']:
-                    record_coords[0] += change_size
+                    record_coords[0] += change_len
                     set_coords(*record_coords)
                 elif key in ['s', 'S']:
-                    record_coords[0] -= change_size
+                    record_coords[0] -= change_len
                     set_coords(*record_coords)
                 elif key in ['a', 'A']:
-                    record_coords[1] -= change_size
+                    record_coords[1] -= change_len
                     set_coords(*record_coords)
                 elif key in ['d', 'D']:
-                    record_coords[1] += change_size
+                    record_coords[1] += change_len
                     set_coords(*record_coords)
                 elif key in ['z', 'Z']:
-                    record_coords[2] -= change_size
+                    record_coords[2] -= change_len
                     set_coords(*record_coords)
                 elif key in ['x', 'X']:
-                    record_coords[2] += change_size
+                    record_coords[2] += change_len
                     set_coords(*record_coords)
                 elif key in ['u', 'U']:
-                    record_coords[3] += change_size
+                    record_coords[3] += change_angle
                     set_coords(*record_coords)
                 elif key in ['j', 'J']:
-                    record_coords[3] -= change_size
+                    record_coords[3] -= change_angle
                     set_coords(*record_coords)
                 elif key in ['i', 'I']:
-                    record_coords[4] += change_size
+                    record_coords[4] += change_angle
                     set_coords(*record_coords)
                 elif key in ['k', 'K']:
-                    record_coords[4] -= change_size
+                    record_coords[4] -= change_angle
                     set_coords(*record_coords)
                 elif key in ['o', 'O']:
-                    record_coords[5] += change_size
+                    record_coords[5] += change_angle
                     set_coords(*record_coords)
                 elif key in ['l', 'L']:
-                    record_coords[5] -= change_size
+                    record_coords[5] -= change_angle
                     set_coords(*record_coords)
                 elif key in ['g', 'G']:
                     switch_gripper(True)

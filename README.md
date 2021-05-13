@@ -1,10 +1,11 @@
 # mycobot_ros
 
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](READMEcn.md)
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)]()
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)]()
 
-[English](README.md) | [中文](READMEcn.md)
+[中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document not finish]()
 
-![Demo](./Screenshot-1.png)
+
 
 **Notes**:
 
@@ -14,12 +15,11 @@
 > ubuntu: 16.04LTS<br>
 > ros version: 1.12.17
 
-**If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)**
-
-Download ROS [http://wiki.ros.org/ROS/Installation](http://wiki.ros.org/ROS/Installation)
+<!-- **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)** -->
 
 
-## 1. Installation
+
+## Installation
 ### Option 1: Docker
 There are two ways to run this project. The first is by running the project in a container, and this requires
 [installing docker](https://docs.docker.com/engine/install/ubuntu/) and
@@ -77,123 +77,15 @@ cd ~/catkin_ws/src/mycobot_ros
 python scripts/test.py
 ```
 
-## 2. Package Modules
+## Screenshot
 
-### 2.1 Nodes
+![Demo](./Screenshot-1.png)
 
-- `display` is a display node. When the node is running, the model of ROS will show the movement of mycobot synchronously.
-- `control_slider` is the node which slider bar control.
-- `control_marker` is the node which use interactive marker control.
+![Demo](./Screenshot-2.png)
 
-### 2.2 Topics
+![Demo](./Screenshot-3.png)
 
-- `joint_states` - control mycobot status.
-
-  ```
-  Message_type: std_msgs/JointState
-  Data: position[float, float, float, float, float, float]
-  ```
-
-## 3. Visualization in RViz
-
-### 3.1 Functions
-
-- Visualization -- display.launch: This function will display robot arm movement in realtime when you manually move mycobot.
-
-- Control -- control.launch: This function will allow you use slider bar to control movement of the robot arm.
-
-### 3.2 Lanuch and Run
-
-- **Use slide bar to control**
-
-  - launch ros and rviz
-
-  ```
-  roslaunch mycobot_ros mycobot_slider.launch
-  ```
-
-  - run python script
-
-  ```
-  rosrun mycobot_ros slider_control.py
-  ```
-
-- **The model moves with the real manipulator**
-
-  - launch ros and rviz
-
-  ```
-  roslanuch mycobot_ros mycobot_follow.launch
-  ```
-
-  - run python script
-
-  ```
-  rosrun mycobot_ros follow_display.py
-  ```
-
-- **Open the keyboard controller**
-
-  - launch
-
-  ```
-  roslaunch mycobot_ros mycobot_teleop_keyboard.launch PORT:=/dev/ttyUSB0
-  ```
-
-  - open another terminal run script
-
-  ```
-  rosrun mycobot_ros teleop_keyboard.py _speed:=60 _change_size:=10
-  ```
-
-  Then you will see this:
-
-  ```
-  Mycobot Teleop Keyboard Controller
-  ---------------------------
-  Movimg options(control coord [x,y,z,rx,ry,rz]):
-                w(x+)
-  
-      a(y-)     s(x-)     d(y+)
-
-      z(z-) x(z+)
-  
-  u(rx+)   i(ry+)   o(rz+)
-  j(rx-)   k(ry-)   l(rz-)
-  
-  Gripper control:
-      g - open
-      h - close
-  
-  Other:
-      1 - Go to init pose
-      2 -
-      3 -
-      q - Quit
-  
-  currently:      speed 50        change size 10 
-  ```
-
-## MoveIT
-
-### Execute plan with actual robot.
-
-```
-roslaunch mycobot_ros demo.launch
-```
-
-Open a new terminal and run:
-
-```
-rosrun mycobot_ros sync_signal.py
-```
-
-<!-- If you use the above command, then you may need to manually add some model components. If you don't want to be so troublesome, you can use the following command to load a saved **myCobot** model.
-
-```bash
-rosrun rviz rviz -d rospack find mycobot_ros/config/mycobot.rviz
-``` -->
-
+![Demo](./Screenshot-4.png)
 ## Q & A
 
 **Q: error[101]**

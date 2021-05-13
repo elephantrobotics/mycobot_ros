@@ -1,9 +1,12 @@
 #!/usr/bin/env python2
-import time, subprocess
+import time
 import rospy
 from sensor_msgs.msg import JointState
 
 from pymycobot.mycobot import MyCobot
+
+
+mc = None
 
 
 def callback(data):
@@ -17,7 +20,13 @@ def callback(data):
     mc.send_radians(data_list, 80)
     
 def listener():
+    global mc
     rospy.init_node('mycobot_reciver', anonymous=True)
+
+    port = rospy.get_param('~port', '/dev/ttyUSB0')
+    baud = rospy.get_param('~baud', 115200)
+    print(port, baud)
+    mc = MyCobot(port, baud)
 
     rospy.Subscriber("joint_states", JointState, callback)
 
@@ -25,7 +34,4 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
-    mc = MyCobot(port)
     listener()
