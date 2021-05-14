@@ -6,6 +6,8 @@ from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 from visualization_msgs.msg import Marker
+import tf
+from tf.broadcaster import TransformBroadcaster
 import tf_conversions
 from mycobot_ros.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
@@ -13,7 +15,7 @@ from mycobot_ros.srv import (
 
 class image_converter:
     def __init__(self):
-        self.mark_pub = rospy.Publisher("/bebop/marker", Marker, queue_size=1)
+        self.br = TransformBroadcaster()
         self.bridge = CvBridge()
         self.aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_6X6_250)
         self.aruo_params = cv.aruco.DetectorParameters_create()
@@ -23,12 +25,12 @@ class image_converter:
         # rospy.wait_for_service('get_joint_coords')
         # rospy.wait_for_service('set_joint_coords')
 
-        try:
-            self.get_coords = rospy.ServiceProxy('get_joint_coords', GetCoords)
-            self.set_coords = rospy.ServiceProxy('set_joint_coords', SetCoords)
-        except:
-            print('Error: cannot connect service...')
-            exit(1)
+        # try:
+        #     self.get_coords = rospy.ServiceProxy('get_joint_coords', GetCoords)
+        #     self.set_coords = rospy.ServiceProxy('set_joint_coords', SetCoords)
+        # except:
+        #     print('Error: cannot connect service...')
+        #     exit(1)
         self.image_sub = rospy.Subscriber("/camera/image", Image, self.callback)
 
 
@@ -61,43 +63,35 @@ class image_converter:
                     cv.aruco.drawDetectedMarkers(cv_image, corners)
                     cv.aruco.drawAxis(cv_image, self.camera_matrix, self.dist_coeffs, rvec[i, :, :], tvec[i, :, :], 0.03)
 
-                res = self.get_coords()
-                if res.x == res.y == 0.0:
-                    return
-                record_coords = [
-                    res.x, res.y, res.z, res.rx, res.ry, res.rz, 60, 1
-                ]
-                print(record_coords)
+                xyz = tvec[0, 0, :]
+
+                euler = rvec[0, 0, :]
+                tf_change = tf.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])
+                print('tf_change:', tf_change)
+
+
+                self.br.sendTransform(xyz, tf_change, rospy.Time.now(), 'basic_shapes', 'joint6_flange' )
+
+
+                # res = self.get_coords()
+                # if res.x == res.y == 0.0:
+                #     return
+                # record_coords = [
+                #     res.x, res.y, res.z, res.rx, res.ry, res.rz, 60, 1
+                # ]
+                # print(record_coords)
 
         # [x, y, z, -172, 3, -46.8]
         cv.imshow("Image", cv_image)
 
-
-        marker = Marker()
-        marker.header.frame_id = '/joint1'
-        marker.header.stamp = rospy.Time.now()
-        marker.type = marker.SPHERE
-        marker.action = marker.ADD
-        marker.scale.x = 0.04
-        marker.scale.y = 0.04
-        marker.scale.z = 0.04
-
-        marker.pose.position.x = 0
-        marker.pose.position.y = 0
-        marker.pose.position.z = 0
-
-        marker.color.a = 1.0
-        marker.color.g = 1.0
-
         cv.waitKey(3)
         try:
-            self.mark_pub.publish(marker)
             pass
         except CvBridgeError as e:
             print e
 if __name__ == '__main__':
     try:
-        rospy.init_node("cv_bridge_test")
+        rospy.init_node("detect_marker")
         rospy.loginfo("Starting cv_bridge_test node")
         image_converter()
         rospy.spin()
