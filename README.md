@@ -3,7 +3,7 @@
 [![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)]()
 [![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)]()
 
-[中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document not finish]()
+[中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
 
 
 
