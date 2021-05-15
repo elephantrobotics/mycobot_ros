@@ -61,7 +61,5 @@ add_executable(opencv_camera src/opencv_camera)
 target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_executable(camera_display src/camera_display)
 target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-add_executable(basic_shape src/basic_shape)
-target_link_libraries(basic_shape ${catkin_LIBRARIES})
 
 
