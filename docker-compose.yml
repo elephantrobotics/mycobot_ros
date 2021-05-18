@@ -12,7 +12,7 @@ x-app: &common
   build:
     context: .
     args: &common-args
-      ROS_DISTRO: "kinetic"
+      ROS_DISTRO: "melodic"
       PYMYCOBOT_VERSION: ">=2<3"
       BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
 

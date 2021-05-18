@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE}
 # (or without GPU) works through docker.
 # I was unable to use the ROS_DISTRO variable here due to this issue:
 # https://github.com/docker/for-mac/issues/2155
-COPY --from=osrf/ros:kinetic-desktop-full / /
+COPY --from=osrf/ros:melodic-desktop-full / /
 
 # Add ROS env vars to the bashrc
 ENV BASH_ENV="/root/launch.sh"
@@ -26,6 +26,7 @@ RUN apt-get update && \
         build-essential \
         # Project-specific build dependencies
         python-pip \
+        ros-${ROS_DISTRO}-moveit \
         ros-${ROS_DISTRO}-serial \
         ros-${ROS_DISTRO}-joint-state-publisher-gui && \
     rm -rf /var/lib/apt/lists/*
