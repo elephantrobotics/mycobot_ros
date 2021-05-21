@@ -86,8 +86,15 @@ python scripts/test.py
 ![Demo](./Screenshot-3.png)
 
 ![Demo](./Screenshot-4.png)
-## Q & A
+
+![Demo](./Screenshot-5.png)
+
+---
+
+~*END*~
+
+<!-- ## Q & A
 
 **Q: error[101]**
 
-**A:** Make sure that the serial port is not occupied, and that the correct firmware is burned in for atom and basic
+**A:** Make sure that the serial port is not occupied, and that the correct firmware is burned in for atom and basic -->
