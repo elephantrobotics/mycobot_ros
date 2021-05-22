@@ -16,6 +16,10 @@ ENTRYPOINT ["/bin/bash", "-c"]
 ARG ROS_DISTRO
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> $BASH_ENV
 
+# Copy myCobot ROS package
+WORKDIR /catkin_ws/src
+COPY . mycobot_ros
+
 # Install build dependencies
 RUN apt-get update && \
     apt-get install -y \
@@ -24,11 +28,9 @@ RUN apt-get update && \
         python-rosinstall-generator \
         python-wstool \
         build-essential \
-        # Project-specific build dependencies
-        python-pip \
-        ros-${ROS_DISTRO}-moveit \
-        ros-${ROS_DISTRO}-serial \
-        ros-${ROS_DISTRO}-joint-state-publisher-gui && \
+        python-pip && \
+    # Project-specific build dependencies
+    rosdep install -r -y -i --from-paths . && \
     rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
@@ -36,8 +38,6 @@ ARG PYMYCOBOT_VERSION
 RUN pip install "pymycobot $PYMYCOBOT_VERSION" --user
 
 # Build the project
-WORKDIR /catkin_ws/src
-ADD . mycobot_ros
 WORKDIR /catkin_ws
 RUN catkin_make
 
