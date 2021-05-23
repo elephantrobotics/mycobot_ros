@@ -43,6 +43,7 @@
   <exec_depend>warehouse_ros_mongo</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>controller_manager</exec_depend>
+  <exec_depend>python-tk</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
