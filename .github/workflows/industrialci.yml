@@ -1,0 +1,30 @@
+name: industrial_ci
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.jpg'
+      - '**.pdf'
+      - '**.png'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.jpg'
+      - '**.pdf'
+      - '**.png'
+  schedule:
+    - cron: "0 1 * * 2" # Weekly on Tuesdays at 01:00(GMT)
+
+jobs:
+  industrial_ci:
+    strategy:
+      matrix:
+        env:
+          - { ROS_DISTRO: melodic, ROS_REPO: main }
+          # - { ROS_DISTRO: noetic, ROS_REPO: main }
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: "ros-industrial/industrial_ci@master"
+        env: ${{ matrix.env }}

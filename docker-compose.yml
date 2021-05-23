@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-app: &common
-  command: [ "roslaunch mycobot_ros control_slider.launch" ]
+  command: [ "roslaunch mycobot_ros mycobot_slider.launch" ]
   privileged: true
   environment:
     PYTHONUNBUFFERED: 1
