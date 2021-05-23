@@ -52,7 +52,7 @@ if __name__ == '__main__':
     print('==> send coord id: X, coord value: -40, speed: 70\n')
     time.sleep(2)
 
-    print('::set_free_mode()')
-    mycobot.set_free_mode()
+    print('::release_all_servos()')
+    mycobot.release_all_servos()
     print('==> into free moving mode.')
     print('=== check end <==\n')
