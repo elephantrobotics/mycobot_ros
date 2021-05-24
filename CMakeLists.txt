@@ -50,6 +50,7 @@ catkin_install_python(PROGRAMS
   scripts/detect_marker.py
   scripts/following_marker.py
   scripts/gripper_control.py
+  scripts/simple_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

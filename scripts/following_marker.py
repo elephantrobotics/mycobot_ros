@@ -1,5 +1,4 @@
 #!/usr/bin/env python2
-# license removed for brevity
 import time
 
 import rospy
@@ -25,8 +24,6 @@ def talker():
     print('publishing ...')
     while not rospy.is_shutdown():
         now = rospy.Time.now() - rospy.Duration(0.1)
-        # now = rospy.Time.now() 
-        # print(now)
 
         try:
             trans, rot = listener.lookupTransform('joint1', 'basic_shapes', now)

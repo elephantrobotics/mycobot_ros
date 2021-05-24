@@ -13,7 +13,7 @@ from mycobot_ros.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
 
 
-class image_converter:
+class ImageConverter:
     def __init__(self):
         self.br = TransformBroadcaster()
         self.bridge = CvBridge()
@@ -35,9 +35,13 @@ class image_converter:
 
 
     def callback(self, data):
+        '''Callback function.
+
+        Process image with OpenCV, detect Mark to get the pose. Then acccording the
+        pose to transforming.
+        '''
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            # sucess, cv_image = self.cap.read()
         except CvBridgeError as e:
             print(e)
         size = cv_image.shape
@@ -63,6 +67,7 @@ class image_converter:
                     cv.aruco.drawDetectedMarkers(cv_image, corners)
                     cv.aruco.drawAxis(cv_image, self.camera_matrix, self.dist_coeffs, rvec[i, :, :], tvec[i, :, :], 0.03)
 
+                # Just process first one detected.
                 xyz = tvec[0, 0, :]
                 xyz = [xyz[0] - 0.035, xyz[1], xyz[2] - 0.03]
 
@@ -70,17 +75,7 @@ class image_converter:
                 tf_change = tf.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])
                 print('tf_change:', tf_change)
 
-
                 self.br.sendTransform(xyz, tf_change, rospy.Time.now(), 'basic_shapes', 'joint6_flange' )
-
-
-                # res = self.get_coords()
-                # if res.x == res.y == 0.0:
-                #     return
-                # record_coords = [
-                #     res.x, res.y, res.z, res.rx, res.ry, res.rz, 60, 1
-                # ]
-                # print(record_coords)
 
         # [x, y, z, -172, 3, -46.8]
         cv.imshow("Image", cv_image)
@@ -94,7 +89,7 @@ if __name__ == '__main__':
     try:
         rospy.init_node("detect_marker")
         rospy.loginfo("Starting cv_bridge_test node")
-        image_converter()
+        ImageConverter()
         rospy.spin()
     except KeyboardInterrupt:
         print "Shutting down cv_bridge_test node."
