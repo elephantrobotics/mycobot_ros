@@ -64,6 +64,7 @@ class image_converter:
                     cv.aruco.drawAxis(cv_image, self.camera_matrix, self.dist_coeffs, rvec[i, :, :], tvec[i, :, :], 0.03)
 
                 xyz = tvec[0, 0, :]
+                xyz = [xyz[0] - 0.035, xyz[1], xyz[2] - 0.03]
 
                 euler = rvec[0, 0, :]
                 tf_change = tf.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])

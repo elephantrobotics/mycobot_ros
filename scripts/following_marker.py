@@ -48,7 +48,7 @@ def talker():
         # marker position initial
         marker_.pose.position.x = trans[0]
         marker_.pose.position.y = trans[1]
-        marker_.pose.position.z = trans[2] - 0.02
+        marker_.pose.position.z = trans[2]
         marker_.pose.orientation.x = rot[0]
         marker_.pose.orientation.y = rot[1]
         marker_.pose.orientation.z = rot[2]

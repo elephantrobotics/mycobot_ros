@@ -1,0 +1,22 @@
+<launch>
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot_with_marker.rviz" />
+	<arg name="gui" default="false" />
+
+	<arg name="num" default="0" />
+
+    <include file="$(find mycobot_ros)/launch/mycobot_teleop_keyboard.launch">
+		<arg name="model" value="$(arg model)" />	
+		<arg name="rvizconfig" value="$(arg rvizconfig)" />	
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+		<!-- <arg name="gui" value="$(arg gui)" />	 -->
+    </include>
+	<!-- <node name="real_listener" pkg="mycobot_ros" type="listen_real.py" /> -->
+	<node name="opencv_camera" pkg="mycobot_ros" type="opencv_camera" args="$(arg num)"/>
+	<node name="detect_marker" pkg="mycobot_ros" type="detect_marker.py" />
+	<node name="following_marker" pkg="mycobot_ros" type="following_marker.py" />
+</launch>
