@@ -16,7 +16,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 add_message_files(FILES
-  Gripper.msg
+  MycobotAngles.msg
+  MycobotCoords.msg
+  MycobotSetAngles.msg
+  MycobotSetCoords.msg
+  MycobotGripperStatus.msg
+  MycobotPumpStatus.msg
 )
 
 add_service_files(FILES 
