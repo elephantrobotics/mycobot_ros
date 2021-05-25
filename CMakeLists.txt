@@ -25,6 +25,7 @@ add_service_files(FILES
   GetCoords.srv
   SetCoords.srv
   GripperStatus.srv
+  PumpStatus.srv
 )
 
 ## Generate added messages and services

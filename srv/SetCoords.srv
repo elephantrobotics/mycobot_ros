@@ -9,3 +9,5 @@ int8 speed
 int8 model
 
 ---
+
+bool Flag

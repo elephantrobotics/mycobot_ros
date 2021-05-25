@@ -8,3 +8,5 @@ float32 joint_6
 int8 speed
 
 ---
+
+bool Flag
