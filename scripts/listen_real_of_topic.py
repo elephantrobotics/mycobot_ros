@@ -36,21 +36,20 @@ class Listener(object):
         joint_state_send.velocity = [0]
         joint_state_send.effort = []
 
-        while not rospy.is_shutdown():
-            joint_state_send.header.stamp = rospy.Time.now()
-            radians_list = [
-                data.joint_1 * (math.pi / 180),
-                data.joint_2 * (math.pi / 180),
-                data.joint_3 * (math.pi / 180),
-                data.joint_4 * (math.pi / 180),
-                data.joint_5 * (math.pi / 180),
-                data.joint_6 * (math.pi / 180),
-            ]
-            rospy.loginfo('res: {}'.format(radians_list))
+        joint_state_send.header.stamp = rospy.Time.now()
+        radians_list = [
+            data.joint_1 * (math.pi / 180),
+            data.joint_2 * (math.pi / 180),
+            data.joint_3 * (math.pi / 180),
+            data.joint_4 * (math.pi / 180),
+            data.joint_5 * (math.pi / 180),
+            data.joint_6 * (math.pi / 180),
+        ]
+        rospy.loginfo('res: {}'.format(radians_list))
 
-            joint_state_send.position = radians_list
-            self.pub.publish(joint_state_send)
-            # rate.sleep()
+        joint_state_send.position = radians_list
+        self.pub.publish(joint_state_send)
+        # rate.sleep()
         
 
 if __name__ == '__main__':

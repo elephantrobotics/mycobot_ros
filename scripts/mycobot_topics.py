@@ -146,7 +146,7 @@ class MycobotTopics(object):
             angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             sp = int(data.speed)
             model = int(data.model)
-            self.mc.send_angles(angles, sp, model)
+            self.mc.send_coords(angles, sp, model)
 
         sub = rospy.Subscriber('mycobot/coords_goal', MycobotSetCoords, callback=callback)
         rospy.spin()
