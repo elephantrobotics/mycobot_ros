@@ -1,5 +1,8 @@
 #!/usr/bin/env python2
 import time
+import os
+import sys
+import signal
 import threading
 
 import rospy
@@ -10,6 +13,49 @@ from sensor_msgs.msg import JointState
 from pymycobot.mycobot import MyCobot
 
 
+class Watcher:  
+    """this class solves two problems with multithreaded 
+    programs in Python, (1) a signal might be delivered 
+    to any thread (which is just a malfeature) and (2) if 
+    the thread that gets the signal is waiting, the signal 
+    is ignored (which is a bug). 
+ 
+    The watcher is a concurrent process (not thread) that 
+    waits for a signal and the process that contains the 
+    threads.  See Appendix A of The Little Book of Semaphores. 
+    http://greenteapress.com/semaphores/ 
+ 
+    I have only tested this on Linux.  I would expect it to 
+    work on the Macintosh and not work on Windows. 
+    """  
+  
+    def __init__(self):  
+        """ Creates a child thread, which returns.  The parent 
+            thread waits for a KeyboardInterrupt and then kills 
+            the child thread.
+        """  
+        self.child = os.fork()  
+        if self.child == 0:  
+            return  
+        else:  
+            self.watch()  
+  
+    def watch(self):  
+        try:  
+            os.wait()  
+        except KeyboardInterrupt:  
+            # I put the capital B in KeyBoardInterrupt so I can  
+            # tell when the Watcher gets the SIGINT  
+            print 'KeyBoardInterrupt'  
+            self.kill()  
+        sys.exit()  
+  
+    def kill(self):  
+        try:  
+            os.kill(self.child, signal.SIGKILL)  
+        except OSError: pass  
+
+
 class MycobotTopics(object):
 
     def __init__(self):
@@ -17,8 +63,8 @@ class MycobotTopics(object):
 
         rospy.init_node('mycobot_topics')
         rospy.loginfo('start ...')
-        port = rospy.get_param('~port')
-        baud = rospy.get_param('~baud')
+        port = rospy.get_param('~port', '/dev/ttyUSB0')
+        baud = rospy.get_param('~baud', 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
@@ -54,7 +100,7 @@ class MycobotTopics(object):
     def pub_real_angles(self):
         pub = rospy.Publisher('mycobot/angles_real', MycobotAngles, queue_size=5)
         ma = MycobotAngles()
-        while True:
+        while not rospy.is_shutdown():
             self.lock.acquire()
             angles = self.mc.get_angles()
             self.lock.release()
@@ -72,7 +118,7 @@ class MycobotTopics(object):
         pub = rospy.Publisher('mycobot/coords_real', MycobotCoords, queue_size=5)
         ma = MycobotCoords()
 
-        while True:
+        while not rospy.is_shutdown():
             self.lock.acquire()
             coords = self.mc.get_coords()
             self.lock.release()
@@ -129,6 +175,7 @@ class MycobotTopics(object):
 
 
 if __name__ == '__main__':
+    Watcher()
     mc_topics = MycobotTopics()
     mc_topics.start()
     # while True:

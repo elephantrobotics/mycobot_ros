@@ -49,7 +49,9 @@ catkin_install_python(PROGRAMS
   scripts/slider_control.py 
   scripts/control_marker.py
   scripts/mycobot_services.py
+  scripts/mycobot_topics.py
   scripts/listen_real.py
+  scripts/listen_real_of_topic.py
   scripts/teleop_keyboard.py
   scripts/sync_plan.py
   scripts/client.py
