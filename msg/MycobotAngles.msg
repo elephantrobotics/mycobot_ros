@@ -4,9 +4,3 @@ float32 joint_3
 float32 joint_4
 float32 joint_5
 float32 joint_6
-
-int8 speed
-
----
-
-bool Flag

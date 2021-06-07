@@ -16,7 +16,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 add_message_files(FILES
-  Gripper.msg
+  MycobotAngles.msg
+  MycobotCoords.msg
+  MycobotSetAngles.msg
+  MycobotSetCoords.msg
+  MycobotGripperStatus.msg
+  MycobotPumpStatus.msg
 )
 
 add_service_files(FILES 
@@ -25,6 +30,7 @@ add_service_files(FILES
   GetCoords.srv
   SetCoords.srv
   GripperStatus.srv
+  PumpStatus.srv
 )
 
 ## Generate added messages and services
@@ -43,12 +49,15 @@ catkin_install_python(PROGRAMS
   scripts/slider_control.py 
   scripts/control_marker.py
   scripts/mycobot_services.py
+  scripts/mycobot_topics.py
   scripts/listen_real.py
+  scripts/listen_real_of_topic.py
   scripts/teleop_keyboard.py
   scripts/sync_plan.py
   scripts/client.py
   scripts/detect_marker.py
   scripts/following_marker.py
+  scripts/gripper_control.py
   scripts/simple_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

@@ -39,6 +39,8 @@ def talker():
         joint_state_send.header.stamp = rospy.Time.now()
 
         res = func()
+        if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
+            continue
         radians_list = [
             res.joint_1 * (math.pi / 180),
             res.joint_2 * (math.pi / 180),

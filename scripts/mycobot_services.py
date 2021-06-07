@@ -24,6 +24,7 @@ def create_services():
     rospy.Service('set_joint_coords', SetCoords, set_coords)
     rospy.Service('get_joint_coords', GetCoords, get_coords)
     rospy.Service('switch_gripper_status', GripperStatus, switch_status)
+    rospy.Service('switch_pump_status', PumpStatus, toggle_pump)
     rospy.loginfo('ready')
     rospy.spin()
 
@@ -41,6 +42,8 @@ def set_angles(req):
 
     if mc:
         mc.send_angles(angles, sp)
+
+    return SetAnglesResponse(True)
 
 
 def get_angles(req):
@@ -63,6 +66,8 @@ def set_coords(req):
 
     if mc:
         mc.send_coords(coords, sp, mod)
+    
+    return SetCoordsResponse(True)
 
 
 def get_coords(req):
@@ -77,6 +82,20 @@ def switch_status(req):
             mc.set_gripper_state(0, 80)
         else:
             mc.set_gripper_state(1, 80)
+
+    return GripperStatusResponse(True)
+
+
+def toggle_pump(req):
+    if mc:
+        if req.Status:
+            mc.set_basic_output(2, 0)
+            mc.set_basic_output(5, 0)
+        else:
+            mc.set_basic_output(2, 1)
+            mc.set_basic_output(5, 1)
+
+    return PumpStatusResponse(True)
 
 
 robot_msg = '''
