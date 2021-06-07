@@ -69,7 +69,7 @@ class ImageConverter:
 
                 # Just process first one detected.
                 xyz = tvec[0, 0, :]
-                xyz = [xyz[0] - 0.045, xyz[1], xyz[2] - 0.01]
+                xyz = [xyz[0] - 0.045, xyz[1], xyz[2] -0.03]
 
                 euler = rvec[0, 0, :]
                 tf_change = tf.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])

@@ -18,7 +18,7 @@ pump = MycobotPumpStatus()
 
 x_offset = -20
 y_offset = 20
-z_offset = 120
+z_offset = 110
 
 flag = False
 
@@ -98,7 +98,7 @@ def grippercallback(data):
         time.sleep(2.5)
 
         # down
-        for i in range(1,14):
+        for i in range(1,17):
             pub_coords(x, y, z - i * 5,rx=-160, sp=10)
             time.sleep(.1)
 
@@ -117,11 +117,13 @@ def grippercallback(data):
         pub_coords(39.4, -174.7, put_z ,-177.13, -4.13, -152.59,70,2)
         time.sleep(1.5)
 
-        for i in range (1,7):
+        for i in range (1,8):
             pub_coords(39.4, -174.7, put_z-i*5, -177.13, -4.13, -152.59,15,2)
             time.sleep(.1)
 
         pub_pump(False)
+
+        time.sleep(.5)
 
         pub_angles(0, 30, -50, -40, 0, 0, 50)
         time.sleep(1.5)
