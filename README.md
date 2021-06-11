@@ -26,10 +26,18 @@ There are two ways to run this project. The first is by running the project in a
 [installing docker-compose](https://docs.docker.com/compose/install/). The benefit of running in the container is that you can run the project in any version of linux, as long as your kernel
 is new enough. 
 
-Once docker is installed, run the following command, and the project should show up:
+Once docker is installed, run the following command, and the project should show up.
+
+without NVIDIA GPU:
 
 ```
 docker-compose build ros && xhost +local:root && docker-compose up ros
+```
+
+with NVIDIA GPU
+
+```
+docker-compose build nvidia-ros && xhost +local:root && docker-compose up nvidia-ros
 ```
 
 This command does three things:
@@ -46,7 +54,7 @@ This command does three things:
 3) `docker-compose up ros`
 
    This runs the image specified in the `docker-compose.yml`, which by default runs
-   the command `roslaunch mycobot_ros control_slider.launch` within the container.
+   the command `roslaunch mycobot_ros mycobot_slider.launch` within the container.
    
 
 ### Option 2: Local

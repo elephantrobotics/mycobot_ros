@@ -21,7 +21,8 @@ WORKDIR /catkin_ws/src
 COPY . mycobot_ros
 
 # Install build dependencies
-RUN apt-get update && \
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+    apt-get update && \
     apt-get install -y \
         # ROS Build dependencies
         python-rosinstall \
