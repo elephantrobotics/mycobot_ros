@@ -97,6 +97,9 @@ python scripts/test.py
 
 ![Demo](./Screenshot-5.png)
 
+![Demo](./320_slider.png)
+
+![Demo](./320_moveit.png)
 ---
 
 ~*END*~
