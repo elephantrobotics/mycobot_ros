@@ -7,11 +7,16 @@
   <link name="base">
     <visual>
       <geometry>
-	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
        <mesh filename="package://mycobot_ros/urdf/320_urdf/base.dae"/>
       </geometry>
     <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <origin xyz = "0 0 0.05 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.102" radius="0.0725"/>
+      </geometry>
+    </collision>
   </link>
 
   <link name="link1">
@@ -19,30 +24,46 @@
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link1.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+      <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <origin xyz = "0 0 -0.02 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.106" radius="0.043"/>
+      </geometry>
+    </collision>
   </link>
 
 
   <link name="link2">
     <visual>
       <geometry>
-       
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link2.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.0587 " rpy = " 0 0 3.1415926"/>
+      <origin xyz = "0 0 0.0587 " rpy = " 0 0 3.1415926"/>
     </visual>
+    <collision>
+     <origin xyz = "0.04 0 0.095 " rpy = " 0 -1.5708 0"/>
+      <geometry>
+        <cylinder length="0.21" radius="0.036"/>
+      </geometry>
+    </collision>
   </link>
 
 
   <link name="link3">
     <visual>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link3.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.038 " rpy = " 0 0 3.1415926"/>
+      <origin xyz = "0 0 0.038 " rpy = " 0 0 3.1415926"/>
     </visual>
+    <collision>
+      <origin xyz = "0.034 0 0 " rpy = " 0 -1.5708 0"/>
+      <geometry>
+        <cylinder length="0.119" radius="0.0305"/>
+      </geometry>
+    </collision>
   </link>
 
 
@@ -50,35 +71,50 @@
 <link name="link4">
     <visual>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link4.dae"/>
       </geometry>
-    <origin xyz = "0 -0.001 0 " rpy = " 0 0 0"/>
+      <origin xyz = "0 -0.001 0 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <origin xyz = "0.0 -0.012 0 " rpy = " 0 -1.5708 1.5708"/>
+      <geometry>
+        <cylinder length="0.085" radius="0.029"/>
+      </geometry>
+    </collision>
   </link>
 
 
   <link name="link5">
     <visual>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link5.dae"/>
       </geometry>
-    <origin xyz = "0 0.002  0 " rpy = " 0  0 3.1415926"/>
+      <origin xyz = "0 0.002  0 " rpy = " 0  0 3.1415926"/>
     </visual>
+    <collision>
+      <origin xyz = "0 -0.01 0 " rpy = " 1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.0849" radius="0.029"/>
+      </geometry>
+    </collision>
   </link>
 
   <link name="link6">
     <visual>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <cylinder length="0.02" radius="0.026"/>
+        <cylinder length="0.02" radius="0.026"/>
       </geometry>
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
     <origin xyz = "0 0 -0.01 " rpy = " 0 0 0"/>
     </visual>
+       <collision>
+      <origin xyz = "0.0 0 -0.01 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.0225" radius="0.026"/>
+      </geometry>
+    </collision>
   </link>
 
 
