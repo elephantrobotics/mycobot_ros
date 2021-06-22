@@ -10,8 +10,14 @@
 	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
        <mesh filename="package://mycobot_ros/urdf/joint1.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 0 " rpy = " 0 0 -1.5708"/>
+      <origin xyz = "0.0 0 0 " rpy = " 0 0 -1.5708"/>
     </visual>
+    <collision>
+      <origin xyz="0 0 0.036" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.065" radius="0.045" />
+      </geometry>
+    </collision>
   </link>
 
   <link name="joint2">
@@ -19,8 +25,14 @@
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/joint2.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.06096 " rpy = " 0 0 -1.5708"/>
+      <origin xyz = "0.0 0 -0.06096 " rpy = " 0 0 -1.5708"/>
     </visual>
+    <collision>
+      <origin xyz="0 0 -0.023" rpy="0 0 -1.5708" />
+      <geometry>
+        <cylinder length="0.075" radius="0.024" />
+      </geometry>
+    </collision>
   </link>
 
 
@@ -32,6 +44,12 @@
       </geometry>
     <origin xyz = "0.0 0 0.03256 " rpy = " 0 -1.5708 0"/>
     </visual>
+    <collision>
+      <origin xyz="-0.05 0 0.064" rpy="0 -1.5708 0" />
+      <geometry>
+        <cylinder length="0.146" radius="0.024" />
+      </geometry>
+    </collision>
   </link>
 
 
@@ -41,14 +59,18 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/joint4.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 0.03056 " rpy = " 0 -1.5708 0"/>
+      <origin xyz = "0.0 0 0.03056 " rpy = " 0 -1.5708 0"/>
     </visual>
+    <collision>
+      <origin xyz="-0.05 0 0.0" rpy="0 -1.5708 0" />
+      <geometry>
+        <cylinder length="0.128" radius="0.024" />
+      </geometry>
+    </collision>
   </link>
 
 
-
-
-<link name="joint5">
+  <link name="joint5">
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
@@ -56,6 +78,12 @@
       </geometry>
     <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
     </visual>
+    <collision>
+      <origin xyz="0 -0.007 0" rpy="0 -1.5708 1.5708 " />
+      <geometry>
+        <cylinder length="0.05" radius="0.024" />
+      </geometry>
+    </collision>
   </link>
 
 
@@ -67,6 +95,12 @@
       </geometry>
     <origin xyz = "0 0.00 -0.038 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <origin xyz="0 0.005 0" rpy="1.57 0 0" />
+      <geometry>
+        <cylinder length="0.058" radius="0.02" />
+      </geometry>
+    </collision>
   </link>
 
 
@@ -78,6 +112,12 @@
       </geometry>
     <origin xyz = "0.0 0 -0.012 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <origin xyz="0 0 -0.004" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.01" radius="0.02" />
+      </geometry>
+    </collision>
   </link>
 
 
