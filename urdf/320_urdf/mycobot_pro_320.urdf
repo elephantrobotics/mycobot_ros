@@ -68,7 +68,7 @@
 
 
 
-<link name="link4">
+  <link name="link4">
     <visual>
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/320_urdf/link4.dae"/>
