@@ -80,7 +80,7 @@ def grippercallback(data):
 
         x -= x_offset
         y -= y_offset
-        pub_coords(x, y, 280)
+        pub_coords(x-20, y, 280)
         time.sleep(.1)
 
         temp_x, temp_y, temp_z = x, y, z
@@ -91,7 +91,7 @@ def grippercallback(data):
         # detect heigth + pump height + limit height + offset
         x += x_offset
         y += y_offset
-        z = z  + 88 + 25 + z_offset
+        z = z  + 88  + z_offset
 
 
         pub_coords(x, y, z)

@@ -43,9 +43,9 @@
       <origin xyz = "0 0 0.0587 " rpy = " 0 0 3.1415926"/>
     </visual>
     <collision>
-     <origin xyz = "0.04 0 0.095 " rpy = " 0 -1.5708 0"/>
+     <origin xyz = "0.07 0 0.095 " rpy = " 0 -1.5708 0"/>
       <geometry>
-        <cylinder length="0.21" radius="0.036"/>
+        <cylinder length="0.18" radius="0.036"/>
       </geometry>
     </collision>
   </link>
@@ -59,9 +59,9 @@
       <origin xyz = "0 0 0.038 " rpy = " 0 0 3.1415926"/>
     </visual>
     <collision>
-      <origin xyz = "0.034 0 0 " rpy = " 0 -1.5708 0"/>
+      <origin xyz = "0.044 0 0 " rpy = " 0 -1.5708 0"/>
       <geometry>
-        <cylinder length="0.119" radius="0.0305"/>
+        <cylinder length="0.14" radius="0.0305"/>
       </geometry>
     </collision>
   </link>
@@ -76,9 +76,9 @@
       <origin xyz = "0 -0.001 0 " rpy = " 0 0 0"/>
     </visual>
     <collision>
-      <origin xyz = "0.0 -0.012 0 " rpy = " 0 -1.5708 1.5708"/>
+      <origin xyz = "0.0 -0.014 0 " rpy = " 0 -1.5708 1.5708"/>
       <geometry>
-        <cylinder length="0.085" radius="0.029"/>
+        <cylinder length="0.083" radius="0.029"/>
       </geometry>
     </collision>
   </link>

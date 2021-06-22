@@ -14,7 +14,7 @@ mc = None
 
 def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    # print(data.position)
+    print(data.position)
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(value)
