@@ -52,6 +52,11 @@ if __name__ == '__main__':
     print('==> send coord id: X, coord value: -40, speed: 70\n')
     time.sleep(2)
 
+    print('==> go to resting position')
+    resting_position = [2.92, -25.08, -25.51, 9.15, 6.44, 16.72]
+    mycobot.send_angles(resting_position, speed=80)
+    time.sleep(5)
+
     print('::release_all_servos()')
     mycobot.release_all_servos()
     print('==> into free moving mode.')
