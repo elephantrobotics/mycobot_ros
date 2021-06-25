@@ -52,7 +52,7 @@ class Window:
         tk.Button(self.frmLB,text="夹爪(关)",command=self.gripper_close,width=5).grid(row=1, column=1, sticky="w", padx=3, pady=2)
     
     def connect_ser(self):
-        rospy.init_node('simple_gui', anonymous=True)
+        rospy.init_node('simple_gui', anonymous=True, disable_signals=True)
 
         rospy.wait_for_service('get_joint_angles')
         rospy.wait_for_service('set_joint_angles')
@@ -338,8 +338,16 @@ class Window:
                 j.set(str(i)+"°")
                 
     def run(self):
-        self.win.mainloop()
-     
+        while True:
+            try:
+                self.win.update()
+                time.sleep(0.001)
+            except tk.TclError as e:
+                if "application has been destroyed" in str(e):
+                    break
+                else:
+                    raise
+
 def main():
     window = tk.Tk()
     window.title('mycobot ros GUI')
