@@ -26,13 +26,13 @@
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link1.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = "0 0 3.1415926"/>
     </visual>
      <collision>
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link1.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = " 0 0 3.1415926"/>
     </collision>
   </link>
 
@@ -42,13 +42,13 @@
       <geometry>
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link2.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.080 " rpy = " 0 0 3.1415926"/>
+    <origin xyz = "0 0 -0.080 " rpy = " 3.1415926 0 3.1415926"/>
     </visual>
      <collision>
      <geometry>
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link2.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.080 " rpy = " 0 0 3.1415926"/>
+    <origin xyz = "0 0 -0.080 " rpy = " 3.1415926 0 3.1415926"/>
     </collision>
   </link>
 
@@ -59,14 +59,14 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link3.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.0855 " rpy = " 0 0 3.1415926"/>
+    <origin xyz = "0 0 -0.0855 " rpy = " 3.1415926 0 3.1415926"/>
     </visual>
      <collision>
       <geometry>
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link3.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.0855 " rpy = " 0 0 3.1415926"/>
+    <origin xyz = "0 0 -0.0855 " rpy = "3.1415926 0 3.1415926"/>
     </collision>
   </link>
 
@@ -78,14 +78,14 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link4.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = " 0 3.1415926 0"/>
     </visual>
      <collision>
      <geometry>
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link4.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = " 0 3.1415926 0"/>
     </collision>
   </link>
 
@@ -96,14 +96,14 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link5.dae"/>
       </geometry>
-    <origin xyz = "0 0  0 " rpy = " 0  0 -1.5707"/>
+    <origin xyz = "0 0  0 " rpy = " 0  0 1.5707"/>
     </visual>
      <collision>
       <geometry>
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_ros/urdf/600_urdf/link5.dae"/>
       </geometry>
-    <origin xyz = "0 0  0 " rpy = " 0  0 -1.5707"/>
+    <origin xyz = "0 0  0 " rpy = " 0  0 1.5707"/>
     </collision>
   </link>
 
@@ -116,7 +116,7 @@
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-    <origin xyz = "-0.03 0 0" rpy = " 0 1.5707  0"/>
+    <origin xyz = "0.03 0 0" rpy = " 0 -1.5707  0"/>
     </visual>
      <collision>
      <geometry>
@@ -126,7 +126,7 @@
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-    <origin xyz = "-0.03 0 0" rpy = " 0 1.5707  0"/>
+    <origin xyz = "0.03 0 0" rpy = " 0 -1.5707  0"/>
     </collision>
   </link>
 
@@ -163,7 +163,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "0.25 0  0.1091" rpy = "0 0 0"/>  
+    <origin xyz= "0.25 0  -0.1091" rpy = "0 0 0"/>  
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
@@ -175,11 +175,11 @@
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
-    <axis xyz="1 0 0"/>
+    <axis xyz="-1 0 0"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link5"/>
     <child link="link6"/>
-    <origin xyz= "0.07586 0 0" rpy = "-1.57080 0 0 "/>  
+    <origin xyz= "-0.07586 0 0" rpy = "-1.57080 0 0 "/>  
   </joint>
 
 
