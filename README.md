@@ -24,7 +24,7 @@
 There are two ways to run this project. The first is by running the project in a container, and this requires
 [installing docker](https://docs.docker.com/engine/install/ubuntu/) and
 [installing docker-compose](https://docs.docker.com/compose/install/). The benefit of running in the container is that you can run the project in any version of linux, as long as your kernel
-is new enough. 
+is new enough.
 
 Once docker is installed, run the following command, and the project should show up.
 
@@ -42,11 +42,11 @@ docker-compose build nvidia-ros && xhost +local:root && docker-compose up nvidia
 
 This command does three things:
 1) `docker-compose build ros`
-   
+
    This builds the project in a container. That means nothing is installed on your host machine!
-   The first time this runs, this command will take a long while. After running it once, caching 
+   The first time this runs, this command will take a long while. After running it once, caching
    will allow this command to run quickly.
-   
+
 2) `xhost +local:root`
 
    This command gives X the ability to display GUI's from within the docker container
@@ -55,7 +55,7 @@ This command does three things:
 
    This runs the image specified in the `docker-compose.yml`, which by default runs
    the command `roslaunch mycobot_ros mycobot_slider.launch` within the container.
-   
+
 
 ### Option 2: Local
 #### 1.1 Pre-Requriements
@@ -72,7 +72,7 @@ Install ros package in your src folder of your Catkin workspace.
 
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/elephantrobotics/mycobot_ros.git
+$ git clone --depth 1 https://github.com/elephantrobotics/mycobot_ros.git
 $ cd ~/catkin_ws
 $ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
@@ -103,9 +103,3 @@ python scripts/test.py
 ---
 
 ~*END*~
-
-<!-- ## Q & A
-
-**Q: error[101]**
-
-**A:** Make sure that the serial port is not occupied, and that the correct firmware is burned in for atom and basic -->
