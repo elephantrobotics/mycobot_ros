@@ -1,71 +1,69 @@
 #!/usr/bin/env python
 
-'''
+"""
 This package need `pymycobot`.
 This file for test the API if right.
 Just can run in Linux.
-'''
+"""
 
 import time, random, subprocess
 from pymycobot.mycobot import MyCobot
 from pymycobot.genre import Angle, Coord
 
-if __name__ == '__main__': 
-    sys_ = subprocess.check_output(['uname'], 
-                                    shell=True).decode()
-    if not sys_ == 'Linux':
-        print('This script just can run on Linux.')  
+if __name__ == "__main__":
+    sys_ = subprocess.check_output(["uname"], shell=True).decode()
+    if not sys_ == "Linux":
+        print("This script just can run on Linux.")
         exit(0)
 
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True).decode()
+    port = subprocess.check_output(["echo -n /dev/ttyUSB*"], shell=True).decode()
     mycobot = MyCobot(port)
 
-    print('Start check api\n')
+    print("Start check api\n")
 
-    print('::get_angles()')
-    print('==> degrees: {}\n'.format(mycobot.get_angles()))
+    print("::get_angles()")
+    print("==> degrees: {}\n".format(mycobot.get_angles()))
     time.sleep(0.5)
 
-    print('::get_radians()')
-    print('==> radians: {}\n'.format(mycobot.get_radians()))
+    print("::get_radians()")
+    print("==> radians: {}\n".format(mycobot.get_radians()))
     time.sleep(0.5)
 
-    print('::send_angles()')
-    mycobot.send_angles([0,0,0,0,0,0], 80)
-    print('==> set angles [0,0,0,0,0,0], speed 80\n')
-    print('Is moving: {}'.format(mycobot.is_moving()))
+    print("::send_angles()")
+    mycobot.send_angles([0, 0, 0, 0, 0, 0], 80)
+    print("==> set angles [0,0,0,0,0,0], speed 80\n")
+    print("Is moving: {}".format(mycobot.is_moving()))
     time.sleep(3)
 
-    print('::send_radians')
-    mycobot.send_radians([1,1,1,1,1,1], 70)
-    print('==> set raidans [1,1,1,1,1,1], speed 70\n')
+    print("::send_radians")
+    mycobot.send_radians([1, 1, 1, 1, 1, 1], 70)
+    print("==> set raidans [1,1,1,1,1,1], speed 70\n")
     time.sleep(1.5)
 
-    print('::send_angle()')
+    print("::send_angle()")
     mycobot.send_angle(Angle.J2.value, 10, 50)
-    print('==> angle: joint2, degree: 10, speed: 50\n')
+    print("==> angle: joint2, degree: 10, speed: 50\n")
     time.sleep(1)
 
-    print('::get_coords()')
-    print('==> coords {}\n'.format(mycobot.get_coords()))
+    print("::get_coords()")
+    print("==> coords {}\n".format(mycobot.get_coords()))
     time.sleep(0.5)
 
-    print('::send_coords()')
+    print("::send_coords()")
     coord_list = [160, 160, 160, 0, 0, 0]
     mycobot.send_coords(coord_list, 70, 0)
-    print('==> send coords [160,160,160,0,0,0], speed 70, mode 0\n')
+    print("==> send coords [160,160,160,0,0,0], speed 70, mode 0\n")
     time.sleep(3.0)
 
     print(mycobot.is_in_position(coord_list, 1))
     time.sleep(1)
 
-    print('::send_coord()')
+    print("::send_coord()")
     mycobot.send_coord(Coord.X.value, -40, 70)
-    print('==> send coord id: X, coord value: -40, speed: 70\n')
+    print("==> send coord id: X, coord value: -40, speed: 70\n")
     time.sleep(2)
 
-    print('::release_all_servos()')
+    print("::release_all_servos()")
     mycobot.release_all_servos()
-    print('==> into free moving mode.')
-    print('=== check end <==\n')
+    print("==> into free moving mode.")
+    print("=== check end <==\n")

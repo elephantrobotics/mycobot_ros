@@ -18,13 +18,14 @@ def callback(data):
         data_list.append(value)
 
     mc.send_radians(data_list, 80)
-    
+
+
 def listener():
     global mc
-    rospy.init_node('mycobot_reciver', anonymous=True)
+    rospy.init_node("mycobot_reciver", anonymous=True)
 
-    port = rospy.get_param('~port', '/dev/ttyUSB0')
-    baud = rospy.get_param('~baud', 115200)
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
 
@@ -33,5 +34,6 @@ def listener():
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     listener()

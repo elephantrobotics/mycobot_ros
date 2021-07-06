@@ -14,7 +14,7 @@ mutex = Lock()
 
 
 class ElephantRobot(object):
-    def __init__(self,host,port):
+    def __init__(self, host, port):
         # setup connection
         self.BUFFSIZE = 2048
         self.ADDR = (host, port)
@@ -23,28 +23,28 @@ class ElephantRobot(object):
     def start_client(self):
         try:
             self.tcp_client.connect(self.ADDR)
-            return ''
+            return ""
         except error, e:
             return e
 
     def stop_client(self):
         self.tcp_client.close()
 
-    def send_command(self,command):
+    def send_command(self, command):
         with mutex:
             self.tcp_client.send(command.encode())
             recv_data = self.tcp_client.recv(self.BUFFSIZE).decode()
             res_str = str(recv_data)
-            print 'recv = ' + res_str
+            print "recv = " + res_str
             res_arr = res_str.split(":")
             if len(res_arr) == 2:
                 return res_arr[1]
             else:
-                return ''
+                return ""
 
     def string_to_coords(self, data):
-        data = data.replace('[','')
-        data = data.replace(']','')
+        data = data.replace("[", "")
+        data = data.replace("]", "")
         data_arr = data.split(",")
         if len(data_arr) == 6:
             try:
@@ -54,8 +54,7 @@ class ElephantRobot(object):
                 coords_4 = float(data_arr[3])
                 coords_5 = float(data_arr[4])
                 coords_6 = float(data_arr[5])
-                coords = [coords_1, coords_2, coords_3,
-                        coords_4, coords_5, coords_6]
+                coords = [coords_1, coords_2, coords_3, coords_4, coords_5, coords_6]
                 return coords
             except:
                 return invalid_coords()
@@ -80,80 +79,80 @@ class ElephantRobot(object):
         return coords
 
     def get_angles(self):
-        command = 'get_angles()\n'
+        command = "get_angles()\n"
         res = self.send_command(command)
         return self.string_to_coords(res)
 
     def get_coords(self):
-        command = 'get_coords()\n'
+        command = "get_coords()\n"
         res = self.send_command(command)
         return self.string_to_coords(res)
 
     def get_speed(self):
-        command = 'get_speed()\n'
+        command = "get_speed()\n"
         res = self.send_command(command)
         return self.string_to_double(res)
 
     def power_on(self):
-        command = 'power_on()\n'
+        command = "power_on()\n"
         res = self.send_command(command)
         return True
 
     def power_off(self):
-        command = 'power_off()\n'
+        command = "power_off()\n"
         res = self.send_command(command)
         return True
 
     def check_running(self):
-        command = 'check_running()\n'
+        command = "check_running()\n"
         res = self.send_command(command)
-        return res == '1'
+        return res == "1"
 
     def state_check(self):
-        command = 'state_check()\n'
+        command = "state_check()\n"
         res = self.send_command(command)
-        return res == '1'
+        return res == "1"
 
     def program_open(self, file_path):
-        command = 'program_open(' + file_path + ")\n"
+        command = "program_open(" + file_path + ")\n"
         res = self.send_command(command)
         return self.string_to_int(res)
 
     def program_run(self, start_line):
-        command = 'program_run(' + str(start_line) + ")\n"
+        command = "program_run(" + str(start_line) + ")\n"
         res = self.send_command(command)
         return self.string_to_int(res)
 
     def read_next_error(self):
-        command = 'read_next_error()\n'
+        command = "read_next_error()\n"
         res = self.send_command(command)
         return res
 
-    def write_coords(self,coords,speed):
+    def write_coords(self, coords, speed):
         command = "set_coords("
         for item in coords:
-            command += str(item) + ','
-        command += str(speed) + ')\n'
+            command += str(item) + ","
+        command += str(speed) + ")\n"
         self.send_command(command)
 
     def write_coord(self, axis, value, speed):
         coords = self.get_coords()
         if coords != self.invalid_coords():
             coords[axis] = value
-            self.write_coords(coords,speed)
+            self.write_coords(coords, speed)
 
-    def write_angles(self,angles,speed):
+    def write_angles(self, angles, speed):
         command = "set_angles("
         for item in angles:
-            command += str(item) + ','
-        command += str(speed) + ')\n'
+            command += str(item) + ","
+        command += str(speed) + ")\n"
         self.send_command(command)
 
     def write_angle(self, joint, value, speed):
         angles = self.get_angles()
         if angles != self.invalid_coords():
             angles[joint] = value
-            self.write_angles(angles,speed)
+            self.write_angles(angles, speed)
 
     def set_speed(self, percentage):
         command = "set_speed(" + str(percentage) + ")\n"
@@ -187,11 +186,15 @@ class ElephantRobot(object):
         self.send_command(command)
 
     def jog_angle(self, joint_str, direction, speed):
-        command = "jog_angle(" + joint_str + "," + str(direction) + "," + str(speed) + ")\n"
+        command = (
+            "jog_angle(" + joint_str + "," + str(direction) + "," + str(speed) + ")\n"
+        )
         self.send_command(command)
 
     def jog_coord(self, axis_str, direction, speed):
-        command = "jog_coord(" + axis_str + "," + str(direction) + "," + str(speed) + ")\n"
+        command = (
+            "jog_coord(" + axis_str + "," + str(direction) + "," + str(speed) + ")\n"
+        )
         self.send_command(command)
 
     def get_digital_in(self, pin_number):
@@ -228,7 +231,7 @@ class ElephantRobot(object):
         self.send_command(command)
 
     def assign_variable(self, var_name, var_value):
-        command = 'assign_variable("' + str(var_name) + '",' + str(var_value) + ')\n'
+        command = 'assign_variable("' + str(var_name) + '",' + str(var_value) + ")\n"
         self.send_command(command)
 
     def get_variable(self, var_name):
@@ -236,41 +239,41 @@ class ElephantRobot(object):
         return self.send_command(command)
 
 
-
 old_list = []
+
 
 def callback(data):
     global old_list
-    #rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    print('position', data.position)
+    # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
+    print ("position", data.position)
     data_list = []
     for index, value in enumerate(data.position):
         value = value * 180 / math.pi
         data_list.append(value)
-    print('data', data_list)
+    print ("data", data_list)
 
     if not old_list:
         old_list = data_list
         mc.write_angles(data_list, 1999)
     elif old_list != data_list:
         old_list = data_list
-        if (mc.check_running()):
+        if mc.check_running():
             mc.task_stop()
             time.sleep(0.05)
-        
+
         mc.write_angles(data_list, 1999)
 
 
 def listener():
     global mc
-    rospy.init_node('control_slider', anonymous=True)
+    rospy.init_node("control_slider", anonymous=True)
 
-    ip = rospy.get_param('~ip', '192.168.10.169')
-    print(ip)
+    ip = rospy.get_param("~ip", "192.168.10.169")
+    print (ip)
     mc = ElephantRobot(ip, 5001)
     # START CLIENT
     res = mc.start_client()
-    if res != '':
+    if res != "":
         print res
         sys.exit(1)
         print ep.wait(5)
@@ -282,9 +285,9 @@ def listener():
     rospy.Subscriber("joint_states", JointState, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
-    print('sping ...')
+    print ("sping ...")
     rospy.spin()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     listener()

@@ -11,28 +11,30 @@ from pymycobot.mycobot import MyCobot
 
 
 def talker():
-    rospy.init_node('display', anonymous=True)
+    rospy.init_node("display", anonymous=True)
 
-    print('Try connect real mycobot...')
-    port = rospy.get_param('~port', '/dev/ttyUSB0')
-    baud = rospy.get_param('~baud', 115200)
-    print('port: {}, baud: {}\n'.format(port, baud))
+    print("Try connect real mycobot...")
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    baud = rospy.get_param("~baud", 115200)
+    print("port: {}, baud: {}\n".format(port, baud))
     try:
         mycobot = MyCobot(port, baud)
     except Exception as e:
         print(e)
-        print('''\
+        print(
+            """\
             \rTry connect mycobot failed!
             \rPlease check wether connected with mycobot.
             \rPlease chckt wether the port or baud is right.
-        ''')
+        """
+        )
         exit(1)
     mycobot.release_all_servos()
-    time.sleep(.1)
-    print('Rlease all servos over.\n')
+    time.sleep(0.1)
+    print("Rlease all servos over.\n")
 
-    pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    pub_marker = rospy.Publisher('visualization_marker', Marker, queue_size=10)
+    pub = rospy.Publisher("joint_states", JointState, queue_size=10)
+    pub_marker = rospy.Publisher("visualization_marker", Marker, queue_size=10)
     rate = rospy.Rate(30)  # 30hz
 
     # pub joint state
@@ -40,21 +42,21 @@ def talker():
     joint_state_send.header = Header()
 
     joint_state_send.name = [
-        'joint2_to_joint1',
-        'joint3_to_joint2',
-        'joint4_to_joint3',
-        'joint5_to_joint4',
-        'joint6_to_joint5',
-        'joint6output_to_joint6'
+        "joint2_to_joint1",
+        "joint3_to_joint2",
+        "joint4_to_joint3",
+        "joint5_to_joint4",
+        "joint6_to_joint5",
+        "joint6output_to_joint6",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
 
     marker_ = Marker()
-    marker_.header.frame_id = '/joint1'
-    marker_.ns = 'my_namespace'
+    marker_.header.frame_id = "/joint1"
+    marker_.ns = "my_namespace"
 
-    print('publishing ...')
+    print("publishing ...")
     while not rospy.is_shutdown():
         joint_state_send.header.stamp = rospy.Time.now()
 
@@ -82,7 +84,7 @@ def talker():
         # print(coords)
         if not coords:
             coords = [0, 0, 0, 0, 0, 0]
-            rospy.loginfo('error [101]: can not get coord values')
+            rospy.loginfo("error [101]: can not get coord values")
 
         marker_.pose.position.x = coords[1] / 1000 * -1
         marker_.pose.position.y = coords[0] / 1000
@@ -95,7 +97,7 @@ def talker():
         rate.sleep()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         talker()
     except rospy.ROSInterruptException:

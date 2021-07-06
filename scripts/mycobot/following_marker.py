@@ -9,24 +9,23 @@ import tf
 
 
 def talker():
-    rospy.init_node('following_marker', anonymous=True)
+    rospy.init_node("following_marker", anonymous=True)
 
-    pub_marker = rospy.Publisher('visualization_marker', Marker, queue_size=10)
+    pub_marker = rospy.Publisher("visualization_marker", Marker, queue_size=10)
     rate = rospy.Rate(20)
-
 
     listener = tf.TransformListener()
 
     marker_ = Marker()
-    marker_.header.frame_id = '/joint1'
-    marker_.ns = 'basic_cube'
+    marker_.header.frame_id = "/joint1"
+    marker_.ns = "basic_cube"
 
-    print('publishing ...')
+    print("publishing ...")
     while not rospy.is_shutdown():
         now = rospy.Time.now() - rospy.Duration(0.1)
 
         try:
-            trans, rot = listener.lookupTransform('joint1', 'basic_shapes', now)
+            trans, rot = listener.lookupTransform("joint1", "basic_shapes", now)
         except Exception as e:
             print(e)
             continue
@@ -58,7 +57,7 @@ def talker():
         rate.sleep()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         talker()
     except rospy.ROSInterruptException:

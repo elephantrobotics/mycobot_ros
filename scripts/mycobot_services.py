@@ -10,22 +10,22 @@ mc = None
 
 def create_handle():
     global mc
-    rospy.init_node('mycobot_services')
-    rospy.loginfo('start ...')
-    port = rospy.get_param('~port')
-    baud = rospy.get_param('~baud')
+    rospy.init_node("mycobot_services")
+    rospy.loginfo("start ...")
+    port = rospy.get_param("~port")
+    baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
     mc = MyCobot(port, baud)
 
 
 def create_services():
-    rospy.Service('set_joint_angles', SetAngles, set_angles)
-    rospy.Service('get_joint_angles', GetAngles, get_angles)
-    rospy.Service('set_joint_coords', SetCoords, set_coords)
-    rospy.Service('get_joint_coords', GetCoords, get_coords)
-    rospy.Service('switch_gripper_status', GripperStatus, switch_status)
-    rospy.Service('switch_pump_status', PumpStatus, toggle_pump)
-    rospy.loginfo('ready')
+    rospy.Service("set_joint_angles", SetAngles, set_angles)
+    rospy.Service("get_joint_angles", GetAngles, get_angles)
+    rospy.Service("set_joint_coords", SetCoords, set_coords)
+    rospy.Service("get_joint_coords", GetCoords, get_coords)
+    rospy.Service("switch_gripper_status", GripperStatus, switch_status)
+    rospy.Service("switch_pump_status", PumpStatus, toggle_pump)
+    rospy.loginfo("ready")
     rospy.spin()
 
 
@@ -66,7 +66,7 @@ def set_coords(req):
 
     if mc:
         mc.send_coords(coords, sp, mod)
-    
+
     return SetCoordsResponse(True)
 
 
@@ -98,7 +98,7 @@ def toggle_pump(req):
     return PumpStatusResponse(True)
 
 
-robot_msg = '''
+robot_msg = """
 MyCobot Status
 --------------------------------
 Joint Limit:
@@ -116,29 +116,30 @@ Servo Infomation: %s
 Servo Temperature: %s
 
 Atom Version: %s
-'''
+"""
 
 
 def output_robot_message():
     connect_status = False
-    servo_infomation = 'unknown'
-    servo_temperature = 'unknown'
-    atom_version = 'unknown'
+    servo_infomation = "unknown"
+    servo_temperature = "unknown"
+    atom_version = "unknown"
 
     if mc:
         cn = mc.is_controller_connected()
         if cn == 1:
             connect_status = True
-        time.sleep(.1)
+        time.sleep(0.1)
         si = mc.is_all_servo_enable()
         if si == 1:
-            servo_infomation = 'all connected'
+            servo_infomation = "all connected"
 
-    print(robot_msg % (connect_status, servo_infomation,
-          servo_temperature, atom_version))
+    print(
+        robot_msg % (connect_status, servo_infomation, servo_temperature, atom_version)
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # print(MyCobot.__dict__)
     create_handle()
     output_robot_message()

@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from mycobot_ros.srv import (
-    GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus)
+from mycobot_ros.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import sys
 import select
 import termios
 import tty
-import copy
 import time
 
 import roslib
-roslib.load_manifest('mycobot_ros')
+
+roslib.load_manifest("mycobot_ros")
 
 
-msg = """
+msg = """\
 Mycobot Teleop Keyboard Controller
 ---------------------------
 Movimg options(control coordinations [x,y,z,rx,ry,rz]):
@@ -44,7 +43,7 @@ def vels(speed, turn):
 
 
 class Raw(object):
-    def __init__(self,stream):
+    def __init__(self, stream):
         self.stream = stream
         self.fd = self.stream.fileno()
 
@@ -57,29 +56,28 @@ class Raw(object):
 
 
 def teleop_keyboard():
-    rospy.init_node('teleop_keyboard')
+    rospy.init_node("teleop_keyboard")
 
     model = 0
     speed = rospy.get_param("~speed", 50)
-    change_percent= rospy.get_param("~change_percent", 5)
+    change_percent = rospy.get_param("~change_percent", 5)
 
-    change_angle = 180 *  change_percent / 100
+    change_angle = 180 * change_percent / 100
     change_len = 250 * change_percent / 100
 
-    rospy.wait_for_service('get_joint_angles')
-    rospy.wait_for_service('set_joint_angles')
-    rospy.wait_for_service('get_joint_coords')
-    rospy.wait_for_service('set_joint_coords')
-    rospy.wait_for_service('switch_gripper_status')
+    rospy.wait_for_service("get_joint_angles")
+    rospy.wait_for_service("set_joint_angles")
+    rospy.wait_for_service("get_joint_coords")
+    rospy.wait_for_service("set_joint_coords")
+    rospy.wait_for_service("switch_gripper_status")
     try:
-        get_coords = rospy.ServiceProxy('get_joint_coords', GetCoords)
-        set_coords = rospy.ServiceProxy('set_joint_coords', SetCoords)
-        get_angles = rospy.ServiceProxy('get_joint_angles', GetAngles)
-        set_angles = rospy.ServiceProxy('set_joint_angles', SetAngles)
-        switch_gripper = rospy.ServiceProxy(
-            'switch_gripper_status', GripperStatus)
+        get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
+        set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
+        get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
+        set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
+        switch_gripper = rospy.ServiceProxy("switch_gripper_status", GripperStatus)
     except:
-        print('start error ...')
+        print("start error ...")
         exit(1)
 
     init_pose = [0, 0, 0, 0, 0, 0, speed]
@@ -91,68 +89,66 @@ def teleop_keyboard():
         res = get_coords()
         if res.x > 1:
             break
-        time.sleep(.1)
+        time.sleep(0.1)
 
-    record_coords = [
-        res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model
-    ]
+    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
     print(record_coords)
 
     try:
         print(msg)
         print(vels(speed, change_percent))
-        while(1):
+        while 1:
             try:
                 # print("\r current coords: %s" % record_coords, end="")
                 with Raw(sys.stdin):
                     key = sys.stdin.read(1)
-                if key == 'q':
+                if key == "q":
                     break
-                elif key in ['w', 'W']:
+                elif key in ["w", "W"]:
                     record_coords[0] += change_len
                     set_coords(*record_coords)
-                elif key in ['s', 'S']:
+                elif key in ["s", "S"]:
                     record_coords[0] -= change_len
                     set_coords(*record_coords)
-                elif key in ['a', 'A']:
+                elif key in ["a", "A"]:
                     record_coords[1] -= change_len
                     set_coords(*record_coords)
-                elif key in ['d', 'D']:
+                elif key in ["d", "D"]:
                     record_coords[1] += change_len
                     set_coords(*record_coords)
-                elif key in ['z', 'Z']:
+                elif key in ["z", "Z"]:
                     record_coords[2] -= change_len
                     set_coords(*record_coords)
-                elif key in ['x', 'X']:
+                elif key in ["x", "X"]:
                     record_coords[2] += change_len
                     set_coords(*record_coords)
-                elif key in ['u', 'U']:
+                elif key in ["u", "U"]:
                     record_coords[3] += change_angle
                     set_coords(*record_coords)
-                elif key in ['j', 'J']:
+                elif key in ["j", "J"]:
                     record_coords[3] -= change_angle
                     set_coords(*record_coords)
-                elif key in ['i', 'I']:
+                elif key in ["i", "I"]:
                     record_coords[4] += change_angle
                     set_coords(*record_coords)
-                elif key in ['k', 'K']:
+                elif key in ["k", "K"]:
                     record_coords[4] -= change_angle
                     set_coords(*record_coords)
-                elif key in ['o', 'O']:
+                elif key in ["o", "O"]:
                     record_coords[5] += change_angle
                     set_coords(*record_coords)
-                elif key in ['l', 'L']:
+                elif key in ["l", "L"]:
                     record_coords[5] -= change_angle
                     set_coords(*record_coords)
-                elif key in ['g', 'G']:
+                elif key in ["g", "G"]:
                     switch_gripper(True)
-                elif key in ['h', 'H']:
+                elif key in ["h", "H"]:
                     switch_gripper(False)
-                elif key == '1':
+                elif key == "1":
                     rsp = set_angles(*init_pose)
-                elif key in '2':
+                elif key in "2":
                     rsp = set_angles(*home_pose)
-                elif key in '3':
+                elif key in "3":
                     rep = get_angles()
                     home_pose[0] = rep.joint_1
                     home_pose[1] = rep.joint_2
