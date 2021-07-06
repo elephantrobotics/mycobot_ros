@@ -1,9 +1,22 @@
+#!/usr/bin/env python
+
+'''
+This package need `pymycobot`.
+This file for test the API if right.
+Just can run in Linux.
+'''
+
 import time, random, subprocess
 from pymycobot.mycobot import MyCobot
-# from pythonAPI.mycobot3 import MyCobot as MyCobot3
 from pymycobot.genre import Angle, Coord
 
 if __name__ == '__main__': 
+    sys_ = subprocess.check_output(['uname'], 
+                                    shell=True).decode()
+    if not sys_ == 'Linux':
+        print('This script just can run on Linux.')  
+        exit(0)
+
     port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
                                     shell=True).decode()
     mycobot = MyCobot(port)

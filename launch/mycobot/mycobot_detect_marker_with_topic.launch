@@ -2,7 +2,7 @@
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot_with_marker.rviz" />
 	<arg name="gui" default="false" />
 
@@ -16,7 +16,7 @@
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
 	<!-- mycobot-topics -->
-    <include file="$(find mycobot_ros)/launch/communication_topic.launch">
+    <include file="$(find mycobot_ros)/launch/mycobot/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>

@@ -2,7 +2,7 @@
 	<!-- <arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" /> -->
 
-	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot.rviz" />
 	<arg name="gui" default="true" />
 

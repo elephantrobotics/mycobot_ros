@@ -45,20 +45,20 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}) 
 
 catkin_install_python(PROGRAMS 
-  scripts/follow_display.py 
-  scripts/slider_control.py 
-  scripts/control_marker.py
   scripts/mycobot_services.py
   scripts/mycobot_topics.py
-  scripts/listen_real.py
-  scripts/listen_real_of_topic.py
-  scripts/teleop_keyboard.py
-  scripts/sync_plan.py
+  scripts/mycobot/follow_display.py 
+  scripts/mycobot/slider_control.py 
+  scripts/mycobot/teleop_keyboard.py
+  scripts/mycobot/listen_real.py
+  scripts/mycobot/listen_real_of_topic.py
+  scripts/mycobot/detect_marker.py
+  scripts/mycobot/following_marker.py
+  scripts/mycobot/follow_and_pump.py
+  scripts/mycobot/simple_gui.py
+  scripts/control_marker.py
+  scripts/mycobot_moveit/sync_plan.py
   scripts/client.py
-  scripts/detect_marker.py
-  scripts/following_marker.py
-  scripts/follow_and_pump.py
-  scripts/simple_gui.py
   scripts/slider_600.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

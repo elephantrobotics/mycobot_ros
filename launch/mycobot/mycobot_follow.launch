@@ -1,5 +1,5 @@
 <launch>
-	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_ros)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot.rviz" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
