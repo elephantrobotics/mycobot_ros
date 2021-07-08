@@ -128,7 +128,7 @@
 
 
 
-    <joint name="joint2_to_joint1" type="revolute">
+  <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint1"/>
