@@ -3,9 +3,9 @@
 	<arg name="rvizconfig" default="$(find mycobot_ros)/config/mycobot_600.rviz" />
 	<arg name="gui" default="true" />
 
-    <include file="$(find mycobot_ros)/launch/mycobot_slider.launch">
-		<arg name="model" value="$(arg model)" />	
-		<arg name="rvizconfig" value="$(arg rvizconfig)" />	
+    <include file="$(find mycobot_ros)/launch/mycobot/mycobot_slider.launch">
+		<arg name="model" value="$(arg model)" />
+		<arg name="rvizconfig" value="$(arg rvizconfig)" />
 		<arg name="gui" value="$(arg gui)" />
     </include>
 </launch>

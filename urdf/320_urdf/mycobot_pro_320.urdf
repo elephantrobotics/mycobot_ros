@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
-	
+
 <xacro:property name="width" value=".2" />
 
 
@@ -120,13 +120,11 @@
   <link name="gripper">
     <visual>
       <geometry>
-       <mesh filename="package://mycobot_ros/urdf/320_urdf/gripper_ag.dae"/>
+       <mesh filename="package://mycobot_ros/urdf/320_urdf/gripper.dae"/>
       </geometry>
       <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
     </visual>
   </link>
-
-
 
 
   <joint name="joint2_to_joint1" type="revolute">
@@ -134,7 +132,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="base"/>
     <child link="link1"/>
-    <origin xyz= "0 0 0.17846" rpy = "0 0 0"/>  
+    <origin xyz= "0 0 0.17846" rpy = "0 0 0"/>
   </joint>
 
 
@@ -143,7 +141,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz= "0 0  0" rpy = "0 -1.57080  1.57080"/>  
+    <origin xyz= "0 0  0" rpy = "0 -1.57080  1.57080"/>
   </joint>
 
 
@@ -152,7 +150,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link2"/>
     <child link="link3"/>
-    <origin xyz= "0.13635 0 0   " rpy = "0 0 0"/>  
+    <origin xyz= "0.13635 0 0   " rpy = "0 0 0"/>
   </joint>
 
   <joint name="joint5_to_joint4" type="revolute">
@@ -160,7 +158,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "0.1 0  0.090" rpy = "0 0 1.57080"/>  
+    <origin xyz= "0.1 0  0.090" rpy = "0 0 1.57080"/>
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
@@ -168,7 +166,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link4"/>
     <child link="link5"/>
-    <origin xyz= "0 -0.08515 0" rpy = "1.57080 -1.57080 0"/>  
+    <origin xyz= "0 -0.08515 0" rpy = "1.57080 -1.57080 0"/>
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
@@ -176,7 +174,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link5"/>
     <child link="link6"/>
-    <origin xyz= "0 0.06 0" rpy = "-1.57080 0 0 "/>  
+    <origin xyz= "0 0.06 0" rpy = "-1.57080 0 0 "/>
   </joint>
 
 
@@ -185,7 +183,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link6"/>
     <child link="gripper"/>
-    <origin xyz= "0 0 0" rpy = "0 0 0 "/>  
+    <origin xyz= "0 0 0" rpy = "0 0 0 "/>
   </joint>
 
 
