@@ -15,7 +15,6 @@ from mycobot_ros.msg import (
     MycobotGripperStatus,
     MycobotPumpStatus,
 )
-from sensor_msgs.msg import JointState
 
 from pymycobot.mycobot import MyCobot
 

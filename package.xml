@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>mycobot_ros</name>
-  <version>0.1.0</version>
+  <version>0.3.0</version>
   <description>The mycobot_ros package</description>
 
   <author email="lijun.zhang@elephantrobotics.com">ZhangLijun</author>
@@ -9,7 +9,7 @@
 
   <license>BSD</license>
 
-  <url type="website"></url>
+  <url type="website">https://github.com/elephantrobotics/mycobot_ros</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 

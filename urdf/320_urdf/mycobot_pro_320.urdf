@@ -179,7 +179,7 @@
 
 
   <joint name="gitpper_to_joint6output" type="fixed">
-    <axis xyz="0 0 1"/>
+    <axis xyz="0 0 0"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="link6"/>
     <child link="gripper"/>
