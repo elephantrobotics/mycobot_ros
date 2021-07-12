@@ -20,6 +20,9 @@
   <build_depend>mycobot_description</build_depend>
   <build_depend>mycobot_communication</build_depend>
 
+  <build_export_depend>mycobot_communication</build_export_depend>
+  <build_export_depend>mycobot_description</build_export_depend>
+
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
