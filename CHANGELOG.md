@@ -1,5 +1,9 @@
 # 2021
 
+## 07.12
+
+- Split package.
+
 ## 07.05
 
 - Added gripper model for Pro320 and modified urdf.

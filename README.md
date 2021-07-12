@@ -87,19 +87,19 @@ python scripts/test.py
 
 ## Screenshot
 
-![Demo](./Screenshot-1.png)
+![Demo](./demo_img/Screenshot-1.png)
 
-![Demo](./Screenshot-2.png)
+![Demo](./demo_img/Screenshot-2.png)
 
-![Demo](./Screenshot-3.png)
+![Demo](./demo_img/Screenshot-3.png)
 
-![Demo](./Screenshot-4.png)
+![Demo](./demo_img/Screenshot-4.png)
 
-![Demo](./Screenshot-5.png)
+![Demo](./demo_img/Screenshot-5.png)
 
-![Demo](./320_slider.png)
+![Demo](./demo_img/320_slider.png)
 
-![Demo](./320_moveit.png)
+![Demo](./demo_img/320_moveit.png)
 ---
 
 ~*END*~
