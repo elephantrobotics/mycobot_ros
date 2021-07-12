@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(mycobot_280) 
+project(mycobot_280)
 add_compile_options(-std=c++11)
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS 
-  roscpp 
-  rospy 
-  std_msgs 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
   actionlib
   image_transport
   cv_bridge
@@ -18,11 +18,11 @@ catkin_package(
 )
 
 ## Build talker and listener
-include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}) 
+include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
-catkin_install_python(PROGRAMS 
-  scripts/follow_display.py 
-  scripts/slider_control.py 
+catkin_install_python(PROGRAMS
+  scripts/follow_display.py
+  scripts/slider_control.py
   scripts/teleop_keyboard.py
   scripts/listen_real.py
   scripts/listen_real_of_topic.py
@@ -42,8 +42,3 @@ add_executable(opencv_camera src/opencv_camera)
 target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_executable(camera_display src/camera_display)
 target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
-if (CATKIN_ENABLE_TESTING)
-  find_package(roslaunch REQUIRED)
-  roslaunch_add_file_check(launch)
-endif()

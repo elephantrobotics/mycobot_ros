@@ -24,7 +24,10 @@ jobs:
         env:
           - { ROS_DISTRO: melodic, ROS_REPO: main }
           # - { ROS_DISTRO: noetic, ROS_REPO: main }
-
+    env:
+      CCACHE_DIR: /github/home/.ccache
+      ISOLATION: shell
+      
     steps:
       - name: Setup directories
         run: mkdir -p ros_ws/src
@@ -32,8 +35,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ros_ws/src
-      - name: Setup ROS environment
-        uses: ros-tooling/setup-ros@0.2.1
-        env: ${{ matrix.env }}
+      - uses: actions/cache@v2
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.env.ROS_DISTRO }}-${{ matrix.env.ROS_REPO }}
       - uses: "ros-industrial/industrial_ci@master"
         env: ${{ matrix.env }}
