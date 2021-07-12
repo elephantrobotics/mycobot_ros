@@ -10,8 +10,6 @@ import time
 
 import roslib
 
-# roslib.load_manifest("mycobot_ros")
-
 
 msg = """\
 Mycobot Teleop Keyboard Controller

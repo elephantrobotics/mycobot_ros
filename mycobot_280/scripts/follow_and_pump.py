@@ -4,7 +4,7 @@ from visualization_msgs.msg import Marker
 import time
 import random
 
-from mycobot_ros.msg import MycobotSetAngles, MycobotSetCoords, MycobotPumpStatus
+from mycobot_description.msg import MycobotSetAngles, MycobotSetCoords, MycobotPumpStatus
 
 
 rospy.init_node("gipper_subscriber", anonymous=True)
