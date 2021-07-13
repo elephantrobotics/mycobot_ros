@@ -6,7 +6,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from mycobot_description.msg import MycobotAngles
+from mycobot_communication.msg import MycobotAngles
 
 
 class Listener(object):

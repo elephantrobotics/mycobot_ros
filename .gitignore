@@ -1,5 +1,15 @@
 
-urdf.zip
 .DS_Store
-.vscode/settings.json
-.vscode/c_cpp_properties.json
+
+.vscode/
+
+# Editor directories and files
+.idea
+#.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+urdf.zip

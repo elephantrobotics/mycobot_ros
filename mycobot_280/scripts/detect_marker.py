@@ -7,7 +7,13 @@ from sensor_msgs.msg import Image
 import tf
 from tf.broadcaster import TransformBroadcaster
 import tf_conversions
-from mycobot_description.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from mycobot_communication.srv import (
+    GetCoords,
+    SetCoords,
+    GetAngles,
+    SetAngles,
+    GripperStatus,
+)
 
 
 class ImageConverter:
