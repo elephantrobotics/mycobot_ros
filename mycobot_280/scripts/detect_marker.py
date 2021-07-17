@@ -58,9 +58,10 @@ class ImageConverter:
         if len(corners) > 0:
             if ids is not None:
                 # print('corners:', corners, 'ids:', ids)
-                rvec, tvec, _ = cv.aruco.estimatePoseSingleMarkers(
+                ret = cv.aruco.estimatePoseSingleMarkers(
                     corners, 0.05, self.camera_matrix, self.dist_coeffs
                 )
+                (rvec, tvec) = (ret[0], ret[1])
                 (rvec - tvec).any()
 
                 print("rvec:", rvec, "tvec:", tvec)
