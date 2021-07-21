@@ -82,7 +82,7 @@ $ source ~/catkin_ws/devel/setup.bash
 
 ```bash
 cd ~/catkin_ws/src/mycobot_ros
-python scripts/test.py
+python test.py
 ```
 
 ## Screenshot
