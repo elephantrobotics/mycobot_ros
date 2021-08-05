@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot_ai" >
+
+  <xacro:property name="width" value=".2" />
+  <xacro:include filename="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf" />
+
+
+  <link name="env">
+    <visual>
+      <geometry>
+	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
+       <mesh filename="package://mycobot_description/urdf/mycobot/suit_env.dae"/>
+      </geometry>
+      <origin xyz = "0 0 -0.02 " rpy = "1.5708 0 -1.5708"/>
+    </visual>
+  </link>
+
+
+
+  <joint name="vision_joint" type="fixed">
+    <axis xyz="0 0 0"/>
+    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <parent link="joint1"/>
+    <child link="env"/>
+    <origin xyz= "0 0 0" rpy = "0 0 0"/>
+  </joint>
+
+</robot>
+

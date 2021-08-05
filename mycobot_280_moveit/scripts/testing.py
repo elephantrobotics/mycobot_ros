@@ -45,13 +45,13 @@ class MoveItIkDemo:
         target_pose = PoseStamped()
         target_pose.header.frame_id = reference_frame
         target_pose.header.stamp = rospy.Time.now()
-        target_pose.pose.position.x = 0.14996
-        target_pose.pose.position.y = 0.12317
-        target_pose.pose.position.z = 0.21203
-        target_pose.pose.orientation.x = -0.59375
-        target_pose.pose.orientation.y = -0.60903
-        target_pose.pose.orientation.z = -0.13927
-        target_pose.pose.orientation.w = 0.5071
+        target_pose.pose.position.x = 0.132
+        target_pose.pose.position.y = 0.150
+        target_pose.pose.position.z = 0.075
+        target_pose.pose.orientation.x =  0.026
+        target_pose.pose.orientation.y = 1.0
+        target_pose.pose.orientation.z = 0.0
+        target_pose.pose.orientation.w = 0.014
 
         # 设置机器臂当前的状态作为运动初始状态
         arm.set_start_state_to_current_state()
@@ -67,14 +67,18 @@ class MoveItIkDemo:
         rospy.sleep(1)
 
         # 控制机械臂终端向右移动5cm 參數1是代表y， 0,1,2,3,4,5 代表xyzrpy
-        arm.shift_pose_target(1, -0.05, end_effector_link)
+        arm.shift_pose_target(1, 0.12, end_effector_link)
+        arm.go()
+        rospy.sleep(1)
+
+        arm.shift_pose_target(1, 0.1, end_effector_link)
         arm.go()
         rospy.sleep(1)
 
         # 控制机械臂终端反向旋转90度  0,1,2,3,4,5 代表xyzrpy
-        arm.shift_pose_target(3, -1.57, end_effector_link)
-        arm.go()
-        rospy.sleep(1)
+        # arm.shift_pose_target(3, -1.57, end_effector_link)
+        # arm.go()
+        # rospy.sleep(1)
 
         # 控制机械臂回到初始化位置
         # arm.set_named_target("home")

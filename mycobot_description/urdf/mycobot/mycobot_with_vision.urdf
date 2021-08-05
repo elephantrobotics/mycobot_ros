@@ -6,9 +6,9 @@
     <visual>
       <geometry>
 	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
-       <mesh filename="package://mycobot_description/urdf/mycobot/210110_6000_001_asm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot/suit_env.dae"/>
       </geometry>
-      <origin xyz = "0 0 0 " rpy = "1.5708 0 -1.5708"/>
+      <origin xyz = "0 0 -0.02 " rpy = "1.5708 0 -1.5708"/>
     </visual>
   </link>
 
