@@ -1,5 +1,4 @@
 #!/usr/bin/env python2
-# license removed for brevity
 import time
 
 import rospy

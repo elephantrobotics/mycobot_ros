@@ -73,7 +73,7 @@ def grippercallback(data):
     if flag:
         return
 
-    # pump lenght: 88mm
+    # pump length: 88mm
     x = float(format(data.pose.position.x * 1000, ".2f"))
     y = float(format(data.pose.position.y * 1000, ".2f"))
     z = float(format(data.pose.position.z * 1000, ".2f"))
