@@ -1,6 +1,4 @@
 #!/usr/bin/env python2
-# license removed for brevity
-import time
 import math
 
 import rospy
@@ -15,13 +13,19 @@ class Listener(object):
 
         rospy.loginfo("start ...")
         rospy.init_node("real_listener_1", anonymous=True)
+        # init publisher.
         self.pub = rospy.Publisher("joint_states", JointState, queue_size=10)
+        # init subscriber.
         self.sub = rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.callback)
-        rate = rospy.Rate(30)  # 30hz
         rospy.spin()
 
     def callback(self, data):
-        # pub joint state
+        """`mycobot/angles_real` subscriber callback method.
+
+        Args:
+            data (MycobotAngles): callback argument.
+        """
+        # ini publisher object.
         joint_state_send = JointState()
         joint_state_send.header = Header()
 
@@ -35,8 +39,9 @@ class Listener(object):
         ]
         joint_state_send.velocity = [0]
         joint_state_send.effort = []
-
         joint_state_send.header.stamp = rospy.Time.now()
+
+        # process callback data.
         radians_list = [
             data.joint_1 * (math.pi / 180),
             data.joint_2 * (math.pi / 180),
@@ -49,7 +54,6 @@ class Listener(object):
 
         joint_state_send.position = radians_list
         self.pub.publish(joint_state_send)
-        # rate.sleep()
 
 
 if __name__ == "__main__":

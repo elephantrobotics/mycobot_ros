@@ -1,6 +1,13 @@
 #!/usr/bin/env python2
-# from std_msgs.msg import String
-import time
+
+"""[summary]
+This file obtains the joint angle of the manipulator in ROS,
+and then sends it directly to the real manipulator using `pymycobot` API.
+This file is [slider_control.launch] related script.
+Passable parameters:
+    port: serial prot string. Defaults is '/dev/ttyUSB0'
+    baud: serial prot baudrate. Defaults is 115200.
+"""
 
 import rospy
 from sensor_msgs.msg import JointState

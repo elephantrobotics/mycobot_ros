@@ -30,14 +30,14 @@ def talker():
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
 
+    # waiting util server `get_joint_angles` enable.
     rospy.loginfo("wait service")
     rospy.wait_for_service("get_joint_angles")
     func = rospy.ServiceProxy("get_joint_angles", GetAngles)
 
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
-        joint_state_send.header.stamp = rospy.Time.now()
-
+        # get real angles from server.
         res = func()
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
@@ -51,6 +51,8 @@ def talker():
         ]
         rospy.loginfo("res: {}".format(radians_list))
 
+        # publish angles.
+        joint_state_send.header.stamp = rospy.Time.now()
         joint_state_send.position = radians_list
         pub.publish(joint_state_send)
         rate.sleep()
