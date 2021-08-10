@@ -2,6 +2,10 @@
 Changelog of mycobot_ros
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+2021-08-05
+----------
+- Added script demo of moveit planning.
+
 2021-07-12
 ----------
 - Split package.
