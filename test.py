@@ -12,7 +12,7 @@ from pymycobot.genre import Angle, Coord
 
 if __name__ == "__main__":
     sys_ = subprocess.check_output(["uname"], shell=True).decode()
-    if not sys_ == "Linux":
+    if not sys_.startswith("Linux"):
         print("This script just can run on Linux.")
         exit(0)
 
