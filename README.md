@@ -1,23 +1,20 @@
 # mycobot_ros
 
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)]()
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)]()
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/)
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
 
 [中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
-
-
 
 **Notes**:
 
 <!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
 
-> Make sure that `Atom` is flashed into the top Atom and `Transponder` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)<br>
-> ubuntu: 16.04LTS<br>
-> ros version: 1.12.17
+* Make sure that `Atom` is flashed into the top Atom and `Transponder` or `minirobot` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)
+* Supported ROS versions:
+   * Ubuntu 16.04 / ROS Kinetic
+   * Ubuntu 18.04 / ROS Melodic
 
 <!-- **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)** -->
-
-
 
 ## Installation
 ### Option 1: Docker
@@ -100,6 +97,3 @@ python test.py
 ![Demo](./demo_img/320_slider.png)
 
 ![Demo](./demo_img/320_moveit.png)
----
-
-~*END*~
