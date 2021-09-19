@@ -51,7 +51,7 @@ This command does three things:
 3) `docker-compose up ros`
 
    This runs the image specified in the `docker-compose.yml`, which by default runs
-   the command `roslaunch mycobot_ros mycobot_slider.launch` within the container.
+   the command `roslaunch mycobot_320 mycobot_320_slider.launch` within the container.
 
 
 ### Option 2: Local
