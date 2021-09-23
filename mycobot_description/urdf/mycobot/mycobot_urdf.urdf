@@ -77,14 +77,14 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot/joint5.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
+    <origin xyz = "0.0 0 -0.03356 " rpy = " -1.5708 0 0"/>
     </visual>
     <collision>
        <geometry>
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot/joint5.dae"/>
       </geometry>
-      <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
+      <origin xyz = "0.0 0 -0.03356 " rpy = " -1.5708 0 0"/>
     </collision>
   </link>
 
