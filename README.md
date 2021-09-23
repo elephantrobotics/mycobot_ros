@@ -13,6 +13,7 @@
 * Supported ROS versions:
    * Ubuntu 16.04 / ROS Kinetic
    * Ubuntu 18.04 / ROS Melodic
+   * Ubuntu 20.04 / ROS Noetic
 
 <!-- **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)** -->
 
