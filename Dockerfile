@@ -29,14 +29,14 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
         python-rosinstall-generator \
         python-wstool \
         build-essential \
-        python-pip && \
+        python3-pip && \
     # Project-specific build dependencies
     rosdep install -r -y -i --from-paths . && \
     rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
 ARG PYMYCOBOT_VERSION
-RUN pip install "pymycobot $PYMYCOBOT_VERSION" --user
+RUN pip3 install "pymycobot $PYMYCOBOT_VERSION" --user
 
 # Build the project
 WORKDIR /catkin_ws
