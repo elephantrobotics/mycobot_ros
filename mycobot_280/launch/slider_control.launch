@@ -15,7 +15,7 @@
 		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
 	</node>
 	<!-- Open control script -->
-	<!-- <node name="control_slider" pkg="mycobot_280" type="control_slider.py"> 
+	<!-- <node name="control_slider" pkg="mycobot_280" type="slider_control.py"> 
 		<param name="port" type="string" value="$(arg port)" />
 		<param name="baud" type="int" value="$(arg baud)" />
 	</node> -->
