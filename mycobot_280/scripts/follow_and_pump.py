@@ -3,30 +3,38 @@ import rospy
 from visualization_msgs.msg import Marker
 import time
 
+# 与 mycobot 通信的消息类型
 from mycobot_communication.msg import MycobotSetAngles, MycobotSetCoords, MycobotPumpStatus
 
 
 rospy.init_node("gipper_subscriber", anonymous=True)
+
+# 控制 mycobot 的 topic，依次是角度、坐标、夹爪
 angle_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=5)
 coord_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=5)
 pump_pub = rospy.Publisher("mycobot/pump_status", MycobotPumpStatus, queue_size=5)
 
+# 实例化消息对象
 angles = MycobotSetAngles()
 coords = MycobotSetCoords()
 pump = MycobotPumpStatus()
 
+# 与 mycobot 真实位置的偏差值
 x_offset = -20
 y_offset = 20
 z_offset = 110
 
+# 通过该变量限制，抓取行为只做一次
 flag = False
 
+# 为了后面比较二维码是否移动
 temp_x = temp_y = temp_z = 0.0
 
 temp_time = time.time()
 
 
 def pub_coords(x, y, z, rx=-150, ry=10, rz=-90, sp=70, m=2):
+    """发布坐标"""
     coords.x = x
     coords.y = y
     coords.z = z
@@ -40,6 +48,7 @@ def pub_coords(x, y, z, rx=-150, ry=10, rz=-90, sp=70, m=2):
 
 
 def pub_angles(a, b, c, d, e, f, sp):
+    """发布角度"""
     angles.joint_1 = float(a)
     angles.joint_2 = float(b)
     angles.joint_3 = float(c)
@@ -51,11 +60,13 @@ def pub_angles(a, b, c, d, e, f, sp):
 
 
 def pub_pump(flag):
+    """发布夹爪状态"""
     pump.Status = flag
     pump_pub.publish(pump)
 
 
 def target_is_moving(x, y, z):
+    """判断目标是否移动"""
     count = 0
     for o, n in zip((x, y, z), (temp_x, temp_y, temp_z)):
         print(o, n)
@@ -68,16 +79,19 @@ def target_is_moving(x, y, z):
 
 
 def grippercallback(data):
+    """回调函数""""
     global flag, temp_x, temp_y, temp_z
     # rospy.loginfo('gripper_subscriber get date :%s', data)
     if flag:
         return
 
+    # 解析出坐标值
     # pump length: 88mm
     x = float(format(data.pose.position.x * 1000, ".2f"))
     y = float(format(data.pose.position.y * 1000, ".2f"))
     z = float(format(data.pose.position.z * 1000, ".2f"))
 
+    # 当运行时间小于 30s，或目标位置还在改变时，进行追踪行为
     if (
         time.time() - temp_time < 30
         or (temp_x == temp_y == temp_z == 0.0)
@@ -91,7 +105,8 @@ def grippercallback(data):
 
         temp_x, temp_y, temp_z = x, y, z
         return
-    else:
+    else: # 表示目标处于静止状态，可以尝试抓取
+        
         print(x, y, z)
 
         # detect heigth + pump height + limit height + offset
@@ -146,7 +161,10 @@ def main():
 
     pub_pump(False)
     # time.sleep(2.5)
+    
+    # mark 信息的订阅者
     rospy.Subscriber("visualization_marker", Marker, grippercallback, queue_size=1)
+    
     print("gripper test")
     rospy.spin()
 
