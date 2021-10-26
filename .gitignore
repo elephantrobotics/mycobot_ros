@@ -4,6 +4,7 @@
 
 .vscode/
 .history
+*.pyc
 
 # Editor directories and files
 .idea
