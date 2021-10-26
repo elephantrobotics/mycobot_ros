@@ -89,11 +89,11 @@ def switch_status(req):
 def toggle_pump(req):
     if mc:
         if req.Status:
-            mc.set_basic_output(2, 0)
-            mc.set_basic_output(5, 0)
+            mc.set_basic_output(req.Pin1, 0)
+            mc.set_basic_output(req.Pin2, 0)
         else:
-            mc.set_basic_output(2, 1)
-            mc.set_basic_output(5, 1)
+            mc.set_basic_output(req.Pin1, 1)
+            mc.set_basic_output(req.Pin2, 1)
 
     return PumpStatusResponse(True)
 
@@ -135,7 +135,8 @@ def output_robot_message():
             servo_infomation = "all connected"
 
     print(
-        robot_msg % (connect_status, servo_infomation, servo_temperature, atom_version)
+        robot_msg % (connect_status, servo_infomation,
+                     servo_temperature, atom_version)
     )
 
 

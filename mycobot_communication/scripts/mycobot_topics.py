@@ -104,7 +104,8 @@ class MycobotTopics(object):
         sp.join()
 
     def pub_real_angles(self):
-        pub = rospy.Publisher("mycobot/angles_real", MycobotAngles, queue_size=5)
+        pub = rospy.Publisher("mycobot/angles_real",
+                              MycobotAngles, queue_size=5)
         ma = MycobotAngles()
         while not rospy.is_shutdown():
             self.lock.acquire()
@@ -121,7 +122,8 @@ class MycobotTopics(object):
             time.sleep(0.25)
 
     def pub_real_coords(self):
-        pub = rospy.Publisher("mycobot/coords_real", MycobotCoords, queue_size=5)
+        pub = rospy.Publisher("mycobot/coords_real",
+                              MycobotCoords, queue_size=5)
         ma = MycobotCoords()
 
         while not rospy.is_shutdown():
@@ -183,11 +185,11 @@ class MycobotTopics(object):
     def sub_pump_status(self):
         def callback(data):
             if data.Status:
-                self.mc.set_basic_output(2, 0)
-                self.mc.set_basic_output(5, 0)
+                self.mc.set_basic_output(data.Pin1, 0)
+                self.mc.set_basic_output(data.Pin2, 0)
             else:
-                self.mc.set_basic_output(2, 1)
-                self.mc.set_basic_output(5, 1)
+                self.mc.set_basic_output(data.Pin1, 1)
+                self.mc.set_basic_output(data.Pin2, 1)
 
         sub = rospy.Subscriber(
             "mycobot/pump_status", MycobotPumpStatus, callback=callback

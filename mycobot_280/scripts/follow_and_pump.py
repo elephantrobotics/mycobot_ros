@@ -1,7 +1,9 @@
 #!/usr/bin/env python2
+# coding:utf-8
 import rospy
 from visualization_msgs.msg import Marker
 import time
+import os
 
 # 与 mycobot 通信的消息类型
 from mycobot_communication.msg import MycobotSetAngles, MycobotSetCoords, MycobotPumpStatus
@@ -10,9 +12,20 @@ from mycobot_communication.msg import MycobotSetAngles, MycobotSetCoords, Mycobo
 rospy.init_node("gipper_subscriber", anonymous=True)
 
 # 控制 mycobot 的 topic，依次是角度、坐标、夹爪
-angle_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=5)
-coord_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=5)
-pump_pub = rospy.Publisher("mycobot/pump_status", MycobotPumpStatus, queue_size=5)
+angle_pub = rospy.Publisher("mycobot/angles_goal",
+                            MycobotSetAngles, queue_size=5)
+coord_pub = rospy.Publisher("mycobot/coords_goal",
+                            MycobotSetCoords, queue_size=5)
+# Judging equipment: ttyUSB* is M5；ttyACM* is wio
+robot = os.popen("ls /dev/ttyUSB*").readline()
+
+if "dev" in robot:
+    Pin = [2, 5]
+else:
+    Pin = [20, 21]
+
+pump_pub = rospy.Publisher("mycobot/pump_status",
+                           MycobotPumpStatus, queue_size=5)
 
 # 实例化消息对象
 angles = MycobotSetAngles()
@@ -59,9 +72,11 @@ def pub_angles(a, b, c, d, e, f, sp):
     angle_pub.publish(angles)
 
 
-def pub_pump(flag):
+def pub_pump(flag, Pin):
     """发布夹爪状态"""
     pump.Status = flag
+    pump.Pin1 = Pin[0]
+    pump.Pin2 = Pin[1]
     pump_pub.publish(pump)
 
 
@@ -79,7 +94,7 @@ def target_is_moving(x, y, z):
 
 
 def grippercallback(data):
-    """回调函数""""
+    """回调函数"""
     global flag, temp_x, temp_y, temp_z
     # rospy.loginfo('gripper_subscriber get date :%s', data)
     if flag:
@@ -105,8 +120,8 @@ def grippercallback(data):
 
         temp_x, temp_y, temp_z = x, y, z
         return
-    else: # 表示目标处于静止状态，可以尝试抓取
-        
+    else:  # 表示目标处于静止状态，可以尝试抓取
+
         print(x, y, z)
 
         # detect heigth + pump height + limit height + offset
@@ -124,7 +139,7 @@ def grippercallback(data):
 
         time.sleep(2)
 
-        pub_pump(True)
+        pub_pump(True, Pin)
         # pump on
 
         pub_coords(x, y, z + 20, -165)
@@ -138,10 +153,11 @@ def grippercallback(data):
         time.sleep(1.5)
 
         for i in range(1, 8):
-            pub_coords(39.4, -174.7, put_z - i * 5, -177.13, -4.13, -152.59, 15, 2)
+            pub_coords(39.4, -174.7, put_z - i * 5, -
+                       177.13, -4.13, -152.59, 15, 2)
             time.sleep(0.1)
 
-        pub_pump(False)
+        pub_pump(False, Pin)
 
         time.sleep(0.5)
 
@@ -159,12 +175,13 @@ def main():
         #     pub_angles(random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), 70)
         time.sleep(0.5)
 
-    pub_pump(False)
+    pub_pump(False, Pin)
     # time.sleep(2.5)
-    
+
     # mark 信息的订阅者
-    rospy.Subscriber("visualization_marker", Marker, grippercallback, queue_size=1)
-    
+    rospy.Subscriber("visualization_marker", Marker,
+                     grippercallback, queue_size=1)
+
     print("gripper test")
     rospy.spin()
 
