@@ -1,4 +1,4 @@
-#encoding:utf-8
+# encoding:utf-8
 
 from tokenize import Pointfloat
 import cv2
@@ -15,7 +15,8 @@ import Tkinter as tk
 from moving_utils import Movement
 
 IS_CV_4 = cv2.__version__[0] == '4'
-__version__ = "1.0" # Adaptive seeed
+__version__ = "1.0"  # Adaptive seeed
+
 
 class Object_detect(Movement):
     def __init__(self, camera_x=150, camera_y=-10):
@@ -32,38 +33,38 @@ class Object_detect(Movement):
         # 移动坐标
         self.move_coords = [
         [120.1, -141.6, 240.9, -173.34, -8.15, -83.11],  # above the red bucket
-        [228.2, -127.8, 260.9, -157.51, -17.5, -71.18],  # above the yello bucket
+        [208.2, -127.8, 260.9, -157.51, -17.5, -71.18],  # above the yello bucket
         [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
         [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
         [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
         ]
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed
-        self.robot = os.popen("ls /dev/ttyUSB*")
+        self.robot = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         if "dev" in self.robot:
-            self.Pin = [2,5]
+            self.Pin = [2, 5]
         else:
-            self.Pin = [20,21]  
-	    for i in self.move_coords:
-		i[2] -= 20      	
+            self.Pin = [20, 21]
+            for i in self.move_coords:
+                i[2] -= 20
 
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
-        self.x1 = self.x2 = self.y1 = self.y2 =0
+        self.x1 = self.x2 = self.y1 = self.y2 = 0
         # set cache of real coord
         self.cache_x = self.cache_y = 0
         # load model of img recognition
-        #self.model_path = os.path.join(dir_path, "frozen_inference_graph.pb")
-        #self.pbtxt_path = os.path.join(dir_path, "graph.pbtxt")
-        #self.label_path = os.path.join(dir_path, "labels.json")
+        # self.model_path = os.path.join(dir_path, "frozen_inference_graph.pb")
+        # self.pbtxt_path = os.path.join(dir_path, "graph.pbtxt")
+        # self.label_path = os.path.join(dir_path, "labels.json")
         # load class labels
         # self.labels = json.load(open(self.label_path))
         # use to calculate coord between cube and mycobot
-        self.sum_x1= self.sum_x2= self.sum_y2= self.sum_y1= 0
+        self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
         # The coordinates of the grab center point relative to the mycobot
         self.camera_x, self.camera_y = camera_x, camera_y
         # The coordinates of the cube relative to the mycobot
-        self.c_x, self.c_y = 0,0
+        self.c_x, self.c_y = 0, 0
         # The ratio of pixels to actual values
         self.ratio = 0
         # Get ArUco marker dict that can be detected.
@@ -79,7 +80,7 @@ class Object_detect(Movement):
         # init a node and a publisher
         rospy.init_node("marker", anonymous=True)
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
-        # init a Marker 
+        # init a Marker
         self.marker = Marker()
         self.marker.header.frame_id = "/joint1"
         self.marker.ns = "cube"
@@ -92,7 +93,6 @@ class Object_detect(Movement):
         self.marker.color.g = 1.0
         self.marker.color.r = 1.0
 
-
         # marker position initial
         self.marker.pose.position.x = 0
         self.marker.pose.position.y = 0
@@ -104,7 +104,8 @@ class Object_detect(Movement):
 
         self.cache_x = self.cache_y = 0
     # publish marker
-    def pub_marker(self, x, y , z=0.03):
+
+    def pub_marker(self, x, y, z=0.03):
         self.marker.header.stamp = rospy.Time.now()
         self.marker.pose.position.x = x
         self.marker.pose.position.y = y
@@ -113,7 +114,7 @@ class Object_detect(Movement):
         self.pub.publish(self.marker)
 
     # Grasping motion
-    def move(self, x,y,color):
+    def move(self, x, y, color):
         # send Angle to move mycobot
         self.pub_angles(self.move_angles[0], 20)
         time.sleep(1.5)
@@ -124,70 +125,81 @@ class Object_detect(Movement):
         # send coordinates to move mycobot
         self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
         time.sleep(1.5)
-        
+
         if "dev" in self.robot:
             self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
         else:
-	    
+
             h = 0
-            if 165<x<180:
+            if 165 < x < 180:
                 h = 10
-            elif x>180:
+            elif x > 180:
                 h = 20
-            elif x<135:
+            elif x < 135:
                 h = -20
-            #print 'down_1:',[x, y, 31.9+h,  -178.9, -1, -25.95]
+            # print 'down_1:',[x, y, 31.9+h,  -178.9, -1, -25.95]
             self.pub_coords([x, y, 31.9+h,  -178.9, -1, -25.95], 20, 1)
         time.sleep(1.5)
         # open pump
-        self.pub_pump(True,self.Pin)
+        self.pub_pump(True, self.Pin)
         time.sleep(0.5)
         self.pub_angles(self.move_angles[2], 20)
         time.sleep(3)
-        self.pub_marker(self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
-        
+        self.pub_marker(
+            self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
+
         self.pub_angles(self.move_angles[1], 20)
         time.sleep(1.5)
-        self.pub_marker(self.move_coords[3][0]/1000.0, self.move_coords[3][1]/1000.0, self.move_coords[3][2]/1000.0)
-        
+        self.pub_marker(
+            self.move_coords[3][0]/1000.0, self.move_coords[3][1]/1000.0, self.move_coords[3][2]/1000.0)
+
         self.pub_angles(self.move_angles[0], 20)
         time.sleep(1.5)
-        self.pub_marker(self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
-        
+        self.pub_marker(
+            self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
+
         self.pub_coords(self.move_coords[color], 20, 1)
-        self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color][1]/1000.0, self.move_coords[color][2]/1000.0)
+        self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
+                        [1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(2)
         # close pump
-        self.pub_pump(False,self.
+        self.pub_pump(False, self.
 Pin)
-        if color==1:
-           self.pub_marker(self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
-        elif color==0:
-           self.pub_marker(self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
+        if color == 1:
+           self.pub_marker(
+               self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
+        elif color == 0:
+           self.pub_marker(
+               self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
         self.pub_angles(self.move_angles[0], 20)
         time.sleep(3)
 
-
     # decide whether grab cube
+
     def decide_move(self, x, y, color):
-        print(x, y,self.cache_x, self.cache_y)
+        print(x, y, self.cache_x, self.cache_y)
         # detect the cube status move or run
-        if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5: # mm
+        if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5:  # mm
             self.cache_x, self.cache_y = x, y
             return
         else:
             self.cache_x = self.cache_y = 0
             if "dev" not in self.robot:
-                if (y<-30 and x>140) or (x>150 and y<-10):
+                if (y < -30 and x > 140) or (x > 150 and y < -10):
                     x -= 10
                     y += 10
-                elif y>-10:
+                elif y > -10:
                     y += 10
-                elif x>170:
-                    x -=10
-                    y +=10
-                #print x,y
-            self.move(x,y,color)
+                elif x > 170:
+                    x -= 10
+                    y += 10
+            else:
+                y += 10
+                x -= 5
+                if y < -20:
+                    y += 5
+                # print x,y
+            self.move(x, y, color)
 
     # init mycobot
     def run(self):
@@ -195,10 +207,10 @@ Pin)
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -38.84], 20)
             print(_)
             time.sleep(0.5)
-        self.pub_pump(False,self.Pin)
+        self.pub_pump(False, self.Pin)
 
     # draw aruco
-    def draw_marker(self,img,x,y):
+    def draw_marker(self, img, x, y):
         # draw rectangle on img
         cv2.rectangle(
             img,
@@ -209,10 +221,11 @@ Pin)
             lineType=cv2.FONT_HERSHEY_COMPLEX,
         )
         # add text on rectangle
-        cv2.putText(img,"({},{})".format(x,y),(x,y),cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (243, 0, 0), 2,)
+        cv2.putText(img, "({},{})".format(x, y), (x, y),
+                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (243, 0, 0), 2,)
 
     # get points of two aruco
-    def get_calculate_params(self,img):
+    def get_calculate_params(self, img):
         # Convert the image to a gray image
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Detect ArUco marker.
@@ -227,23 +240,25 @@ Pin)
         """
         if len(corners) > 0:
             if ids is not None:
-                if len(corners) <= 1 or ids[0]==1:
+                if len(corners) <= 1 or ids[0] == 1:
                     return None
-                x1=x2=y1=y2 = 0
-                point_11,point_21,point_31,point_41 = corners[0][0]
-                x1, y1 = int((point_11[0] + point_21[0] + point_31[0] + point_41[0]) / 4.0), int((point_11[1] + point_21[1] + point_31[1] + point_41[1]) / 4.0)
-                point_1,point_2,point_3,point_4 = corners[1][0]
-                x2, y2 = int((point_1[0] + point_2[0] + point_3[0] + point_4[0]) / 4.0), int((point_1[1] + point_2[1] + point_3[1] + point_4[1]) / 4.0)
-                return x1,x2,y1,y2 
+                x1 = x2 = y1 = y2 = 0
+                point_11, point_21, point_31, point_41 = corners[0][0]
+                x1, y1 = int((point_11[0] + point_21[0] + point_31[0] + point_41[0]) / 4.0), int(
+                    (point_11[1] + point_21[1] + point_31[1] + point_41[1]) / 4.0)
+                point_1, point_2, point_3, point_4 = corners[1][0]
+                x2, y2 = int((point_1[0] + point_2[0] + point_3[0] + point_4[0]) / 4.0), int(
+                    (point_1[1] + point_2[1] + point_3[1] + point_4[1]) / 4.0)
+                return x1, x2, y1, y2
         return None
-    
+
     # set camera clipping parameters
     def set_cut_params(self, x1, y1, x2, y2):
-        self.x1 = int(x1) 
-        self.y1 = int(y1) 
-        self.x2 = int(x2) 
-        self.y2 = int(y2) 
-        print(self.x1,self.y1,self.x2,self.y2)
+        self.x1 = int(x1)
+        self.y1 = int(y1)
+        self.x2 = int(x2)
+        self.y2 = int(y2)
+        print(self.x1, self.y1, self.x2, self.y2)
 
     # set parameters to calculate the coords between cube and mycobot
     def set_params(self, c_x, c_y, ratio):
@@ -253,31 +268,33 @@ Pin)
 
     # calculate the coords between cube and mycobot
     def get_position(self, x, y):
-        return  ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
+        return ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
 
     """
     Calibrate the camera according to the calibration parameters.
     Enlarge the video pixel by 1.5 times, which means enlarge the video size by 1.5 times.
     If two ARuco values have been calculated, clip the video.
     """
+
     def transform_frame(self, frame):
         # enlarge the image by 1.5 times
         fx = 1.5
         fy = 1.5
-        frame = cv2.resize(frame, (0, 0), fx=fx, fy=fy, interpolation=cv2.INTER_CUBIC)
+        frame = cv2.resize(frame, (0, 0), fx=fx, fy=fy,
+                           interpolation=cv2.INTER_CUBIC)
         if self.x1 != self.x2:
             # the cutting ratio here is adjusted according to the actual situation
-            frame = frame[int(self.y2*0.2):int(self.y1*1.15), int(self.x1*0.7):int(self.x2*1.15)]
+            frame = frame[int(self.y2*0.2):int(self.y1*1.15),
+                              int(self.x1*0.7):int(self.x2*1.15)]
         return frame
 
     # according the class_id to get object name
     def id_class_name(self, class_id):
-        for key, value in  self.labels.items():
+        for key, value in self.labels.items():
                 if class_id == int(key):
                     return value
-
-
     # detect object
+
     def obj_detect(self, img, goal):
         # rows, cols = frame.shape[:-1]
         # Resize image and swap BGR to RGB.
@@ -331,7 +348,7 @@ Pin)
         des = []
 
         for i in goal:
-            kp0,des0 = sift.detectAndCompute(i, None)
+            kp0, des0 = sift.detectAndCompute(i, None)
             kp.append(kp0)
             des.append(des0)
         # kp1, des1 = sift.detectAndCompute(goal, None)
@@ -364,7 +381,8 @@ Pin)
                         [kp2[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
 
                     # Using matching points to find homography matrix in cv2.ransac 利用匹配点找到CV2.RANSAC中的单应矩阵
-                    M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+                    M, mask = cv2.findHomography(
+                        src_pts, dst_pts, cv2.RANSAC, 5.0)
                     matchesMask = mask.ravel().tolist()
                     # Calculate the distortion of image, that is the corresponding position in frame 计算图1的畸变，也就是在图2中的对应的位置
                     h, w, d = goal[i].shape
@@ -375,8 +393,10 @@ Pin)
                     cv2.putText(img, "{}".format(ccoord), (50, 60), fontFace=None,
                                 fontScale=1,  color=(0, 255, 0), lineType=1)
                     print(format(dst[0][0][0]))
-                    x = (dst[0][0][0]+dst[1][0][0]+dst[2][0][0]+dst[3][0][0])/4.0
-                    y = (dst[0][0][1]+dst[1][0][1]+dst[2][0][1]+dst[3][0][1])/4.0
+                    x = (dst[0][0][0]+dst[1][0][0] +
+                         dst[2][0][0]+dst[3][0][0])/4.0
+                    y = (dst[0][0][1]+dst[1][0][1] +
+                         dst[2][0][1]+dst[3][0][1])/4.0
 
                     # bound box  绘制边框
                     img = cv2.polylines(
@@ -398,6 +418,7 @@ Pin)
             return x, y
         else:
             return None
+
     def take_photo(self):
         # 提醒用户操作字典
         print("*********************************************")
@@ -444,7 +465,7 @@ Pin)
 	    path = os.getcwd()+'/local_photo/img'
     	print path
     	for i,j,k in os.walk(path):
-	    file_len = len(k)
+            file_len = len(k)
         print("请截取要识别的部分")
         # root = tk.Tk()
         # root.withdraw()
@@ -486,17 +507,17 @@ Pin)
         return goal
 
 
-def run(stop):
+def run():
 
-    #Object_detect().take_photo()
-    #Object_detect().cut_photo()
+    # Object_detect().take_photo()
+    # Object_detect().cut_photo()
     # goal = Object_detect().distinguist()
     goal = []
     path = os.getcwd()+'/local_photo/img'
-    print path
+
     for i,j,k in os.walk(path):
-	for l in k:
-    	    goal.append(cv2.imread('local_photo/img/{}'.format(l)))
+        for l in k:
+            goal.append(cv2.imread('local_photo/img/{}'.format(l)))
     cap_num = 0
     cap = cv2.VideoCapture(cap_num)
     if not cap.isOpened():
@@ -596,7 +617,7 @@ def run(stop):
     
     
 if __name__ == "__main__":
-    run(0)
-    #Object_detect().take_photo()
-    #Object_detect().cut_photo()
+    run()
+    # Object_detect().take_photo()
+    # Object_detect().cut_photo()
 
