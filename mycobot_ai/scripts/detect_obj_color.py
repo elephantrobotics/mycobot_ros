@@ -38,14 +38,23 @@ class Object_detect(Movement):
             [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
             [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
         ]
-        # which robot
-        self.robot = os.popen("ls /dev/ttyUSB*").readline()[:-1]
-        if "dev" in self.robot:
+        # which robot: USB* is m5; ACM* is wio; AMA* is raspi
+        self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
+        self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
+        self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
+        self.raspi = False
+        if "dev" in self.robot_m5:
             self.Pin = [2, 5]
-        else:
+        elif "dev" in self.robot_wio:
             self.Pin = [20, 21]
             for i in self.move_coords:
                 i[2] -= 20
+        elif "dev" in self.robot_raspi:
+            import RPi.GPIO as GPIO
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.setup(21, GPIO.OUT)
+            self.raspi = True
 
         # choose place to set cube
         self.color = 0
@@ -108,6 +117,14 @@ class Object_detect(Movement):
         self.marker.color.g = self.color
         self.pub.publish(self.marker)
 
+    def gpio_status(self, flag):
+        if flag:
+            GPIO.output(20, 0)
+            GPIO.output(21, 0)
+        else:
+            GPIO.output(20, 1)
+            GPIO.output(21, 1)
+
     # Grasping motion
     def move(self, x, y, color):
         # send Angle to move mycobot
@@ -121,10 +138,9 @@ class Object_detect(Movement):
         # send coordinates to move mycobot
         self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
         time.sleep(1.5)
-        if "dev" in self.robot:
+        if "dev" in self.robot_m5 or self.raspi:
             self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
         else:
-
             h = 0
 
             if 165 < x < 180:
@@ -133,11 +149,13 @@ class Object_detect(Movement):
                 h = 20
             elif x < 135:
                 h = -20
-            print 'down_1:', [x, y, 31.9+h,  -178.9, -1, -25.95]
             self.pub_coords([x, y, 31.9+h,  -178.9, -1, -25.95], 20, 1)
         time.sleep(1.5)
         # open pump
-        self.pub_pump(True, self.Pin)
+        if self.raspi:
+            self.gpio_status(True)
+        else:
+            self.pub_pump(True, self.Pin)
         time.sleep(0.5)
         self.pub_angles(self.move_angles[2], 20)
         time.sleep(3)
@@ -160,7 +178,10 @@ class Object_detect(Movement):
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(2)
         # close pump
-        self.pub_pump(False, self.Pin)
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         if color == 1:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
@@ -207,7 +228,10 @@ class Object_detect(Movement):
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -38.84], 20)
             print(_)
             time.sleep(0.5)
-        self.pub_pump(False, self.Pin)
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
 
     # draw aruco
     def draw_marker(self, img, x, y):
