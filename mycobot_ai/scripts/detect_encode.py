@@ -1,4 +1,4 @@
-#encoding: UTF-8
+# encoding: UTF-8
 #!/usr/bin/env python2
 import cv2 as cv
 import os
@@ -13,19 +13,32 @@ pump_y = -55
 # x轴偏移量
 pump_x = 15
 
+
 class Detect_marker(Movement):
     def __init__(self):
         super(Detect_marker, self).__init__()
         # set cache of real coord
         self.cache_x = self.cache_y = 0
-        
+
         # which robot
-        self.robot = os.popen("ls /dev/ttyUSB*")
-        if "dev" in self.robot:
-            self.Pin = [2,5]
-        else:
-            self.Pin = [20,21]  
-        
+        self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
+        self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
+        self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
+        self.raspi = False
+        if "dev" in self.robot_m5:
+            self.Pin = [2, 5]
+        elif "dev" in self.robot_wio:
+            self.Pin = [20, 21]
+            for i in self.move_coords:
+                i[2] -= 20
+        elif "dev" in self.robot_raspi:
+            import RPi.GPIO as GPIO
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.setup(21, GPIO.OUT)
+            self.raspi = True
+            pump_y -= 5
+
         # Creating a Camera Object
         cap_num = 0
         self.cap = cv.VideoCapture(cap_num)
@@ -33,7 +46,8 @@ class Detect_marker(Movement):
         self.aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_6X6_250)
         # Get ArUco marker params.
         self.aruco_params = cv.aruco.DetectorParameters_create()
-        self.calibrationParams = cv.FileStorage("calibrationFileName.xml", cv.FILE_STORAGE_READ)
+        self.calibrationParams = cv.FileStorage(
+            "calibrationFileName.xml", cv.FILE_STORAGE_READ)
         # Get distance coefficient.
         self.dist_coeffs = self.calibrationParams.getNode("distCoeffs").mat()
 
@@ -66,7 +80,6 @@ class Detect_marker(Movement):
         self.marker.color.g = 0.3
         self.marker.color.b = 0.3
 
-
         # marker position initial
         self.marker.pose.position.x = 0
         self.marker.pose.position.y = 0
@@ -78,11 +91,16 @@ class Detect_marker(Movement):
 
     # Grasping motion
     def move(self, x, y):
-
-        coords = [
-            [135.0, -65.5, 280.1, 178.99, 5.38, -179.9],
-            [136.1, -141.6, 243.9, 178.99, 5.38, -179.9]
-        ]
+        if self.raspi:
+            coords = [
+                [145.6, -64.9, 285.2, 179.88, 7.67, -177.06],
+                [130.1, -155.6, 243.9, 178.99, 5.38, -179.9]
+            ]
+        else:
+            coords = [
+                [135.0, -65.5, 280.1, 178.99, 5.38, -179.9],
+                [136.1, -141.6, 243.9, 178.99, 5.38, -179.9]
+            ]
 
         # publish marker
         self.marker.header.stamp = rospy.Time.now()
@@ -93,21 +111,32 @@ class Detect_marker(Movement):
         # send coordinates to move mycobot
         self.pub_coords(coords[0], 30, 1)
         time.sleep(2)
-        self.pub_coords([coords[0][0]-x, coords[0][1]-y, 240, 178.99, 5.38, -179.9], 25, 1)
+        self.pub_coords([coords[0][0]-x, coords[0][1]-y,
+                        240, 178.99, 5.38, -179.9], 25, 1)
         time.sleep(2)
-        self.pub_coords([coords[0][0]-x, coords[0][1]-y, 200, 178.99, 5.38, -179.9], 25, 1)
+        self.pub_coords([coords[0][0]-x, coords[0][1]-y,
+                        200, 178.99, 5.38, -179.9], 25, 1)
         time.sleep(2)
-        if "dev" in self.robot:
-            self.pub_coords([coords[0][0]-x, coords[0][1]-y, 90, 178.99, 5.38, -179.9], 25, 1)
+        if "dev" in self.robot_m5 or self.raspi:
+            self.pub_coords([coords[0][0]-x, coords[0][1]-y,
+                            90, 178.99, 5.38, -179.9], 25, 1)
+        elif "dev" in self.robot_wio:
+            self.pub_coords([coords[0][0]-x+20, coords[0][1] -
+                            y-10, 70, 178.99, 5.38, -179.9], 25, 1)
+        time.sleep(2)
+        if self.raspi:
+            self.gpio_status(True)
         else:
-            self.pub_coords([coords[0][0]-x+20, coords[0][1]-y-10, 70, 178.99, 5.38, -179.9], 25, 1)
-        time.sleep(3.5)
-        self.pub_pump(True,self.Pin)
+            self.pub_pump(True, self.Pin)
+        time.sleep(1)
         self.pub_coords(coords[0], 30, 1)
         time.sleep(3)
         self.pub_coords(coords[1], 30, 1)
         time.sleep(2)
-        self.pub_pump(False,self.Pin)  
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         # publish marker
         self.marker.header.stamp = rospy.Time.now()
         self.marker.pose.position.x = coords[1][0]/1000.0
@@ -117,12 +146,20 @@ class Detect_marker(Movement):
         self.pub_coords(coords[0], 30, 1)
         time.sleep(2)
 
+    def gpio_status(self, flag):
+        if flag:
+            GPIO.output(20, 0)
+            GPIO.output(21, 0)
+        else:
+            GPIO.output(20, 1)
+            GPIO.output(21, 1)
+
     # decide whether grab cube
     def decide_move(self, x, y):
 
-        print(x,y)
+        print(x, y)
         # detect the cube status move or run
-        if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5: # mm
+        if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5:  # mm
             self.cache_x, self.cache_y = x, y
             return
         else:
@@ -131,35 +168,37 @@ class Detect_marker(Movement):
 
     # init mycobot
     def init_mycobot(self):
-        self.pub_pump(False,self.Pin)
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         for _ in range(5):
             print _
-            self.pub_coords([135.0, -65.5, 280.1, 178.99, 5.38, -179.9], 20, 1)
-            time.sleep(0.5)
-        
+            self.pub_coords([145.6, -64.9, 285.2, 179.88, 7.67, -177.06], 20, 1), 20, 1)
 
+            time.sleep(0.5)
 
     def run(self):
         global pump_y, pump_x
-	self.init_mycobot()
-        num = sum_x = sum_y = 0 
+        self.init_mycobot()
+        num=sum_x=sum_y=0
         while cv.waitKey(1) < 0:
-            success, img = self.cap.read()
+            success, img=self.cap.read()
             if not success:
                 print("It seems that the image cannot be acquired correctly.")
                 break
 
             # transfrom the img to model of gray
-            gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            gray=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             # Detect ArUco marker.
-            corners, ids, rejectImaPoint = cv.aruco.detectMarkers(
-                gray, self.aruco_dict, parameters=self.aruco_params
+            corners, ids, rejectImaPoint=cv.aruco.detectMarkers(
+                gray, self.aruco_dict, parameters = self.aruco_params
             )
 
             if len(corners) > 0:
                 if ids is not None:
                     # get informations of aruco
-                    ret = cv.aruco.estimatePoseSingleMarkers(
+                    ret=cv.aruco.estimatePoseSingleMarkers(
                         corners, 0.03, self.camera_matrix, self.dist_coeffs
                     )
                     # rvec:rotation offset,tvec:translation deviator
@@ -167,11 +206,11 @@ class Detect_marker(Movement):
                     (rvec - tvec).any()
                     xyz = tvec[0, 0, :]
                     # calculate the coordinates of the aruco relative to the pump
-                    xyz = [round(xyz[0]*1000+pump_y, 2), round(xyz[1]*1000+pump_x, 2), round(xyz[2]*1000, 2)]
-
+                    xyz = [round(xyz[0]*1000+pump_y, 2), round(xyz[1]
+                                                               * 1000+pump_x, 2), round(xyz[2]*1000, 2)]
 
                     for i in range(rvec.shape[0]):
-			# draw the aruco on img
+                        # draw the aruco on img
                         cv.aruco.drawDetectedMarkers(img, corners)
                         cv.aruco.drawAxis(
                             img,
@@ -182,15 +221,18 @@ class Detect_marker(Movement):
                             0.03,
                         )
 
-                        if num < 40 :
+                        if num < 40:
+                            if self.raspi:
+                                sum_x -= 30
                             sum_x += xyz[1]
                             sum_y += xyz[0]
                             num += 1
-                        elif num ==40 :
+                        elif num == 40:
                             self.decide_move(sum_x/40.0, sum_y/40.0)
                             num = sum_x = sum_y = 0
 
             cv.imshow("encode_image", img)
+
 
 if __name__ == "__main__":
     detect = Detect_marker()

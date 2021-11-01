@@ -1,4 +1,5 @@
 # encoding:utf-8
+#!/usr/bin/env python2
 
 from tokenize import Pointfloat
 import cv2
@@ -33,7 +34,7 @@ class Object_detect(Movement):
         self.move_coords = [
             [120.1, -141.6, 240.9, -173.34, -8.15, -83.11],  # above the red bucket
             # above the yello bucket
-            [208.2, -127.8, 260.9, -157.51, -17.5, -71.18],
+            [215.2, -127.8, 260.9, -157.51, -17.5, -71.18],
             [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
             [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
             [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
@@ -140,7 +141,7 @@ class Object_detect(Movement):
         time.sleep(1.5)
         if "dev" in self.robot_m5 or self.raspi:
             self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
-        else:
+        elif "dev" in self.robot_wio:
             h = 0
 
             if 165 < x < 180:
@@ -172,7 +173,6 @@ class Object_detect(Movement):
         self.pub_marker(
             self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
 
-        print 'down:', self.move_coords[color]
         self.pub_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
@@ -202,7 +202,8 @@ class Object_detect(Movement):
             return
         else:
             self.cache_x = self.cache_y = 0
-            if "dev" not in self.robot:
+            # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
+            if "dev" not in self.robot_wio:
 
                 if (y < -30 and x > 140) or (x > 150 and y < -10):
                     x -= 10

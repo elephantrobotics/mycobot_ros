@@ -1,4 +1,5 @@
 # encoding:utf-8
+#!/usr/bin/env python2
 
 from tokenize import Pointfloat
 import cv2
@@ -24,28 +25,38 @@ class Object_detect(Movement):
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
-	    # 移动角度
+        # 移动角度
         self.move_angles = [
-           [-7.11, -6.94, -55.01, -24.16, 0, -38.84],  # init the point
+            [-7.11, -6.94, -55.01, -24.16, 0, -38.84],  # init the point
             [-1.14, -10.63, -87.8, 9.05, -3.07, -37.7],  # point to grab
             [17.4, -10.1, -87.27, 5.8, -2.02, -37.7],  # point to grab
         ]
         # 移动坐标
         self.move_coords = [
-        [120.1, -141.6, 240.9, -173.34, -8.15, -83.11],  # above the red bucket
-        [208.2, -127.8, 260.9, -157.51, -17.5, -71.18],  # above the yello bucket
-        [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
-        [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
-        [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
+            [120.1, -141.6, 240.9, -173.34, -8.15, -83.11],  # above the red bucket
+            # above the yello bucket
+            [208.2, -127.8, 260.9, -157.51, -17.5, -71.18],
+            [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
+            [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
+            [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
         ]
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed
-        self.robot = os.popen("ls /dev/ttyUSB*").readline()[:-1]
-        if "dev" in self.robot:
+        self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
+        self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
+        self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
+        self.raspi = False
+        if "dev" in self.robot_m5:
             self.Pin = [2, 5]
-        else:
+        elif "dev" in self.robot_wio:
             self.Pin = [20, 21]
             for i in self.move_coords:
                 i[2] -= 20
+        elif "dev" in self.robot_raspi:
+            import RPi.GPIO as GPIO
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(20, GPIO.OUT)
+            GPIO.setup(21, GPIO.OUT)
+            self.raspi = True
 
         # choose place to set cube
         self.color = 0
@@ -113,6 +124,14 @@ class Object_detect(Movement):
         self.marker.color.g = self.color
         self.pub.publish(self.marker)
 
+    def gpio_status(self, flag):
+        if flag:
+            GPIO.output(20, 0)
+            GPIO.output(21, 0)
+        else:
+            GPIO.output(20, 1)
+            GPIO.output(21, 1)
+
     # Grasping motion
     def move(self, x, y, color):
         # send Angle to move mycobot
@@ -125,11 +144,10 @@ class Object_detect(Movement):
         # send coordinates to move mycobot
         self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
         time.sleep(1.5)
-
-        if "dev" in self.robot:
+        # 根据不同底板机械臂，调整吸泵高度
+        if "dev" in self.robot_m5:
             self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
-        else:
-
+        elif "dev" in self.robot_wio:
             h = 0
             if 165 < x < 180:
                 h = 10
@@ -137,11 +155,13 @@ class Object_detect(Movement):
                 h = 20
             elif x < 135:
                 h = -20
-            # print 'down_1:',[x, y, 31.9+h,  -178.9, -1, -25.95]
             self.pub_coords([x, y, 31.9+h,  -178.9, -1, -25.95], 20, 1)
         time.sleep(1.5)
         # open pump
-        self.pub_pump(True, self.Pin)
+        if self.raspi:
+            self.gpio_status(True)
+        else:
+            self.pub_pump(True, self.Pin)
         time.sleep(0.5)
         self.pub_angles(self.move_angles[2], 20)
         time.sleep(3)
@@ -163,14 +183,16 @@ class Object_detect(Movement):
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(2)
         # close pump
-        self.pub_pump(False, self.
-Pin)
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         if color == 1:
-           self.pub_marker(
-               self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
+            self.pub_marker(
+                self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
         elif color == 0:
-           self.pub_marker(
-               self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
+            self.pub_marker(
+                self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
         self.pub_angles(self.move_angles[0], 20)
         time.sleep(3)
 
@@ -184,7 +206,8 @@ Pin)
             return
         else:
             self.cache_x = self.cache_y = 0
-            if "dev" not in self.robot:
+            # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
+            if "dev" not in self.robot_wio:
                 if (y < -30 and x > 140) or (x > 150 and y < -10):
                     x -= 10
                     y += 10
@@ -193,7 +216,7 @@ Pin)
                 elif x > 170:
                     x -= 10
                     y += 10
-            else:
+            elif "dev" not in self.robot_m5:
                 y += 10
                 x -= 5
                 if y < -20:
@@ -203,13 +226,17 @@ Pin)
 
     # init mycobot
     def run(self):
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         for _ in range(5):
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -38.84], 20)
             print(_)
             time.sleep(0.5)
-        self.pub_pump(False, self.Pin)
 
     # draw aruco
+
     def draw_marker(self, img, x, y):
         # draw rectangle on img
         cv2.rectangle(
@@ -285,14 +312,14 @@ Pin)
         if self.x1 != self.x2:
             # the cutting ratio here is adjusted according to the actual situation
             frame = frame[int(self.y2*0.2):int(self.y1*1.15),
-                              int(self.x1*0.7):int(self.x2*1.15)]
+                          int(self.x1*0.7):int(self.x2*1.15)]
         return frame
 
     # according the class_id to get object name
     def id_class_name(self, class_id):
         for key, value in self.labels.items():
-                if class_id == int(key):
-                    return value
+            if class_id == int(key):
+                return value
     # detect object
 
     def obj_detect(self, img, goal):
@@ -405,106 +432,19 @@ Pin)
         except Exception as e:
             pass
 
-        else:
-            if(len(good) < MIN_MATCH_COUNT):
+        # else:
+        #     if(len(good) < MIN_MATCH_COUNT):
 
-                i += 1
-                if(i % 10 == 0):
-                    print("Not enough matches are found - %d/%d" %
-                          (len(good), MIN_MATCH_COUNT))
+        #         i += 1
+        #         if(i % 10 == 0):
+        #             print("Not enough matches are found - %d/%d" %
+        #                   (len(good), MIN_MATCH_COUNT))
 
-            matchesMask = None
+        #     matchesMask = None
         if x+y > 0:
             return x, y
         else:
             return None
-
-    def take_photo(self):
-        # 提醒用户操作字典
-        print("*********************************************")
-        print("*  热键(请在摄像头的窗口使用)：             *")
-        print("*  z: 拍摄图片                              *")
-        print("*  q: 退出                                  *")
-        print("*********************************************")
-
-        # 创建/使用local_photo文件夹
-        class_name = "local_photo"
-        if(os.path.exists("local_photo")):
-            pass
-        else:
-            os.mkdir(class_name)
-
-        # 设置特定值
-
-        index = 'takephoto'
-        cap = cv2.VideoCapture(0)
-
-        while True:
-            # 读入每一帧
-            ret, frame = cap.read()
-
-            cv2.imshow("capture", frame)
-
-            # 存储
-            input = cv2.waitKey(1) & 0xFF
-            # 拍照
-            if input == ord('z'):
-                cv2.imwrite("%s/%s.jpeg" % (class_name, index),
-                            cv2.resize(frame, (600, 480), interpolation=cv2.INTER_AREA))
-                break
-
-            # 退出
-            if input == ord('q'):
-                break
-
-        # 关闭窗口
-        cap.release()
-        cv2.destroyAllWindows()
-
-    def cut_photo(self):
-	    path = os.getcwd()+'/local_photo/img'
-    	print path
-    	for i,j,k in os.walk(path):
-            file_len = len(k)
-        print("请截取要识别的部分")
-        # root = tk.Tk()
-        # root.withdraw()
-        # temp1=filedialog.askopenfilename(parent=root)   #rgb
-        # temp2=Image.open(temp1,mode='r')
-        # temp2= cv.cvtColor(np.asarray(temp2),cv.COLOR_RGB2BGR)
-        # cut = np.array(temp2)
-
-        cut = cv2.imread(r"local_photo/takephoto.jpeg")
-
-        cv2.imshow('original', cut)
-        # C:\Users\Elephant\Desktop\pymycobot+opencv\local_photo/takephoto.jpeg
-
-        # 选择ROI
-        roi = cv2.selectROI(windowName="original", img=cut,
-                            showCrosshair=False, fromCenter=False)
-        x, y, w, h = roi
-        print(roi)
-
-        # 显示ROI并保存图片
-        if roi != (0, 0, 0, 0):
-            crop = cut[y:y+h, x:x+w]
-            cv2.imshow('crop', crop)
-            cv2.imwrite('local_photo/img/goal{}.jpeg'.format(str(file_len+1)), crop)
-            print('Saved!')
-
-        # 退出
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-    def distinguist(self):
-        print("请选择要识别的物体图片")
-        root = tk.Tk()    # 显式创建根窗体
-        root.withdraw()   # 将根窗体隐藏
-        file = filedialog.askopenfilename(parent=root)
-        load = Image.open(file, mode='r')
-        load = cv.cvtColor(np.asarray(load), cv.COLOR_RGB2BGR)
-        goal = np.array(load)
-        return goal
 
 
 def run():
@@ -515,7 +455,7 @@ def run():
     goal = []
     path = os.getcwd()+'/local_photo/img'
 
-    for i,j,k in os.walk(path):
+    for i, j, k in os.walk(path):
         for l in k:
             goal.append(cv2.imread('local_photo/img/{}'.format(l)))
     cap_num = 0
@@ -526,78 +466,77 @@ def run():
     detect = Object_detect()
     # init mycobot
     detect.run()
-    
-    _init_ = 20  # 
+
+    _init_ = 20  #
     init_num = 0
     nparams = 0
     num = 0
     real_sx = real_sy = 0
     while cv2.waitKey(1) < 0:
        # read camera
-        _,frame = cap.read()
+        _, frame = cap.read()
         # deal img
         frame = detect.transform_frame(frame)
-        
 
         if _init_ > 0:
-            _init_-=1
+            _init_ -= 1
             continue
         # calculate the parameters of camera clipping
         if init_num < 20:
             if detect.get_calculate_params(frame) is None:
-                cv2.imshow("figure",frame)
+                cv2.imshow("figure", frame)
                 continue
             else:
-                x1,x2,y1,y2 = detect.get_calculate_params(frame)
-                detect.draw_marker(frame,x1,y1)
-                detect.draw_marker(frame,x2,y2)
-                detect.sum_x1+=x1
-                detect.sum_x2+=x2
-                detect.sum_y1+=y1
-                detect.sum_y2+=y2
-                init_num+=1
+                x1, x2, y1, y2 = detect.get_calculate_params(frame)
+                detect.draw_marker(frame, x1, y1)
+                detect.draw_marker(frame, x2, y2)
+                detect.sum_x1 += x1
+                detect.sum_x2 += x2
+                detect.sum_y1 += y1
+                detect.sum_y2 += y2
+                init_num += 1
                 continue
-        elif init_num==20:
+        elif init_num == 20:
             detect.set_cut_params(
-                (detect.sum_x1)/20.0, 
-                (detect.sum_y1)/20.0, 
-                (detect.sum_x2)/20.0, 
-                (detect.sum_y2)/20.0, 
+                (detect.sum_x1)/20.0,
+                (detect.sum_y1)/20.0,
+                (detect.sum_x2)/20.0,
+                (detect.sum_y2)/20.0,
             )
             detect.sum_x1 = detect.sum_x2 = detect.sum_y1 = detect.sum_y2 = 0
-            init_num+=1
+            init_num += 1
             continue
 
         # calculate params of the coords between cube and mycobot
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
-                cv2.imshow("figure",frame)
+                cv2.imshow("figure", frame)
                 continue
             else:
-                x1,x2,y1,y2 = detect.get_calculate_params(frame)
-                detect.draw_marker(frame,x1,y1)
-                detect.draw_marker(frame,x2,y2)
-                detect.sum_x1+=x1
-                detect.sum_x2+=x2
-                detect.sum_y1+=y1
-                detect.sum_y2+=y2
-                nparams+=1
+                x1, x2, y1, y2 = detect.get_calculate_params(frame)
+                detect.draw_marker(frame, x1, y1)
+                detect.draw_marker(frame, x2, y2)
+                detect.sum_x1 += x1
+                detect.sum_x2 += x2
+                detect.sum_y1 += y1
+                detect.sum_y2 += y2
+                nparams += 1
                 continue
-        elif nparams==10:
-            nparams+=1
+        elif nparams == 10:
+            nparams += 1
             # calculate and set params of calculating real coord between cube and mycobot
             detect.set_params(
-                (detect.sum_x1+detect.sum_x2)/20.0, 
-                (detect.sum_y1+detect.sum_y2)/20.0, 
-                abs(detect.sum_x1-detect.sum_x2)/10.0+abs(detect.sum_y1-detect.sum_y2)/10.0
+                (detect.sum_x1+detect.sum_x2)/20.0,
+                (detect.sum_y1+detect.sum_y2)/20.0,
+                abs(detect.sum_x1-detect.sum_x2)/10.0 +
+                abs(detect.sum_y1-detect.sum_y2)/10.0
             )
             print "ok"
             continue
-            
         # get detect result
-        detect_result = detect.obj_detect(frame,goal)
+        detect_result = detect.obj_detect(frame, goal)
         if detect_result is None:
-            cv2.imshow("figure",frame)
+            cv2.imshow("figure", frame)
             continue
         else:
             x, y = detect_result
@@ -613,11 +552,10 @@ def run():
                 real_sy += real_y
                 real_sx += real_x
 
-        cv2.imshow("figure",frame)
-    
-    
+        cv2.imshow("figure", frame)
+
+
 if __name__ == "__main__":
     run()
     # Object_detect().take_photo()
     # Object_detect().cut_photo()
-

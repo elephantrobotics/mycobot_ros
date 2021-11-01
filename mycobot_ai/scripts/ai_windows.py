@@ -3,7 +3,8 @@
 
 from tkinter import ttk
 from tkinter import *
-import os, time
+import os
+import time
 
 import threading
 from multiprocessing import Process
@@ -34,7 +35,7 @@ class Application(object):
         # 设置标题
         self.win.title("aikit启动工具")
         self.win.geometry(
-            "500x300+100+100")  # 290 160为窗口大小，+10 +10 定义窗口弹出时的默认展示位置
+            "550x350+100+100")  # 290 160为窗口大小，+10 +10 定义窗口弹出时的默认展示位置
         # 打开ros按钮
         self.btn = Button(self.win, text="open ROS", command=self.open_ros)
         self.btn.grid(row=0)
@@ -65,7 +66,7 @@ class Application(object):
         # self.e2 = Entry(self.win,textvariable=self.v2, width=10)
         # self.e2.insert(0,0)
         # self.e2.grid(row=3,column=1)
-        self.tips = "1、首先打开ros\n2、选择所要运行的程序点击运行即可"
+        self.tips = "1、首先打开ros,大概需要等待15s\n2、选择所要运行的程序点击运行即可,开启大概需要10秒,可以通过查看终端查看开启情况。\n\n添加新的图像：\n1、点击按钮，等待开启摄像头\n2、选中图像框，按z键拍照\n3、使用鼠标框出需要识别的图像区域\n4、按Enter键提取图像\n5、再次按Enter键保存即可"
 
         self.btn = Button(self.win, text="运行", command=self.start_run)
         self.btn.grid(row=5)
@@ -87,6 +88,7 @@ class Application(object):
             print(u"开始运行")
             one = self.myCombox.get()
             if one == u"颜色识别":
+                self.run_py = "detect_obj_color.py"
                 t2 = threading.Thread(target=self.open_py1)
                 t2.setDaemon(True)
                 t2.start()
