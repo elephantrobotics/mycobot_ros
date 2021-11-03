@@ -27,15 +27,16 @@ class Object_detect(Movement):
         dir_path = os.path.dirname(__file__)
         # 移动角度
         self.move_angles = [
-            [-7.11, -6.94, -55.01, -24.16, 0, -38.84],  # init the point
-            [-1.14, -10.63, -87.8, 9.05, -3.07, -37.7],  # point to grab
-            [17.4, -10.1, -87.27, 5.8, -2.02, -37.7],  # point to grab
+            [-7.11, -6.94, -55.01, -24.16, 0, 15],  # init the point
+            [-1.14, -10.63, -87.8, 9.05, -3.07, 15],  # point to grab
+            [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
         # 移动坐标
         self.move_coords = [
-            [120.1, -141.6, 240.9, -173.34, -8.15, -83.11],  # above the red bucket
+            [120.1, -141.6, 240.9, -173.34, -8.15, -110.11],  # above the red bucket
             # above the yello bucket
-            [208.2, -127.8, 260.9, -157.51, -17.5, -71.18],
+            #[208.2, -127.8, 260.9, -157.51, -17.5, -71.18],
+            [205.6, -130.5, 263.0, -150.99, -0.07, -107.35],
             [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
             [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
             [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
@@ -44,6 +45,7 @@ class Object_detect(Movement):
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
+        self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
         if "dev" in self.robot_m5:
             self.Pin = [2, 5]
@@ -51,13 +53,19 @@ class Object_detect(Movement):
             self.Pin = [20, 21]
             for i in self.move_coords:
                 i[2] -= 20
-        elif "dev" in self.robot_raspi:
+        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             import RPi.GPIO as GPIO
+            self.GPIO = GPIO
+            GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(20, GPIO.OUT)
             GPIO.setup(21, GPIO.OUT)
-            self.raspi = True
 
+            self.raspi = True
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -126,11 +134,11 @@ class Object_detect(Movement):
 
     def gpio_status(self, flag):
         if flag:
-            GPIO.output(20, 0)
-            GPIO.output(21, 0)
+            self.GPIO.output(20, 0)
+            self.GPIO.output(21, 0)
         else:
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
+            self.GPIO.output(20, 1)
+            self.GPIO.output(21, 1)
 
     # Grasping motion
     def move(self, x, y, color):
@@ -142,11 +150,12 @@ class Object_detect(Movement):
         self.pub_angles(self.move_angles[2], 20)
         time.sleep(1.5)
         # send coordinates to move mycobot
-        self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
+        self.pub_coords([x, y, 165,  -178.9, -1.57, -66], 20, 1)
         time.sleep(1.5)
         # 根据不同底板机械臂，调整吸泵高度
         if "dev" in self.robot_m5:
-            self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
+            # m5 and jetson nano
+            self.pub_coords([x, y, 90,  -178.9, -1.57, -66], 25, 1)
         elif "dev" in self.robot_wio:
             h = 0
             if 165 < x < 180:
@@ -155,7 +164,12 @@ class Object_detect(Movement):
                 h = 20
             elif x < 135:
                 h = -20
-            self.pub_coords([x, y, 31.9+h,  -178.9, -1, -25.95], 20, 1)
+            self.pub_coords([x, y, 31.9+h,  -178.9, -1, -66], 20, 1)
+        elif "dev" in self.robot_jes:
+            h = 0
+            if x<130:
+                h=15
+            self.pub_coords([x, y, 90-h,  -178.9, -1.57, -66], 25, 1)
         time.sleep(1.5)
         # open pump
         if self.raspi:
@@ -177,7 +191,7 @@ class Object_detect(Movement):
         time.sleep(1.5)
         self.pub_marker(
             self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
-
+        print self.move_coords[color]
         self.pub_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
@@ -187,6 +201,7 @@ class Object_detect(Movement):
             self.gpio_status(False)
         else:
             self.pub_pump(False, self.Pin)
+        time.sleep(1)
         if color == 1:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
@@ -207,7 +222,7 @@ class Object_detect(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            if "dev" not in self.robot_wio:
+            if "dev" in self.robot_wio:
                 if (y < -30 and x > 140) or (x > 150 and y < -10):
                     x -= 10
                     y += 10
@@ -216,22 +231,25 @@ class Object_detect(Movement):
                 elif x > 170:
                     x -= 10
                     y += 10
-            elif "dev" not in self.robot_m5:
+            elif "dev" in self.robot_m5:
                 y += 10
                 x -= 5
                 if y < -20:
                     y += 5
                 # print x,y
+            elif "dev" in self.robot_jes:
+                if y<0:
+                    x+=5
+                    y+=3
+                y+=10
+            print x,y
             self.move(x, y, color)
 
     # init mycobot
     def run(self):
-        if self.raspi:
-            self.gpio_status(False)
-        else:
-            self.pub_pump(False, self.Pin)
+        
         for _ in range(5):
-            self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -38.84], 20)
+            self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
             print(_)
             time.sleep(0.5)
 
@@ -459,7 +477,7 @@ def run():
         for l in k:
             goal.append(cv2.imread('local_photo/img/{}'.format(l)))
     cap_num = 0
-    cap = cv2.VideoCapture(cap_num)
+    cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
     if not cap.isOpened():
         cap.open()
     # init a class of Object_detect

@@ -24,6 +24,7 @@ class Detect_marker(Movement):
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
+        self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
         if "dev" in self.robot_m5:
             self.Pin = [2, 5]
@@ -31,17 +32,21 @@ class Detect_marker(Movement):
             self.Pin = [20, 21]
             for i in self.move_coords:
                 i[2] -= 20
-        elif "dev" in self.robot_raspi:
+        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             import RPi.GPIO as GPIO
+            self.GPIO = GPIO
+            GPIO.setwarnings(False)
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(20, GPIO.OUT)
             GPIO.setup(21, GPIO.OUT)
             self.raspi = True
-            pump_y -= 5
-
+        if self.raspi:
+            self.gpio_status(False)
+        else:
+            self.pub_pump(False, self.Pin)
         # Creating a Camera Object
         cap_num = 0
-        self.cap = cv.VideoCapture(cap_num)
+        self.cap = cv.VideoCapture(cap_num, cv.CAP_V4L)
         # Get ArUco marker dict that can be detected.
         self.aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_6X6_250)
         # Get ArUco marker params.
@@ -93,7 +98,7 @@ class Detect_marker(Movement):
     def move(self, x, y):
         if self.raspi:
             coords = [
-                [145.6, -64.9, 285.2, 179.88, 7.67, -177.06],
+                [145.6, -64.9, 285.2, 179.88, 7.67, 179],
                 [130.1, -155.6, 243.9, 178.99, 5.38, -179.9]
             ]
         else:
@@ -138,6 +143,7 @@ class Detect_marker(Movement):
         else:
             self.pub_pump(False, self.Pin)
         # publish marker
+        time.sleep(1)
         self.marker.header.stamp = rospy.Time.now()
         self.marker.pose.position.x = coords[1][0]/1000.0
         self.marker.pose.position.y = coords[1][1]/1000.0
@@ -148,11 +154,11 @@ class Detect_marker(Movement):
 
     def gpio_status(self, flag):
         if flag:
-            GPIO.output(20, 0)
-            GPIO.output(21, 0)
+            self.GPIO.output(20, 0)
+            self.GPIO.output(21, 0)
         else:
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
+            self.GPIO.output(20, 1)
+            self.GPIO.output(21, 1)
 
     # decide whether grab cube
     def decide_move(self, x, y):
@@ -164,41 +170,44 @@ class Detect_marker(Movement):
             return
         else:
             self.cache_x = self.cache_y = 0
+            if "dev" in self.robot_jes:
+                if x > -20:
+                    y += 10
+                if y > -25:
+                    x -= 5
+                x += 10
+
             self.move(x, y)
 
     # init mycobot
     def init_mycobot(self):
-        if self.raspi:
-            self.gpio_status(False)
-        else:
-            self.pub_pump(False, self.Pin)
+
         for _ in range(5):
             print _
-            self.pub_coords([145.6, -64.9, 285.2, 179.88, 7.67, -177.06], 20, 1), 20, 1)
-
+            self.pub_coords([145.6, -64.9, 285.2, 179.88, 7.67, 179], 20, 1)
             time.sleep(0.5)
 
     def run(self):
         global pump_y, pump_x
         self.init_mycobot()
-        num=sum_x=sum_y=0
+        num = sum_x = sum_y = 0
         while cv.waitKey(1) < 0:
-            success, img=self.cap.read()
+            success, img = self.cap.read()
             if not success:
                 print("It seems that the image cannot be acquired correctly.")
                 break
 
             # transfrom the img to model of gray
-            gray=cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             # Detect ArUco marker.
-            corners, ids, rejectImaPoint=cv.aruco.detectMarkers(
-                gray, self.aruco_dict, parameters = self.aruco_params
+            corners, ids, rejectImaPoint = cv.aruco.detectMarkers(
+                gray, self.aruco_dict, parameters=self.aruco_params
             )
 
             if len(corners) > 0:
                 if ids is not None:
                     # get informations of aruco
-                    ret=cv.aruco.estimatePoseSingleMarkers(
+                    ret = cv.aruco.estimatePoseSingleMarkers(
                         corners, 0.03, self.camera_matrix, self.dist_coeffs
                     )
                     # rvec:rotation offset,tvec:translation deviator
