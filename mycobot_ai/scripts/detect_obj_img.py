@@ -64,8 +64,7 @@ class Object_detect(Movement):
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
-        else:
-            self.pub_pump(False, self.Pin)
+
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -167,8 +166,8 @@ class Object_detect(Movement):
             self.pub_coords([x, y, 31.9+h,  -178.9, -1, -66], 20, 1)
         elif "dev" in self.robot_jes:
             h = 0
-            if x<130:
-                h=15
+            if x < 130:
+                h = 15
             self.pub_coords([x, y, 90-h,  -178.9, -1.57, -66], 25, 1)
         time.sleep(1.5)
         # open pump
@@ -233,21 +232,22 @@ class Object_detect(Movement):
                     y += 10
             elif "dev" in self.robot_m5:
                 y += 10
-                x -= 5
+                x -= 15
                 if y < -20:
                     y += 5
                 # print x,y
             elif "dev" in self.robot_jes:
-                if y<0:
-                    x+=5
-                    y+=3
-                y+=10
-            print x,y
+                if y < 0:
+                    x += 5
+                    y += 3
+                y += 10
+            print x, y
             self.move(x, y, color)
 
     # init mycobot
     def run(self):
-        
+        if not self.raspi:
+            self.pub_pump(False, self.Pin)
         for _ in range(5):
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
             print(_)

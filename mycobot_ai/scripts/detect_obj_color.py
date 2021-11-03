@@ -59,13 +59,11 @@ class Object_detect(Movement):
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(20, GPIO.OUT)
             GPIO.setup(21, GPIO.OUT)
-            GPIO.output(20,1)
-            GPIO.output(21,1)
+            GPIO.output(20, 1)
+            GPIO.output(21, 1)
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
-        else:
-            self.pub_pump(False, self.Pin)
 
         # choose place to set cube
         self.color = 0
@@ -215,7 +213,7 @@ class Object_detect(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            if "dev" in self.robot_raspi:
+            if "dev" in self.robot_wio:
 
                 if (y < -30 and x > 140) or (x > 150 and y < -10):
                     x -= 10
@@ -225,28 +223,36 @@ class Object_detect(Movement):
                 elif x > 170:
                     x -= 10
                     y += 10
-            elif "dev" in self.robot_wio:
+            elif "dev" in self.robot_raspi:
                 if x > 160:
                     y += 10
                 elif y < -20:
                     x -= 10
                     y += 10
             elif "dev" in self.robot_jes:
-                y+=13
-                x+=4
+                y += 13
+                x += 4
+
+            elif "dev" in self.robot_m5:
+                x -= 10
+                if y < 0:
+                    y += 10
+                if y < -30:
+                    y += 7
             print x, y
             self.move(x, y, color)
 
     # init mycobot
     def run(self):
-        
+        if not self.raspi:
+            self.pub_pump(False, self.Pin)
         for _ in range(5):
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
             print(_)
             time.sleep(0.5)
-        
 
     # draw aruco
+
     def draw_marker(self, img, x, y):
         # draw rectangle on img
         cv2.rectangle(

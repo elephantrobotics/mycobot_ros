@@ -25,12 +25,9 @@ class Application(object):
             self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
             self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
             if "dev" in self.robot_wio:
-                self.command = '<arg name="port" default="{}" />'.format(
-                    self.robot_wio)
-                # 根据通信口修改ros启动文件
-                os.system(
-                    "sed -i '2c {}' ~/catkin_ws/src/mycobot_ros/mycobot_ai/launch/vision.launch"
-                    .format(self.command))
+                self.set_file(self.robot_wio)
+            elif "dev" in self.robot_m5:
+               self.set_file(self.robot_m5)
             elif "dev" in self.robot_raspi:
                 self.change_file(self.robot_raspi)
             elif "dev" in self.robot_jes:
@@ -73,6 +70,14 @@ class Application(object):
         os.system(
             "ps -ef | grep -E mycobot.rviz | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
         sys.exit(0)
+        
+    def set_file(self,port):
+        self.command = '<arg name="port" default="{}" />'.format(
+            port)
+        # 根据通信口修改ros启动文件
+        os.system(
+            "sed -i '2c {}' ~/catkin_ws/src/mycobot_ros/mycobot_ai/launch/vision.launch"
+            .format(self.command))
 
     def change_file(self, port):
         command1 = '<arg name="port" default="{}" />'.format(port)
