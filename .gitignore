@@ -6,6 +6,8 @@
 .history
 *.pyc
 *.bat
+github.sh
+gitlib.sh
 
 # Editor directories and files
 .idea

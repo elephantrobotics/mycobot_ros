@@ -74,6 +74,7 @@ $ git clone --depth 1 https://github.com/elephantrobotics/mycobot_ros.git
 $ cd ~/catkin_ws
 $ catkin_make
 $ source ~/catkin_ws/devel/setup.bash
+$ sudo echo 'source ~/catkin_ws/devel/setup.bash' >> ~/.bashrc
 ```
 
 #### 1.3 Test Python API
