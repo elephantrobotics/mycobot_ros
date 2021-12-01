@@ -1,0 +1,28 @@
+<launch>
+	<arg name="port" default="192.168.10.10" />
+	<arg name="baud" default="9000" />
+
+    <!-- urdf文件，模型文件的路径 -->
+	<arg name="model" default="$(find mycobot_description)/urdf/jetsonNano/mycobot_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
+	<!-- <arg name="gui" default="false" /> -->
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
+	</node>
+
+	<!-- mycobot-topics -->
+    <include file="$(find mycobot_communication)/launch/communication_topic_pi.launch">
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+    </include>
+
+    <!-- listen and pub the real angles -->
+	<node name="real_listener" pkg="mycobot_280" type="listen_real_of_topic.py" />
+
+	<!-- Show in Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

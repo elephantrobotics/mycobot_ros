@@ -1,0 +1,10 @@
+<launch>
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
+	<!-- Open communication service -->
+	<node name="mycobot_services" pkg="mycobot_communication" type="mycobot_topics_seeed.py" output="screen">
+		<param name="port" type="string" value="$(arg port)" />
+		<param name="baud" type="int" value="$(arg baud)" />
+    </node>
+</launch>
