@@ -74,13 +74,14 @@ def teleop_keyboard():
         set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
         get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
         set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
-        switch_gripper = rospy.ServiceProxy("switch_gripper_status", GripperStatus)
+        switch_gripper = rospy.ServiceProxy(
+            "switch_gripper_status", GripperStatus)
     except:
         print("start error ...")
         exit(1)
 
     init_pose = [0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 0, 0, 0, 0, 0, speed]
+    home_pose = [0, 8, -127, 40, 0, 0, speed]
 
     # rsp = set_angles(*init_pose)
 
