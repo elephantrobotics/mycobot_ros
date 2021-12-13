@@ -117,6 +117,16 @@
     </collision>
   </link>
 
+  <link name="gripper">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/gripper.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    </visual>
+  </link>
+
+
   <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
@@ -167,5 +177,14 @@
     <origin xyz= "0 0.06 0" rpy = "-1.57080 0 0 "/>
   </joint>
 
-</robot>
 
+  <joint name="gitpper_to_joint6output" type="fixed">
+    <axis xyz="0 0 0"/>
+    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <parent link="link6"/>
+    <child link="gripper"/>
+    <origin xyz= "0 0 0" rpy = "0 0 0 "/>
+  </joint>
+
+
+</robot>

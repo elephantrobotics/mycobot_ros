@@ -79,11 +79,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          gripper:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
           link1:
             Alpha: 1
             Show Axes: false
@@ -160,11 +155,6 @@ Visualization Manager:
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
           base:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          gripper:
             Alpha: 1
             Show Axes: false
             Show Trail: false
