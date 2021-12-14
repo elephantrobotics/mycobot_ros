@@ -74,37 +74,37 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          joint1:
+          link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint2:
+          link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint3:
+          link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint4:
+          link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint5:
+          link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6:
+          link6:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6_flange:
+          link7:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -154,37 +154,37 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          joint1:
+          link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint2:
+          link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint3:
+          link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint4:
+          link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint5:
+          link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6:
+          link6:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6_flange:
+          link7:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -198,7 +198,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: joint1
+    Fixed Frame: link1
     Frame Rate: 30
   Name: root
   Tools:
@@ -226,7 +226,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.00999999978
       Pitch: 0.439796686
-      Target Frame: joint1
+      Target Frame: link1
       Value: XYOrbit (rviz)
       Yaw: 2.5317657
     Saved: ~

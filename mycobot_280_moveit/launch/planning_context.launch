@@ -6,7 +6,7 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro gazebo_plugin:=true '$(find mycobot_description)/urdf/mycobot/mycobot.urdf.xacro'"/>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_280_moveit)/config/firefighter.srdf" />
