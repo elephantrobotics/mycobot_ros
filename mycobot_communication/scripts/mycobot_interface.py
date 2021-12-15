@@ -8,12 +8,16 @@ import math
 from itertools import izip_longest # TODO: python3 is zip_longest
 zip_longest = izip_longest
 
-import rospy
 from pymycobot.mycobot import MyCobot
+
+import rospy
+import actionlib
+from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryActionResult, FollowJointTrajectoryActionFeedback
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped, Quaternion
-from std_srvs.srv import SetBool, Empty
+from std_srvs.srv import SetBool, SetBoolResponse, Empty
 import tf
+import numpy as np
 
 
 class MycobotInterface(object):
@@ -27,15 +31,20 @@ class MycobotInterface(object):
 
         self.joint_angle_pub = rospy.Publisher("joint_state", JointState, queue_size=5)
         self.real_angles = None
-        self.joint_command_sub = rospy.Subscriber("joint_command", JointState, self.jointCommandCb)
+        self.joint_command_sub = rospy.Subscriber("joint_command", JointState, self.joint_command_cb)
 
         self.pub_end_coord = rospy.get_param("~pub_end_coord", False)
         if self.pub_end_coord:
             self.end_coord_pub = rospy.Publisher("end_coord", PoseStamped, queue_size=5)
 
-        self.servo_srv = rospy.Service("set_servo", SetBool, self.setServoCb)
-        self.open_gripper_srv = rospy.Service("open_gripper", Empty, self.openGripperCb)
-        self.close_gripper_srv = rospy.Service("close_gripper", Empty, self.closeGripperCb)
+        self.servo_srv = rospy.Service("set_servo", SetBool, self.set_servo_cb)
+
+        # TODO: implement actionlib for gripper
+        self.open_gripper_srv = rospy.Service("open_gripper", Empty, self.open_gripper_cb)
+        self.close_gripper_srv = rospy.Service("close_gripper", Empty, self.close_gripper_cb)
+
+        self.joint_as = actionlib.SimpleActionServer("arm_controller", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
+        self.joint_as.start()
 
     def run(self):
 
@@ -73,7 +82,7 @@ class MycobotInterface(object):
 
             r.sleep()
 
-    def jointCommandCb(self, msg):
+    def joint_command_cb(self, msg):
         angles = self.real_angles
         vel = 50 # hard-coding
         for n, p, v in zip_longest(msg.name, msg.position, msg.velocity):
@@ -93,7 +102,7 @@ class MycobotInterface(object):
         self.mc.send_angles(angles, vel)
         self.lock.release()
 
-    def setServoCb(self, req):
+    def set_servo_cb(self, req):
         if req.data:
             self.lock.acquire()
             self.mc.send_angles(self.real_angles, 0)
@@ -105,21 +114,208 @@ class MycobotInterface(object):
             self.lock.release()
             rospy.loginfo("servo off")
 
-        return SetBool(True, "")
+        return SetBoolResponse(True, "")
 
-    def openGripperCb(self, req):
+    def open_gripper_cb(self, req):
         self.lock.acquire()
         self.mc.set_gripper_state(0, 80)
         self.lock.release()
         rospy.loginfo("open gripper")
 
-    def closeGripperCb(self, req):
+    def close_gripper_cb(self, req):
         self.lock.acquire()
         self.mc.set_gripper_state(1, 80)
         self.lock.release()
         rospy.loginfo("close gripper")
 
+    def joint_as_cb(self, goal):
 
+        # Error case1
+        if not self.real_angles:
+            res = FollowJointTrajectoryActionResult()
+            res.error_code = FollowJointTrajectoryActionResult.INVLID_JOINTS
+            msg = "Real joint angles are empty!"
+            ROS_ERROR_STREAM(msg);
+            self.joint_as.set_aborted(res, msg)
+            return
+
+        # Error case2
+        if len(self.real_angles) != len(goal.trajectory.joint_names):
+            res = FollowJointTrajectoryActionResult()
+            res.error_code = FollowJointTrajectoryActionResult.INVLID_JOINTS
+            msg = "Incoming trajectory joints do not match the joints of the controller"
+            ROS_ERROR_STREAM(msg);
+            self.joint_as.set_aborted(res, msg)
+            return
+
+        # Error case3: make sure trajectory is not empty
+        if len(goal.trajectory.points) == 0:
+            res = FollowJointTrajectoryActionResult()
+            res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
+            msg = "Incoming trajectory is empty"
+            ROS_ERROR_STREAM(msg);
+            self.joint_as.set_aborted(res, msg)
+            return
+
+
+        # correlate the joints we're commanding to the joints in the message
+        durations = []
+
+        # num_points = len(goal.trajectory.points);
+        points = goal.trajectory.points
+        # find out the duration of each segment in the trajectory
+        durations.append(points[0].time_from_start)
+
+        for i in range(1, len(goal.trajectory.points)):
+            durations.append(points[i].time_from_start - points[i-1].time_from_start);
+
+        # Error case4: empty
+        if points[0].positions:
+             msg = "First point of trajectory has no positions"
+             res = FollowJointTrajectoryActionResult()
+             res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
+             ROS_ERROR_STREAM(msg);
+             self.joint_as.set_aborted(res, msg)
+             return
+
+        trajectory = []
+        time = rospy.Time.now() + rospy.Duration(0.01)
+
+        for i in range(len(points)):
+            seg_start_time = 0;
+            seg_duration = 0;
+            seg = {}
+
+            if goal.trajectory.header.stamp == rospy.Time():
+                seg['start_time'] = (time + points.at(i).time_from_start) - durations[i]
+            else:
+                seg['start_time'] = (goal.trajectory.header.stamp + points.at(i).time_from_start) - durations[i]
+
+            seg['end_time'] = seg['start_time'] + durations.at(i);
+
+            # Checks that the incoming segment has the right number of elements.
+            if len(points[i].velocities) > 0 and len(points[i].velocities) != len(goal.trajectory.joint_names):
+                msg = "Command point " + str(i+1) + " has wrong amount of velocities"
+                res = FollowJointTrajectoryActionResult()
+                res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
+                ROS_ERROR_STREAM(msg);
+                self.joint_as.set_aborted(res, msg)
+                return
+
+            if len(points[i].positions) != len(goal.trajectory.joint_names):
+                msg = "Command point " + str(i+1) + " has wrong amount of positions"
+                res = FollowJointTrajectoryActionResult()
+                res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
+                ROS_ERROR_STREAM(msg);
+                self.joint_as.set_aborted(res, msg)
+                return
+
+            if len(points[i].velocities) > 0:
+                seg['velocities'] = points[i].velocities[j]
+            seg['positions'] = points[i].positions[j]
+
+            trajectory.append(seg);
+
+
+        ## wait for start
+        rospy.loginfo("Trajectory start requested at %.3lf, waiting...", goal.trajectory.header.stamp.to_sec())
+        r = rospy.Rate(100)
+        while (goal.trajectory.header.stamp - time).to_sec() > 0:
+            time = rospy.Time.now()
+            r.sleep()
+        total_duration = sum(durations);
+        rospy.loginfo("Trajectory start time is %.3lf, end time is %.3lf, total duration is %.3lf", time.to_sec(),  time.to_sec() + total_duration, total_duration);
+
+
+        feedback = FollowJointTrajectoryFeedback()
+        feedback.joint_names = goal.trajectory.joint_names;
+        feedback.header.stamp = time;
+
+        for i, seg in enumerate(trajectory):
+
+            rospy.logdebug("Current segment is %d time left %f cur time %f", i, durations.at(i) - (time - seg.start_time).to_sec(), time.to_sec());
+
+            if durations[i] == 0:
+                rospy.logdebug("skipping segment %d with duration of 0 seconds", i);
+                continue;
+
+            vel = 100 # hard-coding, max speed
+            target_angles =  np.array(seg['positions']) * 180 / np.pi
+            actual_angles = np.array(self.real_angles);
+            self.lock.acquire()
+            self.mc.send_angles(target_angles.tolist(), vel)
+            self.lock.release()
+
+            while time.to_sec() < seg["end_time"].to_sec():
+                # check if new trajectory was received, if so abort current trajectory execution
+                # by setting the goal to the current position
+                if self.joint_as.is_preempt_requested():
+
+                    self.lock.acquire()
+                    self.mc.send_angles(self.real_angles, 0)
+                    self.lock.release()
+
+                    self.joint_as.set_preempted()
+                    if self.joint_as.is_new_goal_available():
+                        rospy.logwarn("New trajectory received. Aborting old trajectory.");
+                    else:
+                        rospy.logwanr("Canceled trajectory following action");
+                    return;
+
+
+                if (time - feedback.header.stamp).to_sec() > 0.1: # 10 Hz
+
+                    feedback.header.stamp = time;
+                    feedback.desired.positions = (target_angles / 180 * np.pi).tolist()
+                    feedback.actual.positions = (actual_angles / 180 * np.pi).tolist()
+                    feedback.error.positions = ((target_angles - actual_angles) / 180 * np.pi).tolist()
+                    self.joint_as.publish_feedback(feedback);
+
+
+                r.sleep();
+                time = rospy.Time.now();
+
+            # Verify trajectory constraints
+            for tol in goal.path_tolerance:
+                index = goal.trajectory.joint_names.index(tol.name)
+                pos_err = np.fabs(target_angles - actual_angles)[index]  / 180 * np.pi;
+
+                if tol.position > 0 and pos_err > tol.position:
+                    msg = "Unsatisfied position tolerance for " + tol.name + \
+                          ", trajectory point"  + str(i+1) + ", " + str(pos_err) + \
+                          " is larger than " + str(tol.position);
+
+
+                    rospy.logwarn(msg);
+                    res = FollowJointTrajectoryActionResult()
+                    res.error_code = FollowJointTrajectoryActionResult.PATH_TOLERANCE_VIOLATED
+                    ROS_WARN_STREAM(msg);
+                    self.joint_as.set_aborted(res, msg)
+                    return;
+
+        # Checks that we have ended inside the goal constraints
+        for tol in goal.goal_tolerance:
+            index = goal.trajectory.joint_names.index(tol.name)
+
+            pos_err = np.fabs(target_angles - actual_angles)[index] / 180 * np.pi
+            if tol.position > 0 and pos_err > tol.positionl:
+                msg = "Aborting because " + tol.name + \
+                      " wound up outside the goal constraints, " + \
+                      str(pos_err) + " is larger than " + str(tol.position)
+
+                rospy.logwarn(msg);
+                res = FollowJointTrajectoryActionResult()
+                res.error_code = FollowJointTrajectoryActionResult.GOAL_TOLERANCE_VIOLATED
+                ROS_WARN_STREAM(msg);
+                self.joint_as.set_aborted(res, msg)
+                return;
+
+
+        msg = "Trajectory execution successfully completed"
+        ROS_INFO_STREAM(msg)
+        res = FollowJointTrajectoryActionResult()
+        res.error_code = FollowJointTrajectoryResult.SUCCESSFUL;
+        self.joint_as.set_succeeded(res, msg);
 
 if __name__ == "__main__":
     rospy.init_node("mycobot_topics")
