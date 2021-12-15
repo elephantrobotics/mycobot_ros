@@ -12,7 +12,7 @@ from pymycobot.mycobot import MyCobot
 
 import rospy
 import actionlib
-from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryActionResult, FollowJointTrajectoryActionFeedback
+from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryResult, FollowJointTrajectoryFeedback
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped, Quaternion
 from std_srvs.srv import SetBool, SetBoolResponse, Empty
@@ -29,7 +29,7 @@ class MycobotInterface(object):
         self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
 
-        self.joint_angle_pub = rospy.Publisher("joint_state", JointState, queue_size=5)
+        self.joint_angle_pub = rospy.Publisher("joint_states", JointState, queue_size=5)
         self.real_angles = None
         self.joint_command_sub = rospy.Subscriber("joint_command", JointState, self.joint_command_cb)
 
@@ -43,7 +43,7 @@ class MycobotInterface(object):
         self.open_gripper_srv = rospy.Service("open_gripper", Empty, self.open_gripper_cb)
         self.close_gripper_srv = rospy.Service("close_gripper", Empty, self.close_gripper_cb)
 
-        self.joint_as = actionlib.SimpleActionServer("arm_controller", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
+        self.joint_as = actionlib.SimpleActionServer("arm_controller/follow_joint_trajectory", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
         self.joint_as.start()
 
     def run(self):
@@ -132,28 +132,28 @@ class MycobotInterface(object):
 
         # Error case1
         if not self.real_angles:
-            res = FollowJointTrajectoryActionResult()
-            res.error_code = FollowJointTrajectoryActionResult.INVLID_JOINTS
+            res = FollowJointTrajectoryResult()
+            res.error_code = FollowJointTrajectoryResult.INVALID_JOINTS
             msg = "Real joint angles are empty!"
-            ROS_ERROR_STREAM(msg);
+            rospy.logerr(msg);
             self.joint_as.set_aborted(res, msg)
             return
 
         # Error case2
         if len(self.real_angles) != len(goal.trajectory.joint_names):
-            res = FollowJointTrajectoryActionResult()
-            res.error_code = FollowJointTrajectoryActionResult.INVLID_JOINTS
+            res = FollowJointTrajectoryResult()
+            res.error_code = FollowJointTrajectoryResult.INVALID_JOINTS
             msg = "Incoming trajectory joints do not match the joints of the controller"
-            ROS_ERROR_STREAM(msg);
+            rospy.logerr(msg);
             self.joint_as.set_aborted(res, msg)
             return
 
         # Error case3: make sure trajectory is not empty
         if len(goal.trajectory.points) == 0:
-            res = FollowJointTrajectoryActionResult()
-            res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
+            res = FollowJointTrajectoryResult()
+            res.error_code = FollowJointTrajectoryResult.INVALID_GOAL
             msg = "Incoming trajectory is empty"
-            ROS_ERROR_STREAM(msg);
+            rospy.logerr(msg);
             self.joint_as.set_aborted(res, msg)
             return
 
@@ -170,11 +170,11 @@ class MycobotInterface(object):
             durations.append(points[i].time_from_start - points[i-1].time_from_start);
 
         # Error case4: empty
-        if points[0].positions:
+        if not points[0].positions:
              msg = "First point of trajectory has no positions"
-             res = FollowJointTrajectoryActionResult()
-             res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
-             ROS_ERROR_STREAM(msg);
+             res = FollowJointTrajectoryResult()
+             res.error_code = FollowJointTrajectoryResult.INVALID_GOAL
+             rospy.logerr(msg);
              self.joint_as.set_aborted(res, msg)
              return
 
@@ -187,32 +187,32 @@ class MycobotInterface(object):
             seg = {}
 
             if goal.trajectory.header.stamp == rospy.Time():
-                seg['start_time'] = (time + points.at(i).time_from_start) - durations[i]
+                seg['start_time'] = (time + points[i].time_from_start) - durations[i]
             else:
-                seg['start_time'] = (goal.trajectory.header.stamp + points.at(i).time_from_start) - durations[i]
+                seg['start_time'] = (goal.trajectory.header.stamp + points[i].time_from_start) - durations[i]
 
-            seg['end_time'] = seg['start_time'] + durations.at(i);
+            seg['end_time'] = seg['start_time'] + durations[i];
 
             # Checks that the incoming segment has the right number of elements.
             if len(points[i].velocities) > 0 and len(points[i].velocities) != len(goal.trajectory.joint_names):
                 msg = "Command point " + str(i+1) + " has wrong amount of velocities"
-                res = FollowJointTrajectoryActionResult()
-                res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
-                ROS_ERROR_STREAM(msg);
+                res = FollowJointTrajectoryResult()
+                res.error_code = FollowJointTrajectoryResult.INVALID_GOAL
+                rospy.logerr(msg);
                 self.joint_as.set_aborted(res, msg)
                 return
 
             if len(points[i].positions) != len(goal.trajectory.joint_names):
                 msg = "Command point " + str(i+1) + " has wrong amount of positions"
-                res = FollowJointTrajectoryActionResult()
-                res.error_code = FollowJointTrajectoryActionResult.INVALID_GOAL
-                ROS_ERROR_STREAM(msg);
+                res = FollowJointTrajectoryResult()
+                res.error_code = FollowJointTrajectoryResult.INVALID_GOAL
+                rospy.logerr(msg);
                 self.joint_as.set_aborted(res, msg)
                 return
 
             if len(points[i].velocities) > 0:
-                seg['velocities'] = points[i].velocities[j]
-            seg['positions'] = points[i].positions[j]
+                seg['velocities'] = points[i].velocities
+            seg['positions'] = points[i].positions
 
             trajectory.append(seg);
 
@@ -223,7 +223,7 @@ class MycobotInterface(object):
         while (goal.trajectory.header.stamp - time).to_sec() > 0:
             time = rospy.Time.now()
             r.sleep()
-        total_duration = sum(durations);
+        total_duration = sum(map(lambda du: du.to_sec(), durations))
         rospy.loginfo("Trajectory start time is %.3lf, end time is %.3lf, total duration is %.3lf", time.to_sec(),  time.to_sec() + total_duration, total_duration);
 
 
@@ -232,8 +232,6 @@ class MycobotInterface(object):
         feedback.header.stamp = time;
 
         for i, seg in enumerate(trajectory):
-
-            rospy.logdebug("Current segment is %d time left %f cur time %f", i, durations.at(i) - (time - seg.start_time).to_sec(), time.to_sec());
 
             if durations[i] == 0:
                 rospy.logdebug("skipping segment %d with duration of 0 seconds", i);
@@ -247,6 +245,9 @@ class MycobotInterface(object):
             self.lock.release()
 
             while time.to_sec() < seg["end_time"].to_sec():
+
+                rospy.logdebug("Current segment is %d time left %f cur time %f", i, (durations[i] - (time - seg["start_time"])).to_sec(), time.to_sec());
+
                 # check if new trajectory was received, if so abort current trajectory execution
                 # by setting the goal to the current position
                 if self.joint_as.is_preempt_requested():
@@ -287,9 +288,9 @@ class MycobotInterface(object):
 
 
                     rospy.logwarn(msg);
-                    res = FollowJointTrajectoryActionResult()
-                    res.error_code = FollowJointTrajectoryActionResult.PATH_TOLERANCE_VIOLATED
-                    ROS_WARN_STREAM(msg);
+                    res = FollowJointTrajectoryResult()
+                    res.error_code = FollowJointTrajectoryResult.PATH_TOLERANCE_VIOLATED
+                    rospy.logwarn(msg);
                     self.joint_as.set_aborted(res, msg)
                     return;
 
@@ -304,16 +305,16 @@ class MycobotInterface(object):
                       str(pos_err) + " is larger than " + str(tol.position)
 
                 rospy.logwarn(msg);
-                res = FollowJointTrajectoryActionResult()
-                res.error_code = FollowJointTrajectoryActionResult.GOAL_TOLERANCE_VIOLATED
-                ROS_WARN_STREAM(msg);
+                res = FollowJointTrajectoryResult()
+                res.error_code = FollowJointTrajectoryResult.GOAL_TOLERANCE_VIOLATED
+                rospy.logwarn(msg);
                 self.joint_as.set_aborted(res, msg)
                 return;
 
 
         msg = "Trajectory execution successfully completed"
-        ROS_INFO_STREAM(msg)
-        res = FollowJointTrajectoryActionResult()
+        rospy.loginfo(msg)
+        res = FollowJointTrajectoryResult()
         res.error_code = FollowJointTrajectoryResult.SUCCESSFUL;
         self.joint_as.set_succeeded(res, msg);
 
