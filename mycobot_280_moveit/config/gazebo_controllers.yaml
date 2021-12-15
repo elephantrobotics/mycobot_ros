@@ -19,11 +19,12 @@ arm_controller:
     joint6: { p: 10, d: 0, i: 0, i_clamp: 0 }
 
   constraints:
-    joint1: {trajectory: 0.1, goal: 0.1}
-    joint2: {trajectory: 0.1, goal: 0.1}
-    joint3: {trajectory: 0.1, goal: 0.1}
-    joint4: {trajectory: 0.1, goal: 0.1}
-    joint5: {trajectory: 0.1, goal: 0.1}
-    joint6: {trajectory: 0.1, goal: 0.1}
+    stopped_velocity_tolerance: 0
+    joint1: {trajectory: 0.1, goal: 0}
+    joint2: {trajectory: 0.1, goal: 0}
+    joint3: {trajectory: 0.1, goal: 0}
+    joint4: {trajectory: 0.1, goal: 0}
+    joint5: {trajectory: 0.1, goal: 0}
+    joint6: {trajectory: 0.1, goal: 0}
 
 
