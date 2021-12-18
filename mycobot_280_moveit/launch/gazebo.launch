@@ -19,6 +19,10 @@
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
     respawn="false" output="screen" />
 
+  <!-- joint controller -->
   <include file="$(find mycobot_280_moveit)/launch/gazebo_controllers.launch"/>
+
+  <!-- robot state publisher for tf -->
+  <node name="$(anon robot_state_publisher)" pkg="robot_state_publisher" type="state_publisher" />
 
 </launch>
