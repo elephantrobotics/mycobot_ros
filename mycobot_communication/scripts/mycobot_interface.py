@@ -25,6 +25,7 @@ class MycobotInterface(object):
     def __init__(self):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
+        self.vel_rate = rospy.get_param("~vel_rate", 32.0) # 32 bit/rad = 32
         rospy.loginfo("Connect mycobot on %s,%s" % (port, baud))
         self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
@@ -84,7 +85,7 @@ class MycobotInterface(object):
 
     def joint_command_cb(self, msg):
         angles = self.real_angles
-        vel = 50 # hard-coding
+        vel = 50 # deg/s, hard-coding
         for n, p, v in zip_longest(msg.name, msg.position, msg.velocity):
             id = int(n[-1]) - 1
             if 'joint' in n and id >= 0 and id < len(angles):
@@ -237,9 +238,16 @@ class MycobotInterface(object):
                 rospy.logdebug("skipping segment %d with duration of 0 seconds", i);
                 continue;
 
-            vel = 100 # hard-coding, max speed
             target_angles =  np.array(seg['positions']) * 180 / np.pi
             actual_angles = np.array(self.real_angles);
+            # workaround to solve bad joint velocity control
+            if len(trajectory)  == 1: # only has the goal angle position, calculate the average velocity
+                vel = (target_angles - np.array(self.real_angles)) / durations[i].to_sec() * np.pi / 180.0
+                vel = int(np.max(np.abs(vel)) * self.vel_rate )
+            else:
+                # vel = int(np.max(np.abs(seg['velocities'])) * self.vel_rate) # theoretically, we should use the target velocity, but have bad following performance for mycobot280
+                vel = 0 # zero is the max speed
+
             self.lock.acquire()
             self.mc.send_angles(target_angles.tolist(), vel)
             self.lock.release()
