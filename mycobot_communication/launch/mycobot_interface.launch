@@ -1,6 +1,8 @@
 <launch>
   <arg name="port" default="/dev/ttyUSB0" doc ="the serial port for connection" />
   <arg name="baud" default="115200" doc ="the serial baudrate" />
+  <arg name="robot_type" default="mycobot/mycobot.gazebo.xacro"/>
+  <arg name="urdf_path" default="$(find mycobot_description)/urdf/$(arg robot_type)"/>
 
   <!-- Driver -->
   <node pkg="mycobot_communication" type="mycobot_interface.py" name="mycobot_bridge"  output="screen" >
@@ -9,6 +11,7 @@
   </node>
 
   <!-- robot state publisher for tf -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg urdf_path)'" />
   <node name="$(anon robot_state_publisher)" pkg="robot_state_publisher" type="state_publisher" />
 
 </launch>
