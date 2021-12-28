@@ -25,7 +25,8 @@ class MycobotInterface(object):
     def __init__(self):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
-        self.vel_rate = rospy.get_param("~vel_rate", 32.0) # 32 bit/rad = 32
+        self.vel_rate = rospy.get_param("~vel_rate", 32.0) # bit/rad
+        self.min_vel = rospy.get_param("~min_vel", 10) # bit, for the bad velocity tracking of mycobot.
         rospy.loginfo("Connect mycobot on %s,%s" % (port, baud))
         self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
@@ -245,8 +246,10 @@ class MycobotInterface(object):
                 vel = (target_angles - np.array(self.real_angles)) / durations[i].to_sec() * np.pi / 180.0
                 vel = int(np.max(np.abs(vel)) * self.vel_rate )
             else:
-                # vel = int(np.max(np.abs(seg['velocities'])) * self.vel_rate) # theoretically, we should use the target velocity, but have bad following performance for mycobot280
-                vel = 0 # zero is the max speed
+                vel = int(np.max(np.abs(seg['velocities'])) * self.vel_rate)
+                if vel < self.min_vel: # workaround to solve the bad velocity tracking of mycobot
+                    vel = self.min_vel
+                # vel = 0 # zero in pymycobot is the max speed
 
             self.lock.acquire()
             self.mc.send_angles(target_angles.tolist(), vel)
