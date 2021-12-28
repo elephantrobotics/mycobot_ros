@@ -28,6 +28,9 @@
             <emission>
               <color sid="emission">0 0 0 1</color>
             </emission>
+            <ambient>
+              <color sid="ambient">1 1 1 1</color>
+            </ambient>
             <diffuse>
               <texture texture="link5_png-sampler" texcoord="shape0_001-mesh-map-0"/>
             </diffuse>
