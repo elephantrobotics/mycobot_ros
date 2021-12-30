@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-app: &common
-  command: [ "roslaunch mycobot_320 mycobot_320_slider.launch" ]
+  command: [ "roslaunch ${LAUNCH_TARGET:-mycobot_320 mycobot_320_slider.launch}" ]
   privileged: true
   environment:
     PYTHONUNBUFFERED: 1

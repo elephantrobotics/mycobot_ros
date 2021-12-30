@@ -54,6 +54,12 @@ This command does three things:
    This runs the image specified in the `docker-compose.yml`, which by default runs
    the command `roslaunch mycobot_320 mycobot_320_slider.launch` within the container.
 
+To run other tutorials, set the LAUNCH_TARGET environment variable. For example, to the run the MoveIt tutorial run:
+
+```
+export LAUNCH_TARGET=mycobot_320_moveit mycobot320_moveit.launch
+docker-compose up ros
+```
 
 ### Option 2: Local
 #### 1.1 Pre-Requriements
