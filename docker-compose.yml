@@ -14,7 +14,7 @@ x-app: &common
     args: &common-args
       ROS_DISTRO: "melodic"
       PYMYCOBOT_VERSION: ">=2<3"
-      BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
+      BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu20.04
 
 
 services:
@@ -30,4 +30,4 @@ services:
       context: .
       args:
         <<: *common-args
-        BASE_IMAGE: ubuntu:18.04
+        BASE_IMAGE: ubuntu:20.04

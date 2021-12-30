@@ -7,14 +7,14 @@ FROM ${BASE_IMAGE}
 # (or without GPU) works through docker.
 # I was unable to use the ROS_DISTRO variable here due to this issue:
 # https://github.com/docker/for-mac/issues/2155
-COPY --from=osrf/ros:melodic-desktop-full / /
+COPY --from=osrf/ros:noetic-desktop-full / /
 
 # Add ROS env vars to the bashrc
 ENV BASH_ENV="/root/launch.sh"
 SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
 ARG ROS_DISTRO
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> $BASH_ENV
+RUN echo "source /opt/ros/noetic/setup.bash" >> $BASH_ENV
 
 # Copy myCobot ROS package
 WORKDIR /catkin_ws/src
@@ -25,9 +25,9 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
     apt-get update && \
     apt-get install -y \
         # ROS Build dependencies
-        python-rosinstall \
-        python-rosinstall-generator \
-        python-wstool \
+        python3-rosinstall \
+        python3-rosinstall-generator \
+        python3-wstool \
         build-essential \
         python3-pip && \
     # Project-specific build dependencies
