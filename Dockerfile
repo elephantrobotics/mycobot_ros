@@ -44,3 +44,6 @@ RUN catkin_make
 
 # Let ROS know about the projects launch options
 RUN echo "source /catkin_ws/devel/setup.bash" >> $BASH_ENV
+
+# Setup the environment for interactive mode
+RUN echo "source /catkin_ws/devel/setup.bash" >> /root/.bashrc
