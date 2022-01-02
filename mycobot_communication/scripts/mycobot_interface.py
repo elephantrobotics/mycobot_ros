@@ -12,7 +12,7 @@ from pymycobot.mycobot import MyCobot
 
 import rospy
 import actionlib
-from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryResult, FollowJointTrajectoryFeedback
+from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryResult, FollowJointTrajectoryFeedback, GripperCommandAction, GripperCommandResult, GripperCommandFeedback
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped, Quaternion
 from std_srvs.srv import SetBool, SetBoolResponse, Empty
@@ -41,12 +41,17 @@ class MycobotInterface(object):
 
         self.servo_srv = rospy.Service("set_servo", SetBool, self.set_servo_cb)
 
-        # TODO: implement actionlib for gripper
         self.open_gripper_srv = rospy.Service("open_gripper", Empty, self.open_gripper_cb)
         self.close_gripper_srv = rospy.Service("close_gripper", Empty, self.close_gripper_cb)
+        self.gripper_is_moving = False
+        self.gripper_value = None
 
+        # action server for joint and gripper
         self.joint_as = actionlib.SimpleActionServer("arm_controller/follow_joint_trajectory", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
         self.joint_as.start()
+
+        self.gripper_as = actionlib.SimpleActionServer("gripper_controller/gripper_command", GripperCommandAction, execute_cb=self.gripper_as_cb)
+        self.gripper_as.start()
 
     def run(self):
 
@@ -67,6 +72,11 @@ class MycobotInterface(object):
                    msg.position.append(ang / 180.0 * math.pi)
                 self.joint_angle_pub.publish(msg)
 
+            # get gripper state
+            self.gripper_is_moving = self.mc.is_gripper_moving()
+            self.gripper_value = self.mc.get_gripper_value()
+
+            # get end-effector if necessary (use tf by ros in default)
             if self.pub_end_coord:
                 coords = self.mc.get_coords()
                 if coords:
@@ -271,7 +281,7 @@ class MycobotInterface(object):
                     if self.joint_as.is_new_goal_available():
                         rospy.logwarn("New trajectory received. Aborting old trajectory.");
                     else:
-                        rospy.logwanr("Canceled trajectory following action");
+                        rospy.logwarn("Canceled trajectory following action");
                     return;
 
 
@@ -285,7 +295,7 @@ class MycobotInterface(object):
 
 
                 r.sleep();
-                time = rospy.Time.now();
+                time = rospy.Time.now()
 
             # Verify trajectory constraints
             for tol in goal.path_tolerance:
@@ -328,6 +338,67 @@ class MycobotInterface(object):
         res = FollowJointTrajectoryResult()
         res.error_code = FollowJointTrajectoryResult.SUCCESSFUL;
         self.joint_as.set_succeeded(res, msg);
+
+    def gripper_as_cb(self, goal):
+
+        goal_state = (int)(goal.command.position)
+        if not (goal_state == 0 or goal_state == 1):
+            res = GripperCommandResult()
+            res.position = self.gripper_value
+            res.stalled = True
+            res.reached_goal = False
+            msg = "We only support 1 (totally close) or 0 (totally open) for gripper action"
+            rospy.logerr(msg);
+            self.gripper_as.set_aborted(res, msg)
+            return
+
+        feedback = GripperCommandFeedback()
+
+        self.lock.acquire()
+        self.mc.set_gripper_state(goal_state, 100) # first arg is the flag 0 - open, 1 - close; second arg is the speed
+        self.lock.release()
+
+        time = rospy.Time(0)
+        rospy.sleep(0.3) # wait for the gripper to start moving
+
+        r = rospy.Rate(20) # 20 Hz
+        while not rospy.is_shutdown():
+
+            rospy.logdebug("Current gripper value is  %d state is %d", self.gripper_value, self.gripper_is_moving);
+
+            if self.gripper_as.is_preempt_requested():
+
+                self.lock.acquire()
+                self.mc.send_angles(self.real_angles, 0)
+                self.lock.release()
+
+                self.joint_as.set_preempted()
+                if self.joint_as.is_new_goal_available():
+                    rospy.logwarn("New trajectory received. Aborting old trajectory.");
+                else:
+                    rospy.logwarn("Canceled trajectory following action");
+                return;
+
+            if (rospy.Time.now() - time).to_sec() > 0.1: # 10 Hz
+                feedback.position = self.gripper_value
+                feedback.stalled = False
+                feedback.stalled = False
+                self.gripper_as.publish_feedback(feedback);
+                time = rospy.Time.now()
+
+            if self.gripper_is_moving == 0: # not moving
+                msg = "Gripper stops moving"
+                rospy.loginfo(msg)
+                res = GripperCommandResult()
+                res.position = self.gripper_value
+                res.stalled = True
+                res.reached_goal = True
+                self.gripper_as.set_succeeded(res, msg);
+                break
+
+
+            r.sleep();
+
 
 if __name__ == "__main__":
     rospy.init_node("mycobot_topics")
