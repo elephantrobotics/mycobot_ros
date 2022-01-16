@@ -1,5 +1,5 @@
 <launch>
-	<arg name="model" default="$(find mycobot_description)/urdf/320_urdf/mycobot_pro_320.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/320_urdf/mycobot.urdf.xacro"/>
 	<arg name="rvizconfig" default="$(find mycobot_320)/config/mycobot_320.rviz" />
 	<arg name="gui" default="true" />
 

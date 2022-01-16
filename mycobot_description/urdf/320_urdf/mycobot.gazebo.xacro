@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot320" >
+
+  <xacro:arg name="robot_namespace" default="" />
+
+  <xacro:include filename="$(find mycobot_description)/urdf/320_urdf/mycobot.urdf.xacro" />
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>false</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+
+</robot>
+
