@@ -25,6 +25,7 @@ class MycobotInterface(object):
     def __init__(self):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
+        self.model = rospy.get_param("~model", '280')
         self.vel_rate = rospy.get_param("~vel_rate", 32.0) # bit/rad
         self.min_vel = rospy.get_param("~min_vel", 10) # bit, for the bad velocity tracking of mycobot.
         rospy.loginfo("Connect mycobot on %s,%s" % (port, baud))
@@ -51,6 +52,8 @@ class MycobotInterface(object):
         self.joint_as = actionlib.SimpleActionServer("arm_controller/follow_joint_trajectory", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
         self.joint_as.start()
 
+        self.get_joint_state = True
+
         self.gripper_as = actionlib.SimpleActionServer("gripper_controller/gripper_command", GripperCommandAction, execute_cb=self.gripper_as_cb)
         self.gripper_as.start()
 
@@ -61,7 +64,19 @@ class MycobotInterface(object):
         while not rospy.is_shutdown():
 
             # get real joint from MyCobot
-            self.real_angles = self.mc.get_angles()
+            if self.get_joint_state:
+                real_angles = self.mc.get_angles()
+
+                # the duration is over the sending loop, not good
+                # self.lock.acquire()
+                # real_angles = self.mc.get_angles()
+                # self.lock.release()
+
+                if len(real_angles) != 6: # we assume mycobot only have 6 DoF of joints
+                    rospy.logwarn("empty joint angles!!!")
+                else:
+                    self.real_angles = real_angles
+
             if self.real_angles:
                 rospy.logdebug_throttle(1.0, "get real angles from mycobot")
 
@@ -147,6 +162,9 @@ class MycobotInterface(object):
         rospy.loginfo("close gripper")
 
     def joint_as_cb(self, goal):
+
+        if '320' in self.model: # workaround for mycobot pro 320
+            self.get_joint_state = False
 
         # Error case1
         if not self.real_angles:
@@ -257,6 +275,7 @@ class MycobotInterface(object):
 
             target_angles =  np.array(seg['positions']) * 180 / np.pi
             actual_angles = np.array(self.real_angles);
+
             # workaround to solve bad joint velocity control
             if len(trajectory)  == 1: # only has the goal angle position, calculate the average velocity
                 vel = (target_angles - np.array(self.real_angles)) / durations[i].to_sec() * np.pi / 180.0
@@ -270,6 +289,13 @@ class MycobotInterface(object):
             self.lock.acquire()
             self.mc.send_angles(target_angles.tolist(), vel)
             self.lock.release()
+
+            # workaround: pure feedforwad style to address the polling/sending conflict problem in mycobot pro 320
+            if not self.get_joint_state:
+                if len(trajectory)  == 1: # only has the goal angle position
+                    self.get_joint_state= True
+                else:
+                    self.real_angles = target_angles.tolist()
 
             while time.to_sec() < seg["end_time"].to_sec():
 
@@ -288,6 +314,8 @@ class MycobotInterface(object):
                         rospy.logwarn("New trajectory received. Aborting old trajectory.");
                     else:
                         rospy.logwarn("Canceled trajectory following action");
+
+                    self.get_joint_state = True
                     return;
 
 
@@ -319,14 +347,18 @@ class MycobotInterface(object):
                     res.error_code = FollowJointTrajectoryResult.PATH_TOLERANCE_VIOLATED
                     rospy.logwarn(msg);
                     self.joint_as.set_aborted(res, msg)
+
+                    self.get_joint_state = True
                     return;
 
         # Checks that we have ended inside the goal constraints
+        if not self.get_joint_state:
+            actual_angles = np.array(self.mc.get_angles())
         for tol in goal.goal_tolerance:
             index = goal.trajectory.joint_names.index(tol.name)
 
             pos_err = np.fabs(target_angles - actual_angles)[index] / 180 * np.pi
-            if tol.position > 0 and pos_err > tol.positionl:
+            if tol.position > 0 and pos_err > tol.position:
                 msg = "Aborting because " + tol.name + \
                       " wound up outside the goal constraints, " + \
                       str(pos_err) + " is larger than " + str(tol.position)
@@ -345,6 +377,8 @@ class MycobotInterface(object):
         res.error_code = FollowJointTrajectoryResult.SUCCESSFUL;
         self.joint_as.set_succeeded(res, msg);
 
+        self.get_joint_state = True
+
     def gripper_as_cb(self, goal):
 
         goal_state = (int)(goal.command.position)
@@ -361,12 +395,17 @@ class MycobotInterface(object):
         feedback = GripperCommandFeedback()
 
         self.get_gripper_state = True # start retrive the grasping data
+        if '320' in self.model: # workaround for mycobot pro 320
+            self.get_joint_state = False # stop polling joint angles
+            time.sleep(0.1) # wait for the finish of last joint angles polling
 
         self.lock.acquire()
         self.mc.set_gripper_state(goal_state, 100) # first arg is the flag 0 - open, 1 - close; second arg is the speed
         self.lock.release()
 
-        time = rospy.Time(0)
+        self.get_joint_state = True # resume polling joint state if necessary
+
+        t = rospy.Time(0)
         rospy.sleep(0.3) # wait for the gripper to start moving
 
         r = rospy.Rate(20) # 20 Hz
@@ -380,12 +419,12 @@ class MycobotInterface(object):
                 self.get_gripper_state = False
                 return;
 
-            if (rospy.Time.now() - time).to_sec() > 0.1: # 10 Hz
+            if (rospy.Time.now() - t).to_sec() > 0.1: # 10 Hz
                 feedback.position = self.gripper_value
                 feedback.stalled = False
                 feedback.stalled = False
                 self.gripper_as.publish_feedback(feedback);
-                time = rospy.Time.now()
+                t = rospy.Time.now()
 
             if self.gripper_is_moving == 0: # not moving
                 self.get_gripper_state = False
