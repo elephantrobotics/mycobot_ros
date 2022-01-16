@@ -6,10 +6,10 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/320_urdf/mycobot_pro_320moveit.urdf"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro gazebo_plugin:=true '$(find mycobot_description)/urdf/320_urdf/mycobot.urdf.xacro'"/>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_320_moveit)/config/firefighter.srdf" />
+  <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_320_moveit)/config/mycobot.srdf" />
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
