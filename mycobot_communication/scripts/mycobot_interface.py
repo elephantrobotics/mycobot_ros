@@ -45,6 +45,7 @@ class MycobotInterface(object):
         self.close_gripper_srv = rospy.Service("close_gripper", Empty, self.close_gripper_cb)
         self.gripper_is_moving = False
         self.gripper_value = None
+        self.get_gripper_state = False
 
         # action server for joint and gripper
         self.joint_as = actionlib.SimpleActionServer("arm_controller/follow_joint_trajectory", FollowJointTrajectoryAction, execute_cb=self.joint_as_cb)
@@ -73,8 +74,13 @@ class MycobotInterface(object):
                 self.joint_angle_pub.publish(msg)
 
             # get gripper state
-            self.gripper_is_moving = self.mc.is_gripper_moving()
-            self.gripper_value = self.mc.get_gripper_value()
+            # Note: we only retreive the gripper state when doing the grasp action.
+            # We find following polling function will cause the failure of get_angles() for Mycobot Pro 320.
+            # This makes the publish of joint state decrease from 20Hz to 2Hz for MyCobot Pro 320.
+            if self.get_gripper_state:
+                self.gripper_is_moving = self.mc.is_gripper_moving()
+                self.gripper_value = self.mc.get_gripper_value()
+
 
             # get end-effector if necessary (use tf by ros in default)
             if self.pub_end_coord:
@@ -354,6 +360,8 @@ class MycobotInterface(object):
 
         feedback = GripperCommandFeedback()
 
+        self.get_gripper_state = True # start retrive the grasping data
+
         self.lock.acquire()
         self.mc.set_gripper_state(goal_state, 100) # first arg is the flag 0 - open, 1 - close; second arg is the speed
         self.lock.release()
@@ -368,15 +376,8 @@ class MycobotInterface(object):
 
             if self.gripper_as.is_preempt_requested():
 
-                self.lock.acquire()
-                self.mc.send_angles(self.real_angles, 0)
-                self.lock.release()
-
-                self.joint_as.set_preempted()
-                if self.joint_as.is_new_goal_available():
-                    rospy.logwarn("New trajectory received. Aborting old trajectory.");
-                else:
-                    rospy.logwarn("Canceled trajectory following action");
+                self.gripper_as.set_preempted()
+                self.get_gripper_state = False
                 return;
 
             if (rospy.Time.now() - time).to_sec() > 0.1: # 10 Hz
@@ -387,6 +388,7 @@ class MycobotInterface(object):
                 time = rospy.Time.now()
 
             if self.gripper_is_moving == 0: # not moving
+                self.get_gripper_state = False
                 msg = "Gripper stops moving"
                 rospy.loginfo(msg)
                 res = GripperCommandResult()
