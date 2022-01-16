@@ -1,8 +1,8 @@
 <launch>
   <arg name="port" default="/dev/ttyUSB0" doc ="the serial port for connection" />
   <arg name="baud" default="115200" doc ="the serial baudrate" />
-  <arg name="robot_type" default="mycobot/mycobot.urdf.xacro"/>
-  <arg name="urdf_path" default="$(find mycobot_description)/urdf/$(arg robot_type)"/>
+  <arg name="robot_type" default="mycobot"/>
+  <arg name="urdf_path" default="$(find mycobot_description)/urdf/$(arg robot_type)/mycobot.urdf.xacro"/>
 
   <!-- Driver -->
   <node pkg="mycobot_communication" type="mycobot_interface.py" name="mycobot_bridge"  output="screen" >
