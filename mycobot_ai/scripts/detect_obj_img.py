@@ -152,8 +152,8 @@ class Object_detect(Movement):
         self.pub_coords([x, y, 165,  -178.9, -1.57, -66], 20, 1)
         time.sleep(1.5)
         # 根据不同底板机械臂，调整吸泵高度
-        if "dev" in self.robot_m5:
-            # m5 and jetson nano
+        if "dev" in self.robot_m5 or "dev" in self.robot_raspi:
+            # m5 and raspi
             self.pub_coords([x, y, 90,  -178.9, -1.57, -66], 25, 1)
         elif "dev" in self.robot_wio:
             h = 0
