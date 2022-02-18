@@ -47,7 +47,7 @@
   <include file="$(find mycobot_320_moveit)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
-  </include>
+  </include> 
 
   <!-- If database loading was enabled, start mongodb as well -->
   <include file="$(find mycobot_320_moveit)/launch/default_warehouse_db.launch" if="$(arg db)">
