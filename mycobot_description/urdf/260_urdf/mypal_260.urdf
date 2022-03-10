@@ -10,9 +10,16 @@
 	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
        <mesh filename="package://mycobot_description/urdf/260_urdf/base.dae"/>
       </geometry>
-
-    <origin xyz = " 0 -0.28 0.051 " rpy = " 1.5707963 0 -1.5707963"/>
+      <origin xyz = " 0 -0.28 0.051 " rpy = " 1.5707963 0 -1.5707963"/>
     </visual>
+    <collision>
+      <geometry>
+	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
+        <mesh filename="package://mycobot_description/urdf/260_urdf/base.dae"/>
+      </geometry>
+      <origin xyz = " 0 -0.28 0.051 " rpy = " 1.5707963 0 -1.5707963"/>
+    </collision>
+
   </link>
 
   <link name="link1">
@@ -20,8 +27,14 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/260_urdf/link1.dae"/>
       </geometry>
-    <origin xyz = "0 -0.282  -0.115 " rpy = " 1.5707963 0 -1.5707963"/>
+      <origin xyz = "0 -0.282  -0.115 " rpy = " 1.5707963 0 -1.5707963"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/260_urdf/link1.dae"/>
+      </geometry>
+      <origin xyz = "0 -0.282  -0.115 " rpy = " 1.5707963 0 -1.5707963"/>
+    </collision>
   </link>
 
   <link name="link2">
@@ -29,8 +42,15 @@
       <geometry>    
        <mesh filename="package://mycobot_description/urdf/260_urdf/link2.dae"/>
       </geometry>
-    <origin xyz = "0  0.105 -0.414  " rpy = " 0 1.5707963 3.1415926"/>
+      <origin xyz = "0  0.105 -0.414  " rpy = " 0 1.5707963 3.1415926"/>
     </visual>
+    <collision>
+      <geometry>    
+       <mesh filename="package://mycobot_description/urdf/260_urdf/link2.dae"/>
+      </geometry>
+      <origin xyz = "0  0.105 -0.414  " rpy = " 0 1.5707963 3.1415926"/>
+    </collision>     
+
   </link>
 
   <link name="link3">
@@ -39,9 +59,15 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/260_urdf/link3.dae"/>
       </geometry>
-
-    <origin xyz = "0 0.235  -0.325 " rpy = "0 1.5707963  3.1419626"/>
+      <origin xyz = "0 0.235  -0.325 " rpy = "0 1.5707963  3.1419626"/>
     </visual>
+    <collision>
+      <geometry>
+       <!--- 0.0 0 -0.04 -->
+       <mesh filename="package://mycobot_description/urdf/260_urdf/link3.dae"/>
+      </geometry>
+      <origin xyz = "0 0.235  -0.325 " rpy = "0 1.5707963  3.1419626"/>
+    </collision>
   </link>
 
   <link name="link4">
@@ -50,8 +76,15 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/260_urdf/link4.dae"/>
       </geometry>
-    <origin xyz = "-0.12 -0.235  0.252" rpy = " 0 -1.5707963  0"/>
+      <origin xyz = "-0.12 -0.235  0.252" rpy = " 0 -1.5707963  0"/>
     </visual>
+    <collision>
+      <geometry>
+       <!--- 0.0 0 -0.04 -->
+       <mesh filename="package://mycobot_description/urdf/260_urdf/link4.dae"/>
+      </geometry>
+    <origin xyz = "-0.12 -0.235  0.252" rpy = " 0 -1.5707963  0"/>
+    </collision>
   </link>
 
   <link name="link5">
@@ -63,8 +96,15 @@
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-    <origin xyz = "0 -0.001 0.01 " rpy = " 0 0 0"/>
+      <origin xyz = "0 -0.001 0.01 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <geometry>
+       <!--- 0.0 0 -0.04 -->
+       <cylinder length="0.015" radius="0.0152"/>
+      </geometry>
+      <origin xyz = "0 -0.001 0.01 " rpy = " 0 0 0"/>
+    </collision>
   </link>
 
   <joint name="joint1_to_base" type="revolute">
@@ -112,4 +152,3 @@
   </joint>
 
 </robot>
-
