@@ -15,7 +15,7 @@ class MoveItPlanningDemo:
         # API to initialize move_group. 初始化move_group的API
         moveit_commander.roscpp_initialize(sys.argv)
 
-        # Initialize the ROS node. 初始化ROS节点
+        # Initialize the ROS node,初始化ROS节点
         rospy.init_node("moveit_ik_demo")
 
         # Initialize the scene object to listen for changes in the external environment
