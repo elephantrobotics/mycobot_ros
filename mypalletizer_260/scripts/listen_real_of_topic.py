@@ -26,7 +26,8 @@ class Listener(object):
         Args:
             data (MycobotAngles): callback argument.
         """
-        # ini publisher object. 初始化发布者对象
+        # ini publisher object.
+        #  初始化发布者对象
         joint_state_send = JointState()
         joint_state_send.header = Header()
 
