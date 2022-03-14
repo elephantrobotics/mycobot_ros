@@ -10,47 +10,48 @@ from rospy import ServiceException
 class Window:
     def __init__(self, handle):
         self.win = handle
-        self.win.resizable(0, 0)  # 固定窗口大小 fixed window size
+        self.win.resizable(0, 0)  # fixed window size 固定窗口大小 
 
         self.model = 0
         self.speed = rospy.get_param("~speed", 50)
 
-        # 设置默认速度 set default speed
+        # set default speed. 设置默认速度 
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
         # print(self.speed)
         self.connect_ser()
 
-        # # 获取机械臂数据 get data
+        # Get robotic arm data. 获取机械臂数据
         self.record_coords = [0, 0, 0, 0,self.speed, self.model]
         self.res_angles = [0, 0, 0, 0, self.speed, self.model]
         self.get_date()
 
-        # get screen width and height
-        self.ws = self.win.winfo_screenwidth()  # width of the screen
-        self.hs = self.win.winfo_screenheight()  # height of the screen
+        # get screen width and height. 获取屏幕宽度和高度
+        self.ws = self.win.winfo_screenwidth()  
+        self.hs = self.win.winfo_screenheight() 
         # calculate x and y coordinates for the Tk root window
+        # 计算 Tk 根窗口的 x 和 y 坐标
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
         self.win.geometry("430x350+{}+{}".format(x, y))
-        # 布局 layout
+        # layout. 布局
         self.set_layout()
-        # 输入部分 input
+        # input. 输入部分
         self.need_input()
-        # 展示部分 show info
+        # show info. 展示部分
         self.show_init()
 
-        # joint 设置按钮 Settings button
+        # Set joint button. 设置关节按钮
         tk.Button(self.frmLT, text="Set", width=5, command=self.get_joint_input).grid(
             row=6, column=1, sticky="w", padx=3, pady=2
         )
 
-        # coordination 设置按钮 Settings button
+        # Set Coordinate button. 设置坐标按钮
         tk.Button(self.frmRT, text="Set", width=5, command=self.get_coord_input).grid(
             row=6, column=1, sticky="w", padx=3, pady=2
         )
 
-        # 夹爪开关按钮 Gripper Switch
+        # Gripper Switch. 夹爪开关按钮
         tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
             row=1, column=0, sticky="w", padx=3, pady=50
         )
@@ -91,7 +92,7 @@ class Window:
         self.frmRT.grid(row=0, column=1, padx=2, pady=3)
 
     def need_input(self):
-        # 输入提示 input hint
+        # input hint. 输入提示 
         tk.Label(self.frmLT, text="Joint 1 ").grid(row=0)
         tk.Label(self.frmLT, text="Joint 2 ").grid(row=1) 
         tk.Label(self.frmLT, text="Joint 3 ").grid(row=2)
@@ -104,7 +105,7 @@ class Window:
         tk.Label(self.frmRT, text=" rx ").grid(row=3)
 
 
-        # 设置输入框的默认值 Set the default value of the input box
+        # Set the default value of the input box. 设置输入框的默认值
         self.j1_default = tk.StringVar()
         self.j1_default.set(self.res_angles[0])
         self.j2_default = tk.StringVar()
@@ -125,7 +126,7 @@ class Window:
         self.rx_default.set(self.record_coords[3])
 
 
-        # joint input box 输入框
+        # joint input box. 输入框 
         self.J_1 = tk.Entry(self.frmLT, textvariable=self.j1_default)
         self.J_1.grid(row=0, column=1, pady=3)
         self.J_2 = tk.Entry(self.frmLT, textvariable=self.j2_default)
@@ -136,7 +137,7 @@ class Window:
         self.J_4.grid(row=3, column=1, pady=3)
  
 
-        # coord input box 输入框
+        # coord input box. 输入框
         self.x = tk.Entry(self.frmRT, textvariable=self.x_default)
         self.x.grid(row=0, column=1, pady=3, padx=0)
         self.y = tk.Entry(self.frmRT, textvariable=self.y_default)
@@ -147,13 +148,13 @@ class Window:
         self.rx.grid(row=3, column=1, pady=3)
 
 
-        # 所有输入框，用于拿输入的数据 all input box
+        # All input boxes, used to get the input data. 所有输入框，用于拿输入的数据
         self.all_j = [self.J_1, self.J_2, self.J_3, self.J_4]
         self.all_c = [self.x, self.y, self.z, self.rx]
 
 
 
-        # 速度输入框 speed input box
+        # speed input box. 速度输入框 
         tk.Label(
             self.frmLB,
             text="speed",
@@ -162,7 +163,7 @@ class Window:
         self.get_speed.grid(row=0, column=1)
 
     def show_init(self):
-        # 显示 display
+        # display. 显示 
         tk.Label(self.frmLC, text="Joint 1 ").grid(row=0)
         tk.Label(self.frmLC, text="Joint 2 ").grid(row=1) 
         tk.Label(self.frmLC, text="Joint 3 ").grid(row=2)
@@ -228,9 +229,9 @@ class Window:
 
         ]
 
-        # 显示
+        # display. 显示
         tk.Label(self.frmLC, text="  x ").grid(row=0, column=3)
-        tk.Label(self.frmLC, text="  y ").grid(row=1, column=3)  # 第二行
+        tk.Label(self.frmLC, text="  y ").grid(row=1, column=3)  # the second row. 第二行 
         tk.Label(self.frmLC, text="  z ").grid(row=2, column=3)
         tk.Label(self.frmLC, text="  rx ").grid(row=3, column=3)
  
@@ -286,7 +287,7 @@ class Window:
             bg="white",
         ).grid(row=3, column=4, padx=5, pady=5)
 
-        # mm 单位展示 show label"mm"
+        # show label"mm" .mm 单位展示
         self.unit = tk.StringVar()
         self.unit.set("mm")
         for i in range(4):
@@ -307,6 +308,7 @@ class Window:
             pass
 
     def get_coord_input(self):
+        # Get the data input by coord and send it to the robotic arm 
         # 获取 coord 输入的数据，发送给机械臂
         c_value = []
         for i in self.all_c:
@@ -325,7 +327,8 @@ class Window:
         self.show_j_date(c_value[:-2], "coord")
 
     def get_joint_input(self):
-        # 获取joint输入的数据，发送给机械臂 Get the data of the joint and send it to the robotic arm
+        # Get the data of the joint and send it to the robotic arm 
+        # 获取joint输入的数据，发送给机械臂
         j_value = []
         for i in self.all_j:
             # print(type(i.get()))
@@ -343,7 +346,7 @@ class Window:
         # return j_value,c_value,speed
 
     def get_date(self):
-        # 拿机械臂的数据，用于展示 Get the data of robotic arm for display
+        # Get the data of robotic arm for display. 拿机械臂的数据，用于展示
         t = time.time()
         while time.time() - t < 2:
             self.res = self.get_coords()
@@ -380,7 +383,7 @@ class Window:
 
     # def send_input(self,dates):
     def show_j_date(self, date, way=""):
-        # 展示数据
+        # Show data. 展示数据
         if way == "coord":
             for i, j in zip(date, self.coord_all):
                 # print(i)

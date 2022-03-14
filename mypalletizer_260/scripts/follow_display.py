@@ -37,7 +37,7 @@ def talker():
     pub_marker = rospy.Publisher("visualization_marker", Marker, queue_size=10)
     rate = rospy.Rate(30)  # 30hz
 
-    # pub joint state
+    # pub joint state. 发布关节状态
     joint_state_send = JointState()
     joint_state_send.header = Header()
 
@@ -83,7 +83,7 @@ def talker():
         marker_.scale.y = 0.04
         marker_.scale.z = 0.04
 
-        # marker position initial
+        # marker position initial. 标记初始位置
         # print(coords)
         if not coords:
             # coords = [0, 0, 0, 0, 0 ]
