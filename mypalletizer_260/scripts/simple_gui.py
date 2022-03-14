@@ -105,7 +105,8 @@ class Window:
         tk.Label(self.frmRT, text=" rx ").grid(row=3)
 
 
-        # Set the default value of the input box. 设置输入框的默认值
+        # Set the default value of the input box. 
+        # 设置输入框的默认值
         self.j1_default = tk.StringVar()
         self.j1_default.set(self.res_angles[0])
         self.j2_default = tk.StringVar()

@@ -38,7 +38,8 @@ def talker():
 
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
-        # get real angles from server. 从服务获取真实的角度
+        # get real angles from server.
+        #  从服务获取真实的角度
         res = func()
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
