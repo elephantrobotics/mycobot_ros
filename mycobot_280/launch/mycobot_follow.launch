@@ -1,4 +1,5 @@
 <launch>
+	<!-- Load URDF file,加载URDF文件 -->
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
 
