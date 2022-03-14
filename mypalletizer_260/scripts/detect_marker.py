@@ -27,7 +27,7 @@ class ImageConverter:
         )
         self.dist_coeffs = calibrationParams.getNode("distCoeffs").mat()
         self.camera_matrix = None
-        # subscriber, listen wether has img come in.
+        # subscriber, listen wether has img come in. 订阅者，监听是否有img进来
         self.image_sub = rospy.Subscriber("/camera/image", Image, self.callback)
 
     def callback(self, data):
@@ -37,7 +37,7 @@ class ImageConverter:
         pose to transforming.
         """
         try:
-            # trans `rgb` to `gbr` for opencv.
+            # trans `rgb` to `gbr` for opencv. 将 `rgb` 转换为 opencv 的 `gbr`。
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
             print(e)
@@ -45,7 +45,7 @@ class ImageConverter:
         focal_length = size[1]
         center = [size[1] / 2, size[0] / 2]
         if self.camera_matrix is None:
-            # calc the camera matrix, if don't have.
+            # calc the camera matrix, if don't have. 如果没有就计算相机矩阵
             self.camera_matrix = np.array(
                 [
                     [focal_length, 0, center[0]],
@@ -55,7 +55,7 @@ class ImageConverter:
                 dtype=np.float32,
             )
         gray = cv.cvtColor(cv_image, cv.COLOR_BGR2GRAY)
-        # detect aruco marker.
+        # detect aruco marker. 检测 aruco 标记。
         ret = cv.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruo_params)
         corners, ids = ret[0], ret[1]
         # process marker data.
@@ -63,10 +63,10 @@ class ImageConverter:
             if ids is not None:
                 # print('corners:', corners, 'ids:', ids)
 
-                # detect marker pose.
+                # detect marker pose. 检测标记姿势
                 # argument:
-                #   marker corners
-                #   marker size (meter)
+                #   marker corners, 标记角
+                #   marker size (meter), 标记尺寸（米）
                 ret = cv.aruco.estimatePoseSingleMarkers(
                     corners, 0.05, self.camera_matrix, self.dist_coeffs
                 )
@@ -75,7 +75,7 @@ class ImageConverter:
 
                 print("rvec:", rvec, "tvec:", tvec)
 
-                # just select first one detected marker.
+                # just select first one detected marker. 只需选择第一个检测到的标记
                 for i in range(rvec.shape[0]):
                     cv.aruco.drawDetectedMarkers(cv_image, corners)
                     cv.aruco.drawAxis(
@@ -90,14 +90,15 @@ class ImageConverter:
                 xyz = tvec[0, 0, :]
                 xyz = [xyz[0] - 0.045, xyz[1], xyz[2] - 0.03]
 
-                # get quaternion for ros.
+                # get quaternion for ros. 为ros获取四元数
                 euler = rvec[0, 0, :]
                 tf_change = tf.transformations.quaternion_from_euler(
                     euler[0], euler[1], euler[2]
                 )
                 print("tf_change:", tf_change)
 
-                # trans pose according [joint1]
+                # trans pose according [joint1] 
+                # 根据 [joint1] 变换姿势
                 self.br.sendTransform(
                     xyz, tf_change, rospy.Time.now(), "basic_shapes", "joint6_flange"
                 )

@@ -25,7 +25,7 @@ def callback(data):
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(value)
-    del data_list[3] # delete the angle of joint3 to  joint4,because it do not exsist actually! 
+    del data_list[3] # delete the angle of joint3 to  joint4,because it do not exsist actually! 把joint3到joint4的角度删掉，因为它实际上不存在！
     # data_list[3] = data_list[4]
     # print(data_list)
     mc.send_radians(data_list, 80)
@@ -37,12 +37,13 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyPalletizer(port, baud)
 
     # spin() simply keeps python from exiting until this node is stopped
+    # spin() 只是阻止python退出，直到该节点停止
     print("spin ...")
     rospy.spin()
 

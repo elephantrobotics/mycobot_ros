@@ -1,4 +1,5 @@
 <launch>
+	<!-- Load file model ，加载文件模型-->
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot_with_marker.rviz" />
 	<arg name="gui" default="true" />
@@ -10,6 +11,7 @@
 		<arg name="rvizconfig" value="$(arg rvizconfig)" />
 		<arg name="gui" value="$(arg gui)" />
     </include>
+	<!-- vision node -->
 	<node name="opencv_camera" pkg="mycobot_280" type="opencv_camera" args="$(arg num)"/>
 	<node name="detect_marker" pkg="mycobot_280" type="detect_marker.py" />
 	<node name="following_marker" pkg="mycobot_280" type="following_marker.py" />

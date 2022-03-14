@@ -6,7 +6,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 # from mycobot_communication.msg import MycobotAngles
 from mypalletizer_communication.msg import MypalAngles
-
+ 
 
 class Listener(object):
     def __init__(self):
@@ -14,9 +14,9 @@ class Listener(object):
 
         rospy.loginfo("start ...")
         rospy.init_node("real_listener_1", anonymous=True)
-        # init publisher.
+        # init publisher. 初始化发布者
         self.pub = rospy.Publisher("joint_states", JointState, queue_size=10)
-        # init subscriber.
+        # init subscriber. 初始化订阅者
         self.sub = rospy.Subscriber("mypal/angles_real", MypalAngles, self.callback)
         rospy.spin()
 
@@ -26,7 +26,7 @@ class Listener(object):
         Args:
             data (MycobotAngles): callback argument.
         """
-        # ini publisher object.
+        # ini publisher object. 初始化发布者对象
         joint_state_send = JointState()
         joint_state_send.header = Header()
 
@@ -43,7 +43,7 @@ class Listener(object):
         joint_state_send.effort = []
         joint_state_send.header.stamp = rospy.Time.now()
 
-        # process callback data.
+        # process callback data. 处理回调数据
         radians_list = [
             data.joint_1 * (math.pi / 180),
             data.joint_2 * (math.pi / 180),

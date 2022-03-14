@@ -33,7 +33,7 @@ def talker():
         print(type(trans), trans)
         print(type(rot), rot)
 
-        # marker
+        # marker 标记
         marker_.header.stamp = now
         marker_.type = marker_.CUBE
         marker_.action = marker_.ADD
@@ -41,7 +41,7 @@ def talker():
         marker_.scale.y = 0.04
         marker_.scale.z = 0.04
 
-        # marker position initial
+        # marker position initial. 标记初始位置
         marker_.pose.position.x = trans[0]
         marker_.pose.position.y = trans[1]
         marker_.pose.position.z = trans[2]
