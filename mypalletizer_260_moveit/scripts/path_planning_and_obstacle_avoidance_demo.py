@@ -30,14 +30,17 @@ class MoveItPlanningDemo:
         # Get the name of the terminal link. 获取终端link的名称
         self.end_effector_link = self.arm.get_end_effector_link()
 
-        # Set the reference coordinate system used for the target position. 设置目标位置所使用的参考坐标系
+        # Set the reference coordinate system used for the target position.
+        #  设置目标位置所使用的参考坐标系
         self.reference_frame = "joint1"
         self.arm.set_pose_reference_frame(self.reference_frame)
 
-        # Allow replanning when motion planning fails. 当运动规划失败后，允许重新规划
+        # Allow replanning when motion planning fails. 
+        # 当运动规划失败后，允许重新规划
         self.arm.allow_replanning(True)
 
-        # Set the allowable error of position (unit: meter) and attitude (unit: radian). 设置位置(单位：米)和姿态（单位：弧度）的允许误差
+        # Set the allowable error of position (unit: meter) and attitude (unit: radian). 
+        # 设置位置(单位：米)和姿态（单位：弧度）的允许误差
         self.arm.set_goal_position_tolerance(0.01)
         self.arm.set_goal_orientation_tolerance(0.05)
 
