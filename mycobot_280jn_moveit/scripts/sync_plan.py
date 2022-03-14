@@ -32,6 +32,7 @@ def listener():
     rospy.Subscriber("joint_states", JointState, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
+    # spin() 只是阻止 python 退出，直到该节点停止
     rospy.spin()
 
 

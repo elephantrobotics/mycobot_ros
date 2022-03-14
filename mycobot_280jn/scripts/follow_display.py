@@ -79,7 +79,7 @@ def talker():
         marker_.scale.y = 0.04
         marker_.scale.z = 0.04
 
-        # marker position initial
+        # marker position initial.标记位置初始
         # print(coords)
         if not coords:
             coords = [0, 0, 0, 0, 0, 0]

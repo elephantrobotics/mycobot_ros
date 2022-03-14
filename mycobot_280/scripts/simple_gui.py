@@ -10,47 +10,48 @@ from rospy import ServiceException
 class Window:
     def __init__(self, handle):
         self.win = handle
-        self.win.resizable(0, 0)  # 固定窗口大小
+        self.win.resizable(0, 0)  # fixed window size，固定窗口大小
 
         self.model = 0
         self.speed = rospy.get_param("~speed", 50)
 
-        # 设置默认速度
+        # set default speed，设置默认速度
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
         # print(self.speed)
         self.connect_ser()
 
-        # 获取机械臂数据
+        # Get the data of the robotic arm，获取机械臂数据
         self.record_coords = [0, 0, 0, 0, 0, 0, self.speed, self.model]
         self.res_angles = [0, 0, 0, 0, 0, 0, self.speed, self.model]
         self.get_date()
 
-        # get screen width and height
+        # get screen width and height.获取屏幕宽度和高度
         self.ws = self.win.winfo_screenwidth()  # width of the screen
         self.hs = self.win.winfo_screenheight()  # height of the screen
         # calculate x and y coordinates for the Tk root window
+        # 计算 Tk 根窗口的 x 和 y 坐标
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
         self.win.geometry("430x370+{}+{}".format(x, y))
-        # 布局
+        # layout,布局
         self.set_layout()
-        # 输入部分
+        # input section,输入部分
         self.need_input()
-        # 展示部分
+        # Show part,展示部分
         self.show_init()
 
-        # joint 设置按钮
+        # Set the joint buttons 设置joint按钮
         tk.Button(self.frmLT, text="设置", width=5, command=self.get_joint_input).grid(
             row=6, column=1, sticky="w", padx=3, pady=2
         )
 
-        # coordination 设置按钮
+        # coordination settings button,coordination 设置按钮
         tk.Button(self.frmRT, text="设置", width=5, command=self.get_coord_input).grid(
             row=6, column=1, sticky="w", padx=3, pady=2
         )
 
-        # 夹爪开关按钮
+        # Gripper switch button,夹爪开关按钮
         tk.Button(self.frmLB, text="夹爪(开)", command=self.gripper_open, width=5).grid(
             row=1, column=0, sticky="w", padx=3, pady=50
         )
@@ -91,22 +92,22 @@ class Window:
         self.frmRT.grid(row=0, column=1, padx=2, pady=3)
 
     def need_input(self):
-        # 输入提示
+        # input hint,输入提示
         tk.Label(self.frmLT, text="Joint 1 ").grid(row=0)
-        tk.Label(self.frmLT, text="Joint 2 ").grid(row=1)  # 第二行
+        tk.Label(self.frmLT, text="Joint 2 ").grid(row=1)  # the second row,第二行
         tk.Label(self.frmLT, text="Joint 3 ").grid(row=2)
         tk.Label(self.frmLT, text="Joint 4 ").grid(row=3)
         tk.Label(self.frmLT, text="Joint 5 ").grid(row=4)
         tk.Label(self.frmLT, text="Joint 6 ").grid(row=5)
 
         tk.Label(self.frmRT, text=" x ").grid(row=0)
-        tk.Label(self.frmRT, text=" y ").grid(row=1)  # 第二行
+        tk.Label(self.frmRT, text=" y ").grid(row=1)  # the second row,第二行
         tk.Label(self.frmRT, text=" z ").grid(row=2)
         tk.Label(self.frmRT, text=" rx ").grid(row=3)
         tk.Label(self.frmRT, text=" ry ").grid(row=4)
         tk.Label(self.frmRT, text=" rz ").grid(row=5)
 
-        # 设置输入框的默认值
+        # Set the default value of the input box,设置输入框的默认值
         self.j1_default = tk.StringVar()
         self.j1_default.set(self.res_angles[0])
         self.j2_default = tk.StringVar()
@@ -133,7 +134,7 @@ class Window:
         self.rz_default = tk.StringVar()
         self.rz_default.set(self.record_coords[5])
 
-        # joint 输入框
+        # joint input box,joint 输入框
         self.J_1 = tk.Entry(self.frmLT, textvariable=self.j1_default)
         self.J_1.grid(row=0, column=1, pady=3)
         self.J_2 = tk.Entry(self.frmLT, textvariable=self.j2_default)
@@ -147,7 +148,7 @@ class Window:
         self.J_6 = tk.Entry(self.frmLT, textvariable=self.j6_default)
         self.J_6.grid(row=5, column=1, pady=3)
 
-        # coord 输入框
+        # coord input box,coord 输入框
         self.x = tk.Entry(self.frmRT, textvariable=self.x_default)
         self.x.grid(row=0, column=1, pady=3, padx=0)
         self.y = tk.Entry(self.frmRT, textvariable=self.y_default)
@@ -161,11 +162,11 @@ class Window:
         self.rz = tk.Entry(self.frmRT, textvariable=self.rz_default)
         self.rz.grid(row=5, column=1, pady=3)
 
-        # 所有输入框，用于拿输入的数据
+        # All input boxes, used to get the input data,所有输入框，用于拿输入的数据
         self.all_j = [self.J_1, self.J_2, self.J_3, self.J_4, self.J_5, self.J_6]
         self.all_c = [self.x, self.y, self.z, self.rx, self.ry, self.rz]
 
-        # 速度输入框
+        # speed input box,速度输入框
         tk.Label(
             self.frmLB,
             text="speed",
@@ -174,9 +175,9 @@ class Window:
         self.get_speed.grid(row=0, column=1)
 
     def show_init(self):
-        # 显示
+        # show,显示
         tk.Label(self.frmLC, text="Joint 1 ").grid(row=0)
-        tk.Label(self.frmLC, text="Joint 2 ").grid(row=1)  # 第二行
+        tk.Label(self.frmLC, text="Joint 2 ").grid(row=1)  # the second row,第二行
         tk.Label(self.frmLC, text="Joint 3 ").grid(row=2)
         tk.Label(self.frmLC, text="Joint 4 ").grid(row=3)
         tk.Label(self.frmLC, text="Joint 5 ").grid(row=4)
@@ -184,7 +185,7 @@ class Window:
 
         # get数据
 
-        # ，展示出来
+        # show,展示出来
         self.cont_1 = tk.StringVar(self.frmLC)
         self.cont_1.set(str(self.res_angles[0]) + "°")
         self.cont_2 = tk.StringVar(self.frmLC)
@@ -267,9 +268,9 @@ class Window:
             self.show_j6,
         ]
 
-        # 显示
+        # show,显示
         tk.Label(self.frmLC, text="  x ").grid(row=0, column=3)
-        tk.Label(self.frmLC, text="  y ").grid(row=1, column=3)  # 第二行
+        tk.Label(self.frmLC, text="  y ").grid(row=1, column=3)  
         tk.Label(self.frmLC, text="  z ").grid(row=2, column=3)
         tk.Label(self.frmLC, text="  rx ").grid(row=3, column=3)
         tk.Label(self.frmLC, text="  ry ").grid(row=4, column=3)
@@ -347,7 +348,7 @@ class Window:
             bg="white",
         ).grid(row=5, column=4, padx=5, pady=5)
 
-        # mm 单位展示
+        # mm， Unit show，单位展示
         self.unit = tk.StringVar()
         self.unit.set("mm")
         for i in range(6):
@@ -359,6 +360,7 @@ class Window:
         try:
             self.switch_gripper(True)
         except ServiceException:
+            # Probably because the method has no return value, the service throws an unhandled error
             # 可能由于该方法没有返回值，服务抛出无法处理的错误
             pass
 
@@ -369,6 +371,7 @@ class Window:
             pass
 
     def get_coord_input(self):
+        # Get the data input by coord and send it to the robotic arm
         # 获取 coord 输入的数据，发送给机械臂
         c_value = []
         for i in self.all_c:
@@ -387,6 +390,7 @@ class Window:
         self.show_j_date(c_value[:-2], "coord")
 
     def get_joint_input(self):
+        # Get the data input by the joint and send it to the robotic arm
         # 获取joint输入的数据，发送给机械臂
         j_value = []
         for i in self.all_j:
@@ -405,7 +409,7 @@ class Window:
         # return j_value,c_value,speed
 
     def get_date(self):
-        # 拿机械臂的数据，用于展示
+        # Take the data of the robotic arm for display.拿机械臂的数据，用于展示
         t = time.time()
         while time.time() - t < 2:
             self.res = self.get_coords()
@@ -443,7 +447,7 @@ class Window:
 
     # def send_input(self,dates):
     def show_j_date(self, date, way=""):
-        # 展示数据
+        # Show data,展示数据
         if way == "coord":
             for i, j in zip(date, self.coord_all):
                 # print(i)

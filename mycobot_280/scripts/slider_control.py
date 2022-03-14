@@ -40,6 +40,7 @@ def listener():
     mc = MyCobot(port, baud)
 
     # spin() simply keeps python from exiting until this node is stopped
+    # spin()只是阻止python退出，直到该节点停止
     print("spin ...")
     rospy.spin()
 

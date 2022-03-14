@@ -103,6 +103,8 @@ class MypalTopics(object):
         sp.join()
 
     def pub_real_angles(self):
+        """Publish real angle"""
+        """发布真实角度"""
         pub = rospy.Publisher("Mypal/angles_real",
                               MypalAngles, queue_size=5)
         ma = MypalAngles()
@@ -121,6 +123,8 @@ class MypalTopics(object):
             time.sleep(0.25)
 
     def pub_real_coords(self):
+        """publish real coordinates"""
+        """发布真实坐标"""
         pub = rospy.Publisher("Mypal/coords_real",
                               MypalCoords, queue_size=5)
         ma = MypalCoords()
@@ -140,6 +144,8 @@ class MypalTopics(object):
             time.sleep(0.25)
 
     def sub_set_angles(self):
+        """subscription angles"""
+        """订阅角度"""
         def callback(data):
             angles = [
                 data.joint_1,
@@ -172,6 +178,8 @@ class MypalTopics(object):
         rospy.spin()
 
     def sub_gripper_status(self):
+        """Subscribe to Gripper Status"""
+        """订阅夹爪状态"""
         def callback(data):
             if data.Status:
                 self.mc.set_gripper_state(0, 80)

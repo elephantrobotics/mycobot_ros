@@ -41,7 +41,7 @@ def talker():
         marker_.scale.y = 0.04
         marker_.scale.z = 0.04
 
-        # marker position initial
+        # marker position initial,标记位置初始化
         marker_.pose.position.x = trans[0]
         marker_.pose.position.y = trans[1]
         marker_.pose.position.z = trans[2]

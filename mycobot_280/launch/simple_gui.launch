@@ -1,4 +1,5 @@
 <launch>
+	<!-- Select connecting device and serial port ，选择连接设备及串口-->
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
@@ -8,9 +9,9 @@
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
-	<!-- Combinejoin values to TF -->
+	<!-- Combinejoin values to TF ,将值合并到TF-->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<!-- Show in Rviz -->
+	<!-- Show in Rviz ，显示在Rviz-->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
     <include file="$(find mycobot_communication)/launch/communication_service.launch">

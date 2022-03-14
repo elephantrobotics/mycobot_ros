@@ -15,7 +15,7 @@ def talker():
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
     rate = rospy.Rate(30)  # 30hz
 
-    # pub joint state
+    # pub joint state，发布关节状态
     joint_state_send = JointState()
     joint_state_send.header = Header()
 
@@ -30,14 +30,14 @@ def talker():
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
 
-    # waiting util server `get_joint_angles` enable.
+    # waiting util server `get_joint_angles` enable.等待'get_joint_angles'服务启用
     rospy.loginfo("wait service")
     rospy.wait_for_service("get_joint_angles")
     func = rospy.ServiceProxy("get_joint_angles", GetAngles)
 
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
-        # get real angles from server.
+        # get real angles from server.从服务器获得真实的角度。
         res = func()
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
@@ -51,7 +51,7 @@ def talker():
         ]
         rospy.loginfo("res: {}".format(radians_list))
 
-        # publish angles.
+        # publish angles.发布角度
         joint_state_send.header.stamp = rospy.Time.now()
         joint_state_send.position = radians_list
         pub.publish(joint_state_send)

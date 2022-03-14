@@ -15,7 +15,7 @@ mutex = Lock()
 
 class ElephantRobot(object):
     def __init__(self, host, port):
-        # setup connection
+        # setup connection，建立连接
         self.BUFFSIZE = 2048
         self.ADDR = (host, port)
         self.tcp_client = socket(AF_INET, SOCK_STREAM)
@@ -119,6 +119,7 @@ class ElephantRobot(object):
         return self.string_to_int(res)
 
     def program_run(self, start_line):
+        """run program，运行程序"""
         command = "program_run(" + str(start_line) + ")\n"
         res = self.send_command(command)
         return self.string_to_int(res)
@@ -129,6 +130,7 @@ class ElephantRobot(object):
         return res
 
     def write_coords(self, coords, speed):
+        """set coords,设置坐标"""
         command = "set_coords("
         for item in coords:
             command += str(item) + ","
@@ -142,6 +144,7 @@ class ElephantRobot(object):
             self.write_coords(coords, speed)
 
     def write_angles(self, angles, speed):
+        """set angles,设置角度"""
         command = "set_angles("
         for item in angles:
             command += str(item) + ","
@@ -243,6 +246,7 @@ old_list = []
 
 
 def callback(data):
+    """callback function,回调函数"""
     global old_list
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
     print ("position", data.position)
@@ -271,7 +275,7 @@ def listener():
     ip = rospy.get_param("~ip", "192.168.10.169")
     print (ip)
     mc = ElephantRobot(ip, 5001)
-    # START CLIENT
+    # START CLIENT,启动客户端
     res = mc.start_client()
     if res != "":
         print res
@@ -285,6 +289,7 @@ def listener():
     rospy.Subscriber("joint_states", JointState, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
+    # spin()只是阻止python退出，直到该节点停止
     print ("sping ...")
     rospy.spin()
 

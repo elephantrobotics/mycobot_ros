@@ -79,6 +79,7 @@ def get_coords(req):
 
 
 def switch_status(req):
+    """Gripper switch,夹爪开关"""
     if mc:
         if req.Status:
             mc.set_gripper_state(0, 80)
