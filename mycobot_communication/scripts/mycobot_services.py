@@ -30,6 +30,7 @@ def create_services():
 
 
 def set_angles(req):
+    """set angles，设置角度"""
     angles = [
         req.joint_1,
         req.joint_2,
@@ -47,6 +48,7 @@ def set_angles(req):
 
 
 def get_angles(req):
+    """get angles,获取角度"""
     if mc:
         angles = mc.get_angles()
         return GetAnglesResponse(*angles)
@@ -77,6 +79,8 @@ def get_coords(req):
 
 
 def switch_status(req):
+    """Gripper switch status"""
+    """夹爪开关状态"""
     if mc:
         if req.Status:
             mc.set_gripper_state(0, 80)

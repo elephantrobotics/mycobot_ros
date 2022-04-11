@@ -1,0 +1,29 @@
+<launch>
+	<arg name="port" default="/dev/ttyACM0" />
+	<arg name="baud" default="115200" />
+
+	<arg name="model" default="$(find mycobot_description)/urdf/280_arduino/mycobot_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_280arduino)/config/mycobot_with_marker.rviz" />
+	<arg name="gui" default="false" />
+
+	<arg name="num" default="0" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<!-- Show in Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+	<!-- mycobot-topics -->
+    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+    </include>
+	<!-- listen and pub the real angles -->
+	<node name="real_listener" pkg="mycobot_280arduino" type="listen_real_of_topic.py" />
+	<!-- vision node -->
+	<node name="opencv_camera" pkg="mycobot_280arduino" type="opencv_camera" args="$(arg num)"/>
+	<node name="detect_marker" pkg="mycobot_280arduino" type="detect_marker.py" />
+	<node name="following_marker" pkg="mycobot_280arduino" type="following_marker.py" />
+</launch>
