@@ -28,7 +28,8 @@ def listener():
                                     shell=True)
 
     port = rospy.get_param("~port", port)
-    baud = rospy.get_param("~baud", 1000000)
+    baud = rospy.get_param("~baud", 115200)
+    # 1000000
     mc = MyCobot(port, baud)
 
     rospy.Subscriber("joint_states", JointState, callback)
