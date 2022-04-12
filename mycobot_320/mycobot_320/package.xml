@@ -55,6 +55,10 @@
   <build_export_depend>mycobot_description</build_export_depend>
   <exec_depend>mycobot_communication</exec_depend>
   <exec_depend>mycobot_description</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>std_msgs</build_depend>
+  <exec_depend>actionlib</exec_depend>
+  <build_depend>actionlib</build_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
