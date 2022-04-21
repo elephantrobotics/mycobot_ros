@@ -1,7 +1,7 @@
 <launch>
 	<!-- Select connecting device and serial port ，选择连接设备及串口-->
-	<arg name="port" default="/dev/ttyUSB0" />
-	<arg name="baud" default="115200" />
+	<arg name="port" default="/dev/ttyAMA0" />
+	<arg name="baud" default="1000000" />
 	<!-- Load file model ，加载文件模型-->
 	<arg name="model" default="$(find mycobot_description)/urdf/260_pi/mypal_260_pi.urdf"/>
 	<arg name="rvizconfig" default="$(find mypalletizer_260_pi)/config/mypal_260_pi.rviz" />
