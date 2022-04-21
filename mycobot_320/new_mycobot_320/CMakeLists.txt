@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 
   mycobot_communication
   mycobot_description
-  new_mycobot_320
+  
 )
 
 ## Generate messages in the 'msg' folder
