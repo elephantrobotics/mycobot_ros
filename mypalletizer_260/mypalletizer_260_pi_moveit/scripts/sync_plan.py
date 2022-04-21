@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 import time
 import rospy
 from sensor_msgs.msg import JointState
