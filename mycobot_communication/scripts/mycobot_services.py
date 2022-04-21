@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+ # -*- coding: UTF-8 -*-  
 import time
 import rospy
 from mycobot_communication.srv import *
