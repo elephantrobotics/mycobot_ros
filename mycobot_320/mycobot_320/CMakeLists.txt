@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 
   mycobot_communication
   mycobot_description
-  mycobot_320
+  
 )
 
 ## Declare a catkin package
