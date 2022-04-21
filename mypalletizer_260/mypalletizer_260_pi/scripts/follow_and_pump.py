@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# coding:utf-8
+# -*- coding: utf-8 -*-
 import rospy
 from visualization_msgs.msg import Marker
 import time
