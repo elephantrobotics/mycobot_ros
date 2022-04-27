@@ -14,7 +14,7 @@
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 	<!-- mycobot-topics, mycobot-话题-->
-    <include file="$(find mypalletizer_communication)/launch/communication_service.launch">
+    <include file="$(find mecharm_communication)/launch/communication_service.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
