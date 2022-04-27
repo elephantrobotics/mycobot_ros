@@ -6,15 +6,15 @@ This file obtains the joint angle of the manipulator in ROS,
 and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
-    port: serial prot string. Defaults is '/dev/ttyUSB0'
-    baud: serial prot baudrate. Defaults is 115200.
+    port: serial prot string. Defaults is '/dev/ttyAMA0'
+    baud: serial prot baudrate. Defaults is 1000000.
 """
 
 import rospy
 from sensor_msgs.msg import JointState
 
 from pymycobot.mycobot import MyCobot
-from pymycobot.mypalletizer import MyPalletizer
+
 
 
 mc = None
@@ -26,8 +26,7 @@ def callback(data):
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(value)
-    del data_list[3] # delete the angle of joint3 to  joint4,because it do not exsist actually! 把joint3到joint4的角度删掉，因为它实际上不存在！
-    # data_list[3] = data_list[4]
+
     # print(data_list)
     mc.send_radians(data_list, 80)
     # time.sleep(0.5)
