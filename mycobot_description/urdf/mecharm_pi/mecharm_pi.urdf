@@ -42,17 +42,16 @@
       <geometry>    
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link2.dae"/>
       </geometry>
-      <origin xyz = "-0.005  0.21 0.002  " rpy = " -1.5708 0 -3.1415926"/>
+      <origin xyz = "-0.005 -0.21 -0.002  " rpy = " 1.5708 0 3.1415926"/>
 
     </visual>
     <collision>
       <geometry>    
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link2.dae"/>
       </geometry>
-      <origin xyz = "-0.005  0.21 0.002  " rpy = " -1.5708 0 -3.1415926"/>
+      <origin xyz = "-0.005  -0.21 -0.002  " rpy = " 1.5708 0 3.1415926"/>
       
     </collision>     
-
   </link>
 
   <link name="link3">
@@ -95,13 +94,13 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link5.dae"/>
       </geometry>
-      <origin xyz = "-0.292 -0.318 -0.007 " rpy = " 1.5708 0 3.1415926"/>
+      <origin xyz = "-0.292 -0.318 -0.009" rpy = " 1.5708 0 3.1415926"/>
     </visual>
     <collision>
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link5.dae"/>
       </geometry>
-      <origin xyz = "-0.292 -0.318 -0.007 " rpy = " 1.5708 0 3.1415926"/>
+      <origin xyz = "-0.292 -0.318 -0.009 " rpy = " 1.5708 0 3.1415926"/>
     </collision>
   </link>
 
@@ -111,13 +110,13 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link6.dae"/>
       </geometry>
-      <origin xyz = "-0.1648 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
+      <origin xyz = "-0.1625 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
     </visual>
     <collision>
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mecharm_pi/link6.dae"/>
       </geometry>
-      <origin xyz = "-0.1648 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
+      <origin xyz = "-0.1625 0.0536 -0.211 " rpy = " 0 1.5708 0"/>
     </collision>
   </link>
 
@@ -136,8 +135,7 @@
     <limit effort = "1000.0" lower = "-1.570796" upper = "1.570796" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz= "0 0 0.038" rpy = " -1.5708 0 0 "/>  
-     <!-- <origin xyz= "0 0 0" rpy = "0 -1.5708 1.5708"/>  -->
+    <origin xyz= "0 0 0.038" rpy = " 1.5708 0 0 "/>  
   </joint>
 
 
@@ -146,7 +144,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "0.785398" velocity = "0"/>
     <parent link="link2"/>
     <child link="link3"/>
-    <origin xyz= "0.0 -0.1 0   " rpy = "0 0 0 "/>  
+    <origin xyz= "0.0 0.1 0   " rpy = "3.1415926 0 0 "/>  
   </joint>
 
   <joint name="joint4_to_joint3" type="revolute">
@@ -162,8 +160,7 @@
     <limit effort = "1000.0" lower = "-1.745329" upper = "1.745329" velocity = "0"/>
     <parent link="link4"/>
     <child link="link5"/>
-    <origin xyz= " 0 0 0.0" rpy = "  0 -1.5708 0 "/>  
-    <!-- <origin xyz= " 0.178 0 -0.005" rpy = "  -1.5707963 0 0 "/>   -->
+    <origin xyz= " -0.001 0 0.0" rpy = "  0 -1.5708 3.1415926"/>  
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
