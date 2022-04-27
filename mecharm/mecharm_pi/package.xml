@@ -18,9 +18,9 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>actionlib</build_depend>
   <build_depend>mycobot_description</build_depend>
-  <build_depend>mycobot_communication</build_depend>
+  <build_depend>mecharm_communication</build_depend>
 
-  <build_export_depend>mycobot_communication</build_export_depend>
+  <build_export_depend>mecharm_communication</build_export_depend>
   <build_export_depend>mycobot_description</build_export_depend>
 
   <exec_depend>roscpp</exec_depend>
@@ -36,7 +36,7 @@
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>python-tk</exec_depend>
   <exec_depend>mycobot_description</exec_depend>
-  <exec_depend>mycobot_communication</exec_depend>
+  <exec_depend>mecharm_communication</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
