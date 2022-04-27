@@ -70,7 +70,7 @@ def talker():
         # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list
         
-        data_list.insert(3,0.0)
+        # data_list.insert(3,0.0)
         print(joint_state_send.position)
 
         pub.publish(joint_state_send)

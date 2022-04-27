@@ -15,14 +15,15 @@ import roslib
 msg = """\
 MyCobot Teleop Keyboard Controller
 ---------------------------
-Movimg options(control coordinations [x,y,z,rx]):
+Movimg options(control coordinations [x,y,z,rx,ry,rz]):
               w(x+)
 
     a(y-)     s(x-)     d(y+)
 
-        z(z-)       x(z+)
+    z(z-) x(z+)
 
-        u(rx+)      i(rx-)
+u(rx+)   i(ry+)   o(rz+)
+j(rx-)   k(ry-)   l(rz-)
    
 
 Gripper control:
@@ -82,8 +83,8 @@ def teleop_keyboard():
         exit(1)
 
 
-    init_pose = [0, 0,0, 0, speed]
-    home_pose = [0,30, 30, 0,speed]
+    init_pose = [0, 0, 0, 0, 0, 0, speed]
+    home_pose = [0, 8, -127, 40, 0, 0, speed]
 
     # rsp = set_angles(*init_pose)
 
@@ -93,7 +94,7 @@ def teleop_keyboard():
             break
         time.sleep(0.1)
 
-    record_coords = [res.x, res.y, res.z, res.rx, speed, model]
+    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
 
     print(record_coords)
 
@@ -129,8 +130,20 @@ def teleop_keyboard():
                 elif key in ["u", "U"]:
                     record_coords[3] += change_angle
                     set_coords(*record_coords)
-                elif key in ["i", "I"]:
+                elif key in ["j", "J"]:
                     record_coords[3] -= change_angle
+                    set_coords(*record_coords)
+                elif key in ["i", "I"]:
+                    record_coords[4] += change_angle
+                    set_coords(*record_coords)
+                elif key in ["k", "K"]:
+                    record_coords[4] -= change_angle
+                    set_coords(*record_coords)
+                elif key in ["o", "O"]:
+                    record_coords[5] += change_angle
+                    set_coords(*record_coords)
+                elif key in ["l", "L"]:
+                    record_coords[5] -= change_angle
                     set_coords(*record_coords)
                 elif key in ["g", "G"]:
                     switch_gripper(True)
@@ -146,7 +159,7 @@ def teleop_keyboard():
                     home_pose[1] = rep.joint_2
                     home_pose[2] = rep.joint_3
                     home_pose[3] = rep.joint_4
-                    # home_pose[4] = rep.joint_5
+                    home_pose[4] = rep.joint_5
                 else:
                     continue
 
