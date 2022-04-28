@@ -42,18 +42,15 @@ class Object_detect(Movement):
             [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
         ]
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed
-        self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
-        self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
+        # self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
+        # self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
-        self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
+        # self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
-        if "dev" in self.robot_m5:
-            self.Pin = [2, 5]
-        elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
-            for i in self.move_coords:
-                i[2] -= 20
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
+        # if "dev" in self.robot_m5:
+        self.Pin = [2, 5]
+        
+        if "dev" in self.robot_raspi:
             import RPi.GPIO as GPIO
             self.GPIO = GPIO
             GPIO.setwarnings(False)
@@ -62,8 +59,7 @@ class Object_detect(Movement):
             GPIO.setup(21, GPIO.OUT)
 
             self.raspi = True
-        if self.raspi:
-            self.gpio_status(False)
+        
 
         # choose place to set cube
         self.color = 0
@@ -152,23 +148,8 @@ class Object_detect(Movement):
         self.pub_coords([x, y, 165,  -178.9, -1.57, -66], 20, 1)
         time.sleep(1.5)
         # 根据不同底板机械臂，调整吸泵高度
-        if "dev" in self.robot_m5 or "dev" in self.robot_raspi:
-            # m5 and raspi
-            self.pub_coords([x, y, 90,  -178.9, -1.57, -66], 25, 1)
-        elif "dev" in self.robot_wio:
-            h = 0
-            if 165 < x < 180:
-                h = 10
-            elif x > 180:
-                h = 20
-            elif x < 135:
-                h = -20
-            self.pub_coords([x, y, 31.9+h,  -178.9, -1, -66], 20, 1)
-        elif "dev" in self.robot_jes:
-            h = 0
-            if x < 130:
-                h = 15
-            self.pub_coords([x, y, 90-h,  -178.9, -1.57, -66], 25, 1)
+        
+        self.pub_coords([x, y, 90,  -178.9, -1.57, -66], 25, 1)
         time.sleep(1.5)
         # open pump
         if self.raspi:
@@ -197,7 +178,7 @@ class Object_detect(Movement):
         time.sleep(2)
         # close pump
         if self.raspi:
-            self.gpio_status(False)
+            self.gpio_status(True)
         else:
             self.pub_pump(False, self.Pin)
         time.sleep(1)
@@ -221,32 +202,14 @@ class Object_detect(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            if "dev" in self.robot_wio:
-                if (y < -30 and x > 140) or (x > 150 and y < -10):
-                    x -= 10
-                    y += 10
-                elif y > -10:
-                    y += 10
-                elif x > 170:
-                    x -= 10
-                    y += 10
-            elif "dev" in self.robot_m5:
-                y += 10
-                x -= 15
-                if y < -20:
-                    y += 5
-                # print x,y
-            elif "dev" in self.robot_jes:
-                if y < 0:
-                    x += 5
-                    y += 3
-                y += 10
             print x, y
             self.move(x, y, color)
 
     # init mycobot
     def run(self):
-        if not self.raspi:
+        if self.raspi:
+            self.gpio_status(False)
+        else:
             self.pub_pump(False, self.Pin)
         for _ in range(5):
             self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
