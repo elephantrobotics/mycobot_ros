@@ -25,12 +25,10 @@ def callback(data):
 def listener():
     global mc
     rospy.init_node("mycobot_reciver", anonymous=True)
-    port = subprocess.check_output(['echo -n /dev/ttyAMA*'], 
-                                    shell=True)
 
-    port = rospy.get_param("~port", port)
-    baud = rospy.get_param("~baud", 1000000)
-    # 1000000
+    port = rospy.get_param("~port", "/dev/ttyAMA0")
+    baud = rospy.get_param("~baud", 115200)
+    # 115200
     mc = MyCobot(port, baud)
 
     rospy.Subscriber("joint_states", JointState, callback)
