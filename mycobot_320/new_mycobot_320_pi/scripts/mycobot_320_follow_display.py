@@ -16,7 +16,7 @@ def talker():
 
     print("Try connect real mycobot...")
     port = rospy.get_param("~port", "/dev/ttyAMA0")
-    baud = rospy.get_param("~baud", 1000000)
+    baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
         mycobot = MyCobot(port, baud)
