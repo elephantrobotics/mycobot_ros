@@ -1,6 +1,6 @@
 <launch>
 	<arg name="port" default="/dev/ttyAMA0" />
-	<arg name="baud" default="1000000" />
+	<arg name="baud" default="115200" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/new_320_pi/new_mycobot_pro_320_pi.urdf"/>
 	<arg name="rvizconfig" default="$(find new_mycobot_320_pi)/config/new_mycobot_320_pi.rviz" />
