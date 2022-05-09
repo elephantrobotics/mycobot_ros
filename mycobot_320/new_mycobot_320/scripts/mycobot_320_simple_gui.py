@@ -32,7 +32,7 @@ class Window:
         # calculate x and y coordinates for the Tk root window
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
-        self.win.geometry("430x370+{}+{}".format(x, y))
+        self.win.geometry("430x400+{}+{}".format(x, y))
         # 布局
         self.set_layout()
         # 输入部分
