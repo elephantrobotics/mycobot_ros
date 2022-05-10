@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /RobotModel1/Status1
         - /TF1
       Splitter Ratio: 0.5
     Tree Height: 645
@@ -170,10 +171,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.120398536
+      Pitch: 0.300398558
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.79040861
+      Yaw: 1.56040955
     Saved: ~
 Window Geometry:
   Displays:
