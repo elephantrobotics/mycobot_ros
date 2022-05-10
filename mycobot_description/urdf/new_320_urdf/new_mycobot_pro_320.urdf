@@ -79,7 +79,6 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/new_320_urdf/link4.dae"/>
       </geometry>
-    <!-- <origin xyz = "0 0.276 -0.10 " rpy = " 1.5708 1.5708 0"/> -->
         <origin xyz = "0 0.275 -0.096 " rpy = " 1.5708 1.5708 0"/>
     </visual>
     <collision>
@@ -87,7 +86,7 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/new_320_urdf/link4.dae"/>
       </geometry>
-      <origin xyz = "0 0.276 -0.10 " rpy = " 1.5708 1.5708 0"/>
+      <origin xyz = "0 0.275 -0.096 " rpy = " 1.5708 1.5708 0"/>
     </collision>
   </link>
 
