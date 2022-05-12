@@ -24,8 +24,3 @@ joint_state_controller:
   publish_rate: 50
 controller_list:
   []
-  # - name: arm_controller
-  #  action_ns: follow_joint_trajectory
-  #  type: FollowJointTrajectory
-  #  allowed_execution_duration_scaling: 1.2
-  #  allowed_goal_duration_margin: 0.5
