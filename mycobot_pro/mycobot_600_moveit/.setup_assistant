@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: wangweijian
     author_email: weijian.wang@elephantrobotics.com
-    generated_timestamp: 1652250059
+    generated_timestamp: 1652406964
