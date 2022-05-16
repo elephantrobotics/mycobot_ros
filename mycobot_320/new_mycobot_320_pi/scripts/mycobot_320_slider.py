@@ -7,7 +7,7 @@ and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
     port: serial prot string. Defaults is '/dev/ttyAMA0'
-    baud: serial prot baudrate. Defaults is 1000000.
+    baud: serial prot baudrate. Defaults is 115200.
 """
 
 import rospy
