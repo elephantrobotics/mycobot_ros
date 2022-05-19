@@ -1,6 +1,8 @@
 # encoding:utf-8
 #!/usr/bin/env python2
 
+from multiprocessing import Process, Pipe
+
 from cgi import parse
 from difflib import restore
 # import queue
@@ -35,8 +37,8 @@ class Object_detect(Movement):
 
         # 移动角度
         self.move_angles = [
-            [-7.11, -6.94, -55.01, -24.16, 0, 15],  # init the point
-            [-1.14, -10.63, -87.8, 9.05, -3.07, 15],  # point to grab
+            [-26.11, -6.94, -55.01, -24.16, 0, 15],  # init the point
+            [-1.14, 0.63, -87.8, 9.05, -3.07, 15],  # point to grab
             [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
 
@@ -208,7 +210,7 @@ class Object_detect(Movement):
     # init mycobot
     def run(self):
         for _ in range(5):
-            self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
+            self.pub_angles([-26.11, -6.94, -55.01, -24.16, 0, -15], 20)
             print(_)
             time.sleep(0.5)
 
@@ -313,21 +315,25 @@ class Object_detect(Movement):
                 return value
 
     # detect object
-    def obj_detect(self, img, goal):
+    def obj_detect(self, img, goal, kp_img, desc_img, kp_list, desc_list, connection):
         i = 0
         MIN_MATCH_COUNT = 5
-        sift = cv2.xfeatures2d.SIFT_create()
+        # sift = cv2.xfeatures2d.SIFT_create()
 
         # find the keypoints and descriptors with SIFT
-        kp = []
-        des = []
+        # kp = []
+        # des = []
+        kp = kp_list
+        des = desc_list
 
-        for i in goal:
-            kp0, des0 = sift.detectAndCompute(i, None)
-            kp.append(kp0)
-            des.append(des0)
+        # for i in goal:
+        #     kp0, des0 = sift.detectAndCompute(i, None)
+        #     kp.append(kp0)
+        #     des.append(des0)
+
         # kp1, des1 = sift.detectAndCompute(goal, None)
-        kp2, des2 = sift.detectAndCompute(img, None)
+        # kp2, des2 = sift.detectAndCompute(img, None)
+        kp2, des2 = kp_img, desc_img
 
         # FLANN parameters
         FLANN_INDEX_KDTREE = 0
@@ -364,14 +370,12 @@ class Object_detect(Movement):
                     pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1],
                                       [w - 1, 0]]).reshape(-1, 1, 2)
                     dst = cv2.perspectiveTransform(pts, M)
-                    ccoord = (dst[0][0] + dst[1][0] + dst[2][0] +
+                    coord = (dst[0][0] + dst[1][0] + dst[2][0] +
                               dst[3][0]) / 4.0
-                    cv2.putText(img,
-                                "{}".format(ccoord), (50, 60),
-                                fontFace=None,
-                                fontScale=1,
-                                color=(0, 255, 0),
-                                lineType=1)
+                    connection.send((DRAW_COORDS, coord))
+                    # cv2.putText(img, "{}".format(coord), (50, 60),
+                    #         fontFace=None, fontScale=1,
+                    #         color=(0, 255, 0), lineType=1)
                     print(format(dst[0][0][0]))
                     x = (dst[0][0][0] + dst[1][0][0] + dst[2][0][0] +
                          dst[3][0][0]) / 4.0
@@ -379,8 +383,8 @@ class Object_detect(Movement):
                          dst[3][0][1]) / 4.0
 
                     # bound box  绘制边框
-                    img = cv2.polylines(img, [np.int32(dst)], True, 244, 3,
-                                        cv2.LINE_AA)
+                    # img = cv2.polylines(img, [np.int32(dst)], True, 244, 3, cv2.LINE_AA)
+                    connection.send((DRAW_RECT, dst))
                     # cv2.polylines(mixture, [np.int32(dst)], True, (0, 255, 0), 2, cv2.LINE_AA)
         except Exception as e:
             pass
@@ -409,7 +413,98 @@ def parse_folder(folder):
     return restore
 
 
+def compute_keypoints_and_descriptors(sift, images_lists):
+    kp_list = []
+    desc_list = []
+    for images in images_lists:
+        kp_tmp = []
+        desc_tmp = []
+        for img in images:
+            kp, desc = sift.detectAndCompute(img, None)
+            kp_tmp.append(kp)
+            desc_tmp.append(desc)
+        kp_list.append(kp_tmp)
+        desc_list.append(desc_tmp)
+
+    return kp_list, desc_list
+
+
+GET_FRAME = 1
+STOP_PROCESSING = 2
+DRAW_COORDS = 3
+DRAW_RECT = 4
+CLEAR_DRAW = 5
+CROP_FRAME = 6
+
+
+def get_frame(connection):
+    connection.send(GET_FRAME)
+    frame = connection.recv()
+    return frame
+
+
+def process_transform_frame(frame, x1, y1, x2, y2):
+    # enlarge the image by 1.5 times
+    fx = 1.5
+    fy = 1.5
+    frame = cv2.resize(frame, (0, 0),
+                        fx=fx,
+                        fy=fy,
+                        interpolation=cv2.INTER_CUBIC)
+#    if x1 != x2:
+        # the cutting ratio here is adjusted according to the actual situation
+#        frame = frame[int(y2 * 0.2):int(y1 * 1.15),
+#                        int(x1 * 0.7):int(x2 * 1.15)]
+    return frame
+
+
+def process_display_frame(connection):
+    cap_num = 0
+    coord = None
+    dst = None
+    x1 = 0
+    y1 = 0
+    x2 = 0
+    y2 = 0
+    cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
+    if not cap.isOpened():
+        cap.open()
+    while cv2.waitKey(1) < 0:
+        _, frame = cap.read()
+        frame = process_transform_frame(frame, x1, y1, x2, y2)
+        if connection.poll():
+            request = connection.recv()
+            if request == GET_FRAME:
+                connection.send(frame)
+            elif request == CLEAR_DRAW:
+                coord = None
+                dst = None
+            elif type(request) is tuple:
+                if request[0] == DRAW_COORDS:
+                    coord = request[1]
+                elif request[0] == DRAW_RECT:
+                    dst = request[1]
+                elif request[0] == CROP_FRAME:
+                    x1 = request[1]
+                    y1 = request[2]
+                    x2 = request[3]
+                    y2 = request[4]
+
+        if not coord is None:
+            cv2.putText(frame, "{}".format(coord), (50, 60), fontFace=None,
+                    fontScale=1, color=(0, 255, 0), lineType=1)
+        if not dst is None:
+            frame = cv2.polylines(frame, [np.int32(dst)], True, 244, 3, cv2.LINE_AA)
+        cv2.imshow("figure", frame)
+        time.sleep(0.04)
+    connection.send(STOP_PROCESSING)
+
+
 def run():
+    parent_conn, child_conn = Pipe()
+
+    child = Process(target=process_display_frame, args=(child_conn,))
+    child.start()
 
     # Object_detect().take_photo()
     # Object_detect().cut_photo()
@@ -421,34 +516,43 @@ def run():
     res_queue[2] = parse_folder('res/gray')
     res_queue[3] = parse_folder('res/blue')
 
-    cap_num = 0
-    cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
-    if not cap.isOpened():
-        cap.open()
+    # res_queue = []
+    # res_queue.extend(parse_folder('res/red'))
+    # res_queue.extend(parse_folder('res/green'))
+    # res_queue.extend(parse_folder('res/gray'))
+    # res_queue.extend(parse_folder('res/blue'))
+
+    sift = cv2.xfeatures2d.SIFT_create()
+    kp_list, desc_list = compute_keypoints_and_descriptors(sift, res_queue)
+
     # init a class of Object_detect
     detect = Object_detect()
     # init mycobot
     detect.run()
 
-#    _init_ = 20  #
+    # _init_ = 20  #
     init_num = 0
     nparams = 0
-    num = 0
-    real_sx = real_sy = 0
-    while cv2.waitKey(1) < 0:
+    # num = 0
+    # real_sx = real_sy = 0
+    while True:
         start_time = time.time()
+        if parent_conn.poll():
+            data = parent_conn.recv()
+            if data == STOP_PROCESSING:
+                break
         # read camera
-        _, frame = cap.read()
+        frame = get_frame(parent_conn)
         # deal img
-        frame = detect.transform_frame(frame)
+        #frame = detect.transform_frame(frame)
 
-#        if _init_ > 0:
-#            _init_ -= 1
-#            continue
+        # if _init_ > 0:
+        #     _init_ -= 1
+        #     continue
         # calculate the parameters of camera clipping
         if init_num < 20:
             if detect.get_calculate_params(frame) is None:
-                cv2.imshow("figure", frame)
+                # cv2.imshow("figure", frame)
                 continue
             else:
                 x1, x2, y1, y2 = detect.get_calculate_params(frame)
@@ -467,6 +571,11 @@ def run():
                 (detect.sum_x2) / 20.0,
                 (detect.sum_y2) / 20.0,
             )
+            parent_conn.send((CROP_FRAME,
+                (detect.sum_x1) / 20.0,
+                (detect.sum_y1) / 20.0,
+                (detect.sum_x2) / 20.0,
+                (detect.sum_y2) / 20.0))
             detect.sum_x1 = detect.sum_x2 = detect.sum_y1 = detect.sum_y2 = 0
             init_num += 1
             continue
@@ -474,7 +583,7 @@ def run():
         # calculate params of the coords between cube and mycobot
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
-                cv2.imshow("figure", frame)
+                # cv2.imshow("figure", frame)
                 continue
             else:
                 x1, x2, y1, y2 = detect.get_calculate_params(frame)
@@ -496,32 +605,41 @@ def run():
                               abs(detect.sum_y1 - detect.sum_y2) / 10.0)
             print("ok")
             continue
+
         # get detect result
+
+        kp_img, desc_img = sift.detectAndCompute(frame, None)
+
+        frame = get_frame(parent_conn)
         for i, v in enumerate(res_queue):
-            detect_result = detect.obj_detect(frame, v)
-            if detect_result is None:
-                cv2.imshow("figure", frame)
-                continue
-            else:
+            # HACK: to update frame every time
+            detect_result = detect.obj_detect(frame, v, kp_img, desc_img, kp_list[i], desc_list[i], parent_conn)
+            if detect_result:
                 x, y = detect_result
                 # calculate real coord between cube and mycobot
                 real_x, real_y = detect.get_position(x, y)
-                if num == 5:
-                    detect.color = i
-                    detect.pub_marker(real_sx / 5.0 / 1000.0,
-                                      real_sy / 5.0 / 1000.0)
-                    detect.decide_move(real_sx / 5.0, real_sy / 5.0,
-                                       detect.color)
-                    num = real_sx = real_sy = 0
-                else:
-                    num += 1
-                    real_sy += real_y
-                    real_sx += real_x
+                detect.color = i
+                detect.pub_marker(real_x / 1000.0, real_y / 1000.0)
+                detect.decide_move(real_x, real_y, detect.color)
+                # if num == 5:
+                #     detect.color = i
+                #     detect.pub_marker(real_sx / 5.0 / 1000.0,
+                #                       real_sy / 5.0 / 1000.0)
+                #     detect.decide_move(real_sx / 5.0, real_sy / 5.0,
+                #                        detect.color)
+                #     num = real_sx = real_sy = 0
+                # else:
+                #     num += 1
+                #     real_sy += real_y
+                #     real_sx += real_x
+                parent_conn.send(CLEAR_DRAW)
 
-            cv2.imshow("figure", frame)
-
+        # cv2.imshow("figure", frame)
+        time.sleep(0.05)
         end_time = time.time()
         print("loop_time = ", end_time - start_time)
+
+    child.join()
 
 
 if __name__ == "__main__":

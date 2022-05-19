@@ -25,6 +25,8 @@ class Object_detect(Movement):
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
+        
+        	
         # 移动角度
         self.move_angles = [
             [-7.11, -6.94, -55.01, -24.16, 0, 15],  # init the point
@@ -64,7 +66,7 @@ class Object_detect(Movement):
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
-
+        self.Pin = [2, 5]
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -77,6 +79,10 @@ class Object_detect(Movement):
         # self.label_path = os.path.join(dir_path, "labels.json")
         # load class labels
         # self.labels = json.load(open(self.label_path))
+	
+	
+
+        
         # use to calculate coord between cube and mycobot
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
         # The coordinates of the grab center point relative to the mycobot
@@ -121,6 +127,8 @@ class Object_detect(Movement):
         self.marker.pose.orientation.w = 1.0
 
         self.cache_x = self.cache_y = 0
+
+
     # publish marker
 
     def pub_marker(self, x, y, z=0.03):
@@ -152,8 +160,8 @@ class Object_detect(Movement):
         self.pub_coords([x, y, 165,  -178.9, -1.57, -66], 20, 1)
         time.sleep(1.5)
         # 根据不同底板机械臂，调整吸泵高度
-        if "dev" in self.robot_m5 or "dev" in self.robot_raspi:
-            # m5 and raspi
+        if "dev" in self.robot_m5:
+            # m5 and jetson nano
             self.pub_coords([x, y, 90,  -178.9, -1.57, -66], 25, 1)
         elif "dev" in self.robot_wio:
             h = 0
@@ -166,8 +174,8 @@ class Object_detect(Movement):
             self.pub_coords([x, y, 31.9+h,  -178.9, -1, -66], 20, 1)
         elif "dev" in self.robot_jes:
             h = 0
-            if x < 130:
-                h = 15
+            if x<130:
+                h=15
             self.pub_coords([x, y, 90-h,  -178.9, -1.57, -66], 25, 1)
         time.sleep(1.5)
         # open pump
@@ -237,11 +245,11 @@ class Object_detect(Movement):
                     y += 5
                 # print x,y
             elif "dev" in self.robot_jes:
-                if y < 0:
-                    x += 5
-                    y += 3
-                y += 10
-            print x, y
+                if y<0:
+                    x+=5
+                    y+=3
+                y+=10
+            print x,y
             self.move(x, y, color)
 
     # init mycobot
@@ -476,6 +484,7 @@ def run():
     for i, j, k in os.walk(path):
         for l in k:
             goal.append(cv2.imread('local_photo/img/{}'.format(l)))
+    
     cap_num = 0
     cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
     if not cap.isOpened():
