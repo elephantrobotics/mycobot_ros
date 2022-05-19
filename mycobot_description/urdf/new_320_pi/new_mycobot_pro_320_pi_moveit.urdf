@@ -24,10 +24,10 @@
       <geometry>
         <mesh filename="package://mycobot_description/urdf/new_320_pi/link1.dae"/>
       </geometry>
-      <origin xyz = "-0.29156 -0.220 -0.085 " rpy = " 0 0 1.5708"/>
+      <origin xyz = "0.115 -0.172 -0.086 " rpy = " 0 0 3.1415926"/>
     </visual>
     <collision>
-      <origin xyz = "0 0 -0.02 " rpy = " 0 0 1.5708"/>
+      <origin xyz = "0 0 -0.02 " rpy = " 0 0 3.14159"/>
       <geometry>
         <cylinder length="0.106" radius="0.043"/>
       </geometry>
@@ -40,7 +40,7 @@
       <geometry>
         <mesh filename="package://mycobot_description/urdf/new_320_pi/link2.dae"/>
       </geometry>
-      <origin xyz = "-0.090 0 -0.138 " rpy = " 0 1.5708 0"/>
+     <origin xyz = "-0.075 -0.115 -0.022 " rpy = " 1.5708 0 1.5708"/>
     </visual>
     <collision>
       <origin xyz = "0.07 0 0.095 " rpy = " 0 1.5708 0"/>
@@ -56,10 +56,10 @@
       <geometry>
         <mesh filename="package://mycobot_description/urdf/new_320_pi/link3.dae"/>
       </geometry>
-      <origin xyz = "-0.22 0 0.093 " rpy = " 0 1.5708 0"/>
+     <origin xyz = "-0.22 -0.115 0.142 " rpy = " 1.5708 0 1.5708"/>
     </visual>
     <collision>
-      <origin xyz = "0.044 0 0 " rpy = " 0 1.5708 0"/>
+      <origin xyz = "0.044 0 0 " rpy = " 1.5708 0 1.5708"/>
       <geometry>
         <cylinder length="0.14" radius="0.0305"/>
       </geometry>
@@ -73,10 +73,10 @@
       <geometry>
         <mesh filename="package://mycobot_description/urdf/new_320_pi/link4.dae"/>
       </geometry>
-      <origin xyz = "0 0.275 -0.096 " rpy = " 1.5708 1.5708 0"/>
+      <origin xyz = "-0.115 0.338 -0.1435" rpy = " 1.5708 0 0"/>
     </visual>
     <collision>
-      <origin xyz = "0.0 -0.014 0 " rpy = " 1.5708 1.5708 0"/>
+      <origin xyz = "0.0 -0.014 0 " rpy = " 1.5708 0 0"/>
       <geometry>
         <cylinder length="0.083" radius="0.029"/>
       </geometry>
@@ -89,10 +89,10 @@
       <geometry>
         <mesh filename="package://mycobot_description/urdf/new_320_pi/link5.dae"/>
       </geometry>
-      <origin xyz = "0.0012 -0.044  -0.456 " rpy = " 0  0 -1.5708"/>
+       <origin xyz = "-0.1149 -0.0322  -0.482 " rpy = " 0  0 0"/>
     </visual>
     <collision>
-      <origin xyz = "0 -0.01 0 " rpy = " 0 0 -1.5708"/>
+      <origin xyz = "0 -0.01 0 " rpy = " 0 0 0"/>
       <geometry>
         <cylinder length="0.0849" radius="0.029"/>
       </geometry>
@@ -107,10 +107,10 @@
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-       <origin xyz = "-0.431 0.0009 -0.16536 " rpy = " 0 1.5708 0"/>
+       <origin xyz = "-0.11478 0.433 -0.15 " rpy = " 1.5708 0 0"/>
     </visual>
     <collision>
-      <origin xyz = "-0.431 0.0009 -0.16536 " rpy = " 0 1.5708 0"/>
+      <origin xyz = "-0.431 0.0009 -0.16536 " rpy = " 1.5708 0 0"/>
       <geometry>
         <cylinder length="0.0225" radius="0.026"/>
       </geometry>
@@ -119,16 +119,16 @@
 
   <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.96" upper = "2.96" velocity = "0"/>
     <parent link="base"/>
     <child link="link1"/>
-    <origin xyz= "0 0 0.17846" rpy = "0 0 0"/>
+    <origin xyz= "0 0 0.162" rpy = "0 0 0"/>
   </joint>
 
 
   <joint name="joint3_to_joint2" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.79" upper = "2.79" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
     <origin xyz= "0 0  0" rpy = "0 -1.57080  1.57080"/>
@@ -137,7 +137,7 @@
 
   <joint name="joint4_to_joint3" type="revolute">
     <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.79" upper = "2.79" velocity = "0"/>
     <parent link="link2"/>
     <child link="link3"/>
     <origin xyz= "0.13635 0 0   " rpy = "0 0 0"/>
@@ -145,26 +145,26 @@
 
   <joint name="joint5_to_joint4" type="revolute">
     <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.79" upper = "2.79" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "0.12 0  0.090" rpy = "0 0 1.57080"/>
+    <origin xyz= "0.1205 0  0.082" rpy = "0 0 1.57080"/>
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.96" upper = "2.96" velocity = "0"/>
     <parent link="link4"/>
     <child link="link5"/>
-    <origin xyz= "0 -0.08515 0" rpy = "1.57080 0 0"/>
+    <origin xyz= "0 -0.084 0" rpy = "1.57080 0 0"/>
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/>
     <parent link="link5"/>
     <child link="link6"/>
-    <origin xyz= "0 0.0760 0" rpy = "-1.57080 0 0 "/>
+    <origin xyz= "0 0.06635 0" rpy = "-1.57080 0 0 "/>
   </joint>
 
 </robot>
