@@ -122,7 +122,7 @@ Visualization Manager:
           Value: true
         link6:
           Value: true
-      Marker Scale: 0.300000012
+      Marker Scale: 0.400000006
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -178,10 +178,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.584796429
+      Pitch: 0.394796789
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.21858907
+      Yaw: 3.10358953
     Saved: ~
 Window Geometry:
   Displays:
