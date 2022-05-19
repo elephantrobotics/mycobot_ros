@@ -1,4 +1,5 @@
 # coding:utf-8
+from fileinput import filename
 import os, cv2, sys
 
 
@@ -11,8 +12,8 @@ def take_photo():
     print("*********************************************")
 
     # 创建/使用local_photo文件夹
-    class_name = "local_photo"
-    if (os.path.exists("local_photo")):
+    class_name = "res"
+    if (os.path.exists("res")):
         pass
     else:
         os.mkdir(class_name)
@@ -47,9 +48,22 @@ def take_photo():
 
 
 def cut_photo():
-    path = os.getcwd() + '/local_photo/img'
-    for i, j, k in os.walk(path):
-        file_len = len(k)
+    
+    path_red = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/red'
+    for i, j, k in os.walk(path_red):
+        file_len_red = len(k)
+
+    path_gray = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/gray'
+    for i, j, k in os.walk(path_gray):
+        file_len_gray = len(k)
+
+    path_green = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/green'
+    for i, j, k in os.walk(path_green):
+        file_len_green = len(k)
+
+    path_blue = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/blue'
+    for i, j, k in os.walk(path_blue):
+        file_len_blue = len(k)
     print("请截取要识别的部分")
     # root = tk.Tk()
     # root.withdraw()
@@ -58,7 +72,7 @@ def cut_photo():
     # temp2= cv.cvtColor(np.asarray(temp2),cv.COLOR_RGB2BGR)
     # cut = np.array(temp2)
 
-    cut = cv2.imread(r"local_photo/takephoto.jpeg")
+    cut = cv2.imread(r"res/takephoto.jpeg")
 
     cv2.imshow('original', cut)
     # C:\Users\Elephant\Desktop\pymycobot+opencv\local_photo/takephoto.jpeg
@@ -71,13 +85,30 @@ def cut_photo():
     x, y, w, h = roi
     print(roi)
 
+    kw = input("请输入保存图片文件夹名称('red','gray','blue','green'）:")
+    # print(kw)
+
     # 显示ROI并保存图片
     if roi != (0, 0, 0, 0):
+        
         crop = cut[y:y + h, x:x + w]
         cv2.imshow('crop', crop)
-        cv2.imwrite('local_photo/img/goal{}.jpeg'.format(str(file_len + 1)),
-                    crop)
-        print('Saved!')
+        # 选择红桶文件夹
+        if kw == 'red':
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/red/goal{}.jpeg'.format(str(file_len_red + 1)),crop)
+            print('Saved')
+        # 选择灰桶文件夹
+        elif kw == 'gray':
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/gray/goal{}.jpeg'.format(str(file_len_gray+1)),crop)
+            print('Saved')
+        # 选择绿桶文件夹
+        elif kw == 'green':
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/green/goal{}.jpeg'.format(str(file_len_green+1)),crop)
+            print('Saved')
+        # 选择蓝桶文件夹
+        elif kw == 'blue':
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/res/blue/goal{}.jpeg'.format(str(file_len_blue+1)),crop)
+            print('Saved')
 
     # 退出
     cv2.waitKey(0)

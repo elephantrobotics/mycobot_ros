@@ -13,17 +13,17 @@ find_package(catkin REQUIRED COMPONENTS
 
   mycobot_communication
   mycobot_description
-  mycobot_320
+  
 )
 
 ## Declare a catkin package
 catkin_package(
   CATKIN_DEPENDS std_msgs actionlib
 
-  INCLUDE_DIRS include
-  LIBRARIES mycobot_320
-  CATKIN_DEPENDS mycobot_communication mycobot_description
-  DEPENDS system_lib
+  # INCLUDE_DIRS include
+  # LIBRARIES mycobot_320
+  # CATKIN_DEPENDS mycobot_communication mycobot_description
+  # DEPENDS system_lib
 )
 
 ## Build talker and listener
@@ -46,12 +46,12 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN "setup_assistant.launch" EXCLUDE)
 install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
-find_package(OpenCV REQUIRED)
-add_executable(opencv_camera src/opencv_camera.cpp)
+# find_package(OpenCV REQUIRED)
+# add_executable(opencv_camera src/opencv_camera.cpp)
 # Declare a C++ library
-add_library(${PROJECT_NAME}
-   src/opencv_camera.cpp
- )
-target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-add_executable(camera_display src/camera_display)
-target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+# add_library(${PROJECT_NAME}
+#   src/opencv_camera.cpp
+# )
+# target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+# add_executable(camera_display src/camera_display)
+# target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

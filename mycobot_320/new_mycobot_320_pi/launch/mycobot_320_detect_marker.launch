@@ -1,0 +1,16 @@
+<launch>
+	<arg name="model" default="$(find mycobot_description)/urdf/new_320_pi/new_mycobot_pro_320_pi.urdf"/>
+	<arg name="rvizconfig" default="$(find new_mycobot_320_pi)/config/mycobot_320_with_marker.rviz" />
+	<arg name="gui" default="true" />
+
+	<arg name="num" default="0" />
+
+    <include file="$(find new_mycobot_320_pi)/launch/mycobot_320_slider.launch">
+		<arg name="model" value="$(arg model)" />
+		<arg name="rvizconfig" value="$(arg rvizconfig)" />
+		<arg name="gui" value="$(arg gui)" />
+    </include>
+	<node name="opencv_camera" pkg="new_mycobot_320_pi" type="opencv_camera" args="$(arg num)"/>
+	<node name="detect_marker" pkg="new_mycobot_320_pi" type="mycobot_320_detect_marker.py" />
+	<node name="following_marker" pkg="new_mycobot_320_pi" type="mycobot_320_following_marker.py" />
+</launch>
