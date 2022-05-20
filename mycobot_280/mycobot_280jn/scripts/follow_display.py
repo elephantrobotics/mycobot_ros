@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# encoding:utf8
 import time
 
 import rospy
@@ -8,16 +9,22 @@ from visualization_msgs.msg import Marker
 
 from pymycobot.mycobot import MyCobot
 
+from pymycobot import MyCobotSocket
 
 def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mycobot...")
-    port = rospy.get_param("~port", "/dev/ttyTHS1")
-    baud = rospy.get_param("~baud", 1000000)
-    print("port: {}, baud: {}\n".format(port, baud))
+    # port = rospy.get_param("~port", "/dev/ttyTHS1")
+    # baud = rospy.get_param("~baud", 1000000)
+    ip=rospy.get_param('~ip','192.168.125.226')
+    netport=rospy.get_param('~netport',9000)
+    # print("port: {}, baud: {}\n".format(port, baud))
+    print('ip:{},port:{}'.format(ip,netport))
     try:
-        mycobot = MyCobot(port, baud)
+        # mycobot = MyCobot(port, baud)
+        mycobot=MyCobotSocket(ip,netport)
+        mycobot.connect(serialport="/dev/ttyTHS1", baudrate="1000000")
     except Exception as e:
         print(e)
         print(
