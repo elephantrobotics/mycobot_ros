@@ -43,7 +43,7 @@ def listener():
     port=rospy.get_param("~port",9000)
     print(ip,port)
     ms=MyCobotSocket(ip,port)
-    ms.connect(serialport="/dev/ttyTHS1", baudrate="1000000")
+    ms.connect()
 
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止

@@ -24,7 +24,7 @@ def talker():
     try:
         # mycobot = MyCobot(port, baud)
         mycobot=MyCobotSocket(ip,netport)
-        mycobot.connect(serialport="/dev/ttyTHS1", baudrate="1000000")
+        mycobot.connect()
     except Exception as e:
         print(e)
         print(
@@ -67,13 +67,14 @@ def talker():
         joint_state_send.header.stamp = rospy.Time.now()
 
         angles = mycobot.get_radians()
+        print('angles:',angles)
         data_list = []
         for index, value in enumerate(angles):
             data_list.append(value)
 
         # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list
-
+        print('data_list:',data_list)
         pub.publish(joint_state_send)
 
         coords = mycobot.get_coords()

@@ -23,7 +23,7 @@ def create_handle():
     port=rospy.get_param("~port")
     rospy.loginfo("%s,%s" % (ip,port))
     ms=MyCobotSocket(ip,port)
-    ms.connect(serialport="/dev/ttyTHS1", baudrate="1000000")
+    ms.connect()
 
 
 def create_services():
@@ -48,7 +48,7 @@ def set_angles(req):
         req.joint_6,
     ]
     sp = req.speed
-
+    print('angles1:',angles)
     if ms:
         ms.send_angles(angles, sp)
 
@@ -59,6 +59,7 @@ def get_angles(req):
     """get angles,获取角度"""
     if ms:
         angles = ms.get_angles()
+        print('angles2:',angles)
         return GetAnglesResponse(*angles)
 
 
@@ -83,6 +84,7 @@ def set_coords(req):
 def get_coords(req):
     if ms:
         coords = ms.get_coords()
+        print('coords:',coords)
         return GetCoordsResponse(*coords)
 
 
