@@ -19,10 +19,11 @@ def create_handle():
     # baud = rospy.get_param("~baud")
     # rospy.loginfo("%s,%s" % (port, baud))
     # ms = MyCobot(port, baud)
-    ip=rospy.get_param("~ip")
-    port=rospy.get_param("~port")
+    
+    ip = rospy.get_param("~ip")
+    port = rospy.get_param("~port")
     rospy.loginfo("%s,%s" % (ip,port))
-    ms=MyCobotSocket(ip,port)
+    ms = MyCobotSocket(ip,port)
     ms.connect()
 
 
@@ -48,7 +49,7 @@ def set_angles(req):
         req.joint_6,
     ]
     sp = req.speed
-    print('angles1:',angles)
+    # print('angles1:',angles)
     if ms:
         ms.send_angles(angles, sp)
 
@@ -59,8 +60,10 @@ def get_angles(req):
     """get angles,获取角度"""
     if ms:
         angles = ms.get_angles()
-        print('angles2:',angles)
-        return GetAnglesResponse(*angles)
+        if angles is None:
+            angles=[0,0,0,0,0,0]
+            # print('angles2:',angles)
+    return GetAnglesResponse(*angles)
 
 
 def set_coords(req):
@@ -84,8 +87,10 @@ def set_coords(req):
 def get_coords(req):
     if ms:
         coords = ms.get_coords()
-        print('coords:',coords)
-        return GetCoordsResponse(*coords)
+        if coords is None:
+            coords=[0,0,0,0,0,0]
+            # print('coords:',coords)
+    return GetCoordsResponse(*coords)
 
 
 def switch_status(req):
