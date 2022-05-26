@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
+# encoding=utf-8
 import time
 import rospy
 from sensor_msgs.msg import JointState
 
 from pymycobot.mycobot import MyCobot
 
+from pymycobot.mycobotsocket import MyCobotSocket
 
 mc = None
 
@@ -24,10 +26,16 @@ def listener():
     global mc
     rospy.init_node("mycobot_reciver", anonymous=True)
 
-    port = rospy.get_param("~port", "/dev/ttyTHS1")
-    baud = rospy.get_param("~baud", 1000000)
-    print(port, baud)
-    mc = MyCobot(port, baud)
+    # port = rospy.get_param("~port", "/dev/ttyTHS1")
+    # baud = rospy.get_param("~baud", 1000000)
+    # print(port, baud)
+    # mc = MyCobot(port, baud)
+    
+    ip = rospy.get_param("~ip","192.168.125.226")
+    port = rospy.get_param("~port",9000)
+    print(ip,port)
+    mc = MyCobotSocket(ip,port)
+    mc.connect()
 
     rospy.Subscriber("joint_states", JointState, callback)
 
