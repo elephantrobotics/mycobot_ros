@@ -138,8 +138,10 @@ def teleop_keyboard():
                     switch_gripper(False)
                 elif key == "1":
                     rsp = set_angles(*init_pose)
+                    record_coords = [res.x, res.y, res.z, res.rx, speed, model]
                 elif key in "2":
                     rsp = set_angles(*home_pose)
+                    record_coords = [res.x, res.y, res.z, res.rx, speed, model]
                 elif key in "3":
                     rep = get_angles()
                     home_pose[0] = rep.joint_1

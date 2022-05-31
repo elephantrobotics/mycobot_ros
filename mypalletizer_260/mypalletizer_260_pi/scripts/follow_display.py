@@ -15,8 +15,8 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mypal...")
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
-    baud = rospy.get_param("~baud", 115200)
+    port = rospy.get_param("~port", "/dev/ttyAMA0")
+    baud = rospy.get_param("~baud", 1000000)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
         mypa = MyPalletizer(port, baud)
