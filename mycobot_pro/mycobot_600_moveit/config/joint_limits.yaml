@@ -3,32 +3,32 @@
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
   joint2_to_joint1:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
   joint3_to_joint2:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
   joint4_to_joint3:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
   joint5_to_joint4:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
   joint6_to_joint5:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
   joint6output_to_joint6:
-    has_velocity_limits: false
-    max_velocity: 0
+    has_velocity_limits: true
+    max_velocity: 3.14
     has_acceleration_limits: false
-    max_acceleration: 0
+    max_acceleration: 30
