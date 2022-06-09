@@ -75,8 +75,8 @@ class MycobotTopics(object):
         rospy.init_node("mycobot_topics")
         rospy.loginfo("start ...")
         # Select connected device，选择连接设备
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        port = rospy.get_param("~port", "/dev/ttyAMA0")
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
         # self.mc = MyCobot(port,baud)
         self.mc = MyCobotSocket(port, baud) # port
