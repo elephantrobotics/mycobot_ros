@@ -32,7 +32,7 @@ class MoveItPlanningDemo:
 
         # Set the reference coordinate system used for the target position
         # 设置目标位置所使用的参考坐标系
-        self.reference_frame = "joint1"
+        self.reference_frame = "base"
         self.arm.set_pose_reference_frame(self.reference_frame)
 
         # Allow replanning when motion planning fails,当运动规划失败后，允许重新规划
@@ -116,13 +116,13 @@ class MoveItPlanningDemo:
         suit_post.pose.orientation.z = quat[2]
         suit_post.pose.orientation.w = quat[3]
 
-        suit_path = (
-            roslib.packages.get_pkg_dir("mycobot_description")
-            + "/urdf/mycobot/suit_env.dae"
-        )
-        # need `pyassimp==3.3`
-        self.scene.add_mesh("suit", suit_post, suit_path)
-        rospy.sleep(2)
+        # suit_path = (
+        #     roslib.packages.get_pkg_dir("mycobot_description")
+        #     + "/urdf/mycobot/suit_env.dae"
+        # )
+        # # need `pyassimp==3.3`
+        # self.scene.add_mesh("suit", suit_post, suit_path)
+        # rospy.sleep(2)
 
         # Run it again if there is an environmental impact,有环境影响后再运行一次
         self.moving()
