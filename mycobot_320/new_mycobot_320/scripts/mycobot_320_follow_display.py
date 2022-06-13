@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding:utf-8 -*-
 from cgi import print_environ
 import time
 
@@ -14,7 +15,7 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mycobot...")
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    port = rospy.get_param("~port", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
@@ -61,18 +62,17 @@ def talker():
         joint_state_send.header.stamp = rospy.Time.now()
 
         angles = mycobot.get_radians()
-        print('angels=====================>',angles)
         data_list = []
         for index, value in enumerate(angles):
             data_list.append(value)
-        print('data_list=======================>',data_list)
+        # print('data_list=======================>',data_list)
         # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list
 
         pub.publish(joint_state_send)
 
         coords = mycobot.get_coords()
-        print('coords=========================>',coords)
+        # print('coords=========================>',coords)
         # marker
         marker_.header.stamp = rospy.Time.now()
         marker_.type = marker_.SPHERE
@@ -85,7 +85,7 @@ def talker():
         print('coordscoords------------->',coords)
         if not coords:
             coords = [0, 0, 0, 0, 0, 0]
-            print('coordscoordscoords====----==========>',coords)
+            # print('coordscoordscoords====----==========>',coords)
             rospy.loginfo("error [101]: can not get coord values")
 
         marker_.pose.position.x = coords[1] / 1000 * -1

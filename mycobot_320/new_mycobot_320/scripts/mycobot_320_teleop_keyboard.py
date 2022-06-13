@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 from __future__ import print_function
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
@@ -63,7 +64,7 @@ def teleop_keyboard():
     change_angle = 180 * change_percent / 100
     change_len = 250 * change_percent / 100
 
-    rospy.wait_for_service("get_joint_angles")
+    rospy.wait_for_service("get_joint_ang cles")
     rospy.wait_for_service("set_joint_angles")
     rospy.wait_for_service("get_joint_coords")
     rospy.wait_for_service("set_joint_coords")
