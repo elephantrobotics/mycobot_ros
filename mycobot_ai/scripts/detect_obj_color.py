@@ -64,6 +64,7 @@ class Object_detect(Movement):
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
+        self.Pin = [2, 5]
 
         # choose place to set cube
         self.color = 0
@@ -147,20 +148,10 @@ class Object_detect(Movement):
         # send coordinates to move mycobot
         self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
         time.sleep(1.5)
-        if "dev" in self.robot_m5 or self.raspi:
-            self.pub_coords([x, y, 90,  -178.9, -1.57, -25.95], 20, 1)
-        elif "dev" in self.robot_wio:
-            h = 0
-
-            if 165 < x < 180:
-                h = 10
-            elif x > 180:
-                h = 20
-            elif x < 135:
-                h = -20
-            self.pub_coords([x, y, 31.9+h,  -178.9, -1, -25.95], 20, 1)
-
-        time.sleep(1.5)
+        
+        self.pub_coords([x, y, 80,  -178.9, -1.57, -25.95], 20, 1)
+        
+        time.sleep(1)
         # open pump
         if self.raspi:
             self.gpio_status(True)
@@ -213,34 +204,9 @@ class Object_detect(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            if "dev" in self.robot_wio:
-
-                if (y < -30 and x > 140) or (x > 150 and y < -10):
-                    x -= 10
-                    y += 10
-                elif y > -10:
-                    y += 10
-                elif x > 170:
-                    x -= 10
-                    y += 10
-            elif "dev" in self.robot_raspi:
-                if x > 160:
-                    y += 10
-                elif y < -20:
-                    x -= 10
-                    y += 10
-            elif "dev" in self.robot_jes:
-                y += 13
-                x += 4
-
-            elif "dev" in self.robot_m5:
-                x -= 10
-                if y < 0:
-                    y += 10
-                if y < -30:
-                    y += 7
-            print x, y
-            self.move(x, y, color)
+            
+            
+            self.move(x,y, color)
 
     # init mycobot
     def run(self):
