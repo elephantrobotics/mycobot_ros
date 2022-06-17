@@ -2,8 +2,8 @@
 	<!-- <arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" /> -->
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/mybuddy/mybuddy.urdf"/>
+	<arg name="rvizconfig" default="$(find mybuddy)/config/dual_arm.rviz" />
 	<arg name="gui" default="true" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />

@@ -12,7 +12,7 @@ from mycobot_communication.srv import GetAngles
 def talker():
     rospy.loginfo("start ...")
     rospy.init_node("real_listener", anonymous=True)
-    pub = rospy.Publisher("joint_states", JointState, queue_size=10)
+    pub = rospy.Publisher("joint_states", JointState, queue_size=15)
     rate = rospy.Rate(30)  # 30hz
 
     # pub joint state
@@ -20,12 +20,25 @@ def talker():
     joint_state_send.header = Header()
 
     joint_state_send.name = [
-        "joint2_to_joint1",
-        "joint3_to_joint2",
-        "joint4_to_joint3",
-        "joint5_to_joint4",
-        "joint6_to_joint5",
-        "joint6output_to_joint6",
+        # "joint2_to_joint1",
+        # "joint3_to_joint2",
+        # "joint4_to_joint3",
+        # "joint5_to_joint4",
+        # "joint6_to_joint5",
+        # "joint6output_to_joint6",
+        "base_link1",
+        "joint1_L",
+        "joint2_L",
+        "joint3_L",
+        "joint4_L",
+        "joint5_L",
+        "joint6_L",
+        "joint1_R",
+        "joint2_R",
+        "joint3_R",
+        "joint4_R",
+        "joint5_R",
+        "joint6_R",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
