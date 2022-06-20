@@ -43,7 +43,7 @@ def callback(data):
     time.sleep(0.02)
 
     # print(data_list3[0])
-    # mb.send_angle(3,1,data_list3[0]* (180 / math.pi),50)
+    # mb.send_angle(3,1,data_list3[0]* (180 / math.pi),350)
     # mb.send_radians(3,data_list3, 50)
 
     mb.set_encoder(3,1,data_list3[0]*4096/(2*math.pi)+2048,1)

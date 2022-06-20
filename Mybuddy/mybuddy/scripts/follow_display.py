@@ -117,7 +117,7 @@ def talker():
         #     waist_radian = [0]
         #     print("set waist_radian:%s" % waist_radian)
             
-        mb.set_encoder(3,1,waist_radian[0]*4096/(2*math.pi)+2048,1)
+        # mb.set_encoder(3,1,waist_radian[0]*4096/(2*math.pi)+2048,1)
 
 
         # =======all_radians=======
@@ -145,9 +145,10 @@ def talker():
             # rospy.loginfo("error [101]: can not get right_coords values")
             right_coords = [50.4, -63.4, 411.6, -91.23, -0.08, -90.08]
         #     # print("set rc:",right_coords)
+        # right_coords = [50.4, -63.4, 411.6, -91.23, -0.08, -90.08]
 
-        right_coords = [50.4, -63.4, 411.6, -91.23, -0.08, -90.08]
-
+        waist_coords = mb.get_coords(3)
+        print("waist_coords: %s " % waist_coords)
         # coords = left_coords + right_coords
         # print("all_coords:%s" % coords) 
 
@@ -170,6 +171,10 @@ def talker():
         marker_.pose.position.y = right_coords[0] / 1000
         marker_.pose.position.z = right_coords[2] / 1000
 
+        time.sleep(0.02)
+
+        marker_.pose.position.x = waist_coords[1] / 1000 * -1
+        
         marker_.color.a = 1.0
         marker_.color.r = 0.0
         marker_.color.g = 1.0

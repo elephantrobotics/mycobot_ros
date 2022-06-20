@@ -12,7 +12,7 @@ mb = MyBuddy(port, baud)
 # mb.set_free_mode(2)
 # mb.power_on()
 # mb.release_all_servos()
-# mb.set_servo_calibration(1,4)
+# mb.set_servo_calibration(3,1)
 
 # i = 1
 # while i < 7:
@@ -23,7 +23,7 @@ mb = MyBuddy(port, baud)
 '''
 ------------get info--------------
 '''
-# print(mb.get_radians(2))
+# print(mb.get_radians(1))
 # print(mb.get_encoders(3))
 # print(mb.get_encoder(1,1))
 # print(mb.get_angles(1))
@@ -40,5 +40,5 @@ mb = MyBuddy(port, baud)
 # print(mb.get_angles(2))
 # mb.send_angles(1,[0,0,0,0,0,0],30,0)
 # mb.send_angle(1,3,30,30)
-# mb.set_encoder()
+# mb.set_encoder(3,1,2048,1)
 time.sleep(1)
