@@ -21,10 +21,10 @@ class Listener(object):
         rospy.spin()
 
     def callback(self, data):
-        """`mycobot/angles_real` subscriber callback method.
+        """`mypal260/angles_real` subscriber callback method.
 
         Args:
-            data (MycobotAngles): callback argument.
+            data (MypalAngles): callback argument.
         """
         # ini publisher object.
         #  初始化发布者对象
@@ -49,6 +49,7 @@ class Listener(object):
             data.joint_1 * (math.pi / 180),
             data.joint_2 * (math.pi / 180),
             data.joint_3 * (math.pi / 180),
+            0,
             data.joint_4 * (math.pi / 180),
             # data.joint_5 * (math.pi / 180),
             # data.joint_6 * (math.pi / 180),
