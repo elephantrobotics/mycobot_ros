@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>mycobot_ai</name>
+  <name>mechArm_270</name>
   <version>0.0.0</version>
-  <description>The mycobot_ai package</description>
+  <description>The mechArm_270 package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -49,9 +49,9 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>mycobot_280</build_depend>
-  <build_export_depend>mycobot_280</build_export_depend>
-  <exec_depend>mycobot_280</exec_depend>
+  <build_depend>mecharm_pi</build_depend>
+  <build_export_depend>mecharm_pi</build_export_depend>
+  <exec_depend>mecharm_pi</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
