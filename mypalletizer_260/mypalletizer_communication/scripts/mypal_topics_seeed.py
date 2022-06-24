@@ -70,8 +70,8 @@ class MypalTopics(object):
         rospy.init_node("Mypal_topics")
         rospy.loginfo("start ...")
         # problem
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        port = rospy.get_param("~port", "/dev/ttyAMA0")
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyPalletizer(port,baud)
         self.lock = threading.Lock()

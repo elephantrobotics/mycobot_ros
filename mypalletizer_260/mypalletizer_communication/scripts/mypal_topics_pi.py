@@ -1,14 +1,12 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 import time
 import os
 import sys
 import signal
 import threading
-
 import rospy
 from pymycobot.mypalletizer import MyPalletizer
-
 from mypalletizer_communication.msg import(
     MypalAngles,
     MypalCoords,
@@ -17,6 +15,8 @@ from mypalletizer_communication.msg import(
     MypalGripperStatus,
     MypalPumpStatus,
 )
+
+# from pymycobot import MyCobotSocket
 
 
 class Watcher:
@@ -38,7 +38,8 @@ class Watcher:
     def __init__(self):
         """Creates a child thread, which returns.  The parent
         thread waits for a KeyboardInterrupt and then kills
-        the child thread.
+        the child thread.创建一个返回的子线程。 父线程等待 KeyboardInterrupt 
+        然后杀死子线程。
         """
         self.child = os.fork()
         if self.child == 0:
@@ -67,12 +68,16 @@ class MypalTopics(object):
     def __init__(self):
         super(MypalTopics, self).__init__()
 
-        rospy.init_node("Mypal_topics")
+        rospy.init_node("mypal_topics_pi")
         rospy.loginfo("start ...")
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        # problem
+        port = rospy.get_param("~port", "/dev/ttyAMA0")
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
+        # self.mc = MyCobotSocket(port, baud) # port
         self.mc = MyPalletizer(port, baud)
+        # self.mc.connect()   #pi
+
         self.lock = threading.Lock()
 
     def start(self):
@@ -106,8 +111,7 @@ class MypalTopics(object):
     def pub_real_angles(self):
         """Publish real angle"""
         """发布真实角度"""
-        pub = rospy.Publisher("Mypal/angles_real",
-                              MypalAngles, queue_size=5)
+        pub = rospy.Publisher("mypal/angles_real", MypalAngles, queue_size=5)
         ma = MypalAngles()
         while not rospy.is_shutdown():
             self.lock.acquire()
@@ -126,8 +130,7 @@ class MypalTopics(object):
     def pub_real_coords(self):
         """publish real coordinates"""
         """发布真实坐标"""
-        pub = rospy.Publisher("Mypal/coords_real",
-                              MypalCoords, queue_size=5)
+        pub = rospy.Publisher("mypal/coords_real", MypalCoords, queue_size=5)
         ma = MypalCoords()
 
         while not rospy.is_shutdown():
@@ -153,14 +156,14 @@ class MypalTopics(object):
                 data.joint_2,
                 data.joint_3,
                 data.joint_4,
-                # data.joint_5,
+                data.joint_5,
                 # data.joint_6,
             ]
             sp = int(data.speed)
             self.mc.send_angles(angles, sp)
 
         sub = rospy.Subscriber(
-            "Mypal/angles_goal", MypalSetAngles, callback=callback
+            "mypal/angles_goal", MypalSetAngles, callback=callback
         )
         rospy.spin()
 
@@ -174,7 +177,7 @@ class MypalTopics(object):
             self.mc.send_coords(angles, sp, model)
 
         sub = rospy.Subscriber(
-            "Mypal/coords_goal", MypalSetCoords, callback=callback
+            "mypal/coords_goal", MypalSetCoords, callback=callback
         )
         rospy.spin()
 
@@ -188,7 +191,7 @@ class MypalTopics(object):
                 self.mc.set_gripper_state(1, 80)
 
         sub = rospy.Subscriber(
-            "Mypal/gripper_status", MypalGripperStatus, callback=callback
+            "mypal/gripper_status", MypalGripperStatus, callback=callback
         )
         rospy.spin()
 
@@ -202,10 +205,9 @@ class MypalTopics(object):
                 self.mc.set_basic_output(data.Pin2, 1)
 
         sub = rospy.Subscriber(
-            "Mypal/pump_status", MypalPumpStatus, callback=callback
+            "mypal/pump_status", MypalPumpStatus, callback=callback
         )
         rospy.spin()
-
 
 if __name__ == "__main__":
     Watcher()
