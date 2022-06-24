@@ -3,6 +3,15 @@
 	
 <xacro:property name="width" value=".2" />
 
+ <!-- <link name="env">
+    <visual>
+      <geometry>
+
+        <mesh filename="package://mycobot_description/urdf/260_pi/suit_env.dae"/>
+      </geometry>
+      <origin xyz = "0 0 -0.02 " rpy = "1.5708 0 -1.5708"/>
+    </visual>
+  </link> -->
 
   <link name="base">
     <visual>
@@ -151,7 +160,14 @@
     <child link="link5"/>
     <origin xyz= " 0.044 0 0" rpy = "  1.5707963 0 0 "/>  
     <!-- <origin xyz= " 0.178 0 -0.005" rpy = "  -1.5707963 0 0 "/>   -->
-
   </joint>
 
+  <!-- <joint name="vision_joint" type="fixed">
+    <axis xyz="0 0 0"/>
+    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <parent link="base"/>
+    <child link="env"/>
+    <origin xyz= "0 0 0" rpy = "0 0 0"/>
+  </joint> -->
+  
 </robot>
