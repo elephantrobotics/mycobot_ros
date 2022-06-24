@@ -9,7 +9,7 @@ import threading
 import rospy
 from pymycobot.mypalletizer import MyPalletizer
 
-from mypalletizer_communication.msg import(
+from mypalletizer_communication import(
     MypalAngles,
     MypalCoords,
     MypalSetAngles,
