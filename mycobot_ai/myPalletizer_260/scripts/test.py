@@ -116,11 +116,11 @@ mc = MyPalletizer("/dev/ttyAMA0", 1000000)
 # print(mc.get_angles())
 # print(mc.get_coords())
 
-mc.release_all_servos()
-while True:
-    print("angles:%s"%mc.get_angles())
-    print("coords:%s"%mc.get_coords())
-    print("\n")
+# mc.release_all_servos()
+# while True:
+#     print("angles:%s"%mc.get_angles())
+#     print("coords:%s"%mc.get_coords())
+#     print("\n")
 
 # mc.set_servo_calibration(1)
 # mc.set_servo_calibration(2)

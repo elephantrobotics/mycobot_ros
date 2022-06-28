@@ -13,7 +13,7 @@
 		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
 	</node>
 
-	<!-- mycobot-topics -->
+	<!-- mypalletizer-topics -->
     <include file="$(find mypalletizer_communication)/launch/communication_topic_pi.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	

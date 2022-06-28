@@ -144,15 +144,13 @@ class Object_detect(Movement):
     def move(self, x, y, color):
         # send Angle to move mypal260
         print(color)
-        # self.pub_angles(self.move_angles[0], 20)
         self.mc.send_angles(self.move_angles[0], 20)
-        # print("move_angles\n")
         time.sleep(3)
 
         # send coordinates to move mypal260
-        self.mc.send_coords([x, y, 160, -82.17], 20, 2)
+        self.mc.send_coords([x, y, 160, -82.17], 20, 0)
         time.sleep(1.5)
-        self.mc.send_coords([x, y, 99, -82.17], 20, 1)
+        self.mc.send_coords([x, y, 90, -82.17], 20, 0)
         time.sleep(1.5)
 
         # open pump
@@ -160,11 +158,11 @@ class Object_detect(Movement):
             self.gpio_status(True)
         else:
             self.pub_pump(True, self.Pin)
-        time.sleep(0.5)
+        time.sleep(1.5)
 
         self.mc.send_angle(2, 0, 20)
         time.sleep(0.3)
-        self.mc.send_angle(3, -18, 20)
+        self.mc.send_angle(3, -5, 20)
         time.sleep(2)
 
         # self.pub_angles(self.move_angles[2], 20)
@@ -182,7 +180,7 @@ class Object_detect(Movement):
         # self.pub_marker(
         #     self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
 
-        self.mc.send_coords(self.move_coords[color], 20, 1)
+        self.mc.send_coords(self.move_coords[color], 20, 0)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(3)
@@ -228,7 +226,7 @@ class Object_detect(Movement):
     # draw aruco
     def draw_marker(self, img, x, y):
         # draw rectangle on img
-        cv2.rectangle(
+        cv2.rectangle( 
             img,
             (x - 20, y - 20),
             (x + 20, y + 20),
@@ -371,7 +369,6 @@ class Object_detect(Movement):
             return x, y
         else:
             return None
-
 
 if __name__ == "__main__":
 
