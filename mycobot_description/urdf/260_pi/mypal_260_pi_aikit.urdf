@@ -3,15 +3,14 @@
 	
 <xacro:property name="width" value=".2" />
 
- <!-- <link name="env">
+ <link name="env">
     <visual>
       <geometry>
-
-        <mesh filename="package://mycobot_description/urdf/260_pi/suit_env.dae"/>
+        <mesh filename="package://mycobot_description/urdf/260_pi/suit_env.dae" scale="1.2 1.2 1.2"/>
       </geometry>
       <origin xyz = "0 0 -0.02 " rpy = "1.5708 0 -1.5708"/>
     </visual>
-  </link> -->
+  </link>
 
   <link name="base">
     <visual>
@@ -20,7 +19,7 @@
        <mesh filename="package://mycobot_description/urdf/260_pi/base.dae"/>
       </geometry>
       <!-- <origin xyz = " 0 -0.28 0.051 " rpy = " 1.5707963 0 1.5707963"/> -->
-         <origin xyz = " 0 0 0 " rpy = " 0 0 3.1415926"/>
+      <origin xyz = " 0 0 0 " rpy = " 0 0 3.1415926"/>
     </visual>
     <collision>
       <geometry>
@@ -127,7 +126,6 @@
     <origin xyz= "0 0 0.12" rpy = "0 0 0"/>  
   </joint>
 
-
   <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-0.014" upper = "1.49" velocity = "0"/>
@@ -135,7 +133,6 @@
     <child link="link2"/>
     <origin xyz= "0 0 0.0" rpy = " -1.5707963 0 0 "/>  
   </joint>
-
 
   <joint name="joint3_to_joint2" type="revolute">
     <axis xyz=" 0 0 1"/>
@@ -162,12 +159,11 @@
     <!-- <origin xyz= " 0.178 0 -0.005" rpy = "  -1.5707963 0 0 "/>   -->
   </joint>
 
-  <!-- <joint name="vision_joint" type="fixed">
+  <joint name="vision_joint" type="fixed">
     <axis xyz="0 0 0"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="base"/>
     <child link="env"/>
     <origin xyz= "0 0 0" rpy = "0 0 0"/>
-  </joint> -->
-  
+  </joint>
 </robot>
