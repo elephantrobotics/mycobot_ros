@@ -1,9 +1,9 @@
 <launch>
-	<arg name="port" default="/dev/ttyUSB0" />
-	<arg name="baud" default="115200" />
+	<arg name="port" default="/dev/ttyAMA0" />
+	<arg name="baud" default="1000000" />
 
 	<!-- Open communication service -->
-	<node name="mycobot_services" pkg="mycobot_communication" type="mycobot_topics_pi.py" output="screen">
+	<node name="mypalletizer_services" pkg="mypalletizer_communication" type="mypal_topics_pi.py" output="screen">
 		<param name="port" type="string" value="$(arg port)" />
 		<param name="baud" type="int" value="$(arg baud)" />
     	</node>
