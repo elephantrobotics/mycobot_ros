@@ -100,8 +100,8 @@ mc = MyPalletizer("/dev/ttyAMA0", 1000000)
 # mc.send_angles([-47.1, 10.19, -10.1, -76.37],25) # above the red bucket; coords:[127.3, -137.1, 219.2, -29.26]
 # time.sleep(1.5)
 
-# mc.send_angles([0,0,-15,0],25)
-# time.sleep(2)
+mc.send_angles([0,0,0,0],25)
+time.sleep(2)
 
 # mc.send_coords([141.2, -142.0, 206.2, -26.8],25,1) # above the red bucket
 # time.sleep(2)
@@ -116,12 +116,12 @@ mc = MyPalletizer("/dev/ttyAMA0", 1000000)
 # print(mc.get_angles())
 # print(mc.get_coords())
 
-# mc.release_all_servos()
 # while True:
 #     print("angles:%s"%mc.get_angles())
 #     print("coords:%s"%mc.get_coords())
 #     print("\n")
 
+# mc.release_all_servos()
 # mc.set_servo_calibration(1)
 # mc.set_servo_calibration(2)
 # mc.set_servo_calibration(3)

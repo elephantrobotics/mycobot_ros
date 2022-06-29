@@ -148,9 +148,9 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # send coordinates to move mypal260
-        self.mc.send_coords([x, y, 160, -82.17], 20, 0)
+        self.mc.send_coords([x, y, 160, 0], 20, 0) # -82.17
         time.sleep(1.5)
-        self.mc.send_coords([x, y, 90, -82.17], 20, 0)
+        self.mc.send_coords([x, y, 90, 0], 20, 0)
         time.sleep(1.5)
 
         # open pump
@@ -162,28 +162,13 @@ class Object_detect(Movement):
 
         self.mc.send_angle(2, 0, 20)
         time.sleep(0.3)
-        self.mc.send_angle(3, -5, 20)
+        self.mc.send_angle(3, -15, 20)
         time.sleep(2)
 
-        # self.pub_angles(self.move_angles[2], 20)
-        # time.sleep(3)
-        # self.pub_marker(
-        #     self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
-
-        # self.pub_angles(self.move_angles[1], 20)
-        # time.sleep(1.5)
-        # self.pub_marker(
-        #     self.move_coords[3][0]/1000.0, self.move_coords[3][1]/1000.0, self.move_coords[3][2]/1000.0)
-
-        # self.pub_angles(self.move_angles[0], 20)
-        # time.sleep(2)
-        # self.pub_marker(
-        #     self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
-
-        self.mc.send_coords(self.move_coords[color], 20, 0)
+        self.mc.send_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
-        time.sleep(3)
+        time.sleep(4.5)
 
         # close pump
         if self.raspi:
@@ -201,7 +186,7 @@ class Object_detect(Movement):
 
         # self.pub_angles(self.move_angles[0], 20)
         self.mc.send_angles(self.move_angles[1], 20)
-        time.sleep(3)
+        time.sleep(1.5)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
