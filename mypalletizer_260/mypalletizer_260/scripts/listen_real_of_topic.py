@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 import math
-
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
@@ -11,7 +11,6 @@ from mypalletizer_communication.msg import MypalAngles
 class Listener(object):
     def __init__(self):
         super(Listener, self).__init__()
-
         rospy.loginfo("start ...")
         rospy.init_node("real_listener_1", anonymous=True)
         # init publisher. 初始化发布者

@@ -5,11 +5,10 @@ import os
 import sys
 import signal
 import threading
-
 import rospy
 from pymycobot.mypalletizer import MyPalletizer
 
-from mypalletizer_communication import(
+from mypalletizer_communication.msg import(
     MypalAngles,
     MypalCoords,
     MypalSetAngles,
@@ -129,7 +128,6 @@ class MypalTopics(object):
         pub = rospy.Publisher("Mypal/coords_real",
                               MypalCoords, queue_size=5)
         ma = MypalCoords()
-
         while not rospy.is_shutdown():
             self.lock.acquire()
             coords = self.mc.get_coords()
@@ -153,7 +151,7 @@ class MypalTopics(object):
                 data.joint_2,
                 data.joint_3,
                 data.joint_4,
-                # data.joint_5,
+                data.joint_5,
                 # data.joint_6,
             ]
             sp = int(data.speed)
@@ -168,7 +166,6 @@ class MypalTopics(object):
         def callback(data):
             # angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             angles = [data.x, data.y, data.z, data.rx]
-
             sp = int(data.speed)
             model = int(data.model)
             self.mc.send_coords(angles, sp, model)
