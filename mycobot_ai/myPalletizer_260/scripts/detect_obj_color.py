@@ -31,7 +31,6 @@ class Object_detect(Movement):
 
         # 移动角度
         self.move_angles = [
-            # [-20.74, -5.53, -12.39, -76.81],  # init the point
             [0, 0, 0, 0],  # init the point
             [-29.0, 5.88, -4.92, -76.28],  # point to grab
             [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
@@ -184,7 +183,6 @@ class Object_detect(Movement):
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
 
-        # self.pub_angles(self.move_angles[0], 20)
         self.mc.send_angles(self.move_angles[1], 20)
         time.sleep(1.5)
 
@@ -202,10 +200,13 @@ class Object_detect(Movement):
 
     # init mypal260
     def run(self):
-        self.mc = MyPalletizer("/dev/ttyAMA0",1000000) # ok
+        if "dev" in self.robot_m5:
+            self.mc = MyPalletizer(self.robot_m5,115200) 
+        if "dev" in self.robot_raspi:
+            self.mc = MyPalletizer(self.robot_raspi,1000000) 
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20) # ok
+        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20) 
         time.sleep(3)
 
     # draw aruco

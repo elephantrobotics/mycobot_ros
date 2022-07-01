@@ -1,8 +1,6 @@
 # encoding:utf-8
 #!/usr/bin/env python2
-
 from multiprocessing import Process, Pipe
-
 from cgi import parse
 from difflib import restore
 # import queue
