@@ -406,7 +406,7 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/' + folder
+    path = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280' + folder
     for i, j, k in os.walk(path):
         for l in k:
             restore.append(cv2.imread(folder + '/{}'.format(l)))
@@ -594,7 +594,7 @@ def run():
                 detect.sum_y1 += y1
                 detect.sum_y2 += y2
                 nparams += 1
-                print "ok"
+                print ("ok")
                 continue
         elif nparams == 10:
             nparams += 1
