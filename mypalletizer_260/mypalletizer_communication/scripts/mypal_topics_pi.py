@@ -16,8 +16,6 @@ from mypalletizer_communication.msg import(
     MypalPumpStatus,
 )
 
-# from pymycobot import MyCobotSocket
-
 
 class Watcher:
     """this class solves two problems with multithreaded
@@ -171,7 +169,6 @@ class MypalTopics(object):
         def callback(data):
             # angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             angles = [data.x, data.y, data.z, data.rx]
-
             sp = int(data.speed)
             model = int(data.model)
             self.mc.send_coords(angles, sp, model)

@@ -1,6 +1,8 @@
 # encoding:utf-8
 #!/usr/bin/env python2
+
 from multiprocessing import Process, Pipe
+
 from cgi import parse
 from difflib import restore
 # import queue
@@ -28,7 +30,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x= 160, camera_y = 10):
+    def __init__(self, camera_x = 160, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -142,34 +144,26 @@ class Object_detect(Movement):
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mycobot
+        # send Angle to move mypal260
         self.mc.send_angles(self.move_angles[0], 20)
-        # self.pub_angles(self.move_angles[0], 20)
-        # time.sleep(1.5)
-        # self.pub_angles(self.move_angles[1], 20)
-        # time.sleep(1.5)
-        # self.pub_angles(self.move_angles[2], 20)
-        # time.sleep(1.5)
+        time.sleep(3)
         
-        # send coordinates to move mycobot 根据不同底板机械臂，调整吸泵高度
-        # self.pub_coords([x, y, 165, -178.9, -1.57, -66], 20, 1)
-        self.mc.send_coords([x, y, 160, -82.17], 20, 2)
-        time.sleep(2.5)
-        # self.pub_coords([x, y, 90, -178.9, -1.57, -66], 25, 1)
-        self.mc.send_coords([x, y, 90, -82.17], 20, 1)
+        # send coordinates to move mypal260 根据不同底板机械臂，调整吸泵高度
+        self.mc.send_coords([x, y, 160, 0], 20, 0)
+        time.sleep(1.5)
+        self.mc.send_coords([x, y, 90, 0], 20, 0)
         time.sleep(1.5)
 
         # open pump
         self.gpio_status(True)
-        time.sleep(0.5)
+        time.sleep(1.5)
 
         self.mc.send_angle(2, 0, 20)
         time.sleep(0.3)
-        self.mc.send_angle(3, -18, 20)
+        self.mc.send_angle(3, -15, 20)
         time.sleep(2)
 
         print(self.move_coords[color])
-        # self.pub_coords(self.move_coords[color], 20, 1)
 
         self.mc.send_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0] / 1000.0,
@@ -179,10 +173,10 @@ class Object_detect(Movement):
 
         # close pump
         self.gpio_status(False)
-        time.sleep(4)
+        time.sleep(3)
 
         self.mc.send_angles(self.move_angles[1], 20)
-        time.sleep(3)
+        time.sleep(1.5)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
@@ -490,8 +484,8 @@ def run():
     res_queue = [[], [], [], []]
     res_queue[0] = parse_folder('res/red')
     res_queue[1] = parse_folder('res/green')
-    res_queue[2] = parse_folder('res/gray')
-    res_queue[3] = parse_folder('res/blue')
+    res_queue[2] = parse_folder('res/blue')
+    res_queue[3] = parse_folder('res/gray')
 
     # res_queue = []
     # res_queue.extend(parse_folder('res/red'))

@@ -8,7 +8,7 @@ import time
 import json
 import os,sys
 import rospy
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import Marker   
 from pymycobot.mypalletizer import MyPalletizer
 from moving_utils import Movement
 
@@ -147,7 +147,7 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # send coordinates to move mypal260
-        self.mc.send_coords([x, y, 160, 0], 20, 0) # -82.17
+        self.mc.send_coords([x, y, 160, 0], 20, 0)
         time.sleep(1.5)
         self.mc.send_coords([x, y, 90, 0], 20, 0)
         time.sleep(1.5)
@@ -167,14 +167,14 @@ class Object_detect(Movement):
         self.mc.send_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
-        time.sleep(4.5)
-
+        time.sleep(3)
+       
         # close pump
         if self.raspi:
             self.gpio_status(False)
         else:
             self.pub_pump(False, self.Pin)
-        time.sleep(4)
+        time.sleep(6)
 
         if color == 1:
             self.pub_marker(
@@ -183,6 +183,7 @@ class Object_detect(Movement):
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
 
+        # self.pub_angles(self.move_angles[0], 20)
         self.mc.send_angles(self.move_angles[1], 20)
         time.sleep(1.5)
 
@@ -200,13 +201,10 @@ class Object_detect(Movement):
 
     # init mypal260
     def run(self):
-        if "dev" in self.robot_m5:
-            self.mc = MyPalletizer(self.robot_m5,115200) 
-        if "dev" in self.robot_raspi:
-            self.mc = MyPalletizer(self.robot_raspi,1000000) 
+        self.mc = MyPalletizer("/dev/ttyAMA0",1000000) # ok
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20) 
+        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20) # ok
         time.sleep(3)
 
     # draw aruco

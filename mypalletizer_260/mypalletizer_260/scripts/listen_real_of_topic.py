@@ -23,7 +23,7 @@ class Listener(object):
         """`mypal260/angles_real` subscriber callback method.
 
         Args:
-            data (MypalAngles): callback argument.
+            data (mypalAngles): callback argument.
         """
         # ini publisher object.
         #  初始化发布者对象
