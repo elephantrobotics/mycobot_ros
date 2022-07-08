@@ -1,13 +1,13 @@
 <launch>
 	<!-- Select connecting device and serial port ，选择连接设备及串口-->
-	<arg name="port" default="/dev/ttyAMA0" />
-	<arg name="baud" default="1000000" />
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
 
 	<!-- Load file model ，加载文件模型-->
 	<!-- <arg name="model" default="$(find mycobot_description)/urdf/260_urdf/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" /> -->
-	<arg name="model" default="$(find mycobot_description)/urdf/mecharm_pi/mecharm_pi.urdf"/>
-	<arg name="rvizconfig" default="$(find mecharm_pi)/config/mecharm_pi.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/mecharm/mecharm_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find mecharm)/config/mecharm.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -24,5 +24,5 @@
     </include>
 
 	<!-- listen and pub the real angles ，监听并发布真实话题-->
-	<node name="real_listener" pkg="mecharm_pi" type="listen_real.py" />
+	<node name="real_listener" pkg="mecharm" type="listen_real.py" />
 </launch>
