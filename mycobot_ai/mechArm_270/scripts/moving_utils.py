@@ -24,8 +24,8 @@ class Movement(object):
 		self.coords.y = item[1]
 		self.coords.z = item[2]
 		self.coords.rx = item[3]
-		self.coords.ry = item[4]
-		self.coords.rz = item[5]
+		# self.coords.ry = item[4]
+		# self.coords.rz = item[5]
 		self.coords.speed = sp
 		self.coords.model = m
 		self.coord_pub.publish(self.coords)
@@ -36,8 +36,8 @@ class Movement(object):
 		self.angles.joint_2 = item[1]
 		self.angles.joint_3 = item[2]
 		self.angles.joint_4 = item[3]
-		self.angles.joint_5 = item[4]
-		self.angles.joint_6 = item[5]
+		# self.angles.joint_5 = item[4]
+		# self.angles.joint_6 = item[5]
 		self.angles.speed = sp
 		self.angle_pub.publish(self.angles)
 

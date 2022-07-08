@@ -1,16 +1,17 @@
-# encoding:utf-8
+# -*- coding:utf-8 -*- 
 #!/usr/bin/env python2
-
+from operator import imod
 from tokenize import Pointfloat
 import cv2
 import numpy as np
 import time
 import json
-import os
+import os,sys
 import rospy
-from visualization_msgs.msg import Marker
-
+from visualization_msgs.msg import Marker   
+from pymycobot.mypalletizer import MyPalletizer
 from moving_utils import Movement
+
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"
@@ -19,27 +20,30 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x=150, camera_y=-10):
+    def __init__(self, camera_x = 160, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
+
+        # declare mypal260
+        self.mc = None
+
         # 移动角度
         self.move_angles = [
-            [-7.11, -6.94, -55.01, -24.16, 0, 15],  # init the point
-            [5, -10.63, -87.8, 9.05, -3.07, 15],  # point to grab
+            [0, 0, 0, 0],  # init the point
+            [-29.0, 5.88, -4.92, -76.28],  # point to grab
             [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
+
         # 移动坐标
         self.move_coords = [
-            [120.1, -141.6, 240.9, -173.34, -8.15, -110.11],  # above the red bucket
-            # above the yello bucket
-            #[215.2, -127.8, 260.9, -157.51, -17.5, -71.18],
-            [210.6, -130.5, 263.0, -150.99, -0.07, -107.35],
-            [209.7, -18.6, 230.4, -168.48, -9.86, -39.38],
-            [196.9, -64.7, 232.6, -166.66, -9.44, -52.47],
-            [126.6, -118.1, 305.0, -157.57, -13.72, -75.3],
+            [141.2, -142.0, 210, -26.8],  # above the red bucket
+            [234.3, -120, 210, -48.77], # above the green bucket
+            [100.9, 159.3, 248.6, -124.27], # above the blue bucket
+            [-17.6, 161.6, 238.4, -152.31], # above the gray bucket         
         ]
+
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
@@ -80,11 +84,11 @@ class Object_detect(Movement):
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
-        # use to calculate coord between cube and mycobot
+        # use to calculate coord between cube and mypal260
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
-        # The coordinates of the grab center point relative to the mycobot
+        # The coordinates of the grab center point relative to the mypal260
         self.camera_x, self.camera_y = camera_x, camera_y
-        # The coordinates of the cube relative to the mycobot
+        # The coordinates of the cube relative to the mypal260
         self.c_x, self.c_y = 0, 0
         # The ratio of pixels to actual values
         self.ratio = 0
@@ -137,65 +141,54 @@ class Object_detect(Movement):
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mycobot
-        print color
-        self.pub_angles(self.move_angles[0], 20)
+        # send Angle to move mypal260
+        print(color)
+        self.mc.send_angles(self.move_angles[0], 20)
+        time.sleep(3)
+
+        # send coordinates to move mypal260
+        self.mc.send_coords([x, y, 160, 0], 20, 0)
         time.sleep(1.5)
-        self.pub_angles(self.move_angles[1], 20)
+        self.mc.send_coords([x, y, 90, 0], 20, 0)
         time.sleep(1.5)
-        self.pub_angles(self.move_angles[2], 20)
-        time.sleep(1.5)
-        # send coordinates to move mycobot
-        self.pub_coords([x, y, 165,  -178.9, -1.57, -25.95], 20, 1)
-        time.sleep(1.5)
-        
-        self.pub_coords([x, y, 80,  -178.9, -1.57, -25.95], 20, 1)
-        
-        time.sleep(1)
+
         # open pump
         if self.raspi:
             self.gpio_status(True)
         else:
             self.pub_pump(True, self.Pin)
-        time.sleep(0.5)
-        self.pub_angles(self.move_angles[2], 20)
-        time.sleep(3)
-        self.pub_marker(
-            self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
-
-        self.pub_angles(self.move_angles[1], 20)
         time.sleep(1.5)
-        self.pub_marker(
-            self.move_coords[3][0]/1000.0, self.move_coords[3][1]/1000.0, self.move_coords[3][2]/1000.0)
 
-        self.pub_angles(self.move_angles[0], 20)
+        self.mc.send_angle(2, 0, 20)
+        time.sleep(0.3)
+        self.mc.send_angle(3, -15, 20)
         time.sleep(2)
-        self.pub_marker(
-            self.move_coords[4][0]/1000.0, self.move_coords[4][1]/1000.0, self.move_coords[4][2]/1000.0)
 
-        self.pub_coords(self.move_coords[color], 20, 1)
+        self.mc.send_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
-        time.sleep(2)
+        time.sleep(3)
+       
         # close pump
         if self.raspi:
             self.gpio_status(False)
         else:
             self.pub_pump(False, self.Pin)
-        time.sleep(1)
+        time.sleep(6)
+
         if color == 1:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
         elif color == 0:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
-        self.pub_angles(self.move_angles[0], 20)
-        time.sleep(3)
+
+        # self.pub_angles(self.move_angles[0], 20)
+        self.mc.send_angles(self.move_angles[1], 20)
+        time.sleep(1.5)
 
     # decide whether grab cube
-
     def decide_move(self, x, y, color):
-
         print(x, y, self.cache_x, self.cache_y)
         # detect the cube status move or run
         if (abs(x - self.cache_x) + abs(y - self.cache_y)) / 2 > 5:  # mm
@@ -204,24 +197,20 @@ class Object_detect(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            
-            
             self.move(x,y, color)
 
-    # init mycobot
+    # init mypal260
     def run(self):
+        self.mc = MyPalletizer("/dev/ttyAMA0",1000000) # ok
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-        for _ in range(5):
-            self.pub_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
-            print(_)
-            time.sleep(0.5)
+        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20) # ok
+        time.sleep(3)
 
     # draw aruco
-
     def draw_marker(self, img, x, y):
         # draw rectangle on img
-        cv2.rectangle(
+        cv2.rectangle( 
             img,
             (x - 20, y - 20),
             (x + 20, y + 20),
@@ -269,13 +258,13 @@ class Object_detect(Movement):
         self.y2 = int(y2)
         print(self.x1, self.y1, self.x2, self.y2)
 
-    # set parameters to calculate the coords between cube and mycobot
+    # set parameters to calculate the coords between cube and mypal260
     def set_params(self, c_x, c_y, ratio):
         self.c_x = c_x
         self.c_y = c_y
         self.ratio = 220.0/ratio
 
-    # calculate the coords between cube and mycobot
+    # calculate the coords between cube and mypal260
     def get_position(self, x, y):
         return ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
 
@@ -284,7 +273,6 @@ class Object_detect(Movement):
     Enlarge the video pixel by 1.5 times, which means enlarge the video size by 1.5 times.
     If two ARuco values have been calculated, clip the video.
     """
-
     def transform_frame(self, frame):
         # enlarge the image by 1.5 times
         fx = 1.5
@@ -302,21 +290,30 @@ class Object_detect(Movement):
         # set the arrangement of color'HSV
         x = y = 0
         for mycolor, item in self.HSV.items():
+            # print("mycolor:",mycolor)
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
+
             # transfrom the img to model of gray
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            # print("hsv",hsv)
+
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
+
             # a etching operation on a picture to remove edge roughness
             erosion = cv2.erode(mask, np.ones((1, 1), np.uint8), iterations=2)
+
             # the image for expansion operation, its role is to deepen the color depth in the picture
             dilation = cv2.dilate(erosion, np.ones(
                 (1, 1), np.uint8), iterations=2)
+
             # adds pixels to the image
             target = cv2.bitwise_and(img, img, mask=dilation)
+
             # the filtered image is transformed into a binary image and placed in binary
             ret, binary = cv2.threshold(dilation, 127, 255, cv2.THRESH_BINARY)
+
             # get the contour coordinates of the image, where contours is the coordinate value, here only the contour is detected
             contours, hierarchy = cv2.findContours(
                 dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -341,33 +338,35 @@ class Object_detect(Movement):
                     cv2.rectangle(img, (x, y), (x+w, y+h), (153, 153, 0), 2)
                     # calculate the rectangle center
                     x, y = (x*2+w)/2, (y*2+h)/2
-                    # calculate the real coordinates of mycobot relative to the target
-                    if mycolor == "yellow":
-                        self.color = 1
-                    elif mycolor == "red":
+                    # calculate the real coordinates of mypal260 relative to the target
+                    
+                    if mycolor == "red":
                         self.color = 0
-                    else:
+                    elif mycolor == "green":
                         self.color = 1
+                    elif mycolor == "cyan":
+                        self.color = 2
+                    else:
+                        self.color = 3
 
         if abs(x) + abs(y) > 0:
             return x, y
         else:
             return None
 
-
 if __name__ == "__main__":
+
     # open the camera
     cap_num = 0
     cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
-
     if not cap.isOpened():
         cap.open()
     # init a class of Object_detect
     detect = Object_detect()
-    # init mycobot
+    # init mypal260
     detect.run()
 
-    _init_ = 20  #
+    _init_ = 20  
     init_num = 0
     nparams = 0
     num = 0
@@ -377,10 +376,10 @@ if __name__ == "__main__":
         _, frame = cap.read()
         # deal img
         frame = detect.transform_frame(frame)
-
         if _init_ > 0:
             _init_ -= 1
             continue
+
         # calculate the parameters of camera clipping
         if init_num < 20:
             if detect.get_calculate_params(frame) is None:
@@ -407,7 +406,7 @@ if __name__ == "__main__":
             init_num += 1
             continue
 
-        # calculate params of the coords between cube and mycobot
+        # calculate params of the coords between cube and mypal260
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
                 cv2.imshow("figure", frame)
@@ -424,14 +423,14 @@ if __name__ == "__main__":
                 continue
         elif nparams == 10:
             nparams += 1
-            # calculate and set params of calculating real coord between cube and mycobot
+            # calculate and set params of calculating real coord between cube and mypal260
             detect.set_params(
                 (detect.sum_x1+detect.sum_x2)/20.0,
                 (detect.sum_y1+detect.sum_y2)/20.0,
                 abs(detect.sum_x1-detect.sum_x2)/10.0 +
                 abs(detect.sum_y1-detect.sum_y2)/10.0
             )
-            print "ok"
+            print("ok")
             continue
 
         # get detect result
@@ -441,7 +440,7 @@ if __name__ == "__main__":
             continue
         else:
             x, y = detect_result
-            # calculate real coord between cube and mycobot
+            # calculate real coord between cube and mypal260
             real_x, real_y = detect.get_position(x, y)
             if num == 20:
                 detect.pub_marker(real_sx/20.0/1000.0, real_sy/20.0/1000.0)
@@ -454,3 +453,9 @@ if __name__ == "__main__":
                 real_sx += real_x
 
         cv2.imshow("figure", frame)
+
+        # close the window
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+            sys.exit()
