@@ -20,7 +20,7 @@ from threading import Thread
 import tkFileDialog as filedialog
 import Tkinter as tk
 from moving_utils import Movement
-from pymycobot.mypalletizer import MyPalletizer
+from pymycobot.mycobot import MyCobot
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
@@ -28,7 +28,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = 10):
+    def __init__(self, camera_x = 145, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -38,17 +38,16 @@ class Object_detect(Movement):
         self.mc = None
         # 移动角度
         self.move_angles = [
-            [0, 0, 0, 0],  # init the point
-            [-29.0, 5.88, -4.92, -76.28],  # point to grab
-            [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
+            [0, 0, 0, 0, 90, 0],  # point to grab 
+            [-33.31, 2.02, -10.72, -0.08, 95, -54.84],  # init the point
         ]
 
         # 移动坐标
         self.move_coords = [
-            [141.2, -142.0, 210, -26.8],  # above the red bucket
-            [234.3, -120, 210, -48.77], # above the green bucket
-            [100.9, 159.3, 248.6, -124.27], # above the blue bucket
-            [-17.6, 161.6, 238.4, -152.31], # above the gray bucket  
+            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
+            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
+            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
+            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
         ]
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
@@ -176,15 +175,16 @@ class Object_detect(Movement):
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mypal260
-        self.mc.send_angles(self.move_angles[0], 20)
-        time.sleep(3)
+        # send Angle to move 270
+        self.mc.send_angles(self.move_angles[0], 30)
+        time.sleep(4)
         
-        # send coordinates to move mypal260 根据不同底板机械臂，调整吸泵高度
-        self.mc.send_coords([x, y, 160, 0], 20, 0)
-        time.sleep(1.5)
-        self.mc.send_coords([x, y, 90, 0], 20, 0)
-        time.sleep(1.5)
+        # send coordinates to move 270 根据不同底板机械臂，调整吸泵高度
+        self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
+        time.sleep(4)
+        
+        self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
+        time.sleep(4)
 
         # open pump
         if "dev" in self.robot_m5:
@@ -193,12 +193,20 @@ class Object_detect(Movement):
             self.gpio_status(True)
         time.sleep(1.5)
 
-        self.mc.send_angle(2, 0, 20)
-        time.sleep(0.3)
-        self.mc.send_angle(3, -15, 20)
-        time.sleep(2)
+        tmp = []
+        while True:
+            if not tmp: 
+                tmp = self.mc.get_angles()    
+            else:
+                break
+        time.sleep(0.5)
+        
+        # print(tmp)
+        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
+        time.sleep(3)
+        
 
-        self.mc.send_coords(self.move_coords[color], 20, 1)
+        self.mc.send_coords(self.move_coords[color], 30, 1)
         self.pub_marker(self.move_coords[color][0] / 1000.0,
                         self.move_coords[color][1] / 1000.0,
                         self.move_coords[color][2] / 1000.0)
@@ -211,7 +219,7 @@ class Object_detect(Movement):
             self.gpio_status(False)
         time.sleep(6)
 
-        self.mc.send_angles(self.move_angles[1], 20)
+        self.mc.send_angles(self.move_angles[1], 30)
         time.sleep(1.5)
 
     # decide whether grab cube
@@ -226,15 +234,15 @@ class Object_detect(Movement):
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init mypal260
+    # init 270
     def run(self):
         if "dev" in self.robot_m5:
-            self.mc = MyPalletizer(self.robot_m5, 115200) 
+            self.mc = MyCobot(self.robot_m5, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyPalletizer(self.robot_raspi, 1000000) 
+            self.mc = MyCobot(self.robot_raspi, 1000000) 
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20)
+            self.mc.send_angles([-33.31, 2.02, -10.72, -0.08, 95, -54.84], 30)
         time.sleep(3)
 
     # draw aruco
@@ -420,8 +428,8 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/' + folder
-    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/' + folder
+    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
 
     if os.path.exists(path1):
         path = path1

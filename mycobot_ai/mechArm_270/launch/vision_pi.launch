@@ -2,7 +2,7 @@
 <arg name="port" default="/dev/ttyAMA0" />
 	<arg name="baud" default="1000000" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mecharm_pi/mecharm_pi.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mecharm_pi/mecharm_pi_aikit.urdf"/>
 	<arg name="rvizconfig" default="$(find mecharm_pi)/config/mecharm_pi.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 

@@ -1,38 +1,44 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2
+# -*- coding:utf-8 -*-
+from pymycobot.mycobot import MyCobot
 from pymycobot.mypalletizer import MyPalletizer
 from pymycobot.genre import Angle
 from pymycobot import PI_PORT, PI_BAUD  # 当使用树莓派版本的mycobot时，可以引用这两个变量进行MyCobot初始化
 import time,os
 
-mc = MyPalletizer(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
-
+# mc = MyPalletizer(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
+mc = MyCobot("/dev/ttyAMA0", 1000000)
 # mc = MyPalletizer("/dev/ttyAMA0", 1000000)
-# mc.send_angles([-29.0, 5.88, -4.92, -76.28],25) # init the point coords:[155.3, -86.1, 218.4, -47.28]
-# time.sleep(1.5)
 
-# mc.send_angles([-47.1, 10.19, -10.1, -76.37],25) # above the red bucket; coords:[127.3, -137.1, 219.2, -29.26]
-# time.sleep(1.5)
 
-mc.send_angles([0,0,-15,0],25)
-time.sleep(2)
+mc.send_angles([0,0,0,0,90,0],30) # coords:[95.6, 0.5, 166.4, 179.12, -0.18, 179.46]
+# mc.send_angles([-3.25, 17.22, -32.51, 2.37, 92.54, -36.21],30)
 
-# mc.send_coords([141.2, -142.0, 206.2, -26.8],25,1) # above the red bucket
-# time.sleep(2)
-# mc.send_coords([234.3, -120, 210, -48.77],25,1) # above the green bucket
-# time.sleep(2)
-# mc.send_coords([100.9, 159.3, 248.6, -124.27],20,1) # above the blue bucket
+time.sleep(4)
+
+# mc.send_coords([92.3, -104.9, 211.4, -179.6, 28.91, 131.29], 30, 0) # above the red bucket
+# time.sleep(4)
+
+# mc.send_coords([165.0, -93.6, 201.4, -173.43, 46.23, 160.65],30,0) # above the green bucket
+# time.sleep(4)
+
+# mc.send_coords([88.1, 126.3, 193.4, 162.15, 2.23, 156.02],30,0) # above the blue bucket
+# time.sleep(4)
+
+# mc.send_coords([-5.4, 120.6, 204.6, 162.66, -6.96, 159.93],30,0) # above the gray bucket
 # time.sleep(3)
-# mc.send_coords([-17.6, 161.6, 238.4, -152.31],20,1) # above the gray bucket
-# time.sleep(3)
+
+# mc.send_coords([80, 0, 130, 0 ,0, 0], 30, 0)
 
 # mc.send_angle(3,0,25)
 # print(mc.get_angles())
 # print(mc.get_coords())
 
+# mc.release_all_servos()
 # while True:
-#     print("angles:%s"%mc.get_angles())
-#     print("coords:%s"%mc.get_coords())
-#     print("\n")
+#   print("angles:%s"% mc.get_angles())
+#   print("coords:%s"% mc.get_coords())
+#   print("\n")
 
 # mc.release_all_servos()
 # mc.set_servo_calibration(1)
