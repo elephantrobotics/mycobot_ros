@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
-import math
+# encoding:utf-8
 
+import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header

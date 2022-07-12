@@ -1,6 +1,8 @@
-#!/usr/bin/env python2
 # encoding:utf-8
+#!/usr/bin/env python2
+
 from multiprocessing import Process, Pipe
+
 from cgi import parse
 from difflib import restore
 # import queue
@@ -19,8 +21,8 @@ from PIL import Image
 from threading import Thread
 import tkFileDialog as filedialog
 import Tkinter as tk
-from moving_utils import Movement
 from pymycobot.mycobot import MyCobot
+from moving_utils import Movement
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
@@ -28,39 +30,29 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 145, camera_y = -5):
+    def __init__(self, camera_x = 170, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
-
-        # declare 270
         self.mc = None
+
         # 移动角度
         self.move_angles = [
-            [0, 0, 0, 0, 90, 0],  # point to grab 
-            [-33.31, 2.02, -10.72, -0.08, 95, -54.84],  # init the point
+            [-7.11, -6.94, -55.01, -24.16, 0, -15],  # init the point
+            [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],  # point to grab 
         ]
 
         # 移动坐标
         self.move_coords = [
-            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
-            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
-            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
+            [120.8, -134.4, 258.0, -172.72, -5.31, -109.09],  # above the red bucket
+            [219.8, -126.4, 249.7, -158.68, -7.93, -101.6], # green
+            [124.7, 145.3, 250.4, -173.5, -2.23, -11.7], # blue
+            [14.6, 175.9, 250.4, -177.42, -0.08, 25.93], # gray
         ]
 
-        # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
+        # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed
         self.raspi = False
-        # import RPi.GPIO as GPIO
-        # self.GPIO = GPIO
-        # GPIO.setwarnings(False)
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(20, GPIO.OUT)
-        # GPIO.setup(21, GPIO.OUT)
-
-        # self.gpio_status(False)
-        # self.Pin = [2, 5]
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
@@ -83,7 +75,7 @@ class Object_detect(Movement):
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
-
+    
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -115,7 +107,6 @@ class Object_detect(Movement):
         # else:
         #     print('Load tensorflow model need the version of opencv is 4.')
         #     exit(0)
-
         # init a node and a publisher
         rospy.init_node("marker", anonymous=True)
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
@@ -151,7 +142,7 @@ class Object_detect(Movement):
         self.marker.pose.position.z = z
         self.marker.color.g = self.color
         self.pub.publish(self.marker)
-    # pump_control pi
+
     def gpio_status(self, flag):
         if flag:
             self.GPIO.output(20, 0)
@@ -176,20 +167,24 @@ class Object_detect(Movement):
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move 270
-        self.mc.send_angles(self.move_angles[0], 30)
-        time.sleep(4)
+         # send Angle to move mycobot
+        print (color)
+        self.mc.send_angles(self.move_angles[1], 25)
+        time.sleep(3)
+
+        # send coordinates to move mycobot
+        self.mc.send_coords([x, y, 190.6, -173.3, -5.48, -57.9], 25, 1)
+        time.sleep(2.5)
         
-        # send coordinates to move 270 根据不同底板机械臂，调整吸泵高度
-        self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
-        time.sleep(4)
-        
-        self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
-        time.sleep(4)
+        self.mc.send_coords([x, y, 150, -173.3, -5.48, -57.9], 25, 0)
+        time.sleep(2.5)
+
+        self.mc.send_coords([x, y, 123, -173.3, -5.48, -57.9], 10, 0)
+        time.sleep(3)
 
         # open pump
         if "dev" in self.robot_m5:
-           self.pump_on()
+            self.pump_on()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(True)
         time.sleep(1.5)
@@ -201,16 +196,16 @@ class Object_detect(Movement):
             else:
                 break
         time.sleep(0.5)
-        
-        # print(tmp)
-        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
-        time.sleep(3)
-        
 
-        self.mc.send_coords(self.move_coords[color], 30, 1)
-        self.pub_marker(self.move_coords[color][0] / 1000.0,
-                        self.move_coords[color][1] / 1000.0,
-                        self.move_coords[color][2] / 1000.0)
+         # print(tmp)
+        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        time.sleep(3)
+
+
+
+        self.mc.send_coords(self.move_coords[color], 25, 1)
+        self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
+                        [1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(3)
 
         # close pump
@@ -220,8 +215,8 @@ class Object_detect(Movement):
             self.gpio_status(False)
         time.sleep(6)
 
-        self.mc.send_angles(self.move_angles[1], 30)
-        time.sleep(1.5)
+        self.mc.send_angles(self.move_angles[0], 25)
+        time.sleep(3)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
@@ -235,17 +230,17 @@ class Object_detect(Movement):
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init 270
+    # init mycobot
     def run(self):
         if "dev" in self.robot_wio :
             self.mc = MyCobot(self.robot_wio, 115200) 
         elif "dev" in self.robot_m5:
             self.mc = MyCobot(self.robot_m5, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000) 
+            self.mc = MyCobot(self.robot_raspi, 1000000)
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-            self.mc.send_angles([-33.31, 2.02, -10.72, -0.08, 95, -54.84], 30)
+        self.mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
         time.sleep(3)
 
     # draw aruco
@@ -277,7 +272,6 @@ class Object_detect(Movement):
         # Detect ArUco marker.
         corners, ids, rejectImaPoint = cv2.aruco.detectMarkers(
             gray, self.aruco_dict, parameters=self.aruco_params)
-
         """
         Two Arucos must be present in the picture and in the same order.
         There are two Arucos in the Corners, and each aruco contains the pixels of its four corners.
@@ -431,14 +425,12 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
-    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
-
+    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280' + folder
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280/' + folder
     if os.path.exists(path1):
         path = path1
     elif os.path.exists(path2):
         path = path2
-
     for i, j, k in os.walk(path):
         for l in k:
             restore.append(cv2.imread(folder + '/{}'.format(l)))
@@ -552,7 +544,6 @@ def run():
 
     # init a class of Object_detect
     detect = Object_detect()
-
     # init mycobot
     detect.run()
 
@@ -668,9 +659,8 @@ def run():
             # cap.release()
             cv2.destroyAllWindows()
             sys.exit()
-
     child.join()
-    
+
 
 if __name__ == "__main__":
     run()
