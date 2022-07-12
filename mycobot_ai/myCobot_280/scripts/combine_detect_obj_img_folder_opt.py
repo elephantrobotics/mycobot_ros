@@ -30,7 +30,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 170, camera_y = -5):
+    def __init__(self, camera_x = 165, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -173,17 +173,17 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # send coordinates to move mycobot
-        self.mc.send_coords([x, y, 190.6, -173.3, -5.48, -57.9], 25, 1)
-        time.sleep(2.5)
+        self.mc.send_coords([x, y,  190.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
+        time.sleep(3)
         
-        self.mc.send_coords([x, y, 150, -173.3, -5.48, -57.9], 25, 0)
-        time.sleep(2.5)
+        # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
+        # time.sleep(3)
 
-        self.mc.send_coords([x, y, 123, -173.3, -5.48, -57.9], 10, 0)
+        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 10, 0)
         time.sleep(3)
 
         # open pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.pump_on()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(True)
@@ -209,8 +209,8 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # close pump
-        if "dev" in self.robot_m5:
-           self.pump_off()
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+            self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
         time.sleep(6)

@@ -48,7 +48,9 @@ class Object_detect(Movement):
         if "dev" in self.robot_m5:
             self.Pin = [2, 5]
         elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
+            # self.Pin = [20, 21]
+            self.Pin = [2, 5]
+
             for i in self.move_coords:
                 i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
@@ -154,17 +156,17 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # send coordinates to move mycobot
-        self.mc.send_coords([x, y,  190.6, -173.3, -5.48, -57.9], 25, 1)
+        self.mc.send_coords([x, y,  190.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
         time.sleep(3)
         
-        self.mc.send_coords([x, y, 150, -173.3, -5.48, -57.9], 25, 0)
-        time.sleep(3)
+        # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
+        # time.sleep(3)
 
-        self.mc.send_coords([x, y, 123, -173.3, -5.48, -57.9], 10, 0)
+        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 10, 0)
         time.sleep(3)
 
         # open pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.pump_on()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(True)
@@ -191,8 +193,8 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # close pump
-        if "dev" in self.robot_m5:
-           self.pump_off()
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+            self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
         time.sleep(6)
