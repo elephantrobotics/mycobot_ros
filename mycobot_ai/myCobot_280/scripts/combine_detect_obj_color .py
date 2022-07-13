@@ -77,7 +77,7 @@ class Object_detect(Movement):
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
             "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
-            "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
+            # "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
         # use to calculate coord between cube and mycobot

@@ -69,7 +69,7 @@ class MypalTopics(object):
         rospy.init_node("mypal_topics_pi")
         rospy.loginfo("start ...")
         # problem
-        port = rospy.get_param("~port", "/dev/ttyAMA0")
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
         baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
         # self.mc = MyCobotSocket(port, baud) # port
