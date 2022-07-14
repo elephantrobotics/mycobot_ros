@@ -162,7 +162,7 @@ class Object_detect(Movement):
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
         time.sleep(3)
         
-        self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
+        self.mc.send_coords([x, y, 110, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(3)
         
         # open pump
