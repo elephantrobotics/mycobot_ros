@@ -30,7 +30,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 165, camera_y = -5):
+    def __init__(self, camera_x = 160, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file

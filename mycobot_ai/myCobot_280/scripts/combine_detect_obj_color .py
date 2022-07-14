@@ -19,7 +19,7 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 170, camera_y = -10):
+    def __init__(self, camera_x = 160, camera_y = -10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -76,9 +76,9 @@ class Object_detect(Movement):
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
+            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])], # [77, 255, 255]
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
-            "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
+            "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
         }
         # use to calculate coord between cube and mycobot
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
