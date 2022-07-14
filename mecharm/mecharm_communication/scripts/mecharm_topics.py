@@ -70,7 +70,7 @@ class MycobotTopics(object):
 
         rospy.init_node("mycobot_topics")
         rospy.loginfo("start ...")
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyCobot(port, baud)

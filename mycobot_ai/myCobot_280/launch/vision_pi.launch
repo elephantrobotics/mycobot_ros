@@ -14,13 +14,13 @@
 	</node>
 
 	<!-- mycobot-topics -->
-    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+    <include file="$(find mycobot_communication)/launch/communication_topic_pi.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 
     <!-- listen and pub the real angles -->
-	<node name="real_listener" pkg="mycobot_280" type="listen_real_of_topic.py" />
+	<node name="real_listener" pkg="mycobot_280_pi" type="listen_real_of_topic.py" />
 
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
