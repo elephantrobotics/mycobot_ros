@@ -84,9 +84,17 @@ def cut_photo():
                         fromCenter=False)
     x, y, w, h = roi
     print(roi)
-
-    kw = input("请输入保存图片文件夹名称('red','gray','blue','green'）:")
+    msg = """\
+Image save location:
+    1 - Save to red folder
+    2 - Save to gray folder
+    3 - Save to blue folder
+    4 - Save to green folder
+    """
+    print(msg)
+    kw = int(input("请输入保存图片文件夹数字编号:"))
     # print(kw)
+  
 
     # 显示ROI并保存图片
     if roi != (0, 0, 0, 0):
@@ -94,19 +102,19 @@ def cut_photo():
         crop = cut[y:y + h, x:x + w]
         cv2.imshow('crop', crop)
         # 选择红桶文件夹
-        if kw == 'red':
+        if kw == 1:
             cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280/res/red/goal{}.jpeg'.format(str(file_len_red + 1)),crop)
             print('Saved')
         # 选择灰桶文件夹
-        elif kw == 'gray':
+        elif kw == 2:
             cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280/res/gray/goal{}.jpeg'.format(str(file_len_gray+1)),crop)
             print('Saved')
         # 选择绿桶文件夹
-        elif kw == 'green':
+        elif kw == 3:
             cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280/res/green/goal{}.jpeg'.format(str(file_len_green+1)),crop)
             print('Saved')
         # 选择蓝桶文件夹
-        elif kw == 'blue':
+        elif kw == 4:
             cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myCobot_280/res/blue/goal{}.jpeg'.format(str(file_len_blue+1)),crop)
             print('Saved')
 
