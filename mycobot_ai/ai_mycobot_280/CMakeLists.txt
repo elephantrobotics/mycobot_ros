@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(myCobot_280)
+project(ai_mycobot_280)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,6 +9,7 @@ project(myCobot_280)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   mycobot_280
+  mycobot_280pi
 )
 
 ## System dependencies are found with CMake's conventions

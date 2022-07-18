@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(myPalletizer_260)
+project(ai_mypalletizer_260)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,6 +9,7 @@ project(myPalletizer_260)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   mypalletizer_260_pi
+  mypalletizer_260
 )
 
 ## System dependencies are found with CMake's conventions
