@@ -33,7 +33,6 @@ def callback(data):
     mb.set_encoder(3,1,data_list3[0]*4096/(2*math.pi)+2048,1)
     time.sleep(0.02)
 
-
 def listener():
     global mb
     rospy.init_node("mybuddy_reciver", anonymous=True)
@@ -46,7 +45,6 @@ def listener():
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
-
 
 if __name__ == "__main__":
     listener()

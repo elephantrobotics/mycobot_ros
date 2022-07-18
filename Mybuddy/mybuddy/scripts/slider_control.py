@@ -36,17 +36,16 @@ def callback(data):
     print("right_arm: %s" % data_list2)
     print("waist: %s" % data_list3)
 
-    print("\n")
     mb.send_radians(1,data_list1, 50)
-    time.sleep(0.05)
+    time.sleep(0.02)
     mb.send_radians(2,data_list2, 50)
     time.sleep(0.02)
 
-    # print(data_list3[0])
-    # mb.send_angle(3,1,data_list3[0]* (180 / math.pi),350)
-    # mb.send_radians(3,data_list3, 50)
+    print(data_list3[0]* (180 / math.pi))
+    print("\n")
 
-    mb.set_encoder(3,1,data_list3[0]*4096/(2*math.pi)+2048,1)
+    mb.send_angle(3, 1, data_list3[0]* (180 / math.pi), 10)
+    # mb.send_radians(3,data_list3, 50)
     time.sleep(0.02)
 
 def listener():
