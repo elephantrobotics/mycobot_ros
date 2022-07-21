@@ -20,7 +20,7 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 145, camera_y = -5):
+    def __init__(self, camera_x = 140, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -51,6 +51,7 @@ class Object_detect(Movement):
         self.raspi = False
         if "dev" in self.robot_m5:
             self.Pin = [2, 5]
+            # self.Pin = [5]
         elif "dev" in self.robot_wio:
             self.Pin = [20, 21]
             for i in self.move_coords:
@@ -162,7 +163,7 @@ class Object_detect(Movement):
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
         time.sleep(3)
         
-        self.mc.send_coords([x, y, 110, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
+        self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(3)
         
         # open pump
