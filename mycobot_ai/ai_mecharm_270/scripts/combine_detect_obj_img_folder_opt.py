@@ -431,14 +431,16 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
-    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/mechArm_270/' + folder
+    path = ''
+    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/' + folder
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/' + folder
 
     if os.path.exists(path1):
         path = path1
     elif os.path.exists(path2):
         path = path2
 
+    # print("path:",path)
     for i, j, k in os.walk(path):
         for l in k:
             restore.append(cv2.imread(folder + '/{}'.format(l)))
