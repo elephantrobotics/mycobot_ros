@@ -6,14 +6,15 @@ from pymycobot.genre import Angle
 from pymycobot import PI_PORT, PI_BAUD  # 当使用树莓派版本的mycobot时，可以引用这两个变量进行MyCobot初始化
 import time,os
 
-# mc = MyCobot(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
+mc = MyCobot(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
 # mc = MyCobot(os.popen("ls /dev/ttyACM*").readline()[:-1], 115200)
+
 # mc = MyCobot("/dev/ttyAMA0", 1000000)
-mc = MyCobot(PI_PORT,PI_BAUD)
+# mc = MyCobot(PI_PORT,PI_BAUD)
 
 
-# mc.send_angles([0,0,0,0,90,0],20) # coords:[95.6, 0.5, 166.4, 179.12, -0.18, 179.46]
-# time.sleep(4)
+mc.send_angles([0,0,0,0,90,0],20) # coords:[95.6, 0.5, 166.4, 179.12, -0.18, 179.46]
+time.sleep(4)
 
 # mc.send_angles([-3.25, 17.22, -32.51, 2.37, 92.54, -36.21],30)
 
@@ -42,9 +43,9 @@ mc = MyCobot(PI_PORT,PI_BAUD)
 #   print("\n")
 
 # mc.release_all_servos()
-mc.release_servo(2)
+# mc.release_servo(3)
 # mc.set_servo_calibration(1)
-mc.set_servo_calibration(2)
+# mc.set_servo_calibration(2)
 # mc.set_servo_calibration(3)
 # mc.set_servo_calibration(4) 
 # mc.set_servo_calibration(5) 
@@ -53,11 +54,9 @@ mc.set_servo_calibration(2)
 
 # mc.set_basic_output(2, 0)
 # mc.set_basic_output(5, 0)
-# time.sleep(3)
-
+# time.sleep(2)
 # mc.set_basic_output(2, 1)
 # mc.set_basic_output(5, 1)
-# time.sleep(3)
 
 # print(mc.get_basic_input(2))
 # print(mc.get_basic_input(5))
