@@ -49,19 +49,19 @@ def take_photo():
 
 def cut_photo():
     
-    path_red = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/red'
+    path_red = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/red'
     for i, j, k in os.walk(path_red):
         file_len_red = len(k)
 
-    path_gray = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/gray'
+    path_gray = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/gray'
     for i, j, k in os.walk(path_gray):
         file_len_gray = len(k)
 
-    path_green = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/green'
+    path_green = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/green'
     for i, j, k in os.walk(path_green):
         file_len_green = len(k)
 
-    path_blue = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/blue'
+    path_blue = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/blue'
     for i, j, k in os.walk(path_blue):
         file_len_blue = len(k)
     print("请截取要识别的部分")
@@ -85,7 +85,15 @@ def cut_photo():
     x, y, w, h = roi
     print(roi)
 
-    kw = input("请输入保存图片文件夹名称('red','gray','blue','green'）:")
+    msg = """\
+Image save location:
+    1 - Save to red folder
+    2 - Save to gray folder
+    3 - Save to blue folder
+    4 - Save to green folder
+    """
+    print(msg)
+    kw = int(input("请输入保存图片文件夹数字编号:"))
     # print(kw)
 
     # 显示ROI并保存图片
@@ -94,20 +102,20 @@ def cut_photo():
         crop = cut[y:y + h, x:x + w]
         cv2.imshow('crop', crop)
         # 选择红桶文件夹
-        if kw == 'red':
-            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/red/goal{}.jpeg'.format(str(file_len_red + 1)),crop)
+        if kw == 1:
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/red/goal{}.jpeg'.format(str(file_len_red + 1)),crop)
             print('Saved')
         # 选择灰桶文件夹
-        elif kw == 'gray':
-            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/gray/goal{}.jpeg'.format(str(file_len_gray+1)),crop)
+        elif kw == 2:
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/gray/goal{}.jpeg'.format(str(file_len_gray+1)),crop)
             print('Saved')
         # 选择绿桶文件夹
-        elif kw == 'green':
-            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/green/goal{}.jpeg'.format(str(file_len_green+1)),crop)
+        elif kw == 3:
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/green/goal{}.jpeg'.format(str(file_len_green+1)),crop)
             print('Saved')
         # 选择蓝桶文件夹
-        elif kw == 'blue':
-            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/myPalletizer_260/res/blue/goal{}.jpeg'.format(str(file_len_blue+1)),crop)
+        elif kw == 4:
+            cv2.imwrite('/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/res/blue/goal{}.jpeg'.format(str(file_len_blue+1)),crop)
             print('Saved')
 
     # 退出
