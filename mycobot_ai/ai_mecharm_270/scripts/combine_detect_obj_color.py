@@ -159,15 +159,18 @@ class Object_detect(Movement):
         print(color)
         self.mc.send_angles(self.move_angles[0], 30)
         time.sleep(4)
-        # self.pub_marker(self.move_angles[0])
 
         # send coordinates to move 270
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
         time.sleep(3)
+        self.pub_marker(x/1000.0, y/1000.0, 140/1000.0)
+
         
         self.mc.send_coords([x, y, 95, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(3)
+        self.pub_marker(x/1000.0, y/1000.0, 90/1000.0)
+
         
         # open pump
         if "dev" in self.robot_m5:
