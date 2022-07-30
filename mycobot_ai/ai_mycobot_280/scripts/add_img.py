@@ -56,7 +56,9 @@ def cut_photo():
         path = path1
     elif os.path.exists(path2):
         path = path2
-
+    else:
+        print("invalid path!")
+        
     path_red = path + '/res/red'
     for i, j, k in os.walk(path_red):
         file_len_red = len(k)
