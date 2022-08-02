@@ -52,15 +52,6 @@ class Object_detect(Movement):
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
         self.raspi = False
-        # import RPi.GPIO as GPIO
-        # self.GPIO = GPIO
-        # GPIO.setwarnings(False)
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(20, GPIO.OUT)
-        # GPIO.setup(21, GPIO.OUT)
-
-        # self.gpio_status(False)
-        # self.Pin = [2, 5]
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
@@ -90,12 +81,6 @@ class Object_detect(Movement):
         self.x1 = self.x2 = self.y1 = self.y2 = 0
         # set cache of real coord
         self.cache_x = self.cache_y = 0
-        # load model of img recognition
-        # self.model_path = os.path.join(dir_path, "frozen_inference_graph.pb")
-        # self.pbtxt_path = os.path.join(dir_path, "graph.pbtxt")
-        # self.label_path = os.path.join(dir_path, "labels.json")
-        # # load class labels
-        # self.labels = json.load(open(self.label_path))
 
         # use to calculate coord between cube and mycobot
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
@@ -109,13 +94,7 @@ class Object_detect(Movement):
         self.aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
         # Get ArUco marker params.
         self.aruco_params = cv2.aruco.DetectorParameters_create()
-
-        # if IS_CV_4:
-        #     self.net = cv2.dnn.readNetFromTensorflow(self.model_path, self.pbtxt_path)
-        # else:
-        #     print('Load tensorflow model need the version of opencv is 4.')
-        #     exit(0)
-
+        
         # init a node and a publisher
         rospy.init_node("marker", anonymous=True)
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
@@ -151,6 +130,7 @@ class Object_detect(Movement):
         self.marker.pose.position.z = z
         self.marker.color.g = self.color
         self.pub.publish(self.marker)
+    
     # pump_control pi
     def gpio_status(self, flag):
         if flag:
@@ -534,10 +514,6 @@ def run():
     parent_conn, child_conn = Pipe()
     child = Process(target = process_display_frame, args=(child_conn,))
     child.start()
-
-    # Object_detect().take_photo()
-    # Object_detect().cut_photo()
-    # goal = Object_detect().distinguist()
     
     res_queue = [[], [], [], []]
     res_queue[0] = parse_folder('res/red')
@@ -545,11 +521,6 @@ def run():
     res_queue[2] = parse_folder('res/blue')
     res_queue[3] = parse_folder('res/gray')
 
-    # res_queue = []
-    # res_queue.extend(parse_folder('res/red'))
-    # res_queue.extend(parse_folder('res/green'))
-    # res_queue.extend(parse_folder('res/gray'))
-    # res_queue.extend(parse_folder('res/blue'))
 
     sift = cv2.xfeatures2d.SIFT_create()
     kp_list, desc_list = compute_keypoints_and_descriptors(sift, res_queue)

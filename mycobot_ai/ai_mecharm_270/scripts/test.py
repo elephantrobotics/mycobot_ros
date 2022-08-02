@@ -16,6 +16,8 @@ mc = MyCobot(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
 # mc.send_angles([0,0,0,0,90,0],20) # coords:[95.6, 0.5, 166.4, 179.12, -0.18, 179.46]
 # time.sleep(4)
 
+mc.send_angle(3,-15,30)
+
 # mc.send_angles([-3.25, 17.22, -32.51, 2.37, 92.54, -36.21],30)
 
 # mc.send_coords([92.3, -104.9, 211.4, -179.6, 28.91, 131.29], 30, 0) # above the red bucket
@@ -30,7 +32,7 @@ mc = MyCobot(os.popen("ls /dev/ttyUSB*").readline()[:-1], 115200)
 # mc.send_coords([-5.4, 120.6, 204.6, 162.66, -6.96, 159.93],30,0) # above the gray bucket
 # time.sleep(3)
 
-mc.send_coords([80, 0, 92, 179.12, -0.18, 179.46], 30, 0)
+# mc.send_coords([80, 0, 92, 179.12, -0.18, 179.46], 30, 0)
 
 # mc.send_angle(3,0,25)
 # print(mc.get_angles())

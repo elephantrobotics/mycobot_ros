@@ -38,7 +38,7 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [141.2, -142.0, 210, -26.8],  # above the red bucket
+            [141.2, -142.0, 220, -26.8],  # above the red bucket
             [234.3, -120, 210, -48.77], # above the green bucket
             [100.9, 159.3, 248.6, -124.27], # above the blue bucket
             [-17.6, 161.6, 238.4, -152.31], # above the gray bucket         
@@ -174,7 +174,7 @@ class Object_detect(Movement):
 
         self.mc.send_angle(2, 0, 20)
         time.sleep(0.3)
-        self.mc.send_angle(3, -15, 20)
+        self.mc.send_angle(3, -20, 20)
         time.sleep(2)
 
         self.mc.send_coords(self.move_coords[color], 20, 1)
