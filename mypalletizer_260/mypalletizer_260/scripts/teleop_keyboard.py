@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# encoding=utf-8
 from __future__ import print_function
 # from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 from mypalletizer_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
