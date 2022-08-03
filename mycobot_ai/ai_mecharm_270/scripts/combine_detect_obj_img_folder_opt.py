@@ -166,7 +166,9 @@ class Object_detect(Movement):
         time.sleep(7)
         print("ntm")
 
-        self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
+        self.mc.send_coords([x, y, 95, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
+        # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
+        # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(6)
 
         # open pump
