@@ -179,7 +179,9 @@ class Object_detect(Movement):
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
         # time.sleep(3)
 
-        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 10, 0)
+        # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 60, 179.87, -3.78, -62.75], 25, 0)
+        
         time.sleep(3)
 
         # open pump
@@ -199,21 +201,21 @@ class Object_detect(Movement):
 
          # print(tmp)
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        time.sleep(3)
+        time.sleep(5)
 
 
 
         self.mc.send_coords(self.move_coords[color], 25, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
-        time.sleep(3)
+        time.sleep(4)
 
         # close pump
         if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
-        time.sleep(6)
+        time.sleep(4)
 
         self.mc.send_angles(self.move_angles[0], 25)
         time.sleep(3)
@@ -433,7 +435,7 @@ def parse_folder(folder):
     elif os.path.exists(path2):
         path = path2
 
-    print("path:",path)
+    # print("path:",path)
 
     for i, j, k in os.walk(path):
         for l in k:

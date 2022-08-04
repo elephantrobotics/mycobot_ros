@@ -19,7 +19,7 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = -10):
+    def __init__(self, camera_x = 160, camera_y = -5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -162,7 +162,7 @@ class Object_detect(Movement):
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
         # time.sleep(3)
 
-        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 10, 0)
+        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
         time.sleep(3)
 
         # open pump
@@ -197,7 +197,8 @@ class Object_detect(Movement):
             self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
-        time.sleep(6)
+        time.sleep(4)
+        
         if color == 1:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
