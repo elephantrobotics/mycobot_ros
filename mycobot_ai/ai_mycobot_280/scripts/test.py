@@ -5,13 +5,13 @@ from pymycobot import PI_PORT, PI_BAUD  # 当使用树莓派版本的mycobot时�
 import time
 
 # mc = MyCobot("/dev/ttyACM0", 115200)
-mc = MyCobot("/dev/ttyUSB0", 115200)
-# mc = MyCobot("/dev/ttyAMA0", 1000000)
+# mc = MyCobot("/dev/ttyUSB0", 115200)
+mc = MyCobot("/dev/ttyAMA0", 1000000)
 
-# mc.send_angles([0,0,0,0,0,0], 25)
+mc.send_angles([0,0,0,0,0,0], 25)
 # print(mc.get_angles())
-mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0.0, -15], 30)
-time.sleep(4)
+# mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0.0, -15], 30)
+# time.sleep(4)
 # print(mc.get_angles())
 
 # mc.send_coords([120.8, -134.4, 258.0, -172.72, -5.31, -109.09], 30, 1) # red bucket
@@ -35,6 +35,8 @@ time.sleep(4)
 
 
 # mc.release_all_servos()
+# mc.release_servo(1)
+# mc.set_servo_calibration(1)
 # time.sleep(1)
 # while True:
 #   print("angles:%s"% mc.get_angles())
