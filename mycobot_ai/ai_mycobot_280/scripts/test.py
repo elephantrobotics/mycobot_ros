@@ -4,9 +4,9 @@ from pymycobot.genre import Angle
 from pymycobot import PI_PORT, PI_BAUD  # 当使用树莓派版本的mycobot时，可以引用这两个变量进行MyCobot初始化
 import time
 
-# mc = MyCobot("/dev/ttyACM0", 115200)
+mc = MyCobot("/dev/ttyACM0", 115200)
 # mc = MyCobot("/dev/ttyUSB0", 115200)
-mc = MyCobot("/dev/ttyAMA0", 1000000)
+# mc = MyCobot("/dev/ttyAMA0", 1000000)
 
 mc.send_angles([0,0,0,0,0,0], 25)
 # print(mc.get_angles())
@@ -35,8 +35,8 @@ mc.send_angles([0,0,0,0,0,0], 25)
 
 
 # mc.release_all_servos()
-# mc.release_servo(1)
-# mc.set_servo_calibration(1)
+# mc.release_servo(3)
+# mc.set_servo_calibration(3)
 # time.sleep(1)
 # while True:
 #   print("angles:%s"% mc.get_angles())

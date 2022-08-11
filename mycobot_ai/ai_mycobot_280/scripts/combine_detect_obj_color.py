@@ -162,7 +162,7 @@ class Object_detect(Movement):
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
         # time.sleep(3)
 
-        self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 96, 179.87, -3.78, -62.75], 25, 0)
         time.sleep(3)
 
         # open pump
@@ -182,7 +182,7 @@ class Object_detect(Movement):
         
         # print(tmp)
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        time.sleep(3)
+        time.sleep(4)
 
         self.pub_marker(
             self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
