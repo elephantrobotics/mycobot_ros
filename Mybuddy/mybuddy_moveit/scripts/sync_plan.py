@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 import time
 import rospy
 import os
@@ -30,7 +30,8 @@ def callback(data):
     time.sleep(0.02)
     # mb.send_radians(3,data_list3, 50)
     # time.sleep(0.02)
-    mb.set_encoder(3,1,data_list3[0]*4096/(2*math.pi)+2048,1)
+    # mb.set_encoder(3,1,data_list3[0]*4096/(2*math.pi)+2048,1)
+    mb.send_angle(3, 1, data_list3[0]* (180 / math.pi), 10)
     time.sleep(0.02)
 
 def listener():
