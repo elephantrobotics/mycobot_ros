@@ -1,11 +1,11 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,
 and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
-    port: serial prot string. Defaults is '/dev/ttyUSB0'
+    port: serial prot string. Defaults is '/dev/ttyACM0'
     baud: serial prot baudrate. Defaults is 115200.
 """
 
@@ -41,7 +41,7 @@ def callback(data):
     mb.send_radians(2,data_list2, 50)
     time.sleep(0.02)
 
-    print(data_list3[0]* (180 / math.pi))
+    # print(data_list3[0]* (180 / math.pi))
     print("\n")
 
     mb.send_angle(3, 1, data_list3[0]* (180 / math.pi), 10)
