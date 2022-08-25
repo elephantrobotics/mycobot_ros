@@ -56,7 +56,7 @@ def talker():
         "base_link1",
 
     ]
-    joint_state_send.velocity = [0]
+    joint_state_send.velocity = [0.0]
     joint_state_send.effort = []
 
     marker_ = Marker()
