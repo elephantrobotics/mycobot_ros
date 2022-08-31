@@ -1,39 +1,39 @@
 #!/usr/bin/env python3
-import time
 import rospy
 from sensor_msgs.msg import JointState
-
-# from pymycobot.mycobot import MyCobot
-from pymycobot.mypalletizer import MyPalletizer
+from pymycobot.mira import Mira
 
 
-mc = None
+ma = None
 
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "%s", data)
+    rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
+    # print(data.position)
     data_list = []
     for index, value in enumerate(data.position):
-        # if index != 2:
-        #     value *= -1
-        data_list.append(value)
-    # print("data_list:",data_list)
-    mc.send_radians(data_list, 80)
+        data_list.append(round(value,3))
+    
+    print('data_list:',data_list)
+    ma.set_radians(data_list[0],data_list[1],data_list[2], 50)
+    # time.sleep(0.5)
 
 
 def listener():
-    global mc
-    rospy.init_node("mypal_reciver", anonymous=True)
-
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
-    baud = rospy.get_param("~baud", 115200)
-    print(port, baud)
-    mc = MyPalletizer(port, baud)
+    global ma
+    rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
+    port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
+    baud = rospy.get_param("~baud", 115200)
+    print(port, baud)
+    ma = Mira(port, baud)
+    ma.power_on()
+    ma.go_zero()
 
-    # spin() simply keeps python from exiting until this node is stopped 
-    # spin()只是阻止python退出，直到该节点停止
+    # spin() simply keeps python from exiting until this node is stopped
+    # spin() 只是阻止python退出，直到该节点停止
+    print("spin ...")
     rospy.spin()
 
 
