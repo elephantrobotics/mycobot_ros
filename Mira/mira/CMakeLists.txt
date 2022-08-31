@@ -21,7 +21,6 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 catkin_install_python(PROGRAMS
-  scripts/follow_display.py
   scripts/slider_control.py
   scripts/teleop_keyboard.py
   scripts/listen_real.py

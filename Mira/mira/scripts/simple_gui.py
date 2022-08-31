@@ -12,7 +12,7 @@ class Window:
         self.win = handle
         self.win.resizable(0, 0)  # fixed window size 固定窗口大小 
 
-        self.model = 0
+        # self.model = 0
         self.speed = rospy.get_param("~speed", 50)
 
         # set default speed. 设置默认速度 
@@ -22,8 +22,8 @@ class Window:
         self.connect_ser()
 
         # Get robotic arm data. 获取机械臂数据
-        self.record_coords = [0, 0, 0, self.speed,]
-        self.res_angles = [0, 0, 0, self.speed,]
+        self.record_coords = [0, 0, 0, self.speed]
+        self.res_angles = [0, 0, 0, self.speed]
         self.get_date()
 
         # get screen width and height. 获取屏幕宽度和高度
@@ -33,7 +33,7 @@ class Window:
         # 计算 Tk 根窗口的 x 和 y 坐标
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
-        self.win.geometry("430x350+{}+{}".format(x, y))
+        self.win.geometry("430x350+{}+{}".format(int(x), int(y)))
         # layout. 布局
         self.set_layout()
         # input. 输入部分
@@ -66,15 +66,15 @@ class Window:
         rospy.wait_for_service("set_joint_angles")
         rospy.wait_for_service("get_joint_coords")
         rospy.wait_for_service("set_joint_coords")
-        rospy.wait_for_service("switch_gripper_status")
+        # rospy.wait_for_service("switch_gripper_status")
         try:
-            self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
+            self.get_coords_info = rospy.ServiceProxy("get_joint_coords", GetCoords)
             self.set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
-            self.get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
+            self.get_angles_info = rospy.ServiceProxy("get_joint_angles", GetAngles)
             self.set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
-            self.switch_gripper = rospy.ServiceProxy(
-                "switch_gripper_status", GripperStatus
-            )
+            # self.switch_gripper = rospy.ServiceProxy(
+            #     "switch_gripper_status", GripperStatus
+            # )
         except:
             print("start error ...")
             exit(1)
@@ -143,8 +143,8 @@ class Window:
 
 
         # All input boxes, used to get the input data. 所有输入框，用于拿输入的数据
-        self.all_j = [self.J_1, self.J_2, self.J_3,]
-        self.all_c = [self.x, self.y, self.z,]
+        self.all_j = [self.J_1, self.J_2, self.J_3]
+        self.all_c = [self.x, self.y, self.z]
 
 
 
@@ -285,10 +285,10 @@ class Window:
             int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         )
         c_value.append(self.speed)
-        c_value.append(self.model)
+        # c_value.append(self.model)
         # print(c_value)
         try:
-            self.set_coords(*c_value)
+            self.set_coords(c_value[0], c_value[1], c_value[2], self.speed)
         except ServiceException:
             pass
         self.show_j_date(c_value[:-2], "coord")
@@ -306,7 +306,7 @@ class Window:
         j_value.append(self.speed)
 
         try:
-            self.set_angles(*j_value)
+            self.set_angles(j_value[0], j_value[1], j_value[2], self.speed)
         except ServiceException:
             pass
         self.show_j_date(j_value[:-1])
@@ -316,34 +316,41 @@ class Window:
         # Get the data of robotic arm for display. 拿机械臂的数据，用于展示
         t = time.time()
         while time.time() - t < 2:
-            self.res = self.get_coords()
+            self.res = self.get_coords_info()
 
             print(self.res)
             
-            if self.res.x > 1:
+            # if self.res.x > 1:
+            if self.res!= []:
                 break
             time.sleep(0.1)
 
         t = time.time()
         while time.time() - t < 2:
-            self.angles = self.get_angles()
-            if self.angles.joint_1 > 1:
+            self.angles = self.get_angles_info()
+            # if self.angles.joint_1 > 1:
+            if self.angles != []:
                 break
             time.sleep(0.1)
         # print(self.angles.joint_1)
-        self.record_coords = [
-            round(self.res.x, 2),
-            round(self.res.y, 2),
-            round(self.res.z, 2),
-            self.speed,
-        ]
-        self.res_angles = [
-            round(self.angles.joint_1, 2),
-            round(self.angles.joint_2, 2),
-            round(self.angles.joint_3, 2),
-        ]
-        # print('coord:',self.record_coords)
-        # print('angles:',self.res_angles)
+            if self.res and self.angles != None:
+                print('---------------->',self.res)
+                self.record_coords = [
+                    round(self.res.x, 2),
+                    round(self.res.y, 2),
+                    round(self.res.z, 2),
+                    self.speed
+                ]
+                # self.record_coords[0] = self.res[:3]
+                # self.res_angles[0] = self.angles[:3]
+                self.res_angles = [
+                    round(self.angles.joint_1, 2),
+                    round(self.angles.joint_2, 2),
+                    round(self.angles.joint_3, 2),
+    
+                ]
+                print('coord:',self.record_coords)
+                print('angles:',self.res_angles)
 
     # def send_input(self,dates):
     def show_j_date(self, date, way=""):

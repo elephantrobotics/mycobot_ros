@@ -6,9 +6,9 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-# from mycobot_communication.srv import GetAngles
 from mira_communication.srv import GetAngles
 # from pymycobot.mypalletizer import MyPalletizer
+from pymycobot.mira import Mira
 
 
 def talker():
@@ -28,9 +28,9 @@ def talker():
         # "joint4_to_joint3",
         # "joint5_to_joint4",
     ]
-    joint_state_send.velocity = [0]
+    joint_state_send.velocity = [0.0]
     joint_state_send.effort = []
-
+    
     # waiting util server `get_joint_angles` enable.
     rospy.loginfo("wait service")
     rospy.wait_for_service("get_joint_angles")
@@ -40,6 +40,7 @@ def talker():
     while not rospy.is_shutdown():
         # get real angles from server.
         #  从服务获取真实的角度
+
         res = func()
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
@@ -52,7 +53,7 @@ def talker():
 
         ]
         rospy.loginfo("res: {}".format(radians_list))
-
+        print('res:',res)
         # publish angles. 发布角度
         joint_state_send.header.stamp = rospy.Time.now()
         joint_state_send.position = radians_list
