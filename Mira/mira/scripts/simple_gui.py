@@ -33,7 +33,7 @@ class Window:
         # 计算 Tk 根窗口的 x 和 y 坐标
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
-        self.win.geometry("430x350+{}+{}".format(int(x), int(y)))
+        self.win.geometry("450x350+{}+{}".format(int(x), int(y)))
         # layout. 布局
         self.set_layout()
         # input. 输入部分
@@ -52,12 +52,12 @@ class Window:
         )
 
         # Gripper Switch. 夹爪开关按钮
-        tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
-            row=1, column=0, sticky="w", padx=3, pady=50
-        )
-        tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
-            row=1, column=1, sticky="w", padx=3, pady=2
-        )
+        # tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
+        #     row=1, column=0, sticky="w", padx=3, pady=50
+        # )
+        # tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
+        #     row=1, column=1, sticky="w", padx=3, pady=2
+        # )
 
     def connect_ser(self):
         rospy.init_node("simple_gui", anonymous=True, disable_signals=True)
@@ -257,22 +257,10 @@ class Window:
         # show label"mm" .mm 单位展示
         self.unit = tk.StringVar()
         self.unit.set("mm")
-        for i in range(4):
+        for i in range(3):
             tk.Label(self.frmLC, textvariable=self.unit, font=("Arial", 9)).grid(
                 row=i, column=5
             )
-
-    def gripper_open(self):
-        try:
-            self.switch_gripper(True)
-        except ServiceException:
-            pass
-
-    def gripper_close(self):
-        try:
-            self.switch_gripper(False)
-        except ServiceException:
-            pass
 
     def get_coord_input(self):
         # Get the data input by coord and send it to the robotic arm 
