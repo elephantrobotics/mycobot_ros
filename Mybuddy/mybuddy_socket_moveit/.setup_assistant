@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/mybuddy/mybuddy.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: wangweijian
+    author_email: weijian.wang@elephatrobotics.com
+    generated_timestamp: 1661409645
