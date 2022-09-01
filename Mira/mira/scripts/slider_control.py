@@ -28,7 +28,7 @@ def callback(data):
         data_list.append(round(value,3))
   
     print('data_list:',data_list)
-    ma.set_radians(data_list[0],data_list[1],data_list[2], 50)
+    ma.set_radians(data_list[0],data_list[1],data_list[2], 80)
     # time.sleep(0.5)
 
 

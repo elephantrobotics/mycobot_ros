@@ -337,8 +337,8 @@ class Window:
                     round(self.angles.joint_3, 2),
     
                 ]
-                print('coord:',self.record_coords)
-                print('angles:',self.res_angles)
+                # print('coord:',self.record_coords)
+                # print('angles:',self.res_angles)
 
     # def send_input(self,dates):
     def show_j_date(self, date, way=""):

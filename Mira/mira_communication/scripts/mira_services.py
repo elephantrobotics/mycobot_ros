@@ -57,9 +57,8 @@ def get_angles(req):
         angles = ma.get_angles_info()
         # angles = [0.0, 0.0, 0.0, 0.0]
         if angles != None:
-            angles_data = angles[:3]
             # print('angles:',angles)
-            return GetAnglesResponse(*angles_data)
+            return GetAnglesResponse(*angles)
 
 
 def set_coords(req):
@@ -80,11 +79,10 @@ def set_coords(req):
 def get_coords(req):
     if ma:
         # coords = ma.get_coords_info()
-        coords = [0.0, 0.0, 0.0, 0.0]
+        coords = [0.0, 0.0, 0.0]
         if coords != None:
-            coords_data = coords[:3]
             # print('coords:',coords)
-            return GetCoordsResponse(*coords_data)
+            return GetCoordsResponse(*coords)
 
 
 def switch_status(req):
