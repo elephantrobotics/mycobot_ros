@@ -52,7 +52,7 @@ def listener():
     global mb
     rospy.init_node("control_slider", anonymous=True)
     rospy.Subscriber("joint_states", JointState, callback)
-    ip = rospy.get_param("~ip", "192.168.123.240")
+    ip = rospy.get_param("~ip", "192.168.123.219")
     port = rospy.get_param("~port", 9000)
     print(ip, port)
     mb = MyBuddySocket(ip, port)

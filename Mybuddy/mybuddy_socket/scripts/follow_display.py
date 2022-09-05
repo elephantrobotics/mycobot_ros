@@ -12,7 +12,7 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mybuddy...")
-    ip = rospy.get_param("~ip", "192.168.123.240")
+    ip = rospy.get_param("~ip", "192.168.123.219")
     port = rospy.get_param("~port", 9000)
     print("ip: {}, port: {}\n".format(ip, port))
     try:
