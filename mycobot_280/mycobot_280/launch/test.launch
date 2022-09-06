@@ -1,7 +1,9 @@
 <launch>
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_gripper_up.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_gripper_parallel.urdf"/> -->
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
-	<arg name="gui" default="true" />
+	<arg name="gui" default="true"/>
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
