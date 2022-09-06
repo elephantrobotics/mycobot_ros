@@ -34,7 +34,7 @@ def callback(data):
 def listener():
     global mb
     rospy.init_node("mybuddy_reciver", anonymous=True)
-    ip = rospy.get_param("~ip", "192.168.123.240")
+    ip = rospy.get_param("~ip", "192.168.123.219")
     port = rospy.get_param("~port", 9000)
     print(ip, port)
     mb = MyBuddySocket(ip, port)
