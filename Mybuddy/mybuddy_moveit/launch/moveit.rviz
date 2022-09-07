@@ -45,14 +45,14 @@ Visualization Manager:
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
-      MoveIt_Allow_Approximate_IK: false
+      MoveIt_Allow_Approximate_IK: true
       MoveIt_Allow_External_Program: false
       MoveIt_Allow_Replanning: false
       MoveIt_Allow_Sensor_Positioning: false
       MoveIt_Planning_Attempts: 10
       MoveIt_Planning_Time: 5
       MoveIt_Use_Cartesian_Path: false
-      MoveIt_Use_Constraint_Aware_IK: false
+      MoveIt_Use_Constraint_Aware_IK: true
       MoveIt_Workspace:
         Center:
           X: 0
