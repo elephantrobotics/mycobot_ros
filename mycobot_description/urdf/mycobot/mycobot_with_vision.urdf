@@ -6,7 +6,7 @@
     <visual>
       <geometry>
         <!--- 0.0 0 -0.04  1.5708 3.14159-->
-        <mesh filename="package://mycobot_description/urdf/mycobot/suit_env.dae"/>
+        <mesh filename="package://mycobot_description/urdf/mycobot/suit_env.dae" scale="1.2 1.2 1.2"/>
       </geometry>
       <origin xyz = "0 0 -0.02 " rpy = "1.5708 0 -1.5708"/>
     </visual>
