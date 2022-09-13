@@ -5,12 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
-        - /MotionPlanning1/Scene Geometry1
-        - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.742560029
-    Tree Height: 325
+    Tree Height: 265
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -74,6 +72,41 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          gripper_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           joint1:
             Alpha: 1
             Show Axes: false
@@ -129,11 +162,11 @@ Visualization Manager:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
         Goal State Color: 250; 128; 0
-        Interactive Marker Size: 0
+        Interactive Marker Size: 0.150000006
         Joint Violation Color: 255; 0; 255
-        Planning Group: mycobot_arm
+        Planning Group: arm_group
         Query Goal State: true
-        Query Start State: true
+        Query Start State: false
         Show Workspace: false
         Start State Alpha: 1
         Start State Color: 0; 255; 0
@@ -154,6 +187,41 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          gripper_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           joint1:
             Alpha: 1
             Show Axes: false
@@ -191,7 +259,7 @@ Visualization Manager:
             Value: true
         Robot Alpha: 0.5
         Show Robot Collision: false
-        Show Robot Visual: false
+        Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 1
   Enabled: true
@@ -210,7 +278,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 1.39158678
+      Distance: 1.31940138
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -225,15 +293,15 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.439796686
+      Pitch: 0.309796989
       Target Frame: joint1
       Value: XYOrbit (rviz)
-      Yaw: 2.5317657
+      Yaw: 3.91995168
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1028
+  Height: 888
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -242,9 +310,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002ad000003befc0200000007fb000000100044006900730070006c0061007900730100000028000001da000000d700fffffffb0000000800480065006c00700000000342000000bb0000007300fffffffb0000000a0056006900650077007300000003b0000000b0000000ad00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c006900640065007201000002080000004a0000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000002580000018e0000018300ffffff00000471000003be00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002ad00000332fc0200000007fb000000100044006900730070006c00610079007301000000280000019e000000d700fffffffb0000000800480065006c00700000000342000000bb0000007300fffffffb0000000a0056006900650077007300000003b0000000b0000000ad00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004a00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001cc0000018e0000018300ffffff000003320000033200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1828
-  X: 92
-  Y: 24
+  Width: 1509
+  X: 188
+  Y: 29

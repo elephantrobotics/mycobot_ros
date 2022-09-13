@@ -16,6 +16,10 @@
         <joint name="joint5_to_joint4" />
         <joint name="joint6_to_joint5" />
         <joint name="joint6output_to_joint6" />
+        <chain base_link="joint1" tip_link="gripper_base" />
+    </group>
+    <group name="gripper">
+        <chain base_link="gripper_base" tip_link="gripper_left3" />
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="init_pose" group="arm_group">
@@ -26,15 +30,81 @@
         <joint name="joint6_to_joint5" value="0" />
         <joint name="joint6output_to_joint6" value="0" />
     </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="gripper" parent_link="gripper_base" group="gripper" parent_group="arm_group" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="vitual_joint" type="fixed" parent_frame="basic" child_link="joint1" />
+    <virtual_joint name="vitual_joint" type="fixed" parent_frame="world" child_link="joint1" />
+    <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
+    <passive_joint name="gripper_left3_to_gripper_left1" />
+    <passive_joint name="gripper_right3_to_gripper_right1" />
+    <passive_joint name="gripper_base_to_gripper_right3" />
+    <passive_joint name="gripper_base_to_gripper_right2" />
+    <passive_joint name="gripper_base_to_gripper_left2" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="gripper_base" link2="gripper_left1" reason="Never" />
+    <disable_collisions link1="gripper_base" link2="gripper_left2" reason="Adjacent" />
+    <disable_collisions link1="gripper_base" link2="gripper_left3" reason="Adjacent" />
+    <disable_collisions link1="gripper_base" link2="gripper_right1" reason="Never" />
+    <disable_collisions link1="gripper_base" link2="gripper_right2" reason="Adjacent" />
+    <disable_collisions link1="gripper_base" link2="gripper_right3" reason="Adjacent" />
+    <disable_collisions link1="gripper_base" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_base" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_base" link2="joint6_flange" reason="Adjacent" />
+    <disable_collisions link1="gripper_left1" link2="gripper_left2" reason="Default" />
+    <disable_collisions link1="gripper_left1" link2="gripper_left3" reason="Adjacent" />
+    <disable_collisions link1="gripper_left1" link2="gripper_right1" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="gripper_right2" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="gripper_right3" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_left1" link2="joint6_flange" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="gripper_left3" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="gripper_right1" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_left2" link2="joint6_flange" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="gripper_right1" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_left3" link2="joint6_flange" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="gripper_right3" reason="Adjacent" />
+    <disable_collisions link1="gripper_right1" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_right1" link2="joint6_flange" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="gripper_right3" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_right2" link2="joint6_flange" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint1" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint2" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint3" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint4" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint5" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint6" reason="Never" />
+    <disable_collisions link1="gripper_right3" link2="joint6_flange" reason="Never" />
     <disable_collisions link1="joint1" link2="joint2" reason="Adjacent" />
-    <disable_collisions link1="joint1" link2="joint5" reason="Never" />
     <disable_collisions link1="joint2" link2="joint3" reason="Adjacent" />
-    <disable_collisions link1="joint2" link2="joint5" reason="Never" />
     <disable_collisions link1="joint3" link2="joint4" reason="Adjacent" />
-    <disable_collisions link1="joint3" link2="joint5" reason="Never" />
     <disable_collisions link1="joint4" link2="joint5" reason="Adjacent" />
     <disable_collisions link1="joint5" link2="joint6" reason="Adjacent" />
     <disable_collisions link1="joint5" link2="joint6_flange" reason="Never" />

@@ -25,6 +25,8 @@ def callback(data):
     data_list = []  
     for index, value in enumerate(data.position):
         data_list.append(round(value,3))
+    # print(data_list[6:])
+    
     data_list = data_list[:7]
     print("radians:%s"%data_list[:6])
     mc.send_radians(data_list[:6], 80)
