@@ -17,29 +17,28 @@ from pymycobot.mycobot import MyCobot
 
 mc = None
 
-
 def callback(data):
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    # print('data_position======================>',data.position)
+    
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(value)
 
     mc.send_radians(data_list, 80)
-    # print('data_list=====================>',data_list)
+  
     # time.sleep(0.5)
-
 
 def listener():
     global mc
+   
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
-    port = rospy.get_param("~port", "/dev/ttyACM0")
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
-
+ 
     # spin() simply keeps python from exiting until this node is stopped
     print("spin ...")
     rospy.spin()
