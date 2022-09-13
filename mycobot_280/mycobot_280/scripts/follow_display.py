@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import time
+from tokenize import Double
 
 import rospy
 from sensor_msgs.msg import JointState
@@ -48,6 +49,12 @@ def talker():
         "joint5_to_joint4",
         "joint6_to_joint5",
         "joint6output_to_joint6",
+        "gripper_controller",
+        # "gripper_base_to_gripper_left2",
+        # "gripper_left3_to_gripper_left1",
+        # "gripper_base_to_gripper_right3",
+        # "gripper_base_to_gripper_right2",
+        # "gripper_right3_to_gripper_right1",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
@@ -61,9 +68,20 @@ def talker():
         joint_state_send.header.stamp = rospy.Time.now()
 
         angles = mycobot.get_radians()
-        data_list = []
-        for index, value in enumerate(angles):
-            data_list.append(value)
+        mycobot.release_servo(7)
+        
+        # if (gripper_value := mycobot.get_gripper_value()) != -1: python3.8
+        gripper_value = mycobot.get_gripper_value()
+        # print("gripper_value1 %s"%gripper_value)
+        if gripper_value != -1:
+            # print(round(gripper_value / 117.0, 2))
+            gripper_value = -0.78 + round(gripper_value / 117.0, 2)
+            print(gripper_value)
+        
+            data_list = []
+            for index, value in enumerate(angles):
+                data_list.append(value)
+            data_list.append(gripper_value)
 
         # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list
