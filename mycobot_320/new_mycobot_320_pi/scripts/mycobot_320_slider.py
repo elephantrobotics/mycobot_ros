@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """[summary]
@@ -28,6 +28,7 @@ def callback(data):
 
     mc.send_radians(data_list, 80)
 
+    print('data_list:', data_list)
     # time.sleep(0.5)
 
 

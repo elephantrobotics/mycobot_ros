@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # license removed for brevity
 import time
@@ -28,7 +28,7 @@ def talker():
         "joint6_to_joint5",
         "joint6output_to_joint6",
     ]
-    joint_state_send.velocity = [0]
+    joint_state_send.velocity = [0.0]
     joint_state_send.effort = []
 
     # waiting util server `get_joint_angles` enable.

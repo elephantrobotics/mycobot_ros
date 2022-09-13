@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import Tkinter as tk
+import tkinter as tk
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import time
