@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>new_mycobot_320</name>
-  <version>0.0.0</version>
-  <description>The new_mycobot_320 package</description>
+  <name>mycobot_320_communication</name>
+  <version>0.1.0</version>
+  <description>The mycobot_320_commuication package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="h@todo.todo">h</maintainer>
+  <maintainer email="lijun.zhang@elephantrobotics.com">zachary</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>TODO</license>
+  <license>BSD</license>
 
 
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/new_mycobot_320</url> -->
+  <!-- <url type="website">http://wiki.ros.org/mycobot_commuication</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -49,25 +49,15 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <!-- <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend> -->
+
+
+  <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <!-- <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>std_msgs</build_export_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>rospy</exec_depend> -->
+  <build_depend>message_generation</build_depend>
+
+  <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <build_depend>mycobot_320_communication</build_depend>
-  <build_depend>mycobot_description</build_depend>
-  <build_export_depend>mycobot_320_communication</build_export_depend>
-  <build_export_depend>mycobot_description</build_export_depend>
-  <exec_depend>mycobot_320_communication</exec_depend>
-  <exec_depend>mycobot_description</exec_depend>
-  <exec_depend>actionlib</exec_depend>
-  <build_depend>actionlib</build_depend>
-
-
+  <exec_depend>message_runtime</exec_depend>
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
