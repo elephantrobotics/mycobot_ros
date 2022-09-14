@@ -34,7 +34,7 @@ class Window:
         # 计算 Tk 根窗口的 x 和 y 坐标
         x = (self.ws / 2) - 190
         y = (self.hs / 2) - 250
-        self.win.geometry("430x370+{}+{}".format(x, y))
+        self.win.geometry("430x410+{}+{}".format(int(x), int(y)))
         # layout,布局
         self.set_layout()
         # input section,输入部分

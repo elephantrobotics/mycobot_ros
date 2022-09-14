@@ -51,8 +51,11 @@ def set_angles(req):
 def get_angles(req):
     """get angles,获取角度"""
     if mc:
-        angles = mc.get_angles()
-        return GetAnglesResponse(*angles)
+        try:
+            angles = mc.get_angles()
+            return GetAnglesResponse(*angles)         
+        except Exception:
+            pass
 
 
 def set_coords(req):
