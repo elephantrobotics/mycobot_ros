@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 from __future__ import print_function
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
@@ -10,7 +11,7 @@ import time
 
 import roslib
 
-
+# Terminal output prompt information. 终端输出提示信息
 msg = """\
 Mycobot Teleop Keyboard Controller
 ---------------------------
@@ -87,8 +88,8 @@ def teleop_keyboard():
 
     while True:
         res = get_coords()
+        # print(res)
         if res.x > 1:
-            print("joint1's angle : "+str(res.x)+"is not > 1,please calibrate the joint1's angle")
             break
         time.sleep(0.1)
     
@@ -98,6 +99,7 @@ def teleop_keyboard():
     try:
         print(msg)
         print(vels(speed, change_percent))
+        # Keyboard keys call different motion functions. 键盘按键调用不同的运动功能
         while 1:
             try:
                 # print("\r current coords: %s" % record_coords, end="")
@@ -147,8 +149,10 @@ def teleop_keyboard():
                     switch_gripper(False)
                 elif key == "1":
                     rsp = set_angles(*init_pose)
+                    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
                 elif key in "2":
                     rsp = set_angles(*home_pose)
+                    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
                 elif key in "3":
                     rep = get_angles()
                     home_pose[0] = rep.joint_1

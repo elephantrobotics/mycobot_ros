@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding:utf-8 -*-
 import time
 
 import rospy
@@ -70,7 +71,6 @@ def talker():
         pub.publish(joint_state_send)
 
         coords = mycobot.get_coords()
-
         # marker
         marker_.header.stamp = rospy.Time.now()
         marker_.type = marker_.SPHERE
@@ -80,7 +80,6 @@ def talker():
         marker_.scale.z = 0.04
 
         # marker position initial
-        # print(coords)
         if not coords:
             coords = [0, 0, 0, 0, 0, 0]
             rospy.loginfo("error [101]: can not get coord values")
@@ -92,9 +91,7 @@ def talker():
         marker_.color.a = 1.0
         marker_.color.g = 1.0
         pub_marker.publish(marker_)
-
         rate.sleep()
-
 
 if __name__ == "__main__":
     try:

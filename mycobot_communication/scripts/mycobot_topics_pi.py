@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 import time
 import os
 import sys
@@ -74,8 +74,8 @@ class MycobotTopics(object):
         rospy.init_node("mycobot_topics_pi")
         rospy.loginfo("start ...")
         # problem
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyCobotSocket(port, baud) # port
         self.mc.connect()   #pi

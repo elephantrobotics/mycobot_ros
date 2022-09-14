@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-
+# -*- coding:utf-8 -*-
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,
 and then sends it directly to the real manipulator using `pymycobot` API.
@@ -17,21 +17,20 @@ from pymycobot.mycobot import MyCobot
 
 mc = None
 
-
 def callback(data):
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    print('data_position======================>',data.position)
+    
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(value)
 
     mc.send_radians(data_list, 80)
-    print('data_list=====================>',data_list)
+  
     # time.sleep(0.5)
-
 
 def listener():
     global mc
+   
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
@@ -39,7 +38,7 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
-
+ 
     # spin() simply keeps python from exiting until this node is stopped
     print("spin ...")
     rospy.spin()

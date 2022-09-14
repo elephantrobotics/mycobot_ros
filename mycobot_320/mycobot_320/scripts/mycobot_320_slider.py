@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,
 and then sends it directly to the real manipulator using `pymycobot` API.

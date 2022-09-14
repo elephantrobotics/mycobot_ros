@@ -1,15 +1,13 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 import time
 import os
 import sys
 import signal
 import threading
-
 import rospy
 from pymycobot.mypalletizer import MyPalletizer
-
-from mypalletizer_communication import(
+from mypalletizer_communication.msg import(
     MypalAngles,
     MypalCoords,
     MypalSetAngles,
@@ -67,9 +65,10 @@ class MypalTopics(object):
     def __init__(self):
         super(MypalTopics, self).__init__()
 
-        rospy.init_node("Mypal_topics")
+        rospy.init_node("mypal_topics")
         rospy.loginfo("start ...")
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
+        print(port)
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyPalletizer(port, baud)
@@ -106,8 +105,7 @@ class MypalTopics(object):
     def pub_real_angles(self):
         """Publish real angle"""
         """发布真实角度"""
-        pub = rospy.Publisher("Mypal/angles_real",
-                              MypalAngles, queue_size=5)
+        pub = rospy.Publisher("mypal/angles_real", MypalAngles, queue_size=5)
         ma = MypalAngles()
         while not rospy.is_shutdown():
             self.lock.acquire()
@@ -126,10 +124,8 @@ class MypalTopics(object):
     def pub_real_coords(self):
         """publish real coordinates"""
         """发布真实坐标"""
-        pub = rospy.Publisher("Mypal/coords_real",
-                              MypalCoords, queue_size=5)
+        pub = rospy.Publisher("mypal/coords_real", MypalCoords, queue_size=5)
         ma = MypalCoords()
-
         while not rospy.is_shutdown():
             self.lock.acquire()
             coords = self.mc.get_coords()
@@ -153,14 +149,14 @@ class MypalTopics(object):
                 data.joint_2,
                 data.joint_3,
                 data.joint_4,
-                # data.joint_5,
+                data.joint_5,
                 # data.joint_6,
             ]
             sp = int(data.speed)
             self.mc.send_angles(angles, sp)
 
         sub = rospy.Subscriber(
-            "Mypal/angles_goal", MypalSetAngles, callback=callback
+            "mypal/angles_goal", MypalSetAngles, callback=callback
         )
         rospy.spin()
 
@@ -168,13 +164,12 @@ class MypalTopics(object):
         def callback(data):
             # angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             angles = [data.x, data.y, data.z, data.rx]
-
             sp = int(data.speed)
             model = int(data.model)
             self.mc.send_coords(angles, sp, model)
 
         sub = rospy.Subscriber(
-            "Mypal/coords_goal", MypalSetCoords, callback=callback
+            "mypal/coords_goal", MypalSetCoords, callback=callback
         )
         rospy.spin()
 
@@ -188,7 +183,7 @@ class MypalTopics(object):
                 self.mc.set_gripper_state(1, 80)
 
         sub = rospy.Subscriber(
-            "Mypal/gripper_status", MypalGripperStatus, callback=callback
+            "mypal/gripper_status", MypalGripperStatus, callback=callback
         )
         rospy.spin()
 
@@ -202,10 +197,9 @@ class MypalTopics(object):
                 self.mc.set_basic_output(data.Pin2, 1)
 
         sub = rospy.Subscriber(
-            "Mypal/pump_status", MypalPumpStatus, callback=callback
+            "mypal/pump_status", MypalPumpStatus, callback=callback
         )
         rospy.spin()
-
 
 if __name__ == "__main__":
     Watcher()
