@@ -1,6 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import Tkinter as tk
+# import Tkinter as tk
+import tkinter as tk
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import time
@@ -412,14 +413,20 @@ class Window:
         # Take the data of the robotic arm for display.拿机械臂的数据，用于展示
         t = time.time()
         while time.time() - t < 2:
-            self.res = self.get_coords()
+            try:
+                self.res = self.get_coords()
+            except Exception:
+                pass
             if self.res.x > 1:
                 break
             time.sleep(0.1)
 
         t = time.time()
         while time.time() - t < 2:
-            self.angles = self.get_angles()
+            try:
+                self.angles = self.get_angles()
+            except Exception:
+                pass
             if self.angles.joint_1 > 1:
                 break
             time.sleep(0.1)

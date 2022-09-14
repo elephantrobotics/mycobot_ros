@@ -8,10 +8,16 @@ import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from mycobot_communication.srv import GetAngles
+from pymycobot.mycobot import MyCobot
 
 
 def talker():
     rospy.loginfo("start ...")
+    
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    baud = rospy.get_param("~baud", 115200)
+    mc = MyCobot(port, baud)
+    
     rospy.init_node("real_listener", anonymous=True)
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
     rate = rospy.Rate(30)  # 30hz
@@ -27,6 +33,7 @@ def talker():
         "joint5_to_joint4",
         "joint6_to_joint5",
         "joint6output_to_joint6",
+        "gripper_controller",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
@@ -42,21 +49,28 @@ def talker():
         res = func()
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
-        radians_list = [
-            res.joint_1 * (math.pi / 180),
-            res.joint_2 * (math.pi / 180),
-            res.joint_3 * (math.pi / 180),
-            res.joint_4 * (math.pi / 180),
-            res.joint_5 * (math.pi / 180),
-            res.joint_6 * (math.pi / 180),
-        ]
-        rospy.loginfo("res: {}".format(radians_list))
+        
+        gripper_value = mc.get_gripper_value()
+        if gripper_value != -1:
+            gripper_value = -0.78 + round(gripper_value / 117.0, 2)
+            print(gripper_value)
+            
+            radians_list = [
+                res.joint_1 * (math.pi / 180),
+                res.joint_2 * (math.pi / 180),
+                res.joint_3 * (math.pi / 180),
+                res.joint_4 * (math.pi / 180),
+                res.joint_5 * (math.pi / 180),
+                res.joint_6 * (math.pi / 180),
+            ]
+            radians_list.append(gripper_value)
+            rospy.loginfo("res: {}".format(radians_list))
 
-        # publish angles.发布角度
-        joint_state_send.header.stamp = rospy.Time.now()
-        joint_state_send.position = radians_list
-        pub.publish(joint_state_send)
-        rate.sleep()
+            # publish angles.发布角度
+            joint_state_send.header.stamp = rospy.Time.now()
+            joint_state_send.position = radians_list
+            pub.publish(joint_state_send)
+            rate.sleep()
 
 
 if __name__ == "__main__":

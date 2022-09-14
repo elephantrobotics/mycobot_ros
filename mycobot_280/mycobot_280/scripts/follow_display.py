@@ -74,7 +74,6 @@ def talker():
         gripper_value = mycobot.get_gripper_value()
         # print("gripper_value1 %s"%gripper_value)
         if gripper_value != -1:
-            # print(round(gripper_value / 117.0, 2))
             gripper_value = -0.78 + round(gripper_value / 117.0, 2)
             print(gripper_value)
         
