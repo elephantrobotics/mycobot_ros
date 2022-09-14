@@ -53,8 +53,7 @@ def talker():
         gripper_value = mc.get_gripper_value()
         if gripper_value != -1:
             gripper_value = -0.78 + round(gripper_value / 117.0, 2)
-            print(gripper_value)
-            
+            # print(gripper_value)            
             radians_list = [
                 res.joint_1 * (math.pi / 180),
                 res.joint_2 * (math.pi / 180),

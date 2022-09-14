@@ -50,11 +50,6 @@ def talker():
         "joint6_to_joint5",
         "joint6output_to_joint6",
         "gripper_controller",
-        # "gripper_base_to_gripper_left2",
-        # "gripper_left3_to_gripper_left1",
-        # "gripper_base_to_gripper_right3",
-        # "gripper_base_to_gripper_right2",
-        # "gripper_right3_to_gripper_right1",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
