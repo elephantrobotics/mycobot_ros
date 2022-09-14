@@ -5,25 +5,18 @@ import rospy
 from mycobot_communication.srv import *
 
 from pymycobot.mycobot import MyCobot
-from pymycobot.mycobotsocket import MyCobotSocket
 
-# mc = None
-ms = None
+mc = None
+
 
 def create_handle():
-    # global mc
-    global ms
+    global mc
     rospy.init_node("mycobot_services")
     rospy.loginfo("start ...")
-    # port = rospy.get_param("~port")
-    # baud = rospy.get_param("~baud")
-    # rospy.loginfo("%s,%s" % (port, baud))
-    # ms = MyCobot(port, baud)
-    ip=rospy.get_param("~ip")
-    port=rospy.get_param("~port")
-    rospy.loginfo("%s,%s" % (ip,port))
-    ms=MyCobotSocket(ip,port)
-    ms.connect()
+    port = rospy.get_param("~port")
+    baud = rospy.get_param("~baud")
+    rospy.loginfo("%s,%s" % (port, baud))
+    mc = MyCobot(port, baud)
 
 
 def create_services():
@@ -49,16 +42,16 @@ def set_angles(req):
     ]
     sp = req.speed
     print('angles1:',angles)
-    if ms:
-        ms.send_angles(angles, sp)
+    if mc:
+        mc.send_angles(angles, sp)
 
     return SetAnglesResponse(True)
 
 
 def get_angles(req):
     """get angles,获取角度"""
-    if ms:
-        angles = ms.get_angles()
+    if mc:
+        angles = mc.get_angles()
         print('angles2:',angles)
         return GetAnglesResponse(*angles)
 
@@ -75,15 +68,15 @@ def set_coords(req):
     sp = req.speed
     mod = req.model
 
-    if ms:
-        ms.send_coords(coords, sp, mod)
+    if mc:
+        mc.send_coords(coords, sp, mod)
 
     return SetCoordsResponse(True)
 
 
 def get_coords(req):
-    if ms:
-        coords = ms.get_coords()
+    if mc:
+        coords = mc.get_coords()
         print('coords:',coords)
         return GetCoordsResponse(*coords)
 
@@ -91,23 +84,23 @@ def get_coords(req):
 def switch_status(req):
     """Gripper switch status"""
     """夹爪开关状态"""
-    if ms:
+    if mc:
         if req.Status:
-            ms.set_gripper_state(0, 80)
+            mc.set_gripper_state(0, 80)
         else:
-            ms.set_gripper_state(1, 80)
+            mc.set_gripper_state(1, 80)
 
     return GripperStatusResponse(True)
 
 
 def toggle_pump(req):
-    if ms:
+    if mc:
         if req.Status:
-            ms.set_basic_output(req.Pin1, 0)
-            ms.set_basic_output(req.Pin2, 0)
+            mc.set_basic_output(req.Pin1, 0)
+            mc.set_basic_output(req.Pin2, 0)
         else:
-            ms.set_basic_output(req.Pin1, 1)
-            ms.set_basic_output(req.Pin2, 1)
+            mc.set_basic_output(req.Pin1, 1)
+            mc.set_basic_output(req.Pin2, 1)
 
     return PumpStatusResponse(True)
 
@@ -139,12 +132,12 @@ def output_robot_message():
     servo_temperature = "unknown"
     atom_version = "unknown"
 
-    if ms:
-        cn = ms.is_controller_connected()
+    if mc:
+        cn = mc.is_controller_connected()
         if cn == 1:
             connect_status = True
         time.sleep(0.1)
-        si = ms.is_all_servo_enable()
+        si = mc.is_all_servo_enable()
         if si == 1:
             servo_infomation = "all connected"
 
