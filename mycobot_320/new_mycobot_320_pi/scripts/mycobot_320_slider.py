@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """[summary]
@@ -7,7 +7,7 @@ and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
     port: serial prot string. Defaults is '/dev/ttyAMA0'
-    baud: serial prot baudrate. Defaults is 1000000.
+    baud: serial prot baudrate. Defaults is 115200.
 """
 
 import rospy
@@ -28,6 +28,7 @@ def callback(data):
 
     mc.send_radians(data_list, 80)
 
+    print('data_list:', data_list)
     # time.sleep(0.5)
 
 
