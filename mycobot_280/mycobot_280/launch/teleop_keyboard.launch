@@ -4,7 +4,8 @@
 	<arg name="baud" default="115200" />
 
 	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/> -->
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_gripper_up.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_gripper_up.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_gripper_parallel.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
 	<arg name="gui" default="false" />
 
