@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # encoding:utf-8
 # license removed for brevity
+from distutils.log import error
 import time
 import math
 
@@ -9,6 +10,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from mycobot_communication.srv import GetAngles
 from pymycobot.mycobot import MyCobot
+from rospy import ServiceException
 
 
 def talker():
@@ -41,8 +43,16 @@ def talker():
     # waiting util server `get_joint_angles` enable.等待'get_joint_angles'服务启用
     rospy.loginfo("wait service")
     rospy.wait_for_service("get_joint_angles")
-    func = rospy.ServiceProxy("get_joint_angles", GetAngles)
-
+    
+    while True:
+        try:
+            func = rospy.ServiceProxy("get_joint_angles", GetAngles)
+            break
+        except ServiceException as e:
+            # pass
+            # print(f'error:{e}')
+            print("--------------error",e)
+    
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
         # get real angles from server.从服务器获得真实的角度。

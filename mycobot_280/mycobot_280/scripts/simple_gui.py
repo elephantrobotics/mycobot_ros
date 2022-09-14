@@ -415,21 +415,22 @@ class Window:
         while time.time() - t < 2:
             try:
                 self.res = self.get_coords()
+                if self.res.x > 1:
+                    break
+                time.sleep(0.1)
             except Exception:
                 pass
-            if self.res.x > 1:
-                break
-            time.sleep(0.1)
-
+            
         t = time.time()
         while time.time() - t < 2:
             try:
                 self.angles = self.get_angles()
+                if self.angles.joint_1 > 1:
+                    break
+                time.sleep(0.1)
             except Exception:
                 pass
-            if self.angles.joint_1 > 1:
-                break
-            time.sleep(0.1)
+            
         # print(self.angles.joint_1)
         self.record_coords = [
             round(self.res.x, 2),

@@ -78,8 +78,11 @@ def set_coords(req):
 
 def get_coords(req):
     if mc:
-        coords = mc.get_coords()
-        return GetCoordsResponse(*coords)
+        try:
+            coords = mc.get_coords()
+            return GetCoordsResponse(*coords)      
+        except Exception:
+            pass
 
 
 def switch_status(req):
