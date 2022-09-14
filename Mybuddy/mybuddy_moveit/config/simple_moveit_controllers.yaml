@@ -1,0 +1,31 @@
+controller_list:
+  - name: right_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - base_link1
+      - joint1_R
+      - joint2_R
+      - joint3_R
+      - joint4_R
+      - joint5_R
+      - joint6_R
+  - name: left_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - base_link1
+      - joint1_L
+      - joint2_L
+      - joint3_L
+      - joint4_L
+      - joint5_L
+      - joint6_L
+  - name: waist_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - base_link1

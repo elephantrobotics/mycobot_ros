@@ -129,7 +129,7 @@ Visualization Manager:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
         Goal State Color: 250; 128; 0
-        Interactive Marker Size: 0
+        Interactive Marker Size: 0.100000001
         Joint Violation Color: 255; 0; 255
         Planning Group: arm_group
         Query Goal State: true
@@ -225,10 +225,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.164796591
+      Pitch: -0.1102034
       Target Frame: link1
       Value: XYOrbit (rviz)
-      Yaw: 5.75176573
+      Yaw: 1.43358004
     Saved: ~
 Window Geometry:
   Displays:

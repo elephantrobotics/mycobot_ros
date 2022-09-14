@@ -13,7 +13,7 @@
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find mycobot_communication)/launch/communication_service.launch">
+    <include file="$(find mycobot_320_communication)/launch/communication_service.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*
 import time
 import rospy
 from mycobot_communication.srv import *
@@ -41,7 +41,7 @@ def set_angles(req):
         req.joint_6,
     ]
     sp = req.speed
-
+    print('angles1:',angles)
     if mc:
         mc.send_angles(angles, sp)
 
@@ -52,6 +52,7 @@ def get_angles(req):
     """get angles,获取角度"""
     if mc:
         angles = mc.get_angles()
+        print('angles2:',angles)
         return GetAnglesResponse(*angles)
 
 
@@ -76,6 +77,7 @@ def set_coords(req):
 def get_coords(req):
     if mc:
         coords = mc.get_coords()
+        print('coords:',coords)
         return GetCoordsResponse(*coords)
 
 

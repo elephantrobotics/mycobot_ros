@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,

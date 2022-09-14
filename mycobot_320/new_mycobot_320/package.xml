@@ -58,11 +58,11 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend> -->
   <exec_depend>std_msgs</exec_depend>
-  <build_depend>mycobot_communication</build_depend>
+  <build_depend>mycobot_320_communication</build_depend>
   <build_depend>mycobot_description</build_depend>
-  <build_export_depend>mycobot_communication</build_export_depend>
+  <build_export_depend>mycobot_320_communication</build_export_depend>
   <build_export_depend>mycobot_description</build_export_depend>
-  <exec_depend>mycobot_communication</exec_depend>
+  <exec_depend>mycobot_320_communication</exec_depend>
   <exec_depend>mycobot_description</exec_depend>
   <exec_depend>actionlib</exec_depend>
   <build_depend>actionlib</build_depend>

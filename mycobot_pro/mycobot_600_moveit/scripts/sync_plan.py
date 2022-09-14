@@ -275,7 +275,7 @@ def listener():
     global mc
     rospy.init_node("control_slider", anonymous=True)
 
-    ip = rospy.get_param("~ip", "192.168.10.159")
+    ip = rospy.get_param("~ip", "192.168.10.158")
     print (ip)
     mc = ElephantRobot(ip, 5001)
     # START CLIENT,启动客户端

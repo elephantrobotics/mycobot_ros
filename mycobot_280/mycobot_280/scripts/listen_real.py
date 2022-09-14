@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# encoding:utf-8
 # license removed for brevity
 import time
 import math

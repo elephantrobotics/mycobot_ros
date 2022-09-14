@@ -16,7 +16,7 @@
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
 	<!-- mycobot-topics -->
-    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+    <include file="$(find mycobot_320_communication)/launch/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
