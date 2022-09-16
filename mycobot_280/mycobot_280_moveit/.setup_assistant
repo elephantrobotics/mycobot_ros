@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: zachary
     author_email: lijun.zhang@elephantrobotics.com
-    generated_timestamp: 1663041775
+    generated_timestamp: 1663152534
