@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from __future__ import print_function
-# from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 from mira_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import sys
@@ -92,7 +91,7 @@ def teleop_keyboard():
             break
         time.sleep(0.1)
 
-    record_coords = [res.x, res.y, res.z, speed, model]
+    record_coords = [res.x, res.y, res.z, speed]
 
     print(record_coords)
 
@@ -131,10 +130,10 @@ def teleop_keyboard():
                     switch_gripper(False)
                 elif key == "1":
                     rsp = set_angles(*init_pose)
-                    record_coords = [res.x, res.y, res.z, speed, model]
+                    record_coords = [res.x, res.y, res.z, speed]
                 elif key in "2":
                     rsp = set_angles(*home_pose)
-                    record_coords = [res.x, res.y, res.z, speed, model]
+                    record_coords = [res.x, res.y, res.z, speed]
                 elif key in "3":
                     rep = get_angles()
                     home_pose[0] = rep.joint_1

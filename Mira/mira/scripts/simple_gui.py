@@ -276,7 +276,7 @@ class Window:
         # c_value.append(self.model)
         # print(c_value)
         try:
-            self.set_coords(c_value[0], c_value[1], c_value[2], self.speed)
+            self.set_coords(c_value, self.speed)
         except ServiceException:
             pass
         self.show_j_date(c_value[:-2], "coord")
@@ -294,7 +294,7 @@ class Window:
         j_value.append(self.speed)
 
         try:
-            self.set_angles(j_value[0], j_value[1], j_value[2], self.speed)
+            self.set_angles(j_value, self.speed)
         except ServiceException:
             pass
         self.show_j_date(j_value[:-1])

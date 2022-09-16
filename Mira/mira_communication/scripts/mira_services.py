@@ -47,7 +47,7 @@ def set_angles(req):
     sp = req.speed
     print('mira_services:',angles)
     if ma:
-        ma.set_angles(angles[0], angles[1], angles[2], sp)
+        ma.set_angles(angles, sp)
 
     return SetAnglesResponse(True)
 
@@ -71,7 +71,7 @@ def set_coords(req):
     # mod = req.model
     print('mira_services:',coords)
     if ma:
-        ma.set_coords(coords[0], coords[1], coords[2], sp)
+        ma.set_coords(coords, sp)
 
     return SetCoordsResponse(True)
 
@@ -89,9 +89,9 @@ def switch_status(req):
     """Gripper switch,夹爪开关"""
     if ma:
         if req.Status:
-            ma.set_gripper_state(0, 50)
+            ma.set_gripper_state(0)
         else:
-            ma.set_gripper_state(1, 50)
+            ma.set_gripper_state(1)
 
     return GripperStatusResponse(True)
 

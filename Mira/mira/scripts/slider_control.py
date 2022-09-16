@@ -13,7 +13,6 @@ import time
 import rospy
 from sensor_msgs.msg import JointState
 
-# from pymycobot.mycobot import MyCobot
 from pymycobot.mira import Mira
 import math
 
@@ -28,7 +27,7 @@ def callback(data):
         data_list.append(round(value,3))
   
     print('data_list:',data_list)
-    ma.set_radians(data_list[0],data_list[1],data_list[2], 80)
+    ma.set_radians(data_list, 80)
     # time.sleep(0.5)
 
 
@@ -43,7 +42,7 @@ def listener():
     ma = Mira(port, baud)
     ma.power_on()
     ma.go_zero()
-
+    
     # spin() simply keeps python from exiting until this node is stopped
     # spin() 只是阻止python退出，直到该节点停止
     print("spin ...")

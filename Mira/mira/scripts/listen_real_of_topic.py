@@ -35,12 +35,12 @@ class Listener(object):
             "joint1_to_base",
             "joint2_to_joint1",
             "joint3_to_joint2",
-            "joint4_to_joint3",
+            # "joint4_to_joint3",
             # "joint5_to_joint4",
             # "joint6_to_joint5",
             # "joint6output_to_joint6",
         ]
-        joint_state_send.velocity = [0]
+        joint_state_send.velocity = [0.0]
         joint_state_send.effort = []
         joint_state_send.header.stamp = rospy.Time.now()
 

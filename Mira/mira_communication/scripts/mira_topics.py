@@ -8,8 +8,9 @@ import threading
 
 import rospy
 from pymycobot.mypalletizer import MyPalletizer
+from pymycobot.mira import Mira
 
-from mira_communication import(
+from mira_communication.msg import(
     MiraAngles,
     MiraCoords,
     MiraSetAngles,
@@ -72,7 +73,7 @@ class MiraTopics(object):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyPalletizer(port, baud)
+        self.mc = Mira(port, baud)
         self.lock = threading.Lock()
 
     def start(self):
@@ -117,7 +118,7 @@ class MiraTopics(object):
                 ma.joint_1 = angles[0]
                 ma.joint_2 = angles[1]
                 ma.joint_3 = angles[2]
-                ma.joint_4 = angles[3]
+                # ma.joint_4 = angles[3]
                 # ma.joint_5 = angles[4]
                 # ma.joint_6 = angles[5]
                 pub.publish(ma)
@@ -138,7 +139,7 @@ class MiraTopics(object):
                 ma.x = coords[0]
                 ma.y = coords[1]
                 ma.z = coords[2]
-                ma.rx = coords[3]
+                # ma.rx = coords[3]
                 # ma.ry = coords[4]
                 # ma.rz = coords[5]
                 pub.publish(ma)
@@ -152,12 +153,12 @@ class MiraTopics(object):
                 data.joint_1,
                 data.joint_2,
                 data.joint_3,
-                data.joint_4,
+                # data.joint_4,
                 # data.joint_5,
                 # data.joint_6,
             ]
             sp = int(data.speed)
-            self.mc.send_angles(angles, sp)
+            self.mc.set_angles(angles, sp)
 
         sub = rospy.Subscriber(
             "Mypal/angles_goal", MiraSetAngles, callback=callback
@@ -167,11 +168,11 @@ class MiraTopics(object):
     def sub_set_coords(self):
         def callback(data):
             # angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
-            angles = [data.x, data.y, data.z, data.rx]
+            angles = [data.x, data.y, data.z]
 
             sp = int(data.speed)
-            model = int(data.model)
-            self.mc.send_coords(angles, sp, model)
+            # model = int(data.model)
+            self.mc.set_coords(angles, sp)
 
         sub = rospy.Subscriber(
             "Mypal/coords_goal", MiraSetCoords, callback=callback
@@ -183,9 +184,9 @@ class MiraTopics(object):
         """订阅夹爪状态"""
         def callback(data):
             if data.Status:
-                self.mc.set_gripper_state(0, 80)
+                self.mc.set_gripper_state(0)
             else:
-                self.mc.set_gripper_state(1, 80)
+                self.mc.set_gripper_state(1)
 
         sub = rospy.Subscriber(
             "Mypal/gripper_status", MiraGripperStatus, callback=callback

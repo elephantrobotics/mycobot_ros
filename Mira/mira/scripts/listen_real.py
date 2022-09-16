@@ -7,7 +7,7 @@ import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from mira_communication.srv import GetAngles
-# from pymycobot.mypalletizer import MyPalletizer
+
 from pymycobot.mira import Mira
 
 
