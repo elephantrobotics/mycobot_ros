@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding:utf-8 -*- 
 from operator import imod
 from tokenize import Pointfloat
@@ -19,13 +19,13 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 150, camera_y = 10):
+    def __init__(self, camera_x = 148, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
 
-        # declare mypal260
+        # declare mira
         self.mc = None
 
         # 移动角度
@@ -37,8 +37,8 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [-6.91, 175.86, 120.0],  # above the red bucket
-            [136.45, 149.22, 117.11], # above the green bucket
+            [121.35, 127.48, 120.0],  # above the red bucket
+            [217.09, 113.01, 98.36], # above the green bucket
             [107.54, -171.23, 117.11], # above the blue bucket
             [-6.91, -175.86, 120.0], # above the gray bucket         
         ]
@@ -60,14 +60,14 @@ class Object_detect(Movement):
             # "yellow": [np.array([26, 43, 46]), np.array([34, 255, 255])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
             "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
-            # "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
+            "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
-        # use to calculate coord between cube and mypal260
+        # use to calculate coord between cube and mira
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
-        # The coordinates of the grab center point relative to the mypal260
+        # The coordinates of the grab center point relative to the mira
         self.camera_x, self.camera_y = camera_x, camera_y
-        # The coordinates of the cube relative to the mypal260
+        # The coordinates of the cube relative to the mira
         self.c_x, self.c_y = 0, 0
         # The ratio of pixels to actual values
         self.ratio = 0
@@ -134,7 +134,7 @@ class Object_detect(Movement):
         self.mc.set_angles(self.move_angles[0], 20)
         time.sleep(3)
 
-        # send coordinates to move mypal260
+        # send coordinates to move mira
         self.mc.set_coords([x, -y, 58.84], 20)
         time.sleep(1.5)
         self.mc.set_coords([x, -y, 21.8], 20)
@@ -181,7 +181,7 @@ class Object_detect(Movement):
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init mypal260
+    # init mira
     def run(self):
         self.mc = Mira(self.robot_m5, 115200)
         self.mc.go_zero()
@@ -239,13 +239,13 @@ class Object_detect(Movement):
         self.y2 = int(y2)
         print(self.x1, self.y1, self.x2, self.y2)
 
-    # set parameters to calculate the coords between cube and mypal260
+    # set parameters to calculate the coords between cube and mira
     def set_params(self, c_x, c_y, ratio):
         self.c_x = c_x
         self.c_y = c_y
         self.ratio = 220.0/ratio
 
-    # calculate the coords between cube and mypal260
+    # calculate the coords between cube and mira
     def get_position(self, x, y):
         return ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
 
@@ -319,8 +319,7 @@ class Object_detect(Movement):
                     cv2.rectangle(img, (x, y), (x+w, y+h), (153, 153, 0), 2)
                     # calculate the rectangle center
                     x, y = (x*2+w)/2, (y*2+h)/2
-                    # calculate the real coordinates of mypal260 relative to the target
-                    print('mira_mycolor:', mycolor)
+                    # calculate the real coordinates of mira relative to the target
                     if mycolor == "red":
                         self.color = 0
                     elif mycolor == "green":
@@ -344,7 +343,7 @@ if __name__ == "__main__":
         cap.open()
     # init a class of Object_detect
     detect = Object_detect()
-    # init mypal260
+    # init mira
     detect.run()
 
     _init_ = 20  
@@ -387,7 +386,7 @@ if __name__ == "__main__":
             init_num += 1
             continue
 
-        # calculate params of the coords between cube and mypal260
+        # calculate params of the coords between cube and mira
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
                 cv2.imshow("figure", frame)
@@ -404,7 +403,7 @@ if __name__ == "__main__":
                 continue
         elif nparams == 10:
             nparams += 1
-            # calculate and set params of calculating real coord between cube and mypal260
+            # calculate and set params of calculating real coord between cube and mira
             detect.set_params(
                 (detect.sum_x1+detect.sum_x2)/20.0,
                 (detect.sum_y1+detect.sum_y2)/20.0,
@@ -421,7 +420,7 @@ if __name__ == "__main__":
             continue
         else:
             x, y = detect_result
-            # calculate real coord between cube and mypal260
+            # calculate real coord between cube and mira
             real_x, real_y = detect.get_position(x, y)
             if num == 20:
                 detect.pub_marker(real_sx/20.0/1000.0, real_sy/20.0/1000.0)

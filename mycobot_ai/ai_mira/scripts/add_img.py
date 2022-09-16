@@ -49,8 +49,8 @@ def take_photo():
 
 def cut_photo():
     
-    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mypalletizer_260/'    # pi
-    path2 = '/home/u20/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/'         # m5
+    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/'    # pi
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/'         # m5
 
     if os.path.exists(path1):
         path = path1

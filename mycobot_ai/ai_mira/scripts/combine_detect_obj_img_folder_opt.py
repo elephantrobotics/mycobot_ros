@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # encoding:utf-8
 from multiprocessing import Process, Pipe
 from cgi import parse
@@ -18,7 +18,7 @@ from visualization_msgs.msg import Marker
 from PIL import Image
 from threading import Thread
 import tkFileDialog as filedialog
-import tkinter as tk
+import Tkinter as tk
 from moving_utils import Movement
 from pymycobot.mira import Mira
 
@@ -28,7 +28,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 150, camera_y = 10):
+    def __init__(self, camera_x = 148, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -40,13 +40,12 @@ class Object_detect(Movement):
         self.move_angles = [
             [0.0, 0.0, 0.0],  # init the point
             [19.48, 0.0, 0.0],  # point to grab
-            # [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
 
         # 移动坐标
         self.move_coords = [
-            [-6.91, 175.86, 120.0],  # above the red bucket
-            [136.45, 149.22, 117.11], # above the green bucket
+            [121.35, 127.48, 120.0],  # above the red bucket
+            [217.09, 113.01, 98.36], # above the green bucket
             [107.54, -171.23, 117.11], # above the blue bucket
             [-6.91, -175.86, 120.0], # above the gray bucket     
         ]
@@ -360,7 +359,7 @@ class Object_detect(Movement):
 def parse_folder(folder):
     restore = []
     path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/' + folder
-    path2 = '/home/u20/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/' + folder
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mira/' + folder
 
     if os.path.exists(path1):
         path = path1

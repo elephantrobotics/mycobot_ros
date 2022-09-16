@@ -31,13 +31,13 @@ move_gray = [-1.61, 0.0, 0.0]
 gray_angles = [-92.25, 0.0, 0.0]
 gray_coords = [-6.91, -175.86, 120.0]
 
-move_green = [0.83, 0.22, 0]
-green_angles = [47.56, 12.61, 0.0]
-green_coords = [136.45, 149.22, 117.11]
+move_green = [0.48, 0.61, 0]
+green_angles = [27.5, 34.95, 0.0]
+green_coords = [217.09, 113.01, 98.36]
 
-move_red = [1.61, 0.0, 0.0]
-red_angles = [92.25, 0.0, 0.0]
-red_coords = [-6.91, 175.86, 120.0]
+move_red = [0.81, 0.0, 0.0]
+red_angles = [46.41, 0.0, 0.0]
+red_coords = [121.35, 127.48, 120.0]
 
 
 radians_chushi= [0.34, 0, 0]
@@ -65,17 +65,17 @@ chishi_coords = [165.93, 58.69, 120.0]
 # print('qilai_angles:', mc.get_angles_info())
 # print('qilai_coords:', mc.get_coords_info())
 
-mc.set_radians(move_blue, 50)
-time.sleep(4)
-print('blue_angles:', mc.get_angles_info())
-print('blue_coords:', mc.get_coords_info())
-# mc.set_gpio_state(1)
-time.sleep(2)
+# mc.set_radians(move_blue, 50)
+# time.sleep(4)
+# print('blue_angles:', mc.get_angles_info())
+# print('blue_coords:', mc.get_coords_info())
+# # mc.set_gpio_state(1)
+# time.sleep(2)
 
-mc.set_radians(radians_chushi, 50)
-time.sleep(5)
-print('chushi_angles:', mc.get_angles_info())
-print('chishi_coords:', mc.get_coords_info())
+# mc.set_radians(radians_chushi, 50)
+# time.sleep(5)
+# print('chushi_angles:', mc.get_angles_info())
+# print('chishi_coords:', mc.get_coords_info())
 
 # mc.set_radians(move_gray, 50)
 # time.sleep(6)
@@ -85,17 +85,17 @@ print('chishi_coords:', mc.get_coords_info())
 # mc.set_radians(radians_chushi, 50)
 # time.sleep(2)
 
-# mc.set_radians(move_green, 50)
-# time.sleep(4)
-# print('green_angles:', mc.get_angles_info())
-# print('green_coords:', mc.get_coords_info())
+mc.set_radians(move_green, 50)
+time.sleep(4)
+print('green_angles:', mc.get_angles_info())
+print('green_coords:', mc.get_coords_info())
 
-# mc.set_radians(radians_chushi, 50)
-# time.sleep(2)
+mc.set_radians(radians_chushi, 50)
+time.sleep(2)
 
-# mc.set_radians(move_red, 50)
-# time.sleep(4)
-# print('red_angles:', mc.get_angles_info())
-# print('red_coords:', mc.get_coords_info())
+mc.set_radians(move_red, 50)
+time.sleep(4)
+print('red_angles:', mc.get_angles_info())
+print('red_coords:', mc.get_coords_info())
 
 mc.set_radians(radians_chushi, 50)
