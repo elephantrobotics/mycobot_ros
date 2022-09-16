@@ -14,13 +14,13 @@
 	</node>
 
 	<!-- mypalletizer-topics -->
-    <include file="$(find mypalletizer_communication)/launch/communication_topic.launch">
+    <include file="$(find mira_communication)/launch/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 
     <!-- listen and pub the real angles -->
-	<node name="real_listener" pkg="mypalletizer_260" type="listen_real_of_topic.py" />
+	<node name="real_listener" pkg="mira_260" type="listen_real_of_topic.py" />
 
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
