@@ -3,6 +3,20 @@
 	
 <xacro:property name="width" value=".2" />
 
+  <link name="g_base">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot/G_base.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 -0.03" rpy = "0 0 1.5708"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot/G_base.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 -0.03" rpy = "0 0 1.5708"/>
+    </collision>
+  </link>
 
   <link name="joint1">
     <visual>
@@ -232,6 +246,15 @@
     <origin xyz = "-0.012 0.0025 -0.012" rpy = " 0 0 0"/>
     </collision>
   </link>
+
+
+  <joint name="g_base_to_joint1" type="fixed">
+    <axis xyz="0 0 0"/>
+    <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
+    <parent link="g_base"/>
+    <child link="joint1"/>
+    <origin xyz= "0 0 0" rpy = "0 0 0"/>  
+  </joint>
 
 
   <joint name="joint2_to_joint1" type="revolute">
