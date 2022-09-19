@@ -20,8 +20,8 @@
   <arg name="fake_execution_type" default="interpolate" />
 
   <!-- By default, hide joint_state_publisher's GUI in 'fake' controller_manager mode -->
-  <arg name="use_gui" default="true" />
-  <!-- <arg name="use_gui" default="false" /> -->
+  <!-- <arg name="use_gui" default="true" /> -->
+  <arg name="use_gui" default="false" />
   <arg name="use_rviz" default="true" />
 
   <!-- If needed, broadcast static tf for robot root -->
