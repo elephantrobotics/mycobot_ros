@@ -8,7 +8,7 @@ import threading
 
 import rospy
 
-from mira_communication import (
+from mira_communication.msg import (
     MiraAngles,
     MiraCoords,
     MiraSetAngles,
@@ -16,7 +16,7 @@ from mira_communication import (
     MiraGripperStatus,
     MiraPumpStatus,
 )
-from pymycobot.mypalletizer import Mypalletizer
+from pymycobot.mira import Mira
 
 
 class Watcher:
@@ -73,7 +73,8 @@ class MiraTopics(object):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = Mypalletizer(port,baud)
+        self.mc = Mira(port,baud)
+        self.mc.go_zero()
         self.lock = threading.Lock()
 
     def start(self):

@@ -74,6 +74,7 @@ class MiraTopics(object):
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = Mira(port, baud)
+        self.mc.go_zero()
         self.lock = threading.Lock()
 
     def start(self):
@@ -112,7 +113,7 @@ class MiraTopics(object):
         ma = MiraAngles()
         while not rospy.is_shutdown():
             self.lock.acquire()
-            angles = self.mc.get_angles()
+            angles = self.mc.get_angles_info()
             self.lock.release()
             if angles:
                 ma.joint_1 = angles[0]
@@ -133,7 +134,7 @@ class MiraTopics(object):
 
         while not rospy.is_shutdown():
             self.lock.acquire()
-            coords = self.mc.get_coords()
+            coords = self.mc.get_coords_info()
             self.lock.release()
             if coords:
                 ma.x = coords[0]
@@ -196,11 +197,9 @@ class MiraTopics(object):
     def sub_pump_status(self):
         def callback(data):
             if data.Status:
-                self.mc.set_basic_output(data.Pin1, 0)
-                self.mc.set_basic_output(data.Pin2, 0)
+                self.mc.set_gpio_state(0)
             else:
-                self.mc.set_basic_output(data.Pin1, 1)
-                self.mc.set_basic_output(data.Pin2, 1)
+                self.mc.set_gpio_state(1)
 
         sub = rospy.Subscriber(
             "Mypal/pump_status", MiraPumpStatus, callback=callback
