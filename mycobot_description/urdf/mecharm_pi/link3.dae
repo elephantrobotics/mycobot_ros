@@ -2,7 +2,7 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
     <contributor>
-      <author />
+      <author></author>
       <authoring_tool>Rhinoceros 7.5.21082.11001</authoring_tool>
       <comments>Output from Rhinoceros COLLADA Exporter</comments>
       <copyright />
