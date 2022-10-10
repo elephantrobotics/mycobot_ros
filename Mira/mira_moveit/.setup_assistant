@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/mira_urdf/mira.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: weijian.wang
+    author_email: weijian.wang@elephanticrobots.com
+    generated_timestamp: 1662518830

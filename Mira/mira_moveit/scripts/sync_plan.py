@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+import rospy
+from sensor_msgs.msg import JointState
+from pymycobot.mira import Mira
+
+
+ma = None
+
+
+def callback(data):
+    rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
+    # print(data.position)
+    data_list = []
+    for index, value in enumerate(data.position):
+        data_list.append(round(value,3))
+    
+    print('data_list:',data_list)
+    ma.set_radians(data_list, 50)
+    # time.sleep(0.5)
+
+
+def listener():
+    global ma
+    rospy.init_node("control_slider", anonymous=True)
+
+    rospy.Subscriber("joint_states", JointState, callback)
+    port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
+    baud = rospy.get_param("~baud", 115200)
+    print(port, baud)
+    ma = Mira(port, baud)
+    ma.power_on()
+    ma.go_zero()
+
+    # spin() simply keeps python from exiting until this node is stopped
+    # spin() 只是阻止python退出，直到该节点停止
+    print("spin ...")
+    rospy.spin()
+
+
+if __name__ == "__main__":
+    listener()
