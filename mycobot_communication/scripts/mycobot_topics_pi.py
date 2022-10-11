@@ -18,8 +18,8 @@ from mycobot_communication.msg import (
 )
 
 
-
-from pymycobot import MyCobotSocket
+from pymycobot import MyCobot
+# from pymycobot import MyCobotSocket
 
 
 class Watcher:
@@ -77,8 +77,9 @@ class MycobotTopics(object):
         port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
         baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyCobotSocket(port, baud) # port
-        self.mc.connect()   #pi
+        # self.mc = MyCobotSocket(port, baud) # port
+        # self.mc.connect()   #pi
+        self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
 
     def start(self):
