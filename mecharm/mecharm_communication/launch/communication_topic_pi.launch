@@ -1,4 +1,4 @@
-3<launch>
+<launch>
 	<!-- Select connecting device and serial port ，选择连接设备及串口-->
 	<arg name="port" default="/dev/ttyAMA0" />
 	<arg name="baud" default="1000000" />
