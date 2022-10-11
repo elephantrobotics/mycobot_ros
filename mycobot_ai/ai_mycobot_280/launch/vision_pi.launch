@@ -20,7 +20,7 @@
     </include>
 
     <!-- listen and pub the real angles -->
-	<node name="real_listener" pkg="mycobot_280_pi" type="listen_real_of_topic.py" />
+	<node name="real_listener" pkg="mycobot_280pi" type="listen_real_of_topic.py" />
 
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
