@@ -76,6 +76,7 @@ class MycobotTopics(object):
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyCobot(port, baud)
+        
         self.lock = threading.Lock()
 
     def start(self):

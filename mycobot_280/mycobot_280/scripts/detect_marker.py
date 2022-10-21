@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# encoding=utf-8
 import rospy
 import cv2 as cv
 import numpy as np
@@ -96,12 +97,13 @@ class ImageConverter:
                     euler[0], euler[1], euler[2]
                 )
                 print("tf_change:", tf_change)
+                print('xyz:',xyz)
 
                 # trans pose according [joint1]，根据 [joint1] 变换姿势
                 self.br.sendTransform(
-                    xyz, tf_change, rospy.Time.now(), "basic_shapes", "joint6_flange"
+                    xyz, tf_change, rospy.Time.now(), "basic_shapes", "link6"
                 )
-
+                
         # [x, y, z, -172, 3, -46.8]
         cv.imshow("Image", cv_image)
 

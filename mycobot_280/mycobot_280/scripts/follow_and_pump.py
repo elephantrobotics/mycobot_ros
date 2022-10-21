@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 # coding:utf-8
+from cv2 import goodFeaturesToTrack
+from pymycobot import MyCobot
 import rospy
 from visualization_msgs.msg import Marker
 import time
@@ -19,6 +21,11 @@ coord_pub = rospy.Publisher("mycobot/coords_goal",
                             MycobotSetCoords, queue_size=5)
 # 判断设备：ttyUSB*为M5；ttyACM*为wio，Judging equipment: ttyUSB* is M5；ttyACM* is wio
 robot = os.popen("ls /dev/ttyUSB*").readline()
+
+mc = MyCobot('/dev/ttyUSB0', 115200)
+mc.set_tool_reference([-50,0,0,0,0,0])
+mc.set_end_type(1)
+
 
 if "dev" in robot:
     Pin = [2, 5]
@@ -48,7 +55,7 @@ temp_x = temp_y = temp_z = 0.0
 temp_time = time.time()
 
 
-def pub_coords(x, y, z, rx=-150, ry=10, rz=-90, sp=70, m=2):
+def pub_coords(x, y, z, rx=-170, ry=-5.6, rz=-90, sp=20, m=1):
     """Post coordinates,发布坐标"""
     coords.x = x
     coords.y = y
@@ -56,7 +63,7 @@ def pub_coords(x, y, z, rx=-150, ry=10, rz=-90, sp=70, m=2):
     coords.rx = rx
     coords.ry = ry
     coords.rz = rz
-    coords.speed = 70
+    coords.speed = 20
     coords.model = m
     # print(coords)
     coord_pub.publish(coords)
@@ -73,13 +80,6 @@ def pub_angles(a, b, c, d, e, f, sp):
     angles.speed = sp
     angle_pub.publish(angles)
 
-
-def pub_pump(flag, Pin):
-    """Publish gripper status,发布夹爪状态"""
-    pump.Status = flag
-    pump.Pin1 = Pin[0]
-    pump.Pin2 = Pin[1]
-    pump_pub.publish(pump)
 
 
 def target_is_moving(x, y, z):
@@ -102,85 +102,58 @@ def grippercallback(data):
     # rospy.loginfo('gripper_subscriber get date :%s', data)
     if flag:
         return
+   
+    # robot_coords = mc.get_coords()
+   
+    # pub_angles(89.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20)
+    # time.sleep(10)
+    # pub_angles(-89.56, 0.52, -85.69, 0.0, 89.82, 0.08, 20)
+    # time.sleep(10)
 
+    # i = 1
+    # while i <10:
+    #     robot_coords = mc.get_coords()
+    
     # Parse out the coordinate value,解析出坐标值
     # pump length: 88mm
-    x = float(format(data.pose.position.x * 1000, ".2f"))
-    y = float(format(data.pose.position.y * 1000, ".2f"))
-    z = float(format(data.pose.position.z * 1000, ".2f"))
+    x = float(format(data.pose.position.x, ".2f"))
+    y = float(format(data.pose.position.y, ".2f"))
+    z = float(format(data.pose.position.z, ".2f"))
+    print(x, y, z)
+    i = 1
+    while i <10:
+        robot_coords = mc.get_coords()
+        
+    if robot_coords != None:
+        print(robot_coords)
+        Pt = [robot_coords[0],robot_coords[1], robot_coords[2]]
+    print('mycobot:',Pt)
+    Pc = [x, y, z]
+    print('camera:',Pc)
+    Pm = [0, 0]
+    
+    offset = [-0.045, -0.2228, 0]
+    imishiro = 58.43
+    Pm[0] = Pt[0] + imishiro * (Pc[1] - offset[0])
+    Pm[1] = Pt[1] + imishiro * (Pc[0] - offset[1])
+    print('real_coords:',(Pm[0], Pm[1]))
 
-    # When the running time is less than 30s, or the target position is still changing, perform tracking behavior
-    # 当运行时间小于 30s，或目标位置还在改变时，进行追踪行为
-    if (
-        time.time() - temp_time < 30
-        or (temp_x == temp_y == temp_z == 0.0)
-        or target_is_moving(x - x_offset, y - y_offset, z)
-    ):
+    pub_angles(89.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20)
+    time.sleep(10)
+    pub_angles(-89.56, 0.52, -85.69, 0.0, 89.82, 0.08, 20)
+    time.sleep(10)
 
-        x -= x_offset
-        y -= y_offset
-        pub_coords(x - 20, y, 280)
-        time.sleep(0.1)
+    
+ 
 
-        temp_x, temp_y, temp_z = x, y, z
-        return
-    else:  #Indicates that the target is stationary and can try to grab, 表示目标处于静止状态，可以尝试抓取
+    # return Pm
 
-        print(x, y, z)
-
-        # detect heigth + pump height + limit height + offset
-        x += x_offset
-        y += y_offset
-        z = z + 88 + z_offset
-
-        pub_coords(x, y, z)
-        time.sleep(2.5)
-
-        # down
-        for i in range(1, 17):
-            pub_coords(x, y, z - i * 5, rx=-160, sp=10)
-            time.sleep(0.1)
-
-        time.sleep(2)
-
-        pub_pump(True, Pin)
-        # pump on
-
-        pub_coords(x, y, z + 20, -165)
-        time.sleep(1.5)
-
-        pub_angles(0, 30, -50, -40, 0, 0, 50)
-        time.sleep(1.5)
-
-        put_z = 140
-        pub_coords(39.4, -174.7, put_z, -177.13, -4.13, -152.59, 70, 2)
-        time.sleep(1.5)
-
-        for i in range(1, 8):
-            pub_coords(39.4, -174.7, put_z - i * 5, -
-                       177.13, -4.13, -152.59, 15, 2)
-            time.sleep(0.1)
-
-        pub_pump(False, Pin)
-
-        time.sleep(0.5)
-
-        pub_angles(0, 30, -50, -40, 0, 0, 50)
-        time.sleep(1.5)
-
-        # finally
-        flag = True
 
 
 def main():
     for _ in range(10):
-        # pub_coords(150, 20, 220, -175, 0, -90, 70, 2)
-        pub_angles(0, 30, -50, -40, 0, 0, 50)
-        #     pub_angles(random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), random.randint(-30, 30), 70)
+        pub_angles(0.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20)
         time.sleep(0.5)
-
-    pub_pump(False, Pin)
-    # time.sleep(2.5)
 
     # mark 信息的订阅者,subscribers to mark information
     rospy.Subscriber("visualization_marker", Marker,

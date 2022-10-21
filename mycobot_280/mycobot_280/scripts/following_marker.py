@@ -1,4 +1,6 @@
 #!/usr/bin/env python2
+# encoding=utf-8
+from os import listdir
 import time
 
 import rospy
@@ -17,20 +19,27 @@ def talker():
     listener = tf.TransformListener()
 
     marker_ = Marker()
-    marker_.header.frame_id = "/joint1"
+    marker_.header.frame_id = "/base"
     marker_.ns = "basic_cube"
-
+    cache_x = cache_y = 0
+    camera_x, camera_y = 110, 90
+    # The coordinates of the cube relative to the mycobot
+    c_x, c_y = 0, 0
+    # The ratio of pixels to actual values
+    ratio = 0
+    map_pose = ()
     print("publishing ...")
     while not rospy.is_shutdown():
         now = rospy.Time.now() - rospy.Duration(0.1)
 
         try:
-            trans, rot = listener.lookupTransform("joint1", "basic_shapes", now)
+            trans, rot = listener.lookupTransform("base", "basic_shapes", now)
+            # trans, rot = listener.transformPoint("base", marker_.pose, map_pose)
         except Exception as e:
             print(e)
             continue
 
-        print(type(trans), trans)
+        print('------->', type(trans), trans)
         print(type(rot), rot)
 
         # marker
@@ -49,7 +58,7 @@ def talker():
         marker_.pose.orientation.y = rot[1]
         marker_.pose.orientation.z = rot[2]
         marker_.pose.orientation.w = rot[3]
-
+        
         marker_.color.a = 1.0
         marker_.color.g = 1.0
         pub_marker.publish(marker_)
