@@ -21,34 +21,30 @@ def talker():
     marker_ = Marker()
     marker_.header.frame_id = "/base"
     marker_.ns = "basic_cube"
-    cache_x = cache_y = 0
-    camera_x, camera_y = 110, 90
-    # The coordinates of the cube relative to the mycobot
-    c_x, c_y = 0, 0
-    # The ratio of pixels to actual values
-    ratio = 0
-    map_pose = ()
+
+    marker_.type = marker_.CUBE
+    marker_.action = marker_.ADD
+    marker_.scale.x = 0.04
+    marker_.scale.y = 0.04
+    marker_.scale.z = 0.04
+
+    trans, rot = [0,0,0], [0,0,0,0]
     print("publishing ...")
     while not rospy.is_shutdown():
-        now = rospy.Time.now() - rospy.Duration(0.1)
-
+        # now = rospy.Time.now() - rospy.Duration(0.1)
         try:
-            trans, rot = listener.lookupTransform("base", "basic_shapes", now)
-            # trans, rot = listener.transformPoint("base", marker_.pose, map_pose)
+            trans, rot = listener.lookupTransform("/base", "/basic_shapes", rospy.Time())
+            
         except Exception as e:
             print(e)
-            continue
+            trans, rot = [-1.0,-2.0,-3.0], [0,0,0,0]
+            #continue
 
         print('------->', type(trans), trans)
         print(type(rot), rot)
 
         # marker
-        marker_.header.stamp = now
-        marker_.type = marker_.CUBE
-        marker_.action = marker_.ADD
-        marker_.scale.x = 0.04
-        marker_.scale.y = 0.04
-        marker_.scale.z = 0.04
+        marker_.header.stamp = rospy.Time.now() - rospy.Duration(0.1)
 
         # marker position initial,标记位置初始化
         marker_.pose.position.x = trans[0]
@@ -58,7 +54,8 @@ def talker():
         marker_.pose.orientation.y = rot[1]
         marker_.pose.orientation.z = rot[2]
         marker_.pose.orientation.w = rot[3]
-        
+    
+    
         marker_.color.a = 1.0
         marker_.color.g = 1.0
         pub_marker.publish(marker_)

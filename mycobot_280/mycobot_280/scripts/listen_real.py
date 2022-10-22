@@ -34,12 +34,23 @@ def talker():
     # waiting util server `get_joint_angles` enable.等待'get_joint_angles'服务启用
     rospy.loginfo("wait service")
     rospy.wait_for_service("get_joint_angles")
-    func = rospy.ServiceProxy("get_joint_angles", GetAngles)
+    # func = rospy.ServiceProxy("get_joint_angles", GetAngles)
+    while True:
+        try:
+            func = rospy.ServiceProxy("get_joint_angles", GetAngles)
+            break
+        except rospy.ServiceException as e:
+            # pass
+            # print(f'error:{e}')
+            print("--------------error",e)
 
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
-        # get real angles from server.从服务器获得真实的角度。
-        res = func()
+        try:
+            # get real angles from server.从服务器获得真实的角度。
+            res = func()
+        except rospy.ServiceException as e:
+            continue
         if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
             continue
         radians_list = [

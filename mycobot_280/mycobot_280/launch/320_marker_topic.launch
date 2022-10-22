@@ -22,12 +22,17 @@
 
 
 	<!-- mycobot-topics ，mycobot-话题-->
-    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+    <!-- <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+    </include> -->
+	<include file="$(find mycobot_communication)/launch/communication_service.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 	<!-- listen and pub the real angles ，监听并发布真实的角度-->
-	<node name="real_listener" pkg="mycobot_280" type="listen_real_of_topic.py" />
+	<!-- <node name="real_listener" pkg="mycobot_280" type="listen_real_of_topic.py" /> -->
+	<node name="real_listener" pkg="mycobot_280" type="listen_real.py" />
 	<!-- vision node -->
 	<node name="opencv_camera" pkg="mycobot_280" type="opencv_camera" args="$(arg num)"/>
 	<node name="detect_marker" pkg="mycobot_280" type="detect_marker.py" />

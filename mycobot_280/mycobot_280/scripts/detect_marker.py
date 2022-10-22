@@ -15,7 +15,21 @@ from mycobot_communication.srv import (
     SetAngles,
     GripperStatus,
 )
+import math
 
+
+# class Service_Coords():
+#     def __init__(self):
+#         self.connect_str()
+
+#     def connect_str(self):
+#         rospy.wait_for_service("get_joint_coords")
+    
+#         try:
+#             self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
+#         except:
+#             print("start error ...")
+#             exit(1)
 
 class ImageConverter:
     def __init__(self):
@@ -31,12 +45,15 @@ class ImageConverter:
         # subscriber, listen wether has img come in. 订阅者，监听是否有img
         self.image_sub = rospy.Subscriber("/camera/image", Image, self.callback)
 
+   
+
     def callback(self, data):
         """Callback function.
 
         Process image with OpenCV, detect Mark to get the pose. Then acccording the
         pose to transforming.
         """
+        # global mt
         try:
             # trans `rgb` to `gbr` for opencv. 将 `rgb` 转换为 opencv 的 `gbr`。
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
@@ -91,6 +108,31 @@ class ImageConverter:
                 xyz = tvec[0, 0, :]
                 xyz = [xyz[0] - 0.045, xyz[1], xyz[2] - 0.03]
 
+                tsvec = tvec
+                for i in range(3):
+                    tsvec[0][0][i] = round(tvec[0][0][i], 1)
+                tsvec = np.squeeze(tsvec)
+                # font = cv.FONT_HERSHEY_SIMPLEX
+                # cv.putText(cv_image, "position_coords:" + str(tsvec) + str('m'), (0, 80), font, 0.6, (0, 255, 0), 2)
+                # try:
+                    
+                #     c = mt.get_coords()
+                #     mc_coords = [round(c.x, 2), round(c.y, 2), round(c.z, 2), round(c.rx, 2), round(c.ry, 2), round(c.rz), 2]
+                # except Exception as e:
+                #     print(e)
+                # cv.putText(cv_image, "mycobot:" + str(mc_coords[:3]) + str('mm'), (0, 200), font, 0.6, (0, 255, 0), 2,
+                #     cv.LINE_AA)
+
+                # Pt = mc_coords[:3]
+                # Pc = [tsvec[0], tsvec[1], tsvec[2]]
+                # Pm = [0, 0]
+            
+                # offset = [-0.045, -0.2228, 0]
+                # imishiro = 58.43
+                # Pm[0] = round(Pt[0] + imishiro * (Pc[1] - offset[0]), 3)
+                # Pm[1] = round(Pt[1] + imishiro * (Pc[0] - offset[1]), 3)
+                # cv.putText(cv_image, "marker:" + str(Pm) + str('mm'), (0, 120), font, 0.6, (0, 255, 0), 2,
+                #             cv.LINE_AA)
                 # get quaternion for ros. 为ros获取四元数
                 euler = rvec[0, 0, :]
                 tf_change = tf.transformations.quaternion_from_euler(
@@ -116,6 +158,8 @@ class ImageConverter:
 
 if __name__ == "__main__":
     try:
+        # global mt
+        # mt = Service_Coords()
         rospy.init_node("detect_marker")
         rospy.loginfo("Starting cv_bridge_test node")
         ImageConverter()
