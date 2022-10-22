@@ -15,21 +15,7 @@ from mycobot_communication.srv import (
     SetAngles,
     GripperStatus,
 )
-import math
 
-
-# class Service_Coords():
-#     def __init__(self):
-#         self.connect_str()
-
-#     def connect_str(self):
-#         rospy.wait_for_service("get_joint_coords")
-    
-#         try:
-#             self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
-#         except:
-#             print("start error ...")
-#             exit(1)
 
 class ImageConverter:
     def __init__(self):
@@ -44,8 +30,6 @@ class ImageConverter:
         self.camera_matrix = None
         # subscriber, listen wether has img come in. 订阅者，监听是否有img
         self.image_sub = rospy.Subscriber("/camera/image", Image, self.callback)
-        # rospy.Rate(30)
-   
 
     def callback(self, data):
         """Callback function.
@@ -53,7 +37,6 @@ class ImageConverter:
         Process image with OpenCV, detect Mark to get the pose. Then acccording the
         pose to transforming.
         """
-        # global mt
         try:
             # trans `rgb` to `gbr` for opencv. 将 `rgb` 转换为 opencv 的 `gbr`。
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
@@ -76,7 +59,6 @@ class ImageConverter:
         # detect aruco marker.检测 aruco 标记
         ret = cv.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruo_params)
         corners, ids = ret[0], ret[1]
-        font = cv.FONT_HERSHEY_SIMPLEX
         # process marker data.处理标记数据
         if len(corners) > 0:
             if ids is not None:
@@ -87,13 +69,12 @@ class ImageConverter:
                 #   marker corners,标记角
                 #   marker size (meter),标记尺寸（米）
                 ret = cv.aruco.estimatePoseSingleMarkers(
-                    corners, 0.035, self.camera_matrix, self.dist_coeffs
+                    corners, 0.05, self.camera_matrix, self.dist_coeffs
                 )
                 (rvec, tvec) = (ret[0], ret[1])
                 (rvec - tvec).any()
 
                 print("rvec:", rvec, "tvec:", tvec)
-                cv.putText(cv_image, "Id: " + str(ids[0][0]), (0, 40), font, 0.6, (0, 255, 0), 2, cv.LINE_AA)
 
                 # just select first one detected marker.只需选择第一个检测到的标记。
                 for i in range(rvec.shape[0]):
@@ -110,46 +91,26 @@ class ImageConverter:
                 xyz = tvec[0, 0, :]
                 xyz = [xyz[0] - 0.045, xyz[1], xyz[2] - 0.03]
 
-                tsvec = tvec
+                tsvec = tvec * 1000
                 for i in range(3):
                     tsvec[0][0][i] = round(tvec[0][0][i], 1)
                 tsvec = np.squeeze(tsvec)
-                
-                # cv.putText(cv_image, "position_coords:" + str(tsvec) + str('m'), (0, 80), font, 0.6, (0, 255, 0), 2)
-                # try:
-                    
-                #     c = mt.get_coords()
-                #     mc_coords = [round(c.x, 2), round(c.y, 2), round(c.z, 2), round(c.rx, 2), round(c.ry, 2), round(c.rz), 2]
-                # except Exception as e:
-                #     print(e)
-                # cv.putText(cv_image, "mycobot:" + str(mc_coords[:3]) + str('mm'), (0, 200), font, 0.6, (0, 255, 0), 2,
-                #     cv.LINE_AA)
+                font = cv.FONT_HERSHEY_SIMPLEX
+                cv.putText(cv_image, "position_coords:" + str(tsvec) + str('mm'), (0, 80), font, 0.6, (0, 255, 0), 2)
 
-                # Pt = mc_coords[:3]
-                # Pc = [tsvec[0], tsvec[1], tsvec[2]]
-                # Pm = [0, 0]
-            
-                # offset = [-0.045, -0.2228, 0]
-                # imishiro = 58.43
-                # Pm[0] = round(Pt[0] + imishiro * (Pc[1] - offset[0]), 3)
-                # Pm[1] = round(Pt[1] + imishiro * (Pc[0] - offset[1]), 3)
-                # cv.putText(cv_image, "marker:" + str(Pm) + str('mm'), (0, 120), font, 0.6, (0, 255, 0), 2,
-                #             cv.LINE_AA)
+
                 # get quaternion for ros. 为ros获取四元数
                 euler = rvec[0, 0, :]
                 tf_change = tf.transformations.quaternion_from_euler(
-                    # euler[0], euler[1], euler[2]
-                    0, 0, 0
+                    euler[0], euler[1], euler[2]
                 )
                 print("tf_change:", tf_change)
                 print('xyz:',xyz)
-                xyz = [0.1, 0.1, 0.25]
-                # trans pose according [joint1]，根据 [joint1] 变换姿势 rospy.Time.now()
+
+                # trans pose according [joint1]，根据 [joint1] 变换姿势
                 self.br.sendTransform(
                     xyz, tf_change, rospy.Time.now(), "basic_shapes", "link6"
                 )
-        else:
-            cv.putText(cv_image, "No Ids", (0, 40), font, 0.6, (0, 255, 0), 2, cv.LINE_AA)    
                 
         # [x, y, z, -172, 3, -46.8]
         cv.imshow("Image", cv_image)
@@ -159,15 +120,12 @@ class ImageConverter:
             pass
         except CvBridgeError as e:
             print(e)
-        # rospy.Rate(30).sleep()
+
 
 if __name__ == "__main__":
     try:
-        # global mt
-        
         rospy.init_node("detect_marker")
         rospy.loginfo("Starting cv_bridge_test node")
-        # mt = Service_Coords()
         ImageConverter()
         rospy.spin()
     except KeyboardInterrupt:

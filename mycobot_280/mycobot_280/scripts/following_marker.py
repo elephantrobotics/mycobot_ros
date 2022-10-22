@@ -37,7 +37,7 @@ def talker():
             
         except Exception as e:
             print(e)
-            trans, rot = [-1.0,-2.0,-3.0], [0,0,0,0]
+            trans, rot = [-1.0,-1.0,-1.0], [0,0,0,0]
             #continue
 
         print('------->', type(trans), trans)
@@ -54,6 +54,7 @@ def talker():
         marker_.pose.orientation.y = rot[1]
         marker_.pose.orientation.z = rot[2]
         marker_.pose.orientation.w = rot[3]
+
     
     
         marker_.color.a = 1.0

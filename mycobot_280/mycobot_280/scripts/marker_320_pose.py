@@ -34,32 +34,6 @@ class MarkerMycobot():
             print("start error ...")
             exit(1)
 
-
-    def pub_coords(self, x, y, z, rx=-170, ry=-5.6, rz=-90, sp=20, m=1):
-        """Post coordinates,发布坐标"""
-        self.coords.x = x
-        self.coords.y = y
-        self.coords.z = z
-        self.coords.rx = rx
-        self.coords.ry = ry
-        self.coords.rz = rz
-        self.coords.speed = 20
-        self.coords.model = m
-        # print(coords)
-        self.coord_pub.publish(self.coords)
-
-
-    def pub_angles(self, a, b, c, d, e, f, sp):
-        """Publishing angle,发布角度"""
-        self.angles.joint_1 = float(a)
-        self.angles.joint_2 = float(b)
-        self.angles.joint_3 = float(c)
-        self.angles.joint_4 = float(d)
-        self.angles.joint_5 = float(e)
-        self.angles.joint_6 = float(f)
-        self.angles.speed = sp
-        self.angle_pub.publish(self.angles)
-
     def get_date(self):
         t = time.time()
         while time.time() - t <2:
@@ -78,13 +52,13 @@ class MarkerMycobot():
         return self.record_coords
 
     def sends_angles(self):
-        init_angles = [0.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
-        start_angles = [89.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
-        end_angles = [-89.56, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
+        init_angles = [0, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
+        start_angles = [90.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
+        end_angles = [-90.56, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
         try:
             self.set_angles(*init_angles)
-            time.sleep(4)
-            for _ in range(40):
+            time.sleep(2)
+            for _ in range(50):
                 self.set_angles(*start_angles)
                 time.sleep(9)
                 self.set_angles(*end_angles)
@@ -97,7 +71,7 @@ def grippercallback(data):
     global mt
     #rospy.loginfo('gripper_subscriber get date :%s', data)
 
-    
+    start_time = time.time()
     # Parse out the coordinate value,解析出坐标值
     # pump length: 88mm
     x = float(format(data.pose.position.x, ".2f"))
@@ -118,7 +92,9 @@ def grippercallback(data):
     Pm[0] = Pt[0] + imishiro * (Pc[1] - offset[0])
     Pm[1] = Pt[1] + imishiro * (Pc[0] - offset[1])
     print('real_marker_coords:',(Pm[0], Pm[1]))
-
+    end_time = time.time()
+  
+    print("loop_time:", end_time-start_time)
 
 
 def main():
