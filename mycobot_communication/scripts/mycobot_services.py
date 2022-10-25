@@ -60,6 +60,8 @@ def create_handle():
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
     mc = MyCobot(port, baud)
+    mc.set_tool_reference([-50,0,0,0,0,0])
+    mc.set_end_type(1)
 
 
 def create_services():

@@ -3,7 +3,7 @@
 import rospy
 from visualization_msgs.msg import Marker
 import time
-
+import math
 # Type of message communicated with mycobot，与 mycobot 通信的消息类型
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles
 
@@ -52,17 +52,17 @@ class MarkerMycobot():
         return self.record_coords
 
     def sends_angles(self):
-        init_angles = [0, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
-        start_angles = [90.64, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
-        end_angles = [-90.56, 0.52, -85.69, 0.0, 89.82, 0.08, 20]
+        init_angles = [0, 0.52, -85.69, 0.0, 89.82, 0.08, 5]
+        start_angles = [20.64, 0.52, -85.69, 0.0, 89.82, 0.08, 5]
+        end_angles = [-20.56, 0.52, -85.69, 0.0, 89.82, 0.08, 5]
         try:
             self.set_angles(*init_angles)
-            time.sleep(2)
+            time.sleep(0.01)
             for _ in range(50):
                 self.set_angles(*start_angles)
-                time.sleep(9)
+                time.sleep(4.5)
                 self.set_angles(*end_angles)
-                time.sleep(9)
+                time.sleep(4.5)
         except Exception as e:
             print(e)
 
@@ -72,29 +72,41 @@ def grippercallback(data):
     #rospy.loginfo('gripper_subscriber get date :%s', data)
 
     start_time = time.time()
+    print('Start........')
     # Parse out the coordinate value,解析出坐标值
     # pump length: 88mm
-    x = float(format(data.pose.position.x, ".2f"))
-    y = float(format(data.pose.position.y, ".2f"))
-    z = float(format(data.pose.position.z, ".2f"))
+    x = float(format(data.pose.position.x, ".3f"))
+    y = float(format(data.pose.position.y, ".3f"))
+    z = float(format(data.pose.position.z, ".3f"))
     print(x, y, z)
     c = mt.get_coords()
-    # print(type(c), c)
+    b = mt.get_angles()
+   
     #ma = MarkerMycobot()
-    Pt = [c.x, c.y, c.z]
+    angles_data = [b.joint_1, b.joint_2, b.joint_3, b.joint_4, b.joint_5, b.joint_6]
+    q1 = math.radians(angles_data[0])
+    Pt = [round(c.x, 3), round(c.y, 3)]
     print('mycobot:',Pt)
     Pc = [x, y, z]
-        # print('camera:',Pc)
+   
     Pm = [0, 0]
         
-    offset = [-0.045, -0.2228, 0]
-    imishiro = 58.43
-    Pm[0] = Pt[0] + imishiro * (Pc[1] - offset[0])
-    Pm[1] = Pt[1] + imishiro * (Pc[0] - offset[1])
-    print('real_marker_coords:',(Pm[0], Pm[1]))
+    offset = [0.009, 0.018, 0.218]
+    imishiro = 86.77
+    px = Pc[0] - offset[0]
+    py = Pc[1] - offset[1]
+    c1 = math.cos(q1)
+    s1 = math.sin(q1)
+    x = c1*px + py*s1
+    y = px*s1 - c1*py
+
+    Pm[0] = round(Pt[0] + imishiro*x, 3)
+    Pm[1] = round(Pt[1] + imishiro*y, 3)
+    print('Pm_marker_Pm:',(Pm[0], Pm[1]))
     end_time = time.time()
   
     print("loop_time:", end_time-start_time)
+    print('END.......')
 
 
 def main():

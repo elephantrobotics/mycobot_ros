@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 # encoding=utf-8
-from os import listdir
 import time
 
 import rospy
@@ -33,6 +32,7 @@ def talker():
     while not rospy.is_shutdown():
         # now = rospy.Time.now() - rospy.Duration(0.1)
         try:
+            # Listening for tf transformations
             trans, rot = listener.lookupTransform("/base", "/basic_shapes", rospy.Time())
             
         except Exception as e:
@@ -54,11 +54,10 @@ def talker():
         marker_.pose.orientation.y = rot[1]
         marker_.pose.orientation.z = rot[2]
         marker_.pose.orientation.w = rot[3]
-
-    
     
         marker_.color.a = 1.0
         marker_.color.g = 1.0
+
         pub_marker.publish(marker_)
 
         rate.sleep()

@@ -37,9 +37,11 @@ class ImageConverter:
         self.bridge = CvBridge()
         self.aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_6X6_250)
         self.aruo_params = cv.aruco.DetectorParameters_create()
+        # camera calibrationParams 相机校准参数
         calibrationParams = cv.FileStorage(
             "calibrationFileName.xml", cv.FILE_STORAGE_READ
         )
+        # vector of distortion coefficients 失真系数
         self.dist_coeffs = calibrationParams.getNode("distCoeffs").mat()
         self.camera_matrix = None
         # subscriber, listen wether has img come in. 订阅者，监听是否有img
@@ -62,6 +64,7 @@ class ImageConverter:
         size = cv_image.shape
         focal_length = size[1]
         center = [size[1] / 2, size[0] / 2]
+        print('center--->', center)
         if self.camera_matrix is None:
             # calc the camera matrix, if don't have.如果没有，则计算相机矩阵
             self.camera_matrix = np.array(
@@ -84,12 +87,15 @@ class ImageConverter:
 
                 # detect marker pose. 检测marker位姿。
                 # argument:
-                #   marker corners,标记角
+                #   marker corners,marker 标记
                 #   marker size (meter),标记尺寸（米）
                 ret = cv.aruco.estimatePoseSingleMarkers(
                     corners, 0.035, self.camera_matrix, self.dist_coeffs
                 )
+                # rvec:corresponding to the rotation vector of marker 旋转向量
+                # tvet:corresponding to the translation vector marker 平移向量
                 (rvec, tvec) = (ret[0], ret[1])
+                # get rid of that nasty numpy value array error
                 (rvec - tvec).any()
 
                 print("rvec:", rvec, "tvec:", tvec)
@@ -98,6 +104,7 @@ class ImageConverter:
                 # just select first one detected marker.只需选择第一个检测到的标记。
                 for i in range(rvec.shape[0]):
                     cv.aruco.drawDetectedMarkers(cv_image, corners)
+                    # draw the axes  绘制坐标轴
                     cv.aruco.drawAxis(
                         cv_image,
                         self.camera_matrix,
@@ -108,6 +115,7 @@ class ImageConverter:
                     )
 
                 xyz = tvec[0, 0, :]
+                # xyz = [xyz[0] , xyz[1], xyz[2]]
                 xyz = [xyz[0] - 0.045, xyz[1], xyz[2] - 0.03]
 
                 tsvec = tvec
@@ -116,35 +124,18 @@ class ImageConverter:
                 tsvec = np.squeeze(tsvec)
                 
                 # cv.putText(cv_image, "position_coords:" + str(tsvec) + str('m'), (0, 80), font, 0.6, (0, 255, 0), 2)
-                # try:
-                    
-                #     c = mt.get_coords()
-                #     mc_coords = [round(c.x, 2), round(c.y, 2), round(c.z, 2), round(c.rx, 2), round(c.ry, 2), round(c.rz), 2]
-                # except Exception as e:
-                #     print(e)
-                # cv.putText(cv_image, "mycobot:" + str(mc_coords[:3]) + str('mm'), (0, 200), font, 0.6, (0, 255, 0), 2,
-                #     cv.LINE_AA)
-
-                # Pt = mc_coords[:3]
-                # Pc = [tsvec[0], tsvec[1], tsvec[2]]
-                # Pm = [0, 0]
-            
-                # offset = [-0.045, -0.2228, 0]
-                # imishiro = 58.43
-                # Pm[0] = round(Pt[0] + imishiro * (Pc[1] - offset[0]), 3)
-                # Pm[1] = round(Pt[1] + imishiro * (Pc[0] - offset[1]), 3)
-                # cv.putText(cv_image, "marker:" + str(Pm) + str('mm'), (0, 120), font, 0.6, (0, 255, 0), 2,
-                #             cv.LINE_AA)
-                # get quaternion for ros. 为ros获取四元数
+               
+                # get euler angles. 获取欧拉角
                 euler = rvec[0, 0, :]
+                # Euler angle to quaternion in ros. ros中欧拉角转四元数
                 tf_change = tf.transformations.quaternion_from_euler(
-                    # euler[0], euler[1], euler[2]
+                    #  euler[0], euler[1], euler[2]
                     0, 0, 0
                 )
                 print("tf_change:", tf_change)
                 print('xyz:',xyz)
-                xyz = [0.1, 0.1, 0.25]
-                # trans pose according [joint1]，根据 [joint1] 变换姿势 rospy.Time.now()
+                #xyz = [0.1, 0.1, 0.25]
+                # trans pose according [joint1]，根据 [joint1] 变换姿势 rospy.Time.now() Broadcast tf transformation
                 self.br.sendTransform(
                     xyz, tf_change, rospy.Time.now(), "basic_shapes", "link6"
                 )
