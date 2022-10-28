@@ -2,10 +2,10 @@ moveit_setup_assistant_config:
   URDF:
     package: mycobot_description
     relative_path: urdf/mycobot/mycobot_with_gripper_up.urdf
-    xacro_args: "--inorder "
+    xacro_args: ""
   SRDF:
     relative_path: config/firefighter.srdf
   CONFIG:
-    author_name: zachary
-    author_email: lijun.zhang@elephantrobotics.com
-    generated_timestamp: 1663152534
+    author_name: wangwj
+    author_email: weijian.wang@elephantrobotics.com
+    generated_timestamp: 1666945049

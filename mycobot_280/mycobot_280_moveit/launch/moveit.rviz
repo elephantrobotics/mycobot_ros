@@ -1,14 +1,17 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 84
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
+        - /MotionPlanning1/Scene Geometry1
+        - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
+        - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5
-    Tree Height: 144
+    Tree Height: 228
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -45,12 +48,12 @@ Visualization Manager:
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
-      MoveIt_Allow_Approximate_IK: false
-      MoveIt_Allow_External_Program: true
+      MoveIt_Allow_Approximate_IK: true
+      MoveIt_Allow_External_Program: false
       MoveIt_Allow_Replanning: false
       MoveIt_Allow_Sensor_Positioning: false
-      MoveIt_Planning_Attempts: 0
-      MoveIt_Planning_Time: 0
+      MoveIt_Planning_Attempts: 10
+      MoveIt_Planning_Time: 5
       MoveIt_Use_Cartesian_Path: false
       MoveIt_Use_Constraint_Aware_IK: true
       MoveIt_Workspace:
@@ -72,6 +75,11 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          g_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           gripper_base:
             Alpha: 1
             Show Axes: false
@@ -188,6 +196,11 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
+          g_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           gripper_base:
             Alpha: 1
             Show Axes: false
@@ -267,7 +280,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: joint1
+    Fixed Frame: g_base
     Frame Rate: 30
   Name: root
   Tools:
@@ -279,7 +292,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.7242720127105713
+      Distance: 2
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -287,17 +300,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: 0.028488460928201675
-        Y: 0.08126576989889145
-        Z: 0.38752713799476624
+        X: -0.10000000149011612
+        Y: 0.25
+        Z: 0.30000001192092896
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2800000309944153
-      Target Frame: joint1
-      Yaw: 3.914947748184204
+      Pitch: -0.06000000983476639
+      Target Frame: g_base
+      Yaw: 3.649949550628662
     Saved: ~
 Window Geometry:
   Displays:
@@ -315,5 +328,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1291
-  X: 353
+  X: 382
   Y: 27

@@ -16,7 +16,7 @@
         <joint name="joint5_to_joint4"/>
         <joint name="joint6_to_joint5"/>
         <joint name="joint6output_to_joint6"/>
-        <chain base_link="joint1" tip_link="gripper_base"/>
+        <chain base_link="g_base" tip_link="gripper_base"/>
     </group>
     <group name="gripper">
         <chain base_link="gripper_base" tip_link="gripper_left3"/>
@@ -31,16 +31,30 @@
         <joint name="joint6output_to_joint6" value="0"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="gripper" parent_link="gripper_base" group="gripper" parent_group="arm_group"/>
+    <end_effector name="gripper" parent_link="gripper_base" group="arm_group" parent_group="arm_group"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="vitual_joint" type="fixed" parent_frame="world" child_link="joint1"/>
+    <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="g_base"/>
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
-    <passive_joint name="gripper_left3_to_gripper_left1"/>
     <passive_joint name="gripper_right3_to_gripper_right1"/>
-    <passive_joint name="gripper_base_to_gripper_right3"/>
+    <passive_joint name="gripper_left3_to_gripper_left1"/>
     <passive_joint name="gripper_base_to_gripper_right2"/>
+    <passive_joint name="gripper_base_to_gripper_right3"/>
     <passive_joint name="gripper_base_to_gripper_left2"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="g_base" link2="gripper_base" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_left1" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_left2" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_left3" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_right1" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_right2" reason="Default"/>
+    <disable_collisions link1="g_base" link2="gripper_right3" reason="Default"/>
+    <disable_collisions link1="g_base" link2="joint1" reason="Adjacent"/>
+    <disable_collisions link1="g_base" link2="joint2" reason="Never"/>
+    <disable_collisions link1="g_base" link2="joint3" reason="Never"/>
+    <disable_collisions link1="g_base" link2="joint4" reason="Never"/>
+    <disable_collisions link1="g_base" link2="joint5" reason="Never"/>
+    <disable_collisions link1="g_base" link2="joint6" reason="Never"/>
+    <disable_collisions link1="g_base" link2="joint6_flange" reason="Never"/>
     <disable_collisions link1="gripper_base" link2="gripper_left1" reason="Never"/>
     <disable_collisions link1="gripper_base" link2="gripper_left2" reason="Adjacent"/>
     <disable_collisions link1="gripper_base" link2="gripper_left3" reason="Adjacent"/>
