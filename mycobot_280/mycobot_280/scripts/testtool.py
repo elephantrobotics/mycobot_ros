@@ -127,6 +127,7 @@ def target():
             #             cv2.LINE_AA)
 
             Pt = [0, 0]
+            # Need to dynamically obtain coordinates and angles in real time
             for j in range(i, len(ang)):
                 
                 i+=1
@@ -137,7 +138,6 @@ def target():
                 q1 = angles1[0]
                 Pt = [coords1[0], coords1[1]]
                 Pc = [tvec[0], tvec[1], tvec[2]]
-                # Pc = [coords1[0], coords1[1], coords1[2]]
                 Pm = [0, 0]
                 offset = [0.014, 0.016, 0.222]
                 imishiro = 86.06
