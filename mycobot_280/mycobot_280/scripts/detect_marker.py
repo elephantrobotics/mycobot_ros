@@ -16,7 +16,7 @@ from mycobot_communication.srv import (
     GripperStatus,
 )
 import math
-
+import os
 
 # class Service_Coords():
 #     def __init__(self):
@@ -37,16 +37,18 @@ class ImageConverter:
         self.bridge = CvBridge()
         self.aruco_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_6X6_250)
         self.aruo_params = cv.aruco.DetectorParameters_create()
-        # camera calibrationParams 相机校准参数
-        calibrationParams = cv.FileStorage(
-            "calibrationFileName.xml", cv.FILE_STORAGE_READ
-        )
-        # vector of distortion coefficients 失真系数
-        self.dist_coeffs = calibrationParams.getNode("distCoeffs").mat()
-        self.camera_matrix = None
+        # # camera calibrationParams 相机校准参数
+        # Recalibrated camera parameters 重新标定的相机参数
+        self.camera_matrix = np.array([[611.37813149,   0. ,350.02379708], [0.  , 612.14706662, 237.3623127], [ 0, 0, 1]])
+        self.dist_coeffs = np.array(([[0.04106882, -0.11101182, -0.00039303,  0.00539495,  0.08251745]]))
+
+        # print('11camera_matrix:', self.camera_matrix)
+        # print('11discoeffs:', self.dist_coeffs)
+        # self.camera_matrix = None
+
         # subscriber, listen wether has img come in. 订阅者，监听是否有img
         self.image_sub = rospy.Subscriber("/camera/image", Image, self.callback)
-        # rospy.Rate(30)
+
    
 
     def callback(self, data):
@@ -64,7 +66,7 @@ class ImageConverter:
         size = cv_image.shape
         focal_length = size[1]
         center = [size[1] / 2, size[0] / 2]
-        print('center--->', center)
+        print('center--->', center, 'length--->', focal_length)
         if self.camera_matrix is None:
             # calc the camera matrix, if don't have.如果没有，则计算相机矩阵
             self.camera_matrix = np.array(
@@ -92,8 +94,10 @@ class ImageConverter:
                 ret = cv.aruco.estimatePoseSingleMarkers(
                     corners, 0.035, self.camera_matrix, self.dist_coeffs
                 )
+                print('22camera_matrix:', self.camera_matrix)
+                print('22discoeffs:', self.dist_coeffs)
                 # rvec:corresponding to the rotation vector of marker 旋转向量
-                # tvet:corresponding to the translation vector marker 平移向量
+                # tvec:corresponding to the translation vector marker 平移向量
                 (rvec, tvec) = (ret[0], ret[1])
                 # get rid of that nasty numpy value array error
                 (rvec - tvec).any()
@@ -120,7 +124,7 @@ class ImageConverter:
 
                 tsvec = tvec
                 for i in range(3):
-                    tsvec[0][0][i] = round(tvec[0][0][i], 1)
+                    tsvec[0][0][i] = round(tvec[0][0][i], 3)
                 tsvec = np.squeeze(tsvec)
                 
                 # cv.putText(cv_image, "position_coords:" + str(tsvec) + str('m'), (0, 80), font, 0.6, (0, 255, 0), 2)

@@ -2,9 +2,8 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
 import time
-import cv2, math
-import tf
-
+import cv2
+import math
 from pymycobot.mycobot import MyCobot
 import time
 import threading
@@ -40,16 +39,15 @@ def rotationVectorToEulerAngles(rvec):
     rz = z * 180.0 / 3.141592653589793
     return rx, ry, rz
 
-# br = TransformBroadcaster()
-mtx = np.array([[629.61554535, 0, 333.57279485], [0, 631.61712266, 229.33660831], [ 0, 0, 1]])
-dist = np.array(([[0.03109901, -0.0100412, -0.00944869, 0.00123176, 0.31024847]]))
+# 320 camera matrix parameters
+mtx = np.array([[611.37813149,   0. ,350.02379708], [0.  , 612.14706662, 237.3623127], [ 0, 0, 1]])
+# 320 camera distortion factor
+dist = np.array(([[0.04106882, -0.11101182, -0.00039303,  0.00539495,  0.08251745]]))
+
 cap = cv2.VideoCapture(0)
-# cap.set(5, 20)
+cap.set(5, 10)
 font = cv2.FONT_HERSHEY_SIMPLEX #font for displaying text (below)
 
-
-#num = 0
-# rospy.init_node("detect_markers")
 
 def wait_time(t):
     global ang
@@ -59,16 +57,28 @@ def wait_time(t):
         ang.append(ang1)
         coord1 = mc.get_coords()
         cood.append(coord1)
-        # print('ange-------->', ang)
-        # print('coord-------->', cood)
+
+
+def move():
+    try:
+        for _ in range(50):
+            mc.send_angles(start_angles, 5)
+            wait_time(6)
+            mc.send_angles(end_angles, 5)
+            wait_time(6)
+    except Exception as e:
+        print(e)
 
 def target():
     i = 0
 
     while True:
+    # while cap.isOpened():
         ret, frame = cap.read()
-        cap.set(5, 4)
-        print('-->',cap.get(cv2.CAP_PROP_FPS), cv2.CAP_PROP_FRAME_COUNT, cap.get(1))
+        if not ret:
+            break
+        
+        print('-->',cap.get(cv2.CAP_PROP_FPS))
         h1, w1 = frame.shape[:2]
         # print(h1, w1)
         # 读取摄像头画面
@@ -107,8 +117,8 @@ def target():
             cv2.putText(frame, "Id: " + str(ids), (0, 40), font, 0.6, (0, 255, 0), 2, cv2.LINE_AA)
             EulerAngles = rotationVectorToEulerAngles(rvec)
             EulerAngles = [round(i, 2) for i in EulerAngles]
-            cv2.putText(frame, "Attitude_angle:" + str(EulerAngles), (0, 120), font, 0.6, (0, 255, 0), 2,
-                        cv2.LINE_AA)
+            # cv2.putText(frame, "Attitude_angle:" + str(EulerAngles), (0, 120), font, 0.6, (0, 255, 0), 2,
+            #             cv2.LINE_AA)
             tvec = tvec 
             for i in range(3):
                 tvec[0][0][i] = round(tvec[0][0][i], 3)
@@ -116,26 +126,21 @@ def target():
             # cv2.putText(frame, "Position_coordinates:" + str(tvec) + str('m'), (0, 80), font, 0.6, (0, 255, 0), 2,
             #             cv2.LINE_AA)
 
-            xyz = tvec / 1000
-            tf_change = tf.transformations.quaternion_from_euler(0, 0, 0)
-            # br.sendTransform(
-            #             xyz, tf_change, rospy.Time.now(), "basic_shapes", "link6"
-            #         )
             Pt = [0, 0]
             for j in range(i, len(ang)):
                 
                 i+=1
                 angles1 = ang[j]
                 coords1 = cood[j]
-                print('angesgele', angles1)
-                print('-------', coords1)
+                print('angles_data:', angles1)
+                print('coords_data:', coords1)
                 q1 = angles1[0]
                 Pt = [coords1[0], coords1[1]]
-                # Pc = [tvec[0], tvec[1], tvec[2]]
-                Pc = [coords1[0], coords1[1], coords1[2]]
+                Pc = [tvec[0], tvec[1], tvec[2]]
+                # Pc = [coords1[0], coords1[1], coords1[2]]
                 Pm = [0, 0]
-                offset = [0.009, 0.018, 0.218]
-                imishiro = 86.77
+                offset = [0.014, 0.016, 0.222]
+                imishiro = 86.06
                 px = Pc[0] - offset[0]
                 py = Pc[1] - offset[1]
                 c1 = math.cos(q1)
@@ -159,7 +164,7 @@ def target():
         cv2.resizeWindow("frame", 640, 480)
 
         cv2.imshow("frame", frame)
-
+    
         key = cv2.waitKey(1)
 
         if key == 27:         # 按esc键退出
@@ -168,24 +173,13 @@ def target():
             cv2.destroyAllWindows()
             break
 
-def move():
-    try:
-        for _ in range(50):
-            mc.send_angles(start_angles, 5)
-            wait_time(6)
-            mc.send_angles(end_angles, 5)
-            wait_time(6)
-    except Exception as e:
-        print(e)
-
-t = threading.Thread(target=target)
-t.setDaemon(True)
-t.start()
-move()
-
 
 if __name__ == "__main__":
     try:
+        t = threading.Thread(target=target)
+        t.setDaemon(True)
+        t.start()
+        move()
         rotationVectorToEulerAngles()
     except KeyboardInterrupt:
         cv2.destroyAllWindows()

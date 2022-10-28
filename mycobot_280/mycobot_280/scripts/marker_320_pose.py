@@ -57,7 +57,7 @@ class MarkerMycobot():
         end_angles = [-20.56, 0.52, -85.69, 0.0, 89.82, 0.08, 5]
         try:
             self.set_angles(*init_angles)
-            time.sleep(0.01)
+            time.sleep(0.1)
             for _ in range(50):
                 self.set_angles(*start_angles)
                 time.sleep(4.5)
@@ -73,12 +73,18 @@ def grippercallback(data):
 
     start_time = time.time()
     print('Start........')
+
+    while time.time() - start_time < 1:
     # Parse out the coordinate value,解析出坐标值
     # pump length: 88mm
-    x = float(format(data.pose.position.x, ".3f"))
-    y = float(format(data.pose.position.y, ".3f"))
-    z = float(format(data.pose.position.z, ".3f"))
-    print(x, y, z)
+        x = float(format(data.pose.position.x, ".3f"))
+        y = float(format(data.pose.position.y, ".3f"))
+        z = float(format(data.pose.position.z, ".3f"))
+
+        time.sleep(0.01)
+    # print(x, y, z)
+    
+    
     c = mt.get_coords()
     b = mt.get_angles()
    
@@ -86,13 +92,15 @@ def grippercallback(data):
     angles_data = [b.joint_1, b.joint_2, b.joint_3, b.joint_4, b.joint_5, b.joint_6]
     q1 = math.radians(angles_data[0])
     Pt = [round(c.x, 3), round(c.y, 3)]
+    print('joint1:', q1)
     print('mycobot:',Pt)
     Pc = [x, y, z]
+    print(Pc[0], Pc[1], Pc[2])
    
     Pm = [0, 0]
         
-    offset = [0.009, 0.018, 0.218]
-    imishiro = 86.77
+    offset = [0.014, 0.016, 0.222]
+    imishiro = 86.06
     px = Pc[0] - offset[0]
     py = Pc[1] - offset[1]
     c1 = math.cos(q1)
