@@ -64,6 +64,12 @@
     <disable_collisions link1="gripper_base" link2="joint5" reason="Never"/>
     <disable_collisions link1="gripper_base" link2="joint6" reason="Never"/>
     <disable_collisions link1="gripper_base" link2="joint6_flange" reason="Adjacent"/>
+
+    <disable_collisions link1="gripper_base" link2="joint1" reason="Never"/>
+    <disable_collisions link1="gripper_base" link2="joint2" reason="Never"/>
+    <disable_collisions link1="gripper_base" link2="joint3" reason="Never"/>
+    <disable_collisions link1="gripper_base" link2="joint4" reason="Never"/>
+
     <disable_collisions link1="gripper_left1" link2="gripper_left2" reason="Default"/>
     <disable_collisions link1="gripper_left1" link2="gripper_left3" reason="Adjacent"/>
     <disable_collisions link1="gripper_left1" link2="gripper_right1" reason="Never"/>
