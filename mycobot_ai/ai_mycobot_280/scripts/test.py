@@ -8,16 +8,16 @@ mc = MyCobot("/dev/ttyACM0", 115200)
 # mc = MyCobot("/dev/ttyUSB0", 115200)
 # mc = MyCobot("/dev/ttyAMA0", 1000000)
 
-mc.send_angles([0,0,0,0,0,0], 25)
+# mc.send_angles([0,0,0,0,0,0], 25)
 # print(mc.get_angles())
-# mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0.0, -15], 30)
+# mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0.0, -15], 20)
 # time.sleep(4)
 # print(mc.get_angles())
 
 # mc.send_coords([120.8, -134.4, 258.0, -172.72, -5.31, -109.09], 30, 1) # red bucket
 # time.sleep(4)
 
-# mc.send_coords([219.8, -126.4, 249.7, -158.68, -7.93, -101.6], 30, 1) # green bucket
+# mc.send_coords([18.8, -7.91, -54.49, -23.02, -0.79, -14.76], 30, 1) # green bucket
 # time.sleep(4)
 
 # mc.send_coords([124.7, 145.3, 250.4, -173.5, -2.23, -11.7], 30, 1) # above the blue bucket
@@ -42,3 +42,20 @@ mc.send_angles([0,0,0,0,0,0], 25)
 #   print("angles:%s"% mc.get_angles())
 #   print("coords:%s"% mc.get_coords())
 #   print("\n")
+move_coords = [
+            [136.8, -133.4, 260.2, -171.72, -3.88, -107.09],  # above the red bucket
+            [221.8, -116.4, 271.2, -147.53, -6.21, -99.91], # green
+            [117.7, 164.3, 259.4, -168.25, -2.25, -6.92], # blue
+            [11.8, 162.5, 260.3, -167.54, -1.78, 29.4], # gray
+        ]
+
+move_angles = [
+        [-7.11, -6.94, -55.01, -24.16, 0, -15],  # init the point
+        [-12.56, -45, -0.49, -7.02, -4.79, -5.76],  # point to grab 
+    ]
+
+mc.send_coords(move_coords[1], 20, 1)
+# mc.send_angles(move_angles[1],20)
+time.sleep(2)
+print(mc.get_angles())
+print(mc.get_coords())

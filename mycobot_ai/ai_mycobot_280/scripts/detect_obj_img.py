@@ -84,7 +84,7 @@ class Object_detect(Movement):
 
         
         # use to calculate coord between cube and mycobot
-        self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
+        self.sum_x1 = self.sum_x2 = se54lf.sum_y2 = self.sum_y1 = 0
         # The coordinates of the grab center point relative to the mycobot
         self.camera_x, self.camera_y = camera_x, camera_y
         # The coordinates of the cube relative to the mycobot

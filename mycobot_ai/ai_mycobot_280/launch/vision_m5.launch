@@ -1,5 +1,5 @@
 ﻿<launch>
-<arg name="port" default="/dev/ttyUSB0" />
+<arg name="port" default="/dev/ttyACM0" />
 	<arg name="baud" default="115200" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>

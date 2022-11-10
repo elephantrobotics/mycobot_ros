@@ -30,7 +30,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = -5):
+    def __init__(self, camera_x = 170, camera_y = 5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -45,10 +45,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [120.8, -134.4, 258.0, -172.72, -5.31, -109.09],  # above the red bucket
-            [219.8, -126.4, 249.7, -158.68, -7.93, -101.6], # green
-            [124.7, 145.3, 250.4, -173.5, -2.23, -11.7], # blue
-            [14.6, 175.9, 250.4, -177.42, -0.08, 25.93], # gray
+            [136.8, -133.4, 260.2, -171.72, -3.88, -107.09],  # above the red bucket
+            [221.8, -116.4, 271.2, -147.53, -6.21, -99.91], # green
+            [117.7, 164.3, 259.4, -168.25, -2.25, -6.92], # blue
+            [11.8, 162.5, 260.3, -167.54, -1.78, 29.4], # gray
         ]
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed
@@ -154,14 +154,14 @@ class Object_detect(Movement):
     # 开启吸泵 m5
     def pump_on(self):
         # 让2号位工作
-        self.mc.set_basic_output(2, 0)
+        # self.mc.set_basic_output(2, 0)
         # 让5号位工作
         self.mc.set_basic_output(5, 0)
 
     # 停止吸泵 m5
     def pump_off(self):
         # 让2号位停止工作
-        self.mc.set_basic_output(2, 1)
+        # self.mc.set_basic_output(2, 1)
         # 让5号位停止工作
         self.mc.set_basic_output(5, 1)
 
@@ -180,7 +180,7 @@ class Object_detect(Movement):
         # time.sleep(3)
 
         # self.mc.send_coords([x, y, 105, 179.87, -3.78, -62.75], 25, 0)
-        self.mc.send_coords([x, y, 60, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 110, 179.87, -3.78, -62.75], 25, 0)
         
         time.sleep(3)
 
@@ -200,7 +200,7 @@ class Object_detect(Movement):
         time.sleep(0.5)
 
          # print(tmp)
-        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        self.mc.send_angles([tmp[0], -0.71, -40.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(5)
 
 
@@ -305,7 +305,7 @@ class Object_detect(Movement):
         self.y1 = int(y1)
         self.x2 = int(x2)
         self.y2 = int(y2)
-        print(self.x1, self.y1, self.x2, self.y2)
+        print('camera_clipping:',self.x1, self.y1, self.x2, self.y2)
 
     # set parameters to calculate the coords between cube and mycobot
     def set_params(self, c_x, c_y, ratio):
@@ -658,7 +658,7 @@ def run():
         # cv2.imshow("figure", frame)
         time.sleep(0.05)
         end_time = time.time()
-        print("loop_time = ", end_time - start_time)
+        # print("loop_time = ", end_time - start_time)
 
         # close the window
         if cv2.waitKey(1) & 0xFF == ord('q'):

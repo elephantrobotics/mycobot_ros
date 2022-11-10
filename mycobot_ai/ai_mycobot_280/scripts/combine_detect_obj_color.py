@@ -19,7 +19,7 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = -5):
+    def __init__(self, camera_x = 170, camera_y = 5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -34,10 +34,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [120.8, -134.4, 258.0, -172.72, -5.31, -109.09],  # above the red bucket
-            [219.8, -126.4, 249.7, -158.68, -7.93, -101.6], # green
-            [124.7, 145.3, 250.4, -173.5, -2.23, -11.7], # blue
-            [14.6, 175.9, 250.4, -177.42, -0.08, 25.93], # gray
+            [136.8, -133.4, 260.2, -171.72, -3.88, -107.09],  # above the red bucket
+            [221.8, -116.4, 271.2, -147.53, -6.21, -99.91], # green
+            [117.7, 164.3, 259.4, -168.25, -2.25, -6.92], # blue
+            [11.8, 162.5, 260.3, -167.54, -1.78, 29.4], # gray
         ]
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
@@ -76,7 +76,7 @@ class Object_detect(Movement):
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])], # [77, 255, 255]
+            "green": [np.array([35, 43, 35]), np.array([90, 255, 255])], # [77, 255, 255]
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
         }
@@ -138,14 +138,14 @@ class Object_detect(Movement):
     # 开启吸泵 m5
     def pump_on(self):
         # 让2号位工作
-        self.mc.set_basic_output(2, 0)
+        # self.mc.set_basic_output(2, 0)
         # 让5号位工作
         self.mc.set_basic_output(5, 0)
 
     # 停止吸泵 m5
     def pump_off(self):
         # 让2号位停止工作
-        self.mc.set_basic_output(2, 1)
+        # self.mc.set_basic_output(2, 1)
         # 让5号位停止工作
         self.mc.set_basic_output(5, 1)
     # Grasping motion
@@ -162,7 +162,7 @@ class Object_detect(Movement):
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
         # time.sleep(3)
 
-        self.mc.send_coords([x, y, 96, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 100, 179.87, -3.78, -62.75], 25, 0)
         time.sleep(3)
 
         # open pump
@@ -181,7 +181,7 @@ class Object_detect(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        self.mc.send_angles([tmp[0], -0.71, -40.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(4)
 
         self.pub_marker(
@@ -310,8 +310,8 @@ class Object_detect(Movement):
                            interpolation=cv2.INTER_CUBIC)
         if self.x1 != self.x2:
             # the cutting ratio here is adjusted according to the actual situation
-            frame = frame[int(self.y2*0.2):int(self.y1*1.15),
-                          int(self.x1*0.7):int(self.x2*1.15)]
+            frame = frame[int(self.y2*0.8):int(self.y1*1.08),
+                          int(self.x1*0.88):int(self.x2*1.08)]
         return frame
 
     # detect cube color
