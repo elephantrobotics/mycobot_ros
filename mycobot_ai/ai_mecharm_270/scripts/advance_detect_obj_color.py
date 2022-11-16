@@ -17,8 +17,8 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 140, camera_y = 5): # m5
-    # def __init__(self, camera_x = 140, camera_y = -5): # pi
+    def __init__(self, camera_x = 148, camera_y = 5): # m5
+    # def __init__(self, camera_x = 148, camera_y = -5): # pi
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -35,10 +35,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
-            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
-            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket         
+            [109.1, -118.8, 164.9, -179.02, 11.07, 132.93], # above the red bucket
+            [178.4, -98.5, 172.7, -175.8, 41.25, 159.41], # above the green bucket
+            [97.9, 139.9, 170.7, 163.54, 2.03, 156.04], # above the blue bucket
+            [-1.8, 143.8, 172.4, 170.69, -4.62, 161.79], # above the gray bucket         
         ]
 
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
@@ -165,9 +165,9 @@ class Object_detect(Movement):
 
         
         self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
-        # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
+        # self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         time.sleep(3)
-        self.pub_marker(x/1000.0, y/1000.0, 90/1000.0)
+        self.pub_marker(x/1000.0, y/1000.0, 103/1000.0)
 
         
         # open pump

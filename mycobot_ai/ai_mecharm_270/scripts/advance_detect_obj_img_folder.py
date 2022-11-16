@@ -16,7 +16,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 145, camera_y = -5):
+    def __init__(self, camera_x = 148, camera_y = 5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -32,10 +32,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
-            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
-            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
+            [109.1, -118.8, 164.9, -179.02, 11.07, 132.93], # above the red bucket
+            [178.4, -98.5, 172.7, -175.8, 41.25, 159.41], # above the green bucket
+            [97.9, 139.9, 170.7, 163.54, 2.03, 156.04], # above the blue bucket
+            [-1.8, 143.8, 172.4, 170.69, -4.62, 161.79], # above the gray bucket         
         ]
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
@@ -147,18 +147,17 @@ class Object_detect(Movement):
     def move(self, x, y, color):
         # send Angle to move 270
         self.mc.send_angles(self.move_angles[0], 30)
-        time.sleep(7)
+        time.sleep(4)
 
         print("x %s ,y %s" % (x,y))
         # send coordinates to move 270 根据不同底板机械臂，调整吸泵高度
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
-        time.sleep(7)
-        print("ntm")
+        time.sleep(3)
 
         self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
         # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
-        time.sleep(6)
+        time.sleep(3)
 
         # open pump
         if "dev" in self.robot_m5 or "dev" in self.robot_wio:
