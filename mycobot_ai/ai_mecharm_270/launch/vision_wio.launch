@@ -2,8 +2,8 @@
 	<arg name="port" default="/dev/ttyACM0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>
-	<arg name="rvizconfig" default="$(find mypalletizer_260)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/mecharm/mecharm_aikit.urdf"/>
+	<arg name="rvizconfig" default="$(find mecharm)/config/mecharm.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -14,13 +14,13 @@
 	</node>
 
 	<!-- mycobot-topics -->
-    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+    <include file="$(find mecharm_communication)/launch/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 
     <!-- listen and pub the real angles -->
-	<node name="real_listener" pkg="mypalletizer_260" type="listen_real_of_topic.py" />
+	<node name="real_listener" pkg="mecharm" type="listen_real_of_topic.py" />
 
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
