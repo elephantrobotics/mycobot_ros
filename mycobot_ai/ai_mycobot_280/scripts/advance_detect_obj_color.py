@@ -316,11 +316,13 @@ class Object_detect(Movement):
     def color_detect(self, img):
         # set the arrangement of color'HSV
         x = y = 0
+        gs_img = cv2.GaussianBlur(img, (3, 3), 0) # 高斯模糊
+        # transfrom the img to model of gray
+        hsv = cv2.cvtColor(gs_img, cv2.COLOR_BGR2HSV)
+
         for mycolor, item in self.HSV.items():
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
-            # transfrom the img to model of gray
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
             # a etching operation on a picture to remove edge roughness
@@ -365,7 +367,7 @@ class Object_detect(Movement):
                     elif mycolor == "green":
                         self.color = 1
                        
-                    elif mycolor == "cyan":
+                    elif mycolor == "cyan" or mycolor == "blue":
                         self.color = 2
         
                     else:
@@ -400,7 +402,6 @@ if __name__ == "__main__":
         _, frame = cap.read()
         # deal img
         frame = detect.transform_frame(frame)
-
         if _init_ > 0:
             _init_ -= 1
             continue

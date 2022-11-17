@@ -77,7 +77,7 @@ class Object_detect(Movement):
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
+            "green": [np.array([35, 43, 35]), np.array([90, 255, 255])],
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
@@ -321,14 +321,14 @@ class Object_detect(Movement):
     def color_detect(self, img):
         # set the arrangement of color'HSV
         x = y = 0
+        gs_img = cv2.GaussianBlur(img, (3, 3), 0) # 高斯模糊
+        # transfrom the img to model of gray
+        hsv = cv2.cvtColor(gs_img, cv2.COLOR_BGR2HSV)
+
         for mycolor, item in self.HSV.items():
             # print("mycolor:",mycolor)
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
-
-            # transfrom the img to model of gray
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            # print("hsv",hsv)
 
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
@@ -376,7 +376,7 @@ class Object_detect(Movement):
                         self.color = 0
                     elif mycolor == "green":
                         self.color = 1
-                    elif mycolor == "cyan":
+                    elif mycolor == "cyan" or mycolor == "blue":
                         self.color = 2
                     else:
                         self.color = 3

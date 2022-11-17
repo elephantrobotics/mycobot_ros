@@ -73,33 +73,15 @@ class Object_detect(Movement):
         # set cache of real coord
         self.cache_x = self.cache_y = 0
 
+        # set color HSV
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([70, 100, 100]), np.array([90, 255, 255])], # [77, 255, 255]
+            "green": [np.array([35, 43, 35]), np.array([90, 255, 255])], # [77, 255, 255]
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
         }
-
-        # set color HSV
-        # self.HSV = {
-        #     # "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
-        #     "yellow": [np.array([22, 93, 70]), np.array([45, 255, 245])],
-        #     "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-        #     # "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
-        #     "green": [np.array([35, 55, 30]), np.array([88, 255, 255])],
-        #     "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
-        #     # "blue": [np.array([-10, 100, 100]), np.array([10, 255, 255])],
-        #     "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
-        # }
-        # self.HSV = {
-        #     # "yellow": [np.array([11, 85, 70]), np.array([59, 255, 245])],
-        #     "yellow": [np.array([22, 93, 0]), np.array([45, 255, 245])],
-        #     "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-        #     "green": [np.array([35, 43, 35]), np.array([90, 255, 255])],
-        #     # "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
-        #     "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
-        # }
+       
         # use to calculate coord between cube and mypal260
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
         # The coordinates of the grab center point relative to the mypal260
@@ -328,14 +310,14 @@ class Object_detect(Movement):
     def color_detect(self, img):
         # set the arrangement of color'HSV
         x = y = 0
+        gs_img = cv2.GaussianBlur(img, (3, 3), 0) # 高斯模糊
+        # transfrom the img to model of gray
+        hsv = cv2.cvtColor(gs_img, cv2.COLOR_BGR2HSV)
+
         for mycolor, item in self.HSV.items():
             # print("mycolor:",mycolor)
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
-        
-            # transfrom the img to model of gray
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            # print("hsv",hsv)
 
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
@@ -380,64 +362,18 @@ class Object_detect(Movement):
                     # calculate the real coordinates of mypal260 relative to the target
                     if mycolor == "red":
                         self.color = 0
-                        break
-                    elif mycolor == "blue":
-                        self.color = 2
-                        break
+           
                     elif mycolor == "green":
                         self.color = 1
-                        break
-                    elif mycolor == "cyan":
+                  
+                    elif mycolor == "cyan" or mycolor == "blue":
                         self.color = 2
-                        break
-
-                    elif mycolor == "yellow":
-                        self.color = 3
-                        break
-
-                    # elif mycolor == "green":
-                    #     self.color = 1
                     
-                    # if mycolor == "red":
-                    #     self.color = 0
-                    #     break
-                    # elif mycolor == "green":
-                    #     self.color = 1
-                    #     print('green')
-                    #     break
-                    # elif mycolor == "cyan":
-                    #     self.color = 2
-                    #     break
-                    # elif mycolor == "blue":
-                    #     self.color = 2
-                    #     break
-                    # elif mycolor == "yellow":
-                    #     self.color = 3
-                    #     break
-                    # if mycolor  == "yellow":
-                        
-                    #     self.color = 3
-                    #     print(mycolor)
-                    #     break
+                    else:
+                        self.color = 3
+                       
 
-                    # elif mycolor == "red":
-                    #     self.color = 0
-                    #     print(mycolor)
-                    #     break
-
-                    # elif mycolor == "cyan" or mycolor == "blue":
-                    #     self.color = 2
-                    #     print(mycolor)
-                    #     break
-
-                    # # elif mycolor == "blue":
-                    #     # self.color =2
-                    #     # break
-                    # else:
-                    #     self.color = 1
-                    #     print(mycolor)
-                    #     # break
-
+                
         if abs(x) + abs(y) > 0:
             return x, y
         else:
