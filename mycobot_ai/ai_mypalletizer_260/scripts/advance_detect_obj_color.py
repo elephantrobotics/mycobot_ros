@@ -162,7 +162,7 @@ class Object_detect(Movement):
         # send coordinates to move mypal260
         self.mc.send_coords([x, y, 160, 0], 20, 0)
         time.sleep(1.5)
-        self.mc.send_coords([x, y, 101, 0], 20, 0)
+        self.mc.send_coords([x, y, 96, 0], 20, 0)
         time.sleep(1.5)
 
         # open pump

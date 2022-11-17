@@ -154,7 +154,7 @@ class Object_detect(Movement):
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
         time.sleep(3)
 
-        self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
+        self.mc.send_coords([x, y, 96, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
         # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(3)
@@ -176,7 +176,7 @@ class Object_detect(Movement):
         
         # print(tmp)
         self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
-        time.sleep(6)
+        time.sleep(3)
         
 
         self.mc.send_coords(self.move_coords[color], 30, 1)

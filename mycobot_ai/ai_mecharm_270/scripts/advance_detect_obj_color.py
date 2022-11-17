@@ -164,10 +164,10 @@ class Object_detect(Movement):
         self.pub_marker(x/1000.0, y/1000.0, 140/1000.0)
 
         
-        self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
+        self.mc.send_coords([x, y, 96, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
         # self.mc.send_coords([x, y, 103, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         time.sleep(3)
-        self.pub_marker(x/1000.0, y/1000.0, 103/1000.0)
+        self.pub_marker(x/1000.0, y/1000.0, 96/1000.0)
 
         
         # open pump
