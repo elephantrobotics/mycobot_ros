@@ -50,13 +50,11 @@ class Object_detect(Movement):
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.Pin = [2, 5]
             # self.Pin = [5]
         elif "dev" in self.robot_wio:
-            # self.Pin = [20, 21]
-            self.Pin = [2, 5]
-            # self.Pin = [5]
+            self.Pin = [20, 21]
             for i in self.move_coords:
                 i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
