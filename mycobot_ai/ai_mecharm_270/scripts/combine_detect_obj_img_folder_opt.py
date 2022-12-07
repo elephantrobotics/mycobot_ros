@@ -46,8 +46,8 @@ class Object_detect(Movement):
         self.move_coords = [
             [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
             [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
-            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
+            [84.3, 123.8, 205.0, 153.45, -3.67, 142.01], # above the blue bucket
+            [-15, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
         ]
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
@@ -59,7 +59,8 @@ class Object_detect(Movement):
         if "dev" in self.robot_m5:
             self.Pin = [2, 5]
         elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
+            # self.Pin = [20, 21]
+            self.Pin = [2, 5]
             for i in self.move_coords:
                 i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
@@ -158,21 +159,20 @@ class Object_detect(Movement):
     def move(self, x, y, color):
         # send Angle to move 270
         self.mc.send_angles(self.move_angles[0], 30)
-        time.sleep(7)
+        time.sleep(4)
 
         print("x %s ,y %s" % (x,y))
         # send coordinates to move 270 根据不同底板机械臂，调整吸泵高度
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
-        time.sleep(7)
-        print("ntm")
+        time.sleep(3)
 
         self.mc.send_coords([x, y, 95, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
         # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
-        time.sleep(6)
+        time.sleep(3)
 
         # open pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
            self.pump_on()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(True)
@@ -187,25 +187,25 @@ class Object_detect(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
-        time.sleep(6)
+        self.mc.send_angles([tmp[0], 17.22, -45, tmp[3], 97, tmp[5]],30)
+        time.sleep(3)
         
 
         self.mc.send_coords(self.move_coords[color], 30, 1)
         self.pub_marker(self.move_coords[color][0] / 1000.0,
                         self.move_coords[color][1] / 1000.0,
                         self.move_coords[color][2] / 1000.0)
-        time.sleep(6)
+        time.sleep(3)
 
         # close pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
            self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
         time.sleep(6)
 
         self.mc.send_angles(self.move_angles[1], 30)
-        time.sleep(6)
+        time.sleep(2)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
