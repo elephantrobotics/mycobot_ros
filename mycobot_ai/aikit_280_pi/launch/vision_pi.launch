@@ -3,13 +3,13 @@
 	<arg name="baud" default="1000000" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
+	<arg name="rvizconfig" default="$(find mycobot_280)/config/ai_mycobot_pi.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
 	<!-- Combinejoin values to TF -->
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
 		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
 	</node>
 

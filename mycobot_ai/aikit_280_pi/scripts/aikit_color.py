@@ -101,7 +101,7 @@ class Object_detect(Movement):
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
         # init a Marker
         self.marker = Marker()
-        self.marker.header.frame_id = "/joint1"
+        self.marker.header.frame_id = "joint1"
         self.marker.ns = "cube"
         self.marker.type = self.marker.CUBE
         self.marker.action = self.marker.ADD
