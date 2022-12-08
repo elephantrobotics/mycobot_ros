@@ -39,31 +39,31 @@ class Application(object):
         # 设置标题
         self.win.title("aikit启动工具")
         self.win.geometry(
-            "600x400+100+100")  # 290 160为窗口大小，+10 +10 定义窗口弹出时的默认展示位置
+            "800x600+100+100")  # 290 160为窗口大小，+10 +10 定义窗口弹出时的默认展示位置
         # 打开ros按钮
-        self.btn = Button(self.win, text="open ROS", command=self.open_ros)
+        self.btn = Button(self.win, text="open ROS", font=("Helvetica","13"), command=self.open_ros)
         self.btn.grid(row=0)
 
-        self.chanse_code = Label(self.win, text="选择程序:", width=10)
+        self.chanse_code = Label(self.win, text="选择程序:", font=("Helvetica","13"), width=10)
         self.chanse_code.grid(row=1)
 
         self.myComboList = [u"颜色识别", u"物体识别", u"二维码识别"]
-        self.myCombox = ttk.Combobox(self.win, values=self.myComboList)
+        self.myCombox = ttk.Combobox(self.win, font=("Helvetica","13"), values=self.myComboList)
         self.myCombox.grid(row=1, column=1)
 
-        self.add_btn = Button(self.win, text="添加新的物体图像", command=self.add_img)
+        self.add_btn = Button(self.win, text="添加新的物体图像", font=("Helvetica","13"), command=self.add_img)
         self.add_btn.grid(row=1, column=2)
 
         self.tips = "1、首先打开ros,大概需要等待5s\n2、选择所要运行的程序点击运行即可,开启大概需要10秒,可以通过查看终端查看开启情况。\n\n添加新的图像：\n1、点击按钮，等待开启摄像头\n2、选中图像框，按z键拍照\n3、使用鼠标框出需要识别的图像区域\n4、按Enter键提取图像\n5、根据终端提示，输入数字(1~4)保存到相对应图像的文件夹，按下Enter键即可保存至对应文件夹。"
 
-        self.btn = Button(self.win, text="运行", command=self.start_run)
+        self.btn = Button(self.win, text="运行", font=("Helvetica","13"), command=self.start_run)
         self.btn.grid(row=5)
 
-        self.close = Button(self.win, text="close", command=self.close_py)
+        self.close = Button(self.win, text="close", font=("Helvetica","13"), command=self.close_py)
         self.close.grid(row=5, column=1)
 
         self.t2 = None
-        self.log_data = Text(self.win, width=74, height=20)
+        self.log_data = Text(self.win, width=74, height=20, font=("Helvetica","13"))
         self.log_data.grid(row=16, column=0, columnspan=10)
         self.log_data.insert(END, self.tips)
 
