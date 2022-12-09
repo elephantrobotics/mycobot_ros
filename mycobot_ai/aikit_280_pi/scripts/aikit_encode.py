@@ -5,7 +5,9 @@ from pymycobot.mycobot import MyCobot
 from pymycobot import PI_BAUD, PI_PORT
 import RPi.GPIO as GPIO
 import time
-
+import rospy
+from visualization_msgs.msg import Marker
+from moving_utils import Movement
 
 
 # y轴偏移量
@@ -41,6 +43,34 @@ class Detect_marker():
         self.dist_coeffs = np.array(([[3.41360787e-01, -2.52114260e+00, -1.28012469e-03,  6.70503562e-03,
              2.57018000e+00]]))
     
+        # init a node and a publisher
+        rospy.init_node("encode_marker", anonymous=True)
+        self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
+
+        self.marker = Marker()
+        self.marker.header.frame_id = "joint1"
+        self.marker.ns = "cube"
+        self.marker.type = self.marker.CUBE
+        self.marker.action = self.marker.ADD
+        self.marker.scale.x = 0.04
+        self.marker.scale.y = 0.04
+        self.marker.scale.z = 0.04
+        self.marker.color.a = 1
+        self.marker.color.r = 0.3
+        self.marker.color.g = 0.3
+        self.marker.color.b = 0.3
+
+        # marker position initial
+        self.marker.pose.position.x = 0
+        self.marker.pose.position.y = 0
+        self.marker.pose.position.z = 0.03
+        self.marker.pose.orientation.x = 0
+        self.marker.pose.orientation.y = 0
+        self.marker.pose.orientation.z = 0
+        self.marker.pose.orientation.w = 1.0
+        
+        
+    
     # 控制吸泵      
     def pub_pump(self, flag):
         if flag:
@@ -60,6 +90,12 @@ class Detect_marker():
             [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # A分拣区 A sorting area
             [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # B分拣区  B sorting area
         ]
+        
+        # publish marker
+        self.marker.header.stamp = rospy.Time.now()
+        self.marker.pose.position.x = (coords[0][0]-x)/1000.0
+        self.marker.pose.position.y = (coords[0][1]-y)/1000.0
+        self.pub.publish(self.marker)
 
         # send coordinates to move mycobot
         self.mc.send_coords(coords[0], 30, 1)
@@ -77,6 +113,14 @@ class Detect_marker():
         time.sleep(4)
         self.pub_pump(False)  
         time.sleep(5)
+        
+        # publish marker
+        time.sleep(1)
+        self.marker.header.stamp = rospy.Time.now()
+        self.marker.pose.position.x = coords[1][0]/1000.0
+        self.marker.pose.position.y = coords[1][1]/1000.0
+        self.pub.publish(self.marker)
+        
         self.mc.send_coords(coords[0], 30, 1)
         time.sleep(2)
 

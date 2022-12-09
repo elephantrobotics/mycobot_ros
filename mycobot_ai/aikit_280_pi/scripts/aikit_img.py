@@ -3,6 +3,9 @@ import cv2
 import numpy as np
 import time
 import os,sys
+import rospy
+from visualization_msgs.msg import Marker
+from moving_utils import Movement
 
 from pymycobot.mycobot import MyCobot
 
@@ -10,7 +13,7 @@ IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
 
 
-class Object_detect():
+class Object_detect(Movement):
 
     def __init__(self, camera_x = 160, camera_y = 10):
         # inherit the parent class
@@ -79,6 +82,42 @@ class Object_detect():
         # Get ArUco marker params.
         self.aruco_params = cv2.aruco.DetectorParameters_create()
         
+        # init a Marker
+        rospy.init_node("marker", anonymous=True)
+        self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
+        # init a Marker
+        self.marker = Marker()
+        self.marker.header.frame_id = "joint1"
+        self.marker.ns = "cube"
+        self.marker.type = self.marker.CUBE
+        self.marker.action = self.marker.ADD
+        self.marker.scale.x = 0.04
+        self.marker.scale.y = 0.04
+        self.marker.scale.z = 0.04
+        self.marker.color.a = 1.0
+        self.marker.color.g = 1.0
+        self.marker.color.r = 1.0
+
+        # marker position initial
+        self.marker.pose.position.x = 0
+        self.marker.pose.position.y = 0
+        self.marker.pose.position.z = 0.03
+        self.marker.pose.orientation.x = 0
+        self.marker.pose.orientation.y = 0
+        self.marker.pose.orientation.z = 0
+        self.marker.pose.orientation.w = 1.0
+
+        self.cache_x = self.cache_y = 0
+
+    # publish marker
+    def pub_marker(self, x, y, z=0.03):
+        self.marker.header.stamp = rospy.Time.now()
+        self.marker.pose.position.x = x
+        self.marker.pose.position.y = y
+        self.marker.pose.position.z = z
+        self.marker.color.g = self.color
+        self.pub.publish(self.marker)
+        
     # pump_control pi
     def gpio_status(self, flag):
         if flag:
@@ -142,6 +181,8 @@ class Object_detect():
 
 
         self.mc.send_coords(self.move_coords[color], 25, 1)
+        self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color][1]/1000.0,
+                        self.move_coords[color][2]/1000.0)
         time.sleep(4)
 
         # close pump
@@ -366,13 +407,14 @@ class Object_detect():
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path1 = '/home/er/AiKit_280PI/' + folder
-    path2 = r'D:/BaiduSyncdisk/PythonProject/OpenCV/' + folder
+    path = ''
+    path1 = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_280_pi/' + folder    # pi
+    path2 = r'D:/BaiduSyncdisk/PythonProject/OpenCV/' + folder    # windows
 
-    # if os.path.exists(path1):
-    #     path = path1
-    # elif os.path.exists(path2):
-    path = path1
+    if os.path.exists(path1):
+        path = path1
+    elif os.path.exists(path2):
+        path = path2
 
     for i, j, k in os.walk(path):
         for l in k:
@@ -571,7 +613,7 @@ def run():
                 # calculate real coord between cube and mycobot
                 real_x, real_y = detect.get_position(x, y)
                 detect.color = i
-                # detect.pub_marker(real_x / 1000.0, real_y / 1000.0)
+                detect.pub_marker(real_x / 1000.0, real_y / 1000.0)
                 detect.decide_move(real_x, real_y, detect.color)
                 # if num == 5:
                 #     detect.color = i
