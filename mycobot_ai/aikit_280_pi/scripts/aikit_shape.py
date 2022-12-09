@@ -3,7 +3,9 @@ import numpy as np
 import time
 import os,sys
 import math
-
+import rospy
+from visualization_msgs.msg import Marker
+from moving_utils import Movement
 from pymycobot.mycobot import MyCobot
 
 
@@ -12,7 +14,7 @@ __version__ = "1.0"
 # Adaptive seeed
 
 
-class Object_detect():
+class Object_detect(Movement):
 
     def __init__(self, camera_x = 162, camera_y = 15):
         # inherit the parent class
@@ -84,6 +86,40 @@ class Object_detect():
         
         # 初始化背景减法器
         self.mog =cv2.bgsegm.createBackgroundSubtractorMOG() 
+        
+        # init a node and a publisher
+        rospy.init_node("marker", anonymous=True)
+        self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
+        # init a Marker
+        self.marker = Marker()
+        self.marker.header.frame_id = "joint1"
+        self.marker.ns = "cube"
+        self.marker.type = self.marker.CUBE
+        self.marker.action = self.marker.ADD
+        self.marker.scale.x = 0.04
+        self.marker.scale.y = 0.04
+        self.marker.scale.z = 0.04
+        self.marker.color.a = 1.0
+        self.marker.color.g = 1.0
+        self.marker.color.r = 1.0
+        
+        # marker position initial
+        self.marker.pose.position.x = 0
+        self.marker.pose.position.y = 0
+        self.marker.pose.position.z = 0.03
+        self.marker.pose.orientation.x = 0
+        self.marker.pose.orientation.y = 0
+        self.marker.pose.orientation.z = 0
+        self.marker.pose.orientation.w = 1.0
+        
+    # publish marker
+    def pub_marker(self, x, y, z=0.03):
+        self.marker.header.stamp = rospy.Time.now()
+        self.marker.pose.position.x = x 
+        self.marker.pose.position.y = y
+        self.marker.pose.position.z = z
+        self.marker.color.g = self.color
+        self.pub.publish(self.marker)
     
     # pump_control pi
     def gpio_status(self, flag):
@@ -143,8 +179,11 @@ class Object_detect():
         # print(tmp)
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(3)
-
+        self.pub_marker(self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
+        
         self.mc.send_coords(self.move_coords[color], 25, 1)
+        
+        self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color][1]/1000.0, self.move_coords[color][2]/1000.0)
  
         time.sleep(3)
        
@@ -155,6 +194,15 @@ class Object_detect():
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
         time.sleep(5)
+        
+        if color == 1:
+            self.pub_marker(
+                self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0-0.02
+            )
+        elif color == 0:
+            self.pub_marker(
+                self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0
+            )
 
         self.mc.send_angles(self.move_angles[0], 25)
         time.sleep(4.5)
@@ -449,7 +497,7 @@ if __name__ == "__main__":
             # calculate real coord between cube and mycobot280
             real_x, real_y = detect.get_position(x, y)
             if num == 20:
-                
+                detect.pub_marker(real_sx/20.0/1000.0, real_sy/20.0/1000.0)
                 detect.decide_move(real_sx/20.0, real_sy/20.0, detect.color)
                 num = real_sx = real_sy = 0
 
