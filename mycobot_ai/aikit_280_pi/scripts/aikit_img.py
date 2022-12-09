@@ -148,7 +148,7 @@ class Object_detect(Movement):
         time.sleep(3)
 
         # send coordinates to move mycobot
-        self.mc.send_coords([x, y,  190.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
+        self.mc.send_coords([x, y,  170.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
         time.sleep(3)
         
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
@@ -176,7 +176,7 @@ class Object_detect(Movement):
 
          # print(tmp)
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        time.sleep(2.5)
+        time.sleep(3)
 
 
 
@@ -457,10 +457,10 @@ def process_transform_frame(frame, x1, y1, x2, y2):
                         fx=fx,
                         fy=fy,
                         interpolation=cv2.INTER_CUBIC)
-    # if x1 != x2:
-    #     # the cutting ratio here is adjusted according to the actual situation
-    #    frame = frame[int(y2 * 0.2):int(y1 * 1.15),
-    #                    int(x1 * 0.7):int(x2 * 1.15)]
+    if x1 != x2:
+        # the cutting ratio here is adjusted according to the actual situation
+       frame = frame[int(y2 * 0.7):int(y1 * 1.15),
+                       int(x1 * 0.7):int(x2 * 1.15)]
     return frame
 
 def process_display_frame(connection):

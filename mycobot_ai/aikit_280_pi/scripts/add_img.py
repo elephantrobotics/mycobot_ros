@@ -52,7 +52,7 @@ def take_photo():
 
 def cut_photo():
     
-    path1 = '/home/er/AiKit_280PI'    # pi
+    path1 = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_280_pi'    # pi
     path2 = r'D:/BaiduSyncdisk/PythonProject/OpenCV'         # m5
 
     if os.path.exists(path1):
