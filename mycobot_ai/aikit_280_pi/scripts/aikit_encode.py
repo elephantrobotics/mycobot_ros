@@ -20,7 +20,7 @@ class Detect_marker():
         #initialize MyCobot
         self.mc = MyCobot(PI_PORT, PI_BAUD) 
         GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(20, GPIO.OUT)
+        GPIO.setup(20, GPIO.OUT)
         GPIO.setup(21, GPIO.OUT)
         # set cache of real coord
         self.cache_x = self.cache_y = 0
@@ -74,10 +74,10 @@ class Detect_marker():
     # 控制吸泵      
     def pub_pump(self, flag):
         if flag:
-           # GPIO.output(20, 0)
+            GPIO.output(20, 0)
             GPIO.output(21, 0)
         else:
-           # GPIO.output(20, 1)
+            GPIO.output(20, 1)
             GPIO.output(21, 1)
 
     # Grasping motion
