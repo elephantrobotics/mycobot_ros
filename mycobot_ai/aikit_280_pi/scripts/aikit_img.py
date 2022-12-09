@@ -143,7 +143,7 @@ class Object_detect(Movement):
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mypal260
+        # send Angle to move mycobot 280
         self.mc.send_angles(self.move_angles[1], 25)
         time.sleep(3)
 
