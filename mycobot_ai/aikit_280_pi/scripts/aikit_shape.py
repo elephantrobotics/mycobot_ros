@@ -231,7 +231,7 @@ class Object_detect(Movement):
         if not self.raspi:
             self.pub_pump(False, self.Pin)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
-        time.sleep(4.5)
+        time.sleep(2.5)
 
     # draw aruco
     def draw_marker(self, img, x, y):

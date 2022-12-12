@@ -192,7 +192,7 @@ class Detect_marker(Movement):
         self.pub_pump(False)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
         # self.mc.send_coords([135.0, -65.5, 280.1, 178.99, 5.38, -179.9], 20, 1)
-        time.sleep(3.5)
+        time.sleep(2.5)
         
 
 
