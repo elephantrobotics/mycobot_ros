@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from pymycobot.mycobot import MyCobot
 from pymycobot.genre import Angle
-from pymycobot import PI_PORT, PI_BAUD  # 当使用树莓派版本的mycobot时，可以引用这两个变量进行MyCobot初始化
+  # 当使用树莓派版本的mycobot时，可以引用这两个变量进行MyCobot初始化
 import time
 
 mc = MyCobot("/dev/ttyACM0", 115200)
 # mc = MyCobot("/dev/ttyUSB0", 115200)
 # mc = MyCobot("/dev/ttyAMA0", 1000000)
 
-mc.send_angles([0,0,0,0,0,0], 25)
+# mc.send_angles([0,0,0,0,0,0], 25)
 # print(mc.get_angles())
 # mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0.0, -15], 30)
 # time.sleep(4)
@@ -42,3 +42,16 @@ mc.send_angles([0,0,0,0,0,0], 25)
 #   print("angles:%s"% mc.get_angles())
 #   print("coords:%s"% mc.get_coords())
 #   print("\n")
+move_coords = [
+            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # above the red bucket
+            [232.5, -124.6, 212.8, -169.94, -5.88, -97.63], # green
+            [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # blue
+            [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # gray
+        ]
+
+# mc.send_coords(move_coords[1],20, 1)
+# mc.send_angles([-13.44, -57.3, 0.7, -22.76, -4.74, -6.76], 20)
+mc.send_coords([238.8, -124.1, 204.3, -169.69, -5.52, -96.52], 20, 1)
+time.sleep(3)
+print(mc.get_angles())
+print(mc.get_coords())
