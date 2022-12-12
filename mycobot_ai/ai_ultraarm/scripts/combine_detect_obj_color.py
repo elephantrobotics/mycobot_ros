@@ -1,6 +1,6 @@
-# encoding:utf-8
 #!/usr/bin/env python2
-
+# -*- coding:utf-8 -*- 
+from operator import imod
 from tokenize import Pointfloat
 import cv2
 import numpy as np
@@ -8,8 +8,8 @@ import time
 import json
 import os,sys
 import rospy
-from visualization_msgs.msg import Marker
-from pymycobot.mycobot import MyCobot
+from visualization_msgs.msg import Marker   
+from pymycobot.ultraArm import ultraArm
 from moving_utils import Movement
 
 IS_CV_4 = cv2.__version__[0] == '4'
@@ -19,54 +19,36 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = -5):
+    def __init__(self, camera_x = 148, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
-        self.mc = None
+
+        # declare ultraArm
+        self.ua = None
 
         # 移动角度
         self.move_angles = [
-            [-7.11, -6.94, -55.01, -24.16, 0, -15],  # init the point
-            [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],  # point to grab 
+            [0.0, 0.0, 0.0],  # init the point
+            [19.48, 0.0, 0.0],  # point to grab
+            # [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
 
         # 移动坐标
         self.move_coords = [
-            [120.8, -134.4, 258.0, -172.72, -5.31, -109.09],  # above the red bucket
-            [219.8, -126.4, 249.7, -158.68, -7.93, -101.6], # green
-            [124.7, 145.3, 250.4, -173.5, -2.23, -11.7], # blue
-            [14.6, 175.9, 250.4, -177.42, -0.08, 25.93], # gray
+            [121.35, 127.48, 120.0],  # above the red bucket
+            [217.09, 113.01, 98.36], # above the green bucket
+            [107.54, -171.23, 117.11], # above the blue bucket
+            [-6.91, -175.86, 120.0], # above the gray bucket         
         ]
+
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
-        self.raspi = False
-        if "dev" in self.robot_m5:
-            self.Pin = [2, 5]
-        elif "dev" in self.robot_wio:
-            # self.Pin = [20, 21]
-            self.Pin = [2, 5]
-
-            # for i in self.move_coords:
-            #     i[2] -= 20
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            import RPi.GPIO as GPIO
-            GPIO.setwarnings(False)
-            self.GPIO = GPIO
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(20, GPIO.OUT)
-            GPIO.setup(21, GPIO.OUT)
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
-            self.raspi = True
-        if self.raspi:
-            self.gpio_status(False)
-
-        # choose place to set cube
+      
         self.color = 0
         # parameters to calculate camera clipping parameters
         self.x1 = self.x2 = self.y1 = self.y2 = 0
@@ -75,16 +57,17 @@ class Object_detect(Movement):
         # set color HSV
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
+            # "yellow": [np.array([26, 43, 46]), np.array([34, 255, 255])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])], # [77, 255, 255]
+            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])],
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
-            "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
+            "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
-        # use to calculate coord between cube and mycobot
+        # use to calculate coord between cube and ultraArm
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
-        # The coordinates of the grab center point relative to the mycobot
+        # The coordinates of the grab center point relative to the ultraArm
         self.camera_x, self.camera_y = camera_x, camera_y
-        # The coordinates of the cube relative to the mycobot
+        # The coordinates of the cube relative to the ultraArm
         self.c_x, self.c_y = 0, 0
         # The ratio of pixels to actual values
         self.ratio = 0
@@ -127,6 +110,7 @@ class Object_detect(Movement):
         self.marker.color.g = self.color
         self.pub.publish(self.marker)
 
+    # pump_control pi
     def gpio_status(self, flag):
         if flag:
             self.GPIO.output(20, 0)
@@ -134,80 +118,56 @@ class Object_detect(Movement):
         else:
             self.GPIO.output(20, 1)
             self.GPIO.output(21, 1)
-
+    
     # 开启吸泵 m5
     def pump_on(self):
-        # 让2号位工作
-        self.mc.set_basic_output(2, 0)
-        # 让5号位工作
-        self.mc.set_basic_output(5, 0)
+        self.ua.set_gpio_state(0)
 
     # 停止吸泵 m5
     def pump_off(self):
-        # 让2号位停止工作
-        self.mc.set_basic_output(2, 1)
-        # 让5号位停止工作
-        self.mc.set_basic_output(5, 1)
+        self.ua.set_gpio_state(1)
+
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mycobot
-        print (color)
-        self.mc.send_angles(self.move_angles[1], 25)
+        # send Angle to move ultraArm
+        print('color-->', color)
+        self.ua.set_angles(self.move_angles[0], 20)
         time.sleep(3)
 
-        # send coordinates to move mycobot
-        self.mc.send_coords([x, y,  190.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
-        time.sleep(3)
-        
-        # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
-        # time.sleep(3)
-
-        self.mc.send_coords([x, y, 96, 179.87, -3.78, -62.75], 25, 0)
-        time.sleep(3)
+        # send coordinates to move ultraArm
+        self.ua.set_coords([x, -y, 58.84], 20)
+        time.sleep(1.5)
+        self.ua.set_coords([x, -y, 21.8], 20)
+        time.sleep(2)
 
         # open pump
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_on()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(True)
+        self.pump_on()
         time.sleep(1.5)
 
-        tmp = []
-        while True:
-            if not tmp: 
-                tmp = self.mc.get_angles()    
-            else:
-                break
-        time.sleep(0.5)
-        
-        # print(tmp)
-        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        time.sleep(4)
+        self.ua.set_angle(2, 0, 30)
+        time.sleep(0.3)
+        self.ua.set_angle(3, 0, 30)
+        time.sleep(1)
 
-        self.pub_marker(
-            self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
-
-        self.mc.send_coords(self.move_coords[color], 25, 1)
+        self.ua.set_coords(self.move_coords[color], 30)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color]
                         [1]/1000.0, self.move_coords[color][2]/1000.0)
-        time.sleep(3)
-
+        time.sleep(7)
+       
         # close pump
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_off()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(False)
-        time.sleep(4)
         
+        self.pump_off()
+        time.sleep(6)
+
         if color == 1:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.04, self.move_coords[color][1]/1000.0-0.02)
         elif color == 0:
             self.pub_marker(
                 self.move_coords[color][0]/1000.0+0.03, self.move_coords[color][1]/1000.0)
-        # self.pub_angles(self.move_angles[0], 20)
-        self.mc.send_angles(self.move_angles[0], 25)
-        time.sleep(3)
+
+        self.ua.set_angles(self.move_angles[1], 20)
+        time.sleep(1.5)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
@@ -218,27 +178,20 @@ class Object_detect(Movement):
             return
         else:
             self.cache_x = self.cache_y = 0
-            # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动         
+            # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init mycobot
+    # init ultraArm
     def run(self):
-        if "dev" in self.robot_wio :
-            self.mc = MyCobot(self.robot_wio, 115200) 
-        elif "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
-        elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
-        if not self.raspi:
-            self.pub_pump(False, self.Pin)
-        self.mc.send_angles([-7.11, -6.94, -55.01, -24.16, 0, -15], 20)
+        self.ua = ultraArm(self.robot_m5, 115200)
+        self.ua.go_zero()
+        self.ua.set_angles([19.48, 0.0, 0.0], 40)
         time.sleep(3)
 
     # draw aruco
-
     def draw_marker(self, img, x, y):
         # draw rectangle on img
-        cv2.rectangle(
+        cv2.rectangle( 
             img,
             (x - 20, y - 20),
             (x + 20, y + 20),
@@ -286,13 +239,13 @@ class Object_detect(Movement):
         self.y2 = int(y2)
         print(self.x1, self.y1, self.x2, self.y2)
 
-    # set parameters to calculate the coords between cube and mycobot
+    # set parameters to calculate the coords between cube and ultraArm
     def set_params(self, c_x, c_y, ratio):
         self.c_x = c_x
         self.c_y = c_y
         self.ratio = 220.0/ratio
 
-    # calculate the coords between cube and mycobot
+    # calculate the coords between cube and ultraArm
     def get_position(self, x, y):
         return ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
 
@@ -301,7 +254,6 @@ class Object_detect(Movement):
     Enlarge the video pixel by 1.5 times, which means enlarge the video size by 1.5 times.
     If two ARuco values have been calculated, clip the video.
     """
-
     def transform_frame(self, frame):
         # enlarge the image by 1.5 times
         fx = 1.5
@@ -319,21 +271,30 @@ class Object_detect(Movement):
         # set the arrangement of color'HSV
         x = y = 0
         for mycolor, item in self.HSV.items():
+            # print("mycolor:",mycolor)
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
+
             # transfrom the img to model of gray
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            # print("hsv",hsv)
+
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
+
             # a etching operation on a picture to remove edge roughness
             erosion = cv2.erode(mask, np.ones((1, 1), np.uint8), iterations=2)
+
             # the image for expansion operation, its role is to deepen the color depth in the picture
             dilation = cv2.dilate(erosion, np.ones(
                 (1, 1), np.uint8), iterations=2)
+
             # adds pixels to the image
             target = cv2.bitwise_and(img, img, mask=dilation)
+
             # the filtered image is transformed into a binary image and placed in binary
             ret, binary = cv2.threshold(dilation, 127, 255, cv2.THRESH_BINARY)
+
             # get the contour coordinates of the image, where contours is the coordinate value, here only the contour is detected
             contours, hierarchy = cv2.findContours(
                 dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -358,7 +319,7 @@ class Object_detect(Movement):
                     cv2.rectangle(img, (x, y), (x+w, y+h), (153, 153, 0), 2)
                     # calculate the rectangle center
                     x, y = (x*2+w)/2, (y*2+h)/2
-                    # calculate the real coordinates of mycobot relative to the target
+                    # calculate the real coordinates of ultraArm relative to the target
                     if mycolor == "red":
                         self.color = 0
                     elif mycolor == "green":
@@ -373,20 +334,19 @@ class Object_detect(Movement):
         else:
             return None
 
-
 if __name__ == "__main__":
+
     # open the camera
     cap_num = 0
     cap = cv2.VideoCapture(cap_num, cv2.CAP_V4L)
-
     if not cap.isOpened():
         cap.open()
     # init a class of Object_detect
     detect = Object_detect()
-    # init mycobot
+    # init ultraArm
     detect.run()
 
-    _init_ = 20  #
+    _init_ = 20  
     init_num = 0
     nparams = 0
     num = 0
@@ -396,10 +356,10 @@ if __name__ == "__main__":
         _, frame = cap.read()
         # deal img
         frame = detect.transform_frame(frame)
-
         if _init_ > 0:
             _init_ -= 1
             continue
+
         # calculate the parameters of camera clipping
         if init_num < 20:
             if detect.get_calculate_params(frame) is None:
@@ -426,7 +386,7 @@ if __name__ == "__main__":
             init_num += 1
             continue
 
-        # calculate params of the coords between cube and mycobot
+        # calculate params of the coords between cube and ultraArm
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
                 cv2.imshow("figure", frame)
@@ -443,14 +403,14 @@ if __name__ == "__main__":
                 continue
         elif nparams == 10:
             nparams += 1
-            # calculate and set params of calculating real coord between cube and mycobot
+            # calculate and set params of calculating real coord between cube and ultraArm
             detect.set_params(
                 (detect.sum_x1+detect.sum_x2)/20.0,
                 (detect.sum_y1+detect.sum_y2)/20.0,
                 abs(detect.sum_x1-detect.sum_x2)/10.0 +
                 abs(detect.sum_y1-detect.sum_y2)/10.0
             )
-            print ("ok")
+            print("ok")
             continue
 
         # get detect result
@@ -460,7 +420,7 @@ if __name__ == "__main__":
             continue
         else:
             x, y = detect_result
-            # calculate real coord between cube and mycobot
+            # calculate real coord between cube and ultraArm
             real_x, real_y = detect.get_position(x, y)
             if num == 20:
                 detect.pub_marker(real_sx/20.0/1000.0, real_sy/20.0/1000.0)
@@ -473,3 +433,9 @@ if __name__ == "__main__":
                 real_sx += real_x
 
         cv2.imshow("figure", frame)
+
+        # close the window
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+            sys.exit()
