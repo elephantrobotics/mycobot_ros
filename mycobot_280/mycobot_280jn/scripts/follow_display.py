@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # encoding:utf8
 import time
 
@@ -15,16 +15,16 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mycobot...")
-    # port = rospy.get_param("~port", "/dev/ttyTHS1")
-    # baud = rospy.get_param("~baud", 1000000)
-    ip=rospy.get_param('~ip','192.168.125.226')
-    netport=rospy.get_param('~netport',9000)
-    # print("port: {}, baud: {}\n".format(port, baud))
-    print('ip:{},port:{}'.format(ip,netport))
+    port = rospy.get_param("~port", "/dev/ttyTHS1")
+    baud = rospy.get_param("~baud", 1000000)
+    # ip=rospy.get_param('~ip','192.168.125.226')
+    # netport=rospy.get_param('~netport',9000)
+    print("port: {}, baud: {}\n".format(port, baud))
+    # print('ip:{},port:{}'.format(ip,netport))
     try:
-        # mycobot = MyCobot(port, baud)
-        mycobot=MyCobotSocket(ip,netport)
-        mycobot.connect()
+        mycobot = MyCobot(port, baud)
+        # mycobot=MyCobotSocket(ip,netport)
+        # mycobot.connect()
     except Exception as e:
         print(e)
         print(

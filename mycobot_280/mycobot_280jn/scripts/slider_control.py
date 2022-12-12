@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # encoding:utf-8
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,
@@ -16,7 +16,7 @@ from pymycobot.mycobot import MyCobot
 from pymycobot.mycobotsocket import MyCobotSocket
 
 
-ms = None
+mc = None
 
 
 def callback(data):
@@ -26,24 +26,24 @@ def callback(data):
     for index, value in enumerate(data.position):
         data_list.append(value)
 
-    ms.send_radians(data_list, 80)
+    mc.send_radians(data_list, 80)
     # time.sleep(0.5)
 
 
 def listener():
-    global ms
+    global mc
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
-    # port = rospy.get_param("~port", "/dev/ttyTHS1")
-    # baud = rospy.get_param("~baud", 1000000)
-    # print(port, baud)
-    # mc = MyCobot(port, baud)
-    ip=rospy.get_param("~ip",'192.168.125.226')
-    port=rospy.get_param("~port",9000)
-    print(ip,port)
-    ms=MyCobotSocket(ip,port)
-    ms.connect()
+    port = rospy.get_param("~port", "/dev/ttyTHS1")
+    baud = rospy.get_param("~baud", 1000000)
+    print(port, baud)
+    mc = MyCobot(port, baud)
+    # ip=rospy.get_param("~ip",'192.168.125.226')
+    # port=rospy.get_param("~port",9000)
+    # print(ip,port)
+    # ms=MyCobotSocket(ip,port)
+    # ms.connect()
 
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止

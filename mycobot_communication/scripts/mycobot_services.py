@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
 import time
 import rospy
 import os
@@ -32,7 +32,10 @@ def acquire(lock_file):
         else:
             lock_file_fd = fd
             break
+
         # print('pid waiting for lock:%d'% pid)
+
+
         time.sleep(1.0)
         current_time = time.time()
     if lock_file_fd is None:
@@ -45,7 +48,6 @@ def release(lock_file_fd):
     fcntl.flock(lock_file_fd, fcntl.LOCK_UN)
     os.close(lock_file_fd)
     return None
-
 
 def create_handle():
     global mc
@@ -149,6 +151,8 @@ def toggle_pump(req):
             mc.set_basic_output(req.Pin1, 1)
             mc.set_basic_output(req.Pin2, 1)
         release(lock)
+
+
     return PumpStatusResponse(True)
 
 

@@ -123,23 +123,23 @@ class Object_detect(Movement):
     # pump_control pi
     def gpio_status(self, flag):
         if flag:
-            # self.GPIO.output(20, 0)
+            self.GPIO.output(20, 0)
             self.GPIO.output(21, 0)
         else:
-            # self.GPIO.output(20, 1)
+            self.GPIO.output(20, 1)
             self.GPIO.output(21, 1)
 
     # 开启吸泵 m5
     def pump_on(self):
         # 让2号位工作
-        # self.mc.set_basic_output(2, 0)
+        self.mc.set_basic_output(2, 0)
         # 让5号位工作
         self.mc.set_basic_output(5, 0)
 
     # 停止吸泵 m5
     def pump_off(self):
         # 让2号位停止工作
-        # self.mc.set_basic_output(2, 1)
+        self.mc.set_basic_output(2, 1)
         # 让5号位停止工作
         self.mc.set_basic_output(5, 1)
 
