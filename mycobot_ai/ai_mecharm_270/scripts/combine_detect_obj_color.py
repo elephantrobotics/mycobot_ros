@@ -40,8 +40,8 @@ class Object_detect(Movement):
         self.move_coords = [
             [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
             [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [88.1, 126.3, 193.4, 162.15, 2.23, 156.02], # above the blue bucket
-            [-5.4, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket         
+            [84.3, 123.8, 205.0, 153.45, -3.67, 142.01], # above the blue bucket
+            [-15, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket         
         ]
 
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
@@ -50,7 +50,7 @@ class Object_detect(Movement):
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.Pin = [2, 5]
             # self.Pin = [5]
         elif "dev" in self.robot_wio:
@@ -173,7 +173,7 @@ class Object_detect(Movement):
 
         
         # open pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
             self.pump_on()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(True)
@@ -188,7 +188,7 @@ class Object_detect(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
+        self.mc.send_angles([tmp[0], 17.22, -45, tmp[3], 97, tmp[5]],30)
         time.sleep(3)
 
 
@@ -200,7 +200,7 @@ class Object_detect(Movement):
         time.sleep(3)
        
         # close pump
-        if "dev" in self.robot_m5:
+        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
            self.pump_off()
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             self.gpio_status(False)
@@ -231,7 +231,9 @@ class Object_detect(Movement):
     # init 270
     def run(self):
         if "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
+            self.mc = MyCobot(self.robot_m5, 115200)
+        elif "dev" in self.robot_wio:
+            self.mc = MyCobot(self.robot_wio, 115200) 
         elif "dev" in self.robot_raspi:
             self.mc = MyCobot(self.robot_raspi, 1000000)
         if not self.raspi:

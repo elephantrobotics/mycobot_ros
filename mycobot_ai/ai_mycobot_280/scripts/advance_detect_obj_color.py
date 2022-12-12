@@ -1,11 +1,9 @@
 # encoding:utf-8
 #!/usr/bin/env python2
 
-from tokenize import Pointfloat
 import cv2
 import numpy as np
 import time
-import json
 import os,sys
 import rospy
 from visualization_msgs.msg import Marker
@@ -19,7 +17,7 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = -5):
+    def __init__(self, camera_x = 155, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -34,10 +32,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [120.8, -134.4, 258.0, -172.72, -5.31, -109.09],  # above the red bucket
-            [219.8, -126.4, 249.7, -158.68, -7.93, -101.6], # green
-            [124.7, 145.3, 250.4, -173.5, -2.23, -11.7], # blue
-            [14.6, 175.9, 250.4, -177.42, -0.08, 25.93], # gray
+            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # above the red bucket
+            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # green
+            [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # blue
+            [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # gray
         ]
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
@@ -51,8 +49,8 @@ class Object_detect(Movement):
             # self.Pin = [20, 21]
             self.Pin = [2, 5]
 
-            # for i in self.move_coords:
-            #     i[2] -= 20
+            for i in self.move_coords:
+                i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             import RPi.GPIO as GPIO
             GPIO.setwarnings(False)
@@ -76,9 +74,9 @@ class Object_detect(Movement):
         self.HSV = {
             "yellow": [np.array([11, 115, 70]), np.array([40, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
-            "green": [np.array([35, 43, 46]), np.array([77, 255, 255])], # [77, 255, 255]
+            "green": [np.array([35, 43, 35]), np.array([90, 255, 255])], # [77, 255, 255]
             "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
-            "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
+            "cyan": [np.array([89, 43, 46]), np.array([99, 255, 255])], # np.array([78, 43, 46]), np.array([99, 255, 255])
         }
         # use to calculate coord between cube and mycobot
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
@@ -162,7 +160,7 @@ class Object_detect(Movement):
         # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
         # time.sleep(3)
 
-        self.mc.send_coords([x, y, 96, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 103, 179.87, -3.78, -62.75], 25, 0)
         time.sleep(3)
 
         # open pump
@@ -182,7 +180,7 @@ class Object_detect(Movement):
         
         # print(tmp)
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
-        time.sleep(4)
+        time.sleep(2.5)
 
         self.pub_marker(
             self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
@@ -310,19 +308,21 @@ class Object_detect(Movement):
                            interpolation=cv2.INTER_CUBIC)
         if self.x1 != self.x2:
             # the cutting ratio here is adjusted according to the actual situation
-            frame = frame[int(self.y2*0.2):int(self.y1*1.15),
-                          int(self.x1*0.7):int(self.x2*1.15)]
+            frame = frame[int(self.y2*0.78):int(self.y1*1.1),
+                          int(self.x1*0.86):int(self.x2*1.08)]
         return frame
 
     # detect cube color
     def color_detect(self, img):
         # set the arrangement of color'HSV
         x = y = 0
+        gs_img = cv2.GaussianBlur(img, (3, 3), 0) # 高斯模糊
+        # transfrom the img to model of gray
+        hsv = cv2.cvtColor(gs_img, cv2.COLOR_BGR2HSV)
+
         for mycolor, item in self.HSV.items():
             redLower = np.array(item[0])
             redUpper = np.array(item[1])
-            # transfrom the img to model of gray
-            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             # wipe off all color expect color in range
             mask = cv2.inRange(hsv, item[0], item[1])
             # a etching operation on a picture to remove edge roughness
@@ -330,6 +330,8 @@ class Object_detect(Movement):
             # the image for expansion operation, its role is to deepen the color depth in the picture
             dilation = cv2.dilate(erosion, np.ones(
                 (1, 1), np.uint8), iterations=2)
+    
+            
             # adds pixels to the image
             target = cv2.bitwise_and(img, img, mask=dilation)
             # the filtered image is transformed into a binary image and placed in binary
@@ -361,12 +363,16 @@ class Object_detect(Movement):
                     # calculate the real coordinates of mycobot relative to the target
                     if mycolor == "red":
                         self.color = 0
+                
                     elif mycolor == "green":
                         self.color = 1
-                    elif mycolor == "cyan":
+                       
+                    elif mycolor == "cyan" or mycolor == "blue":
                         self.color = 2
+        
                     else:
                         self.color = 3
+                    
 
         if abs(x) + abs(y) > 0:
             return x, y
@@ -396,7 +402,6 @@ if __name__ == "__main__":
         _, frame = cap.read()
         # deal img
         frame = detect.transform_frame(frame)
-
         if _init_ > 0:
             _init_ -= 1
             continue

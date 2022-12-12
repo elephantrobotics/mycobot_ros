@@ -1,24 +1,12 @@
 #!/usr/bin/env python2
 # encoding:utf-8
 from multiprocessing import Process, Pipe
-from cgi import parse
-from difflib import restore
-# import queue
-from sys import path
-from tokenize import Pointfloat
-from turtle import color
-# from typing_extensions import Self
 import cv2
 import numpy as np
 import time
-import json
 import os,sys
 import rospy
 from visualization_msgs.msg import Marker
-from PIL import Image
-from threading import Thread
-import tkFileDialog as filedialog
-import Tkinter as tk
 from moving_utils import Movement
 from pymycobot.mycobot import MyCobot
 
@@ -28,7 +16,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 145, camera_y = -5):
+    def __init__(self, camera_x = 148, camera_y = 5):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
@@ -44,10 +32,10 @@ class Object_detect(Movement):
 
         # 移动坐标
         self.move_coords = [
-            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
-            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [84.3, 123.8, 205.0, 153.45, -3.67, 142.01], # above the blue bucket
-            [-15, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
+            [109.1, -118.8, 164.9, -179.02, 11.07, 132.93], # above the red bucket
+            [178.4, -98.5, 172.7, -175.8, 41.25, 159.41], # above the green bucket
+            [97.9, 139.9, 170.7, 163.54, 2.03, 156.04], # above the blue bucket
+            [-1.8, 143.8, 172.4, 170.69, -4.62, 161.79], # above the gray bucket         
         ]
 
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
@@ -56,10 +44,11 @@ class Object_detect(Movement):
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+        if "dev" in self.robot_m5:
             self.Pin = [2, 5]
         elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
+            # self.Pin = [20, 21]
+            self.Pin = [2, 5]
             for i in self.move_coords:
                 i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
@@ -165,7 +154,7 @@ class Object_detect(Movement):
         self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
         time.sleep(3)
 
-        self.mc.send_coords([x, y, 95, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
+        self.mc.send_coords([x, y, 96, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
         # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
         # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
         time.sleep(3)
@@ -186,7 +175,7 @@ class Object_detect(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], 17.22, -45, tmp[3], 97, tmp[5]],30)
+        self.mc.send_angles([tmp[0], 17.22, -32.51, tmp[3], 97, tmp[5]],30)
         time.sleep(3)
         
 
@@ -194,7 +183,7 @@ class Object_detect(Movement):
         self.pub_marker(self.move_coords[color][0] / 1000.0,
                         self.move_coords[color][1] / 1000.0,
                         self.move_coords[color][2] / 1000.0)
-        time.sleep(3)
+        time.sleep(6)
 
         # close pump
         if "dev" in self.robot_m5 or "dev" in self.robot_wio:
@@ -204,7 +193,7 @@ class Object_detect(Movement):
         time.sleep(6)
 
         self.mc.send_angles(self.move_angles[1], 30)
-        time.sleep(2)
+        time.sleep(6)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):

@@ -1,5 +1,5 @@
 <launch>
-	<arg name="port" default="/dev/ttyUSB1" />
+	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
 	<!-- Open communication service -->

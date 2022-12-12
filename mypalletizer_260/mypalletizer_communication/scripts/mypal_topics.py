@@ -67,11 +67,17 @@ class MypalTopics(object):
 
         rospy.init_node("mypal_topics")
         rospy.loginfo("start ...")
-        port = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
-        print(port)
-        baud = rospy.get_param("~baud", 115200)
-        rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyPalletizer(port, baud)
+        port_m5 = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
+        # if not port:
+        port_wio = rospy.get_param("~port", os.popen("ls /dev/ttyACM*").readline()[:-1])
+        if "dev" in port_m5:
+            baud = rospy.get_param("~baud", 115200)
+            rospy.loginfo("%s,%s" % (port_m5, baud))
+            self.mc = MyPalletizer(port_m5, baud)
+        elif "dev" in port_wio:
+            baud = rospy.get_param("~baud", 115200)
+            rospy.loginfo("%s,%s" % (port_wio, baud))
+            self.mc = MyPalletizer(port_wio, baud)
         self.lock = threading.Lock()
 
     def start(self):

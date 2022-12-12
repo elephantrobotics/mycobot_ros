@@ -1,26 +1,14 @@
 #!/usr/bin/env python2
 # encoding:utf-8
 from multiprocessing import Process, Pipe
-from cgi import parse
-from difflib import restore
-# import queue
-from sys import path
-from tokenize import Pointfloat
-from turtle import color
-# from typing_extensions import Self
 import cv2
 import numpy as np
 import time
-import json
 import os,sys
 import rospy
 from visualization_msgs.msg import Marker
-from PIL import Image
-from threading import Thread
-import tkFileDialog as filedialog
-import Tkinter as tk
 from moving_utils import Movement
-from pymycobot.mycobot import MyCobot
+from pymycobot.mypalletizer import MyPalletizer
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
@@ -28,38 +16,38 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 145, camera_y = -5):
+    def __init__(self, camera_x = 160, camera_y = 10):
         # inherit the parent class
         super(Object_detect, self).__init__()
         # get path of file
         dir_path = os.path.dirname(__file__)
 
-        # declare 270
+        # declare mypal260
         self.mc = None
         # 移动角度
         self.move_angles = [
-            [0, 0, 0, 0, 90, 0],  # point to grab 
-            [-33.31, 2.02, -10.72, -0.08, 95, -54.84],  # init the point
+            [0, 0, 0, 0],  # init the point
+            [-29.0, 5.88, -4.92, -76.28],  # point to grab
+            [17.4, -10.1, -87.27, 5.8, -2.02, 15],  # point to grab
         ]
 
         # 移动坐标
         self.move_coords = [
-            [92.3, -104.9, 211.4, -179.6, 28.91, 131.29], # above the red bucket
-            [165.0, -93.6, 201.4, -173.43, 46.23, 160.65], # above the green bucket
-            [84.3, 123.8, 205.0, 153.45, -3.67, 142.01], # above the blue bucket
-            [-15, 120.6, 204.6, 162.66, -6.96, 159.93], # above the gray bucket  
+            [132.6, -155.6, 211.8, -20.9],  # above the red bucket
+            [232.5, -134.1, 197.7, -45.26], # above the green bucket
+            [111.6, 159, 221.5, -120], # above the blue bucket
+            [-15.9, 164.6, 217.5, -119.35], # above the gray bucket        
         ]
-
         # 判断连接设备:ttyUSB*为M5，ttyACM*为seeed       
         self.raspi = False
         self.robot_m5 = os.popen("ls /dev/ttyUSB*").readline()[:-1]
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
+        if "dev" in self.robot_m5:
             self.Pin = [2, 5]
         elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
+            self.Pin = [2, 5]
             for i in self.move_coords:
                 i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
@@ -74,7 +62,6 @@ class Object_detect(Movement):
             self.raspi = True
         if self.raspi:
             self.gpio_status(False)
-
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -94,7 +81,8 @@ class Object_detect(Movement):
         self.aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
         # Get ArUco marker params.
         self.aruco_params = cv2.aruco.DetectorParameters_create()
-        
+
+
         # init a node and a publisher
         rospy.init_node("marker", anonymous=True)
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
@@ -143,32 +131,29 @@ class Object_detect(Movement):
     # 开启吸泵 m5
     def pump_on(self):
         # 让2号位工作
-        self.mc.set_basic_output(2, 0)
+        # self.mc.set_basic_output(2, 0)
         # 让5号位工作
         self.mc.set_basic_output(5, 0)
 
     # 停止吸泵 m5
     def pump_off(self):
         # 让2号位停止工作
-        self.mc.set_basic_output(2, 1)
+        # self.mc.set_basic_output(2, 1)
         # 让5号位停止工作
         self.mc.set_basic_output(5, 1)
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move 270
-        self.mc.send_angles(self.move_angles[0], 30)
-        time.sleep(4)
-
-        print("x %s ,y %s" % (x,y))
-        # send coordinates to move 270 根据不同底板机械臂，调整吸泵高度
-        self.mc.send_coords([x, y, 140, 179.12, -0.18, 179.46], 30, 0)
+        print(color)
+        # send Angle to move mypal260
+        self.mc.send_angles(self.move_angles[0], 20)
         time.sleep(3)
-
-        self.mc.send_coords([x, y, 95, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15       m5
-        # self.mc.send_coords([x, y, 90, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15     pi
-        # self.mc.send_coords([x, y, 92, 179.12, -0.18, 179.46], 30, 0) # -178.77, -2.69, 40.15
-        time.sleep(3)
+        
+        # send coordinates to move mypal260 根据不同底板机械臂，调整吸泵高度
+        self.mc.send_coords([x, y, 160, 0], 20, 0)
+        time.sleep(1.5)
+        self.mc.send_coords([x, y, 96, 0], 20, 0)
+        time.sleep(1.5)
 
         # open pump
         if "dev" in self.robot_m5 or "dev" in self.robot_wio:
@@ -177,20 +162,12 @@ class Object_detect(Movement):
             self.gpio_status(True)
         time.sleep(1.5)
 
-        tmp = []
-        while True:
-            if not tmp: 
-                tmp = self.mc.get_angles()    
-            else:
-                break
-        time.sleep(0.5)
-        
-        # print(tmp)
-        self.mc.send_angles([tmp[0], 17.22, -45, tmp[3], 97, tmp[5]],30)
-        time.sleep(3)
-        
+        self.mc.send_angle(2, 0, 20)
+        time.sleep(0.3)
+        self.mc.send_angle(3, -18, 20)
+        time.sleep(2)
 
-        self.mc.send_coords(self.move_coords[color], 30, 1)
+        self.mc.send_coords(self.move_coords[color], 20, 1)
         self.pub_marker(self.move_coords[color][0] / 1000.0,
                         self.move_coords[color][1] / 1000.0,
                         self.move_coords[color][2] / 1000.0)
@@ -203,8 +180,8 @@ class Object_detect(Movement):
             self.gpio_status(False)
         time.sleep(6)
 
-        self.mc.send_angles(self.move_angles[1], 30)
-        time.sleep(2)
+        self.mc.send_angles(self.move_angles[1], 20)
+        time.sleep(1.5)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
@@ -218,17 +195,17 @@ class Object_detect(Movement):
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init 270
+    # init mypal260
     def run(self):
-        if "dev" in self.robot_wio :
-            self.mc = MyCobot(self.robot_wio, 115200) 
-        elif "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
+        if "dev" in self.robot_m5:
+            self.mc = MyPalletizer(self.robot_m5, 115200)
+        elif "dev" in self.robot_wio:
+            self.mc = MyPalletizer(self.robot_wio, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000) 
+            self.mc = MyPalletizer(self.robot_raspi, 1000000) 
         if not self.raspi:
             self.pub_pump(False, self.Pin)
-            self.mc.send_angles([-33.31, 2.02, -10.72, -0.08, 95, -54.84], 30)
+        self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20)
         time.sleep(3)
 
     # draw aruco
@@ -414,16 +391,14 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    # path = ''
-    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/' + folder
-    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mecharm_270/' + folder
+    path1 = '/home/ubuntu/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mypalletizer_260/' + folder
+    path2 = '/home/h/catkin_ws/src/mycobot_ros/mycobot_ai/ai_mypalletizer_260/' + folder
 
     if os.path.exists(path1):
         path = path1
     elif os.path.exists(path2):
         path = path2
 
-    # print("path:",path)
     for i, j, k in os.walk(path):
         for l in k:
             restore.append(cv2.imread(folder + '/{}'.format(l)))
@@ -515,13 +490,12 @@ def run():
     parent_conn, child_conn = Pipe()
     child = Process(target = process_display_frame, args=(child_conn,))
     child.start()
-    
+
     res_queue = [[], [], [], []]
     res_queue[0] = parse_folder('res/red')
     res_queue[1] = parse_folder('res/green')
     res_queue[2] = parse_folder('res/blue')
     res_queue[3] = parse_folder('res/gray')
-
 
     sift = cv2.xfeatures2d.SIFT_create()
     kp_list, desc_list = compute_keypoints_and_descriptors(sift, res_queue)
@@ -637,7 +611,7 @@ def run():
         # cv2.imshow("figure", frame)
         time.sleep(0.05)
         end_time = time.time()
-        print("loop_time = ", end_time - start_time)
+        # print("loop_time = ", end_time - start_time)
 
         # close the window
         if cv2.waitKey(1) & 0xFF == ord('q'):

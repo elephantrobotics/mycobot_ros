@@ -2,8 +2,8 @@
 	<arg name="port" default="/dev/ttyACM0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>
-	<arg name="rvizconfig" default="$(find mypalletizer_260)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/260_urdf/mypal_260_aikit.urdf"/>
+	<arg name="rvizconfig" default="$(find mypalletizer_260)/config/mypal_260.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -14,7 +14,7 @@
 	</node>
 
 	<!-- mycobot-topics -->
-    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
+    <include file="$(find mypalletizer_communication)/launch/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>

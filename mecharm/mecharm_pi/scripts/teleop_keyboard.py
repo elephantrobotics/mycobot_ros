@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 from __future__ import print_function
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
@@ -84,7 +84,7 @@ def teleop_keyboard():
 
 
     init_pose = [0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 8, -127, 40, 0, 0, speed]
+    home_pose = [0, 30, 30, 0, 30, 0, speed]
 
     # rsp = set_angles(*init_pose)
 
