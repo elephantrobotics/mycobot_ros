@@ -163,7 +163,7 @@ class Detect_marker(Movement):
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(3)
         
-        self.mc.send_coords(coords[1], 25, 1)
+        self.mc.send_coords(coords[color], 25, 1) # coords[1] 为A分拣区，coords[2] 为B分拣区, coords[3] 为C分拣区，coords[4] 为D分拣区
         time.sleep(4)
         
         # close pump
