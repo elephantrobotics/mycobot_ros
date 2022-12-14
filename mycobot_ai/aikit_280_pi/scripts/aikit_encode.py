@@ -192,7 +192,7 @@ class Detect_marker(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            self.move(x, y+145, color)
+            self.move(x, y+160, color)
 
     # init mycobot
     def init_mycobot(self):
@@ -214,6 +214,9 @@ class Detect_marker(Movement):
             if not success:
                 print("It seems that the image cannot be acquired correctly.")
                 break
+            
+            img = cv2.resize(img, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC)
+            img = img[140:630, 240:730]
 
             # transfrom the img to model of gray
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -245,7 +248,7 @@ class Detect_marker(Movement):
                     # calculate the coordinates of the aruco relative to the pump
                     xyz = [round(xyz[0]*1000+pump_y, 2), round(xyz[1]*1000+pump_x, 2), round(xyz[2]*1000, 2)]
 
-                    cv2.putText(img, str(xyz[:2]), (0, 64), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    # cv2.putText(img, str(xyz[:2]), (0, 64), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                     for i in range(rvec.shape[0]):
 			# draw the aruco on img
                         cv2.aruco.drawDetectedMarkers(img, corners)
