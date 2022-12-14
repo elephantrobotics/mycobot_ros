@@ -32,8 +32,8 @@ class Detect_marker(Movement):
             # self.Pin = [20, 21]
             self.Pin = [2, 5]
 
-            for i in self.move_coords:
-                i[2] -= 20
+            # for i in self.move_coords:
+            #     i[2] -= 20
         elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
             import RPi.GPIO as GPIO
             GPIO.setwarnings(False)
@@ -53,6 +53,10 @@ class Detect_marker(Movement):
         self.cap = cv2.VideoCapture(cap_num)
         self.cap.set(3, 640)
         self.cap.set(4, 480)
+        
+        # Determine the placement point of the QR code
+        self.color = 0
+        
         # Get ArUco marker dict that can be detected.
         self.aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
         # Get ArUco marker params.
@@ -105,8 +109,10 @@ class Detect_marker(Movement):
             GPIO.output(21, 1)
 
     # Grasping motion
-    def move(self, x, y):
-    
+    def move(self, x, y, color):
+        
+        print(color)
+        
         angles = [
             [0.61, 45.87, -92.37, -41.3, 2.02, 9.58], # init to point
             [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],
@@ -114,10 +120,10 @@ class Detect_marker(Movement):
 
         coords = [
             [145.6, -65.5, 285.1, 178.99, 7.67, 179.9], # 初始化点 init point
-            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # D分拣区 D sorting area
-            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # C分拣区 C sorting area
             [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # A分拣区 A sorting area
             [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # B分拣区  B sorting area
+            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # C分拣区 C sorting area
+            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # D分拣区 D sorting area
         ]
         
         # publish marker
@@ -134,7 +140,10 @@ class Detect_marker(Movement):
         #time.sleep(2)
         self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 200, 178.99, -3.78, -62.9], 25, 0)
         time.sleep(2)
-        self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 105, 178.99, -3.78, -62.9], 25, 0)
+        # self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 105, 178.99, -3.78, -62.9], 25, 0)
+        # time.sleep(2)
+        self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 65.5, 178.99, -3.78, -62.9], 25, 0)
+        
         time.sleep(3.5)
         
         # open pump
@@ -173,7 +182,7 @@ class Detect_marker(Movement):
         time.sleep(2)
 
     # decide whether grab cube
-    def decide_move(self, x, y):
+    def decide_move(self, x, y, color):
 
         print(x,y)
         # detect the cube status move or run
@@ -183,7 +192,7 @@ class Detect_marker(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            self.move(x-5, y+145)
+            self.move(x, y+145, color)
 
     # init mycobot
     def init_mycobot(self):
@@ -212,7 +221,16 @@ class Detect_marker(Movement):
             corners, ids, rejectImaPoint = cv2.aruco.detectMarkers(
                 gray, self.aruco_dict, parameters=self.aruco_params
             )
-        
+
+            # Determine the placement point of the QR code
+            if ids == np.array([[1]]):
+                self.color = 1
+            elif ids == np.array([[2]]):
+                self.color = 2
+            elif ids == np.array([[3]]):
+                self.color = 3
+            elif ids == np.array([[4]]):
+                self.color = 4
 
             if len(corners) > 0:
                 if ids is not None:
@@ -237,7 +255,7 @@ class Detect_marker(Movement):
                             sum_y += xyz[0]
                             num += 1
                         elif num ==40 :
-                            self.decide_move(sum_x/40.0, sum_y/40.0)
+                            self.decide_move(sum_x/40.0, sum_y/40.0, self.color)
                             num = sum_x = sum_y = 0
 
             cv2.imshow("encode_image", img)

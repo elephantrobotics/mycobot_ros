@@ -2,8 +2,9 @@
 <arg name="port" default="/dev/ttyAMA0" />
 	<arg name="baud" default="1000000" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_280)/config/ai_mycobot_pi.rviz" />
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pi/mycobot_with_vision_v2.urdf"/>
+	<arg name="rvizconfig" default="$(find aikit_280_pi)/config/ai_mycobot_pi.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
