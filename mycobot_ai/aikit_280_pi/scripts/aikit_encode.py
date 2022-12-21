@@ -192,7 +192,7 @@ class Detect_marker(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            self.move(x, y+160, color)
+            self.move(x-15, y+145, color)
 
     # init mycobot
     def init_mycobot(self):
@@ -214,9 +214,6 @@ class Detect_marker(Movement):
             if not success:
                 print("It seems that the image cannot be acquired correctly.")
                 break
-            
-            img = cv2.resize(img, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC)
-            img = img[140:630, 240:730]
 
             # transfrom the img to model of gray
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
