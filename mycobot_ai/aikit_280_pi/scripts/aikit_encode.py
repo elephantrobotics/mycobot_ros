@@ -208,6 +208,7 @@ class Detect_marker(Movement):
     def run(self):
         global pump_y, pump_x
         self.init_mycobot()
+        print('ok')
         num = sum_x = sum_y = 0 
         while cv2.waitKey(1) < 0:
             success, img = self.cap.read()
