@@ -5,9 +5,9 @@
 
 [中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
 
-**Notes**:
+Control or simulate myCobot series robots in ROS.
 
-<!-- This is the mycobot ROS package designed by Zhang Lijun([lijun.zhang@elephantrobotics.com]()) -->
+**Notes**:
 
 * Make sure that `Atom` is flashed into the top Atom and `Transponder` or `minirobot` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)
 * Supported ROS versions:
@@ -84,7 +84,15 @@ cd ~/catkin_ws/src/mycobot_ros
 python test.py
 ```
 
-## Screenshot
+## Where to get help
+
+There is documentation in the [ElephantRobotics Docs](https://docs.elephantrobotics.com/docs/gitbook-en/). Please check the ROS chapter.
+
+## Important Links & Docs
+
+* [User Guide](https://docs.elephantrobotics.com/docs/gitbook-en/12-ApplicationBaseROS/)
+
+## Screenshots
 
 ![Demo](./demo_img/Screenshot-1.png)
 
@@ -99,3 +107,24 @@ python test.py
 ![Demo](./demo_img/320_slider.png)
 
 ![Demo](./demo_img/320_moveit.png)
+
+## Contributors
+
+Thanks goes to these people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors)
+specification. Contributions of any kind are welcome!
+
+## License
+
+Licensed under standard three-clause BSD license (same as ROS Core), 
+Copyright 2020-2023 Elephant Robotics. [Copy of the license](LICENSE).
