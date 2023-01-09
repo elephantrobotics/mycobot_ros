@@ -113,7 +113,7 @@ There is documentation in the [ElephantRobotics Docs](https://docs.elephantrobot
 
 ## Contributors
 
-Thanks goes to these people:
+Thanks goes to these people ([Emoji Key](https://allcontributors.org/docs/en/emoji-key)):
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -131,16 +131,7 @@ Thanks goes to these people:
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors)
+This project follows the [all-contributors](https://allcontributors.org/)
 specification. Contributions of any kind are welcome!
 
 ## License
