@@ -89,6 +89,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "eacousineau",
+      "name": "Eric Cousineau",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2806276?v=4",
+      "profile": "https://www.eacousineau.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
