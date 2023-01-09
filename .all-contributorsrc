@@ -79,6 +79,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Tiryoh",
+      "name": "Daisuke Sato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3256629?v=4",
+      "profile": "https://profile.tiryoh.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
