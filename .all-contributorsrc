@@ -116,6 +116,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "comoc",
+      "name": "Akihiro Komori",
+      "avatar_url": "https://avatars.githubusercontent.com/u/843396?v=4",
+      "profile": "https://twitter.com/comocc",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
