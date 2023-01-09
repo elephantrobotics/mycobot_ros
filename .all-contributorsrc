@@ -24,6 +24,51 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "OTL",
+      "name": "Takashi Ogura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/207142?v=4",
+      "profile": "https://www.smilerobotics.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "toyoshi",
+      "name": "Ryuichiro Toyoshi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/188394?v=4",
+      "profile": "https://github.com/toyoshi",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Ry0",
+      "name": "Ryo Kabutan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8924325?v=4",
+      "profile": "https://ry0.github.io/",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "dieu-detruit",
+      "name": "Takafumi Watanabe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27790373?v=4",
+      "profile": "https://github.com/dieu-detruit",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "graziegrazie",
+      "name": "Yoshiaki Watanabe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11900858?v=4",
+      "profile": "https://github.com/graziegrazie",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
