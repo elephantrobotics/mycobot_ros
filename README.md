@@ -3,10 +3,10 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/)
-[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](https://docs.elephantrobotics.com/docs/gitbook/12-ApplicationBaseROS/)
+[![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)](https://docs.elephantrobotics.com/docs/gitbook-en/12-ApplicationBaseROS/)
 
-[中文文档](https://www.elephantrobotics.com/docs/myCobot/3-development/4-ros&moveit/) | [English Document](https://www.elephantrobotics.com/docs/myCobot-en/3-development/4-ros&moveit/)
+[中文文档](https://docs.elephantrobotics.com/docs/gitbook/12-ApplicationBaseROS/) | [English Documentation](https://docs.elephantrobotics.com/docs/gitbook-en/12-ApplicationBaseROS/)
 
 Control or simulate myCobot series robots in ROS.
 
