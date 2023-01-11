@@ -10,37 +10,46 @@ ARG ROS_DISTRO
 # (or without GPU) works through docker.
 COPY --from=ros_distro / /
 
-# Add ROS env vars to the bashrc
-ENV BASH_ENV="/root/launch.sh"
 SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> $BASH_ENV
-
-# Copy myCobot ROS package
-WORKDIR /catkin_ws/src
-COPY . mycobot_ros
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y curl
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
     apt-get install -y \
+        sudo \
         # ROS Build dependencies
         python-rosinstall \
         python-rosinstall-generator \
         python-wstool \
         build-essential \
-        python3-pip && \
-    # Project-specific build dependencies
-    rosdep install -r -y -i --from-paths . && \
-    rm -rf /var/lib/apt/lists/*
+        python3-pip
+
+RUN useradd -m er
+RUN echo er:'Elephant' | chpasswd
+RUN echo "er ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+USER er
+WORKDIR /home/er
+
+ENV BASH_ENV="/home/er/launch.sh"
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> $BASH_ENV
 
 # Install python dependencies
 ARG PYMYCOBOT_VERSION
 RUN pip3 install "pymycobot $PYMYCOBOT_VERSION" --user
 
+# Copy myCobot ROS package
+WORKDIR /home/er/catkin_ws/src
+COPY . mycobot_ros
+
+USER root
+WORKDIR /home/er/catkin_ws/src
+RUN rosdep install -r -y -i --from-paths .
+
+USER er
 # Build the project
-WORKDIR /catkin_ws
-RUN catkin_make
+WORKDIR /home/er/catkin_ws
+RUN . /opt/ros/melodic/setup.bash && catkin_make
 
 # Let ROS know about the projects launch options
-RUN echo "source /catkin_ws/devel/setup.bash" >> $BASH_ENV
+RUN echo "source /home/er/catkin_ws/devel/setup.bash" >> $BASH_ENV

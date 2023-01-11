@@ -9,7 +9,7 @@ x-app: &common
     DISPLAY: $DISPLAY
   volumes:
     - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-    - ".:/catkin_ws/src/mycobot_ros"
+    - ".:/home/er/catkin_ws/src/mycobot_ros"
   build:
     context: .
     args: &common-args
