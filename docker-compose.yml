@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-app: &common
-  command: [ "roslaunch mycobot_320 mycobot_320_slider.launch" ]
+  command: [ "roslaunch mycobot_280 slider_control.launch" ]
   privileged: true
   environment:
     PYTHONUNBUFFERED: 1
@@ -9,6 +9,7 @@ x-app: &common
     DISPLAY: $DISPLAY
   volumes:
     - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    - ".:/catkin_ws/src/mycobot_ros"
   build:
     context: .
     args: &common-args
