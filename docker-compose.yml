@@ -32,3 +32,22 @@ services:
       args:
         <<: *common-args
         BASE_IMAGE: ubuntu:18.04
+
+  nvidia-ros-noetic:
+    <<: *common
+    runtime: nvidia
+    build:
+      context: .
+      args:
+        <<: *common-args
+        ROS_DISTRO: "noetic"
+        BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
+
+  ros-noetic:
+    <<: *common
+    build:
+      context: .
+      args:
+        <<: *common-args
+        ROS_DISTRO: "noetic"
+        BASE_IMAGE: ubuntu:20.04
