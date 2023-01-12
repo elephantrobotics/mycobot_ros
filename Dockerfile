@@ -53,3 +53,7 @@ RUN . /opt/ros/melodic/setup.bash && catkin_make
 
 # Let ROS know about the projects launch options
 RUN echo "source /home/er/catkin_ws/devel/setup.bash" >> $BASH_ENV
+
+# Setup the environment for interactive mode
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/er/.bashrc
+RUN echo "source /home/er/catkin_ws/devel/setup.bash" >> /home/er/.bashrc
