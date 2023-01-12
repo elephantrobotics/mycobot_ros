@@ -65,7 +65,7 @@ docker-compose up ros
 ```
 
 ### Option 2: Local
-#### 1.1 Pre-Requriements
+#### 2.1 Pre-Requriements
 
 For using this package, the [Python api](https://github.com/elephantrobotics/pymycobot.git) library should be installed first.
 
@@ -73,7 +73,7 @@ For using this package, the [Python api](https://github.com/elephantrobotics/pym
 pip install pymycobot --user
 ```
 
-#### 1.2 Package Download and Install
+#### 2.2 Package Download and Install
 
 Install ros package in your src folder of your Catkin workspace.
 
@@ -86,7 +86,7 @@ $ source ~/catkin_ws/devel/setup.bash
 $ sudo echo 'source ~/catkin_ws/devel/setup.bash' >> ~/.bashrc
 ```
 
-#### 1.3 Test Python API
+#### 2.3 Test Python API
 
 ```bash
 cd ~/catkin_ws/src/mycobot_ros
