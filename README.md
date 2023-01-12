@@ -29,13 +29,29 @@ is new enough.
 
 Once docker is installed, run the following command, and the project should show up.
 
-without NVIDIA GPU:
+#### Without NVIDIA GPU:
+
+**ROS Noetic**:
+
+```
+docker-compose build ros-noetic && xhost +local:root && docker-compose up ros-noetic
+```
+
+**ROS Melodic**:
 
 ```
 docker-compose build ros && xhost +local:root && docker-compose up ros
 ```
 
-with NVIDIA GPU
+#### With NVIDIA GPU
+
+**ROS Noetic**:
+
+```
+docker-compose build nvidia-ros-noetic && xhost +local:root && docker-compose up nvidia-ros-noetic
+```
+
+**ROS Melodic**:
 
 ```
 docker-compose build nvidia-ros && xhost +local:root && docker-compose up nvidia-ros
