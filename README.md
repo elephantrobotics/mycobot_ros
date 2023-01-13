@@ -1,6 +1,6 @@
 # mycobot_ros
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)](https://docs.elephantrobotics.com/docs/gitbook/12-ApplicationBaseROS/)
@@ -169,6 +169,7 @@ Thanks goes to these people ([Emoji Key](https://allcontributors.org/docs/en/emo
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/2929ss"><img src="https://avatars.githubusercontent.com/u/51234222?v=4?s=100" width="100px;" alt="2929ss"/><br /><sub><b>2929ss</b></sub></a><br /><a href="https://github.com/elephantrobotics/mycobot_ros/commits?author=2929ss" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://medium.com/@tks/takasu-profile-c50feee078ac"><img src="https://avatars.githubusercontent.com/u/1667148?v=4?s=100" width="100px;" alt="TAKASU Masakazu"/><br /><sub><b>TAKASU Masakazu</b></sub></a><br /><a href="#promotion-takasumasakazu" title="Promotion">📣</a></td>
     </tr>
   </tbody>
 </table>
