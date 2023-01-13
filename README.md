@@ -10,6 +10,8 @@
 
 Control or simulate myCobot series robots in ROS.
 
+![Demo](./demo_img/Screenshot-1.png)
+
 **Notes**:
 
 * Make sure that `Atom` is flashed into the top Atom and `Transponder` or `minirobot` is flashed into the base Basic .The tool download address: [https://github.com/elephantrobotics/myCobot/tree/main/Software](https://github.com/elephantrobotics/myCobot/tree/main/Software)
@@ -117,9 +119,15 @@ There is documentation in the [ElephantRobotics Docs](https://docs.elephantrobot
 
 * [User Guide](https://docs.elephantrobotics.com/docs/gitbook-en/12-ApplicationBaseROS/)
 
-## Screenshots
+## Contributing
 
-![Demo](./demo_img/Screenshot-1.png)
+Contributions are always welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
+
+Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
+
+## Screenshots
 
 ![Demo](./demo_img/Screenshot-2.png)
 
