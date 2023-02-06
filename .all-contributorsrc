@@ -134,6 +134,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "2929ss",
+      "name": "2929ss",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51234222?v=4",
+      "profile": "https://github.com/2929ss",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "takasumasakazu",
+      "name": "TAKASU Masakazu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1667148?v=4",
+      "profile": "https://medium.com/@tks/takasu-profile-c50feee078ac",
+      "contributions": [
+        "promotion"
+      ]
+    },
+    {
+      "login": "3110",
+      "name": "SAITO, Tetsuya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/114928?v=4",
+      "profile": "https://scrapbox.io/saitotetsuya/",
+      "contributions": [
+        "promotion"
+      ]
     }
   ],
   "contributorsPerLine": 7,
