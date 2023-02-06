@@ -25,8 +25,8 @@ def listener():
     global mc
     rospy.init_node("mypal_reciver", anonymous=True)
 
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
-    baud = rospy.get_param("~baud", 115200)
+    port = rospy.get_param("~port", "/dev/ttyAMA0")
+    baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
     mc = MyCobot(port, baud)
 
