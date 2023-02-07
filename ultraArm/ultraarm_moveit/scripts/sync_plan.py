@@ -4,7 +4,7 @@ from sensor_msgs.msg import JointState
 from pymycobot.ultraArm import ultraArm
 
 
-ma = None
+ua = None
 
 
 def callback(data):
@@ -20,7 +20,7 @@ def callback(data):
 
 
 def listener():
-    global ma
+    global ua
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
