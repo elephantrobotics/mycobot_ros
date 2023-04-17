@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import Tkinter as tk
+try:
+    import tkinter as tk
+except ImportError:
+    import Tkinter as tk
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import time
@@ -32,7 +35,7 @@ class Window:
         # calculate x and y coordinates for the Tk root window
         x = int((self.ws / 2) - 190)
         y = int((self.hs / 2) - 250)
-        self.win.geometry("430x370+{}+{}".format(x, y))
+        self.win.geometry("430x400+{}+{}".format(x, y))
         # 布局
         self.set_layout()
         # 输入部分
