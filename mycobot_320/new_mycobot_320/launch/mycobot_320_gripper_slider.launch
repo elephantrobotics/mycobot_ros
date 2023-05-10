@@ -1,0 +1,31 @@
+<launch>
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
+	<arg name="model" default="$(find mycobot_description)/urdf/new_320_urdf/new_mycobot_pro_320_gripper.urdf"/>
+	<arg name="rvizconfig" default="$(find new_mycobot_320)/config/new_mycobot_320_gripper.rviz" />
+	<arg name="gui" default="true" />
+
+    <!-- <include file="$(find mycobot_280)/launch/slider_control.launch">
+		<arg name="model" value="$(arg model)" />
+		<arg name="rvizconfig" value="$(arg rvizconfig)" />
+		<arg name="gui" value="$(arg gui)" />
+    </include> -->
+
+	<!-- new -->
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"> 
+		<!-- <param name="use_gui" value="$(arg gui)" />	 -->
+		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
+	</node>
+	<!-- Open control script -->
+	<!-- <node name="control_slider" pkg="mycobot_280" type="slider_control.py"> 
+		<param name="port" type="string" value="$(arg port)" />
+		<param name="baud" type="int" value="$(arg baud)" />
+	</node> -->
+	<!-- Show in Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>
