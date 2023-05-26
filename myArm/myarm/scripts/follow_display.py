@@ -6,7 +6,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
 
-from pymycobot.mycobot import MyCobot
+from pymycobot.myarm import MyArm
 
 
 def talker():
@@ -17,7 +17,7 @@ def talker():
     baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
-        mycobot = MyCobot(port, baud)
+        mycobot = MyArm(port, baud)
     except Exception as e:
         print(e)
         print(
@@ -41,18 +41,19 @@ def talker():
     joint_state_send.header = Header()
 
     joint_state_send.name = [
+        "joint1_to_base",
         "joint2_to_joint1",
         "joint3_to_joint2",
         "joint4_to_joint3",
         "joint5_to_joint4",
         "joint6_to_joint5",
-        "joint6output_to_joint6",
+        "joint7_to_joint6",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
 
     marker_ = Marker()
-    marker_.header.frame_id = "/joint1"
+    marker_.header.frame_id = "/base"
     marker_.ns = "my_namespace"
 
     print("publishing ...")

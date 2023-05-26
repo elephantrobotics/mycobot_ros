@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # encoding:utf-8
 
 import math
@@ -31,12 +31,13 @@ class Listener(object):
         joint_state_send.header = Header()
 
         joint_state_send.name = [
+            "joint1_to_base",
             "joint2_to_joint1",
             "joint3_to_joint2",
             "joint4_to_joint3",
             "joint5_to_joint4",
             "joint6_to_joint5",
-            "joint6output_to_joint6",
+            "joint7_to_joint6",
         ]
         joint_state_send.velocity = [0]
         joint_state_send.effort = []
@@ -50,6 +51,7 @@ class Listener(object):
             data.joint_4 * (math.pi / 180),
             data.joint_5 * (math.pi / 180),
             data.joint_6 * (math.pi / 180),
+            data.joint_7 * (math.pi / 180),
         ]
         rospy.loginfo("res: {}".format(radians_list))
 

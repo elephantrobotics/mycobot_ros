@@ -3,8 +3,8 @@
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm/myarm_urdf.urdf"/>
+	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -14,10 +14,10 @@
 	<!-- Show in Rviz ，显示在Rviz-->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find mycobot_communication)/launch/communication_service.launch">
+    <include file="$(find myarm_communication)/launch/communication_service.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 	<!-- listen and pub the real angles ，监听并发布真实角度-->
-	<node name="real_listener" pkg="mycobot_280" type="listen_real.py" />
+	<node name="real_listener" pkg="myarm" type="listen_real.py" />
 </launch>

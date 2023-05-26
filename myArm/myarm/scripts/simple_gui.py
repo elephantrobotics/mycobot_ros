@@ -102,6 +102,7 @@ class Window:
         tk.Label(self.frmLT, text="Joint 4 ").grid(row=3)
         tk.Label(self.frmLT, text="Joint 5 ").grid(row=4)
         tk.Label(self.frmLT, text="Joint 6 ").grid(row=5)
+        tk.Label(self.frmLT, text="Joint 7 ").grid(row=6)
 
         tk.Label(self.frmRT, text=" x ").grid(row=0)
         tk.Label(self.frmRT, text=" y ").grid(row=1)  # the second row,第二行
@@ -123,6 +124,9 @@ class Window:
         self.j5_default.set(self.res_angles[4])
         self.j6_default = tk.StringVar()
         self.j6_default.set(self.res_angles[5])
+        self.j7_default = tk.StringVar()
+        self.j7_default.set(self.res_angles[6])
+
 
         self.x_default = tk.StringVar()
         self.x_default.set(self.record_coords[0])
@@ -150,6 +154,8 @@ class Window:
         self.J_5.grid(row=4, column=1, pady=3)
         self.J_6 = tk.Entry(self.frmLT, textvariable=self.j6_default)
         self.J_6.grid(row=5, column=1, pady=3)
+        self.J_7 = tk.Entry(self.frmLT, textvariable=self.j7_default)
+        self.J_7.grid(row=5, column=1, pady=3)
 
         # coord input box,coord 输入框
         self.x = tk.Entry(self.frmRT, textvariable=self.x_default)
@@ -166,7 +172,7 @@ class Window:
         self.rz.grid(row=5, column=1, pady=3)
 
         # All input boxes, used to get the input data,所有输入框，用于拿输入的数据
-        self.all_j = [self.J_1, self.J_2, self.J_3, self.J_4, self.J_5, self.J_6]
+        self.all_j = [self.J_1, self.J_2, self.J_3, self.J_4, self.J_5, self.J_6, self.J_7]
         self.all_c = [self.x, self.y, self.z, self.rx, self.ry, self.rz]
 
         # speed input box,速度输入框
@@ -185,6 +191,7 @@ class Window:
         tk.Label(self.frmLC, text="Joint 4 ").grid(row=3)
         tk.Label(self.frmLC, text="Joint 5 ").grid(row=4)
         tk.Label(self.frmLC, text="Joint 6 ").grid(row=5)
+        tk.Label(self.frmLC, text="Joint 7 ").grid(row=6)
 
         # get数据
 
@@ -201,6 +208,8 @@ class Window:
         self.cont_5.set(str(self.res_angles[4]) + "°")
         self.cont_6 = tk.StringVar(self.frmLC)
         self.cont_6.set(str(self.res_angles[5]) + "°")
+        self.cont_7 = tk.StringVar(self.frmLC)
+        self.cont_7.set(str(self.res_angles[6]) + "°")
         self.cont_all = [
             self.cont_1,
             self.cont_2,
@@ -208,6 +217,7 @@ class Window:
             self.cont_4,
             self.cont_5,
             self.cont_6,
+            self.cont_7,
             self.speed,
             self.model,
         ]
@@ -261,6 +271,14 @@ class Window:
             height=1,
             bg="white",
         ).grid(row=5, column=1, padx=5, pady=5)
+        self.show_j7 = tk.Label(
+            self.frmLC,
+            textvariable=self.cont_7,
+            font=("Arial", 9),
+            width=7,
+            height=1,
+            bg="white",
+        ).grid(row=5, column=1, padx=5, pady=5)
 
         self.all_jo = [
             self.show_j1,
@@ -269,6 +287,7 @@ class Window:
             self.show_j4,
             self.show_j5,
             self.show_j6,
+            self.show_j7,
         ]
 
         # show,显示
@@ -444,6 +463,7 @@ class Window:
             round(self.angles.joint_4, 2),
             round(self.angles.joint_5, 2),
             round(self.angles.joint_6, 2),
+            round(self.angles.joint_7, 2),
         ]
         # print('coord:',self.record_coords)
         # print('angles:',self.res_angles)

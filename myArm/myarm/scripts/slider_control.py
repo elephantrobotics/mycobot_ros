@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 """[summary]
 This file obtains the joint angle of the manipulator in ROS,
@@ -12,7 +12,7 @@ Passable parameters:
 import rospy
 from sensor_msgs.msg import JointState
 
-from pymycobot.mycobot import MyCobot
+from pymycobot.myarm import MyArm
 
 
 mc = None
@@ -37,7 +37,7 @@ def listener():
     port = rospy.get_param("~port", "/dev/ttyUSB0")
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
-    mc = MyCobot(port, baud)
+    mc = MyArm(port, baud)
 
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止

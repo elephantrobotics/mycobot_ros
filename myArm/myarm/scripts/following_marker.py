@@ -17,7 +17,7 @@ def talker():
     listener = tf.TransformListener()
 
     marker_ = Marker()
-    marker_.header.frame_id = "/joint1"
+    marker_.header.frame_id = "/base"
     marker_.ns = "basic_cube"
 
     print("publishing ...")
@@ -25,7 +25,7 @@ def talker():
         now = rospy.Time.now() - rospy.Duration(0.1)
 
         try:
-            trans, rot = listener.lookupTransform("joint1", "basic_shapes", now)
+            trans, rot = listener.lookupTransform("base", "basic_shapes", now)
         except Exception as e:
             print(e)
             continue
