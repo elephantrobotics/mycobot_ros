@@ -32,6 +32,7 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 catkin_install_python(PROGRAMS
   scripts/mycobot_320_follow_display.py
   scripts/mycobot_320_slider.py
+  scripts/mycobot_320_gripper_slider.py
   scripts/mycobot_320_teleop_keyboard.py
   scripts/mycobot_320_listen_real.py
   scripts/mycobot_320_listen_real_of_topic.py
