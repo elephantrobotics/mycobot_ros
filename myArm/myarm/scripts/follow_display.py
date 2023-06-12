@@ -28,7 +28,7 @@ def talker():
         """
         )
         exit(1)
-    mycobot.release_all_servos()
+    mycobot.release_all_servos(0)
     time.sleep(0.1)
     print("Rlease all servos over.\n")
 

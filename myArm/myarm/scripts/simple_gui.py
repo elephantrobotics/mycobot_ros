@@ -4,7 +4,7 @@ try:
     import tkinter as tk
 except ImportError:
     import Tkinter as tk
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from myarm_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import time
 from rospy import ServiceException
