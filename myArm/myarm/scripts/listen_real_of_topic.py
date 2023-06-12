@@ -5,7 +5,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from mycobot_communication.msg import MycobotAngles
+from myarm_communication.msg import MyArmAngles
 
 
 class Listener(object):
@@ -17,14 +17,14 @@ class Listener(object):
         # init publisher.初始化发布者
         self.pub = rospy.Publisher("joint_states", JointState, queue_size=10)
         # init subscriber.初始化订阅者
-        self.sub = rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.callback)
+        self.sub = rospy.Subscriber("myarm/angles_real", MyArmAngles, self.callback)
         rospy.spin()
 
     def callback(self, data):
-        """`mycobot/angles_real` subscriber callback method.
+        """`myarm/angles_real` subscriber callback method.
 
         Args:
-            data (MycobotAngles): callback argument.
+            data (MyArmAngles): callback argument.
         """
         # ini publisher object. 初始化发布者对象
         joint_state_send = JointState()

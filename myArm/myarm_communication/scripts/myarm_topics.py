@@ -8,16 +8,16 @@ import threading
 
 import rospy
 
-from mycobot_communication.msg import (
-    MycobotAngles,
-    MycobotCoords,
-    MycobotSetAngles,
-    MycobotSetCoords,
-    MycobotGripperStatus,
-    MycobotPumpStatus,
+from myarm_communication.msg import (
+    MyArmAngles,
+    MyArmCoords,
+    MyArmSetAngles,
+    MyArmSetCoords,
+    MyArmGripperStatus,
+    MyArmPumpStatus,
 )
 
-from pymycobot.mycobot import MyCobot
+from pymycobot.myarm import MyArm
 
 
 class Watcher:
@@ -64,18 +64,18 @@ class Watcher:
             pass
 
 
-class MycobotTopics(object):
+class MyarmTopics(object):
     def __init__(self):
-        super(MycobotTopics, self).__init__()
+        super(MyarmTopics, self).__init__()
 
-        rospy.init_node("mycobot_topics")
+        rospy.init_node("myarm_topics")
         rospy.loginfo("start ...")
-        port = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
         if not port:
             port = rospy.get_param("~port", os.popen("ls /dev/ttyACM*").readline()[:-1])
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyCobot(port, baud)
+        self.mc = MyArm(port, baud)
         self.lock = threading.Lock()
 
     def start(self):
@@ -109,9 +109,9 @@ class MycobotTopics(object):
     def pub_real_angles(self):
         """Publish real angle"""
         """发布真实角度"""
-        pub = rospy.Publisher("mycobot/angles_real",
-                              MycobotAngles, queue_size=5)
-        ma = MycobotAngles()
+        pub = rospy.Publisher("myarm/angles_real",
+                              MyArmAngles, queue_size=5)
+        ma = MyArmAngles()
         while not rospy.is_shutdown():
             self.lock.acquire()
             angles = self.mc.get_angles()
@@ -123,15 +123,16 @@ class MycobotTopics(object):
                 ma.joint_4 = angles[3]
                 ma.joint_5 = angles[4]
                 ma.joint_6 = angles[5]
+                ma.joint_7 = angles[6]
                 pub.publish(ma)
             time.sleep(0.25)
 
     def pub_real_coords(self):
         """publish real coordinates"""
         """发布真实坐标"""
-        pub = rospy.Publisher("mycobot/coords_real",
-                              MycobotCoords, queue_size=5)
-        ma = MycobotCoords()
+        pub = rospy.Publisher("myarm/coords_real",
+                              MyArmCoords, queue_size=5)
+        ma = MyArmCoords()
 
         while not rospy.is_shutdown():
             self.lock.acquire()
@@ -158,12 +159,13 @@ class MycobotTopics(object):
                 data.joint_4,
                 data.joint_5,
                 data.joint_6,
+                data.joint_7,
             ]
             sp = int(data.speed)
             self.mc.send_angles(angles, sp)
 
         sub = rospy.Subscriber(
-            "mycobot/angles_goal", MycobotSetAngles, callback=callback
+            "myarm/angles_goal", MyArmSetAngles, callback=callback
         )
         rospy.spin()
 
@@ -175,7 +177,7 @@ class MycobotTopics(object):
             self.mc.send_coords(angles, sp, model)
 
         sub = rospy.Subscriber(
-            "mycobot/coords_goal", MycobotSetCoords, callback=callback
+            "myarm/coords_goal", MyArmSetCoords, callback=callback
         )
         rospy.spin()
 
@@ -189,7 +191,7 @@ class MycobotTopics(object):
                 self.mc.set_gripper_state(1, 80)
 
         sub = rospy.Subscriber(
-            "mycobot/gripper_status", MycobotGripperStatus, callback=callback
+            "myarm/gripper_status", MyArmGripperStatus, callback=callback
         )
         rospy.spin()
 
@@ -203,14 +205,14 @@ class MycobotTopics(object):
                 self.mc.set_basic_output(data.Pin2, 1)
 
         sub = rospy.Subscriber(
-            "mycobot/pump_status", MycobotPumpStatus, callback=callback
+            "myarm/pump_status", MyArmPumpStatus, callback=callback
         )
         rospy.spin()
 
 
 if __name__ == "__main__":
     Watcher()
-    mc_topics = MycobotTopics()
+    mc_topics = MyarmTopics()
     mc_topics.start()
     # while True:
     #     mc_topics.pub_real_coords()

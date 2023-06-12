@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from myarm_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import sys
 import select
@@ -12,7 +12,7 @@ import roslib
 
 # Terminal output prompt information. 终端输出提示信息
 msg = """\
-Mycobot Teleop Keyboard Controller
+MyArm Teleop Keyboard Controller
 ---------------------------
 Movimg options(control coordinations [x,y,z,rx,ry,rz]):
               w(x+)

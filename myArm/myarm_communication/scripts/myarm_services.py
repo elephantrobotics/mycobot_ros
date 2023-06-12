@@ -1,12 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*
 import time
 import rospy
 import os
 import fcntl
-from mycobot_communication.srv import *
+from myarm_communication.srv import *
 
-from pymycobot.mycobot import MyCobot
+from pymycobot.myarm import MyArm
 
 mc = None
 
@@ -51,12 +51,12 @@ def release(lock_file_fd):
 
 def create_handle():
     global mc
-    rospy.init_node("mycobot_services")
+    rospy.init_node("myarm")
     rospy.loginfo("start ...")
     port = rospy.get_param("~port")
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
-    mc = MyCobot(port, baud)
+    mc = MyArm(port, baud)
 
 
 def create_services():
@@ -79,11 +79,12 @@ def set_angles(req):
         req.joint_4,
         req.joint_5,
         req.joint_6,
+        req.joint_7,
     ]
     sp = req.speed
 
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         mc.send_angles(angles, sp)
         release(lock)
 
@@ -93,7 +94,7 @@ def set_angles(req):
 def get_angles(req):
     """get angles,获取角度"""
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         angles = mc.get_angles()
         release(lock)
         return GetAnglesResponse(*angles)
@@ -112,7 +113,7 @@ def set_coords(req):
     mod = req.model
 
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         mc.send_coords(coords, sp, mod)
         release(lock)
 
@@ -121,7 +122,7 @@ def set_coords(req):
 
 def get_coords(req):
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         coords = mc.get_coords()
         release(lock)
         return GetCoordsResponse(*coords)
@@ -131,7 +132,7 @@ def switch_status(req):
     """Gripper switch status"""
     """夹爪开关状态"""
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         if req.Status:
             mc.set_gripper_state(0, 80)
         else:
@@ -143,7 +144,7 @@ def switch_status(req):
 
 def toggle_pump(req):
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         if req.Status:
             mc.set_basic_output(req.Pin1, 0)
             mc.set_basic_output(req.Pin2, 0)
@@ -157,10 +158,10 @@ def toggle_pump(req):
 
 
 robot_msg = """
-MyCobot Status
+MyArm Status
 --------------------------------
 Joint Limit:
-    joint 1: -170 ~ +170
+    joint 1: -180 ~ +180
     joint 2: -170 ~ +170
     joint 3: -170 ~ +170
     joint 4: -170 ~ +170
@@ -184,13 +185,13 @@ def output_robot_message():
     atom_version = "unknown"
 
     if mc:
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         cn = mc.is_controller_connected()
         release(lock)
         if cn == 1:
             connect_status = True
         time.sleep(0.1)
-        lock = acquire("/tmp/mycobot_lock")
+        lock = acquire("/tmp/myarm_lock")
         si = mc.is_all_servo_enable()
         release(lock)
         if si == 1:
@@ -203,7 +204,7 @@ def output_robot_message():
 
 
 if __name__ == "__main__":
-    # print(MyCobot.__dict__)
+    # print(MyArm.__dict__)
     create_handle()
     output_robot_message()
     create_services()
