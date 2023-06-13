@@ -107,7 +107,7 @@
        
        <mesh filename="package://mycobot_description/urdf/myarm/j6.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.0 " rpy = " 0 0 -1.5708"/>
+    <origin xyz = "0.0 0 -0.0 " rpy = " 0 0 1.5708"/>
     </visual>
     <collision>
       <geometry>
@@ -188,7 +188,7 @@
     <limit effort = "1000.0" lower = "-1.5708" upper = "1.5708" velocity = "0"/>
     <parent link="joint5"/>
     <child link="joint6"/>
-    <origin xyz= "0 0.0 0" rpy = "-1.5708 0 0"/>  
+    <origin xyz= "0 0.0 0" rpy = "-1.5708 3.14 0"/>  
   </joint>
 
   <joint name="joint7_to_joint6" type="revolute">
@@ -196,7 +196,7 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint6"/>
     <child link="joint7"/>
-    <origin xyz= "0 -0.056 0" rpy = "1.5708 0 0"/>  
+    <origin xyz= "0 0.056 0" rpy = "-1.5708 1.5708 0"/>  
   </joint>
 
 

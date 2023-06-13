@@ -167,6 +167,7 @@ Joint Limit:
     joint 4: -170 ~ +170
     joint 5: -170 ~ +170
     joint 6: -180 ~ +180
+    joint 7: -180 ~ +180
 
 Connect Status: %s
 

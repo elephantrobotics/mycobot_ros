@@ -80,8 +80,8 @@ def teleop_keyboard():
         print("start error ...")
         exit(1)
 
-    init_pose = [0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 8, -127, 40, 0, 0, speed]
+    init_pose = [0, 0, 0, 0, 0, 0, 0, speed]
+    home_pose = [0, 0, 0, -90, 0, -90, 0, speed]
 
     # rsp = set_angles(*init_pose)
 
