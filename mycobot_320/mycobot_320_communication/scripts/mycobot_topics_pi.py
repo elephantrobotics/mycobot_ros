@@ -152,9 +152,11 @@ class MycobotTopics(object):
         ma = MycobotAngles()
         while not rospy.is_shutdown():
             if self.mc:
-                self.lock.acquire()
+                # self.lock.acquire()
+                lock = acquire("/tmp/mycobot_lock")
                 angles = self.mc.get_angles()
-                self.lock.release()
+                release(lock)
+                # self.lock.release()
             if angles:
                 ma.joint_1 = angles[0]
                 ma.joint_2 = angles[1]
