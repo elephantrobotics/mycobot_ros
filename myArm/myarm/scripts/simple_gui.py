@@ -46,12 +46,12 @@ class Window:
 
         # Set the joint buttons 设置joint按钮
         tk.Button(self.frmLT, text="设置", width=5, command=self.get_joint_input).grid(
-            row=6, column=1, sticky="w", padx=3, pady=2
+            row=7, column=1, sticky="w", padx=3, pady=2
         )
 
         # coordination settings button,coordination 设置按钮
         tk.Button(self.frmRT, text="设置", width=5, command=self.get_coord_input).grid(
-            row=6, column=1, sticky="w", padx=3, pady=2
+            row=, column=1, sticky="w", padx=3, pady=2
         )
 
         # Gripper switch button,夹爪开关按钮
