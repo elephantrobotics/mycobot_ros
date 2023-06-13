@@ -5,6 +5,7 @@ import os
 import sys
 import signal
 import threading
+import fcntl
 
 import rospy
 
@@ -20,6 +21,43 @@ from mycobot_communication.msg import (
 
 
 from pymycobot import MyCobot
+
+
+# Avoid serial port conflicts and need to be locked
+def acquire(lock_file):
+    open_mode = os.O_RDWR | os.O_CREAT | os.O_TRUNC
+    fd = os.open(lock_file, open_mode)
+
+    pid = os.getpid()
+    lock_file_fd = None
+    
+    timeout = 50.0
+    start_time = current_time = time.time()
+    while current_time < start_time + timeout:
+        try:
+            # The LOCK_EX means that only one process can hold the lock
+            # The LOCK_NB means that the fcntl.flock() is not blocking
+            # and we are able to implement termination of while loop,
+            # when timeout is reached.
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except (IOError, OSError):
+            pass
+        else:
+            lock_file_fd = fd
+            break
+        print('pid waiting for lock:%d'% pid)
+        time.sleep(1.0)
+        current_time = time.time()
+    if lock_file_fd is None:
+        os.close(fd)
+    return lock_file_fd
+
+
+def release(lock_file_fd):
+    # Do not remove the lockfile:
+    fcntl.flock(lock_file_fd, fcntl.LOCK_UN)
+    os.close(lock_file_fd)
+    return None
 
 class Watcher:
     """this class solves two problems with multithreaded
@@ -133,9 +171,11 @@ class MycobotTopics(object):
         ma = MycobotCoords()
 
         while not rospy.is_shutdown():
-            self.lock.acquire()
+            # self.lock.acquire()
+            lock = acquire("/tmp/mycobot_lock")
             coords = self.mc.get_coords()
-            self.lock.release()
+            # self.lock.release()
+            release(lock)
             if coords:
                 ma.x = coords[0]
                 ma.y = coords[1]
@@ -159,7 +199,9 @@ class MycobotTopics(object):
                 data.joint_6,
             ]
             sp = int(data.speed)
+            lock = acquire("/tmp/mycobot_lock")
             self.mc.send_angles(angles, sp)
+            release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/angles_goal", MycobotSetAngles, callback=callback
@@ -171,7 +213,9 @@ class MycobotTopics(object):
             angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             sp = int(data.speed)
             model = int(data.model)
+            lock = acquire("/tmp/mycobot_lock")
             self.mc.send_coords(angles, sp, model)
+            release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/coords_goal", MycobotSetCoords, callback=callback
@@ -183,9 +227,13 @@ class MycobotTopics(object):
         """订阅夹爪状态"""
         def callback(data):
             if data.Status:
+                lock = acquire("/tmp/mycobot_lock")
                 self.mc.set_gripper_state(0, 80)
+                release(lock)
             else:
+                lock = acquire("/tmp/mycobot_lock")
                 self.mc.set_gripper_state(1, 80)
+                release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/gripper_status", MycobotGripperStatus, callback=callback
