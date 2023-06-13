@@ -57,7 +57,7 @@ def talker():
         # publish angles.发布角度
         joint_state_send.header.stamp = rospy.Time.now()
         joint_state_send.position = radians_list
-        pub.publish(joint_state_send)
+        print('radius:', radians_list)
         rate.sleep()
 
 

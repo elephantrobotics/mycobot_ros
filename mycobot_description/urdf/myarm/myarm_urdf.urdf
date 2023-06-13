@@ -114,7 +114,7 @@
        
        <mesh filename="package://mycobot_description/urdf/myarm/j6.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.0 " rpy = " 0 0 -1.5708"/>
+    <origin xyz = "0.0 0 -0.0 " rpy = " 0 0 1.5708"/>
     </collision>
   </link>
 
