@@ -151,9 +151,10 @@ class MycobotTopics(object):
         pub = rospy.Publisher("mycobot/angles_real", MycobotAngles, queue_size=5)
         ma = MycobotAngles()
         while not rospy.is_shutdown():
-            self.lock.acquire()
-            angles = self.mc.get_angles()
-            self.lock.release()
+            if self.mc:
+                self.lock.acquire()
+                angles = self.mc.get_angles()
+                self.lock.release()
             if angles:
                 ma.joint_1 = angles[0]
                 ma.joint_2 = angles[1]
@@ -172,10 +173,11 @@ class MycobotTopics(object):
 
         while not rospy.is_shutdown():
             # self.lock.acquire()
-            lock = acquire("/tmp/mycobot_lock")
-            coords = self.mc.get_coords()
-            # self.lock.release()
-            release(lock)
+            if self.mc:
+                lock = acquire("/tmp/mycobot_lock")
+                coords = self.mc.get_coords()
+                # self.lock.release()
+                release(lock)
             if coords:
                 ma.x = coords[0]
                 ma.y = coords[1]
@@ -199,9 +201,10 @@ class MycobotTopics(object):
                 data.joint_6,
             ]
             sp = int(data.speed)
-            lock = acquire("/tmp/mycobot_lock")
-            self.mc.send_angles(angles, sp)
-            release(lock)
+            if self.mc:
+                lock = acquire("/tmp/mycobot_lock")
+                self.mc.send_angles(angles, sp)
+                release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/angles_goal", MycobotSetAngles, callback=callback
@@ -213,9 +216,10 @@ class MycobotTopics(object):
             angles = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
             sp = int(data.speed)
             model = int(data.model)
-            lock = acquire("/tmp/mycobot_lock")
-            self.mc.send_coords(angles, sp, model)
-            release(lock)
+            if self.mc:
+                lock = acquire("/tmp/mycobot_lock")
+                self.mc.send_coords(angles, sp, model)
+                release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/coords_goal", MycobotSetCoords, callback=callback
@@ -227,13 +231,15 @@ class MycobotTopics(object):
         """订阅夹爪状态"""
         def callback(data):
             if data.Status:
-                lock = acquire("/tmp/mycobot_lock")
-                self.mc.set_gripper_state(0, 80)
-                release(lock)
+                if self.mc:
+                    lock = acquire("/tmp/mycobot_lock")
+                    self.mc.set_gripper_state(0, 80)
+                    release(lock)
             else:
-                lock = acquire("/tmp/mycobot_lock")
-                self.mc.set_gripper_state(1, 80)
-                release(lock)
+                if self.mc:
+                    lock = acquire("/tmp/mycobot_lock")
+                    self.mc.set_gripper_state(1, 80)
+                    release(lock)
 
         sub = rospy.Subscriber(
             "mycobot/gripper_status", MycobotGripperStatus, callback=callback
