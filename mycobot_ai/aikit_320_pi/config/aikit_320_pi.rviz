@@ -9,6 +9,7 @@ Panels:
         - /RobotModel1
         - /TF1
         - /TF1/Tree1
+        - /Marker1
       Splitter Ratio: 0.5
     Tree Height: 603
   - Class: rviz/Selection
@@ -151,6 +152,14 @@ Visualization Manager:
                     link6:
                       {}
       Update Interval: 0
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: cube
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:

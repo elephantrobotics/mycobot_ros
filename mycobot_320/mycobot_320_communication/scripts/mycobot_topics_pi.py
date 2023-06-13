@@ -19,8 +19,7 @@ from mycobot_communication.msg import (
 
 
 
-from pymycobot import MyCobotSocket
-
+from pymycobot import MyCobot
 
 class Watcher:
     """this class solves two problems with multithreaded
@@ -77,8 +76,7 @@ class MycobotTopics(object):
         port = rospy.get_param("~port", "/dev/ttyAMA0")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyCobotSocket(port, baud) # port
-        self.mc.connect()   #pi
+        self.mc = MyCobot(port, baud) # port
         self.lock = threading.Lock()
 
     def start(self):
