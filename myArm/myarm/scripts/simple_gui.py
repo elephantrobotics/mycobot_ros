@@ -155,7 +155,7 @@ class Window:
         self.J_6 = tk.Entry(self.frmLT, textvariable=self.j6_default)
         self.J_6.grid(row=5, column=1, pady=3)
         self.J_7 = tk.Entry(self.frmLT, textvariable=self.j7_default)
-        self.J_7.grid(row=5, column=1, pady=3)
+        self.J_7.grid(row=6, column=1, pady=3)
 
         # coord input box,coord 输入框
         self.x = tk.Entry(self.frmRT, textvariable=self.x_default)
@@ -278,7 +278,7 @@ class Window:
             width=7,
             height=1,
             bg="white",
-        ).grid(row=5, column=1, padx=5, pady=5)
+        ).grid(row=6, column=1, padx=5, pady=5)
 
         self.all_jo = [
             self.show_j1,
@@ -493,7 +493,7 @@ class Window:
 
 def main():
     window = tk.Tk()
-    window.title("mycobot ros GUI")
+    window.title("myarm ros GUI")
     Window(window).run()
 
 
