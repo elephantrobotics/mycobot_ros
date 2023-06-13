@@ -16,24 +16,25 @@ __version__ = "1.0"
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 155, camera_y = 15):
+    def __init__(self, camera_x = 256, camera_y = 0):
         # inherit the parent class
         super(Object_detect, self).__init__()
-        # declare mycobot280
+        # declare mycobot320
         self.mc = None
 
         # 移动角度
         self.move_angles = [
             [0.61, 45.87, -92.37, -41.3, 2.02, 9.58],  # init the point
             [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],  # point to grab
+            [17.22, -5.27, -52.47, -25.75, 89.73, -0.26],
         ]
 
         # 移动坐标
         self.move_coords = [
-            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # D Sorting area
-            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # C Sorting area
-            [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # A Sorting area
-            [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # B Sorting area
+            [28.9, -226, 246, -171.13, -3.94, -92.37],  # D Sorting area
+            [253.3, -216.1, 257, -163.12, -6.12, -95.27],  # C Sorting area
+            [241.8, 219.5, 270.6, -168.47, 10.42, -76.84],  # A Sorting area
+            [37.8, 233, 251.4, -170.6, -6.75, 88.53],  # B Sorting area
         ]
         
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
@@ -42,25 +43,7 @@ class Object_detect(Movement):
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
         self.raspi = False
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.Pin = [2, 5]
-        elif "dev" in self.robot_wio:
-            self.Pin = [20, 21]
-            for i in self.move_coords:
-                i[2] -= 20
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            import RPi.GPIO as GPIO
-            GPIO.setwarnings(False)
-            self.GPIO = GPIO
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(20, GPIO.OUT)
-            GPIO.setup(21, GPIO.OUT)
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
-            self.raspi = True
-        if self.raspi:
-            self.gpio_status(False)
-
+    
         # choose place to set cube 选择放置立方体的地方
         self.color = 0
         # parameters to calculate camera clipping parameters 计算相机裁剪参数的参数
@@ -73,17 +56,17 @@ class Object_detect(Movement):
             # "yellow": [np.array([22, 93, 0]), np.array([45, 255, 245])],
             "red": [np.array([0, 43, 46]), np.array([8, 255, 255])],
             "green": [np.array([35, 43, 35]), np.array([90, 255, 255])],
-            "blue": [np.array([100, 43, 46]), np.array([124, 255, 255])],
+            "blue": [np.array([78, 43, 46]), np.array([110, 255, 255])],
             "cyan": [np.array([78, 43, 46]), np.array([99, 255, 255])],
         }
-   
-        # use to calculate coord between cube and mycobot280
+        
+        # use to calculate coord between cube and mycobot320
         # 用于计算立方体和 mycobot 之间的坐标
         self.sum_x1 = self.sum_x2 = self.sum_y2 = self.sum_y1 = 0
-        # The coordinates of the grab center point relative to the mycobot280
+        # The coordinates of the grab center point relative to the mycobot320
         # 抓取中心点相对于 mycobot 的坐标
         self.camera_x, self.camera_y = camera_x, camera_y
-        # The coordinates of the cube relative to the mycobot280
+        # The coordinates of the cube relative to the mycobot320
         # 立方体相对于 mycobot 的坐标
         self.c_x, self.c_y = 0, 0
         # The ratio of pixels to actual values
@@ -101,7 +84,7 @@ class Object_detect(Movement):
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
         # init a Marker
         self.marker = Marker()
-        self.marker.header.frame_id = "joint1"
+        self.marker.header.frame_id = "base"
         self.marker.ns = "cube"
         self.marker.type = self.marker.CUBE
         self.marker.action = self.marker.ADD
@@ -133,48 +116,46 @@ class Object_detect(Movement):
     # pump_control pi
     def gpio_status(self, flag):
         if flag:
-            self.GPIO.output(20, 0)
-            self.GPIO.output(21, 0)
+            """start the suction pump"""
+            self.mc.set_basic_output(1, 0)
+            self.mc.set_basic_output(2, 1)
         else:
-            self.GPIO.output(20, 1)
-            self.GPIO.output(21, 1)
+            """stop suction pump"""
+            self.mc.set_basic_output(1, 1)
+            self.mc.set_basic_output(2, 0)
+            time.sleep(1)
+            self.mc.set_basic_output(2, 1)
     
     # 开启吸泵 m5
     def pump_on(self):
-        # 让2号位工作
-        self.mc.set_basic_output(2, 0)
-        # 让5号位工作
-        self.mc.set_basic_output(5, 0)
-
-    # 停止吸泵 m5
-    def pump_off(self):
-        # 让2号位停止工作
+        """Start the suction pump"""
+        self.mc.set_basic_output(1, 0)
         self.mc.set_basic_output(2, 1)
-        # 让5号位停止工作
-        self.mc.set_basic_output(5, 1)
+
+    def pump_off(self):
+        """stop suction pump m5"""
+        self.mc.set_basic_output(1, 1)
+        self.mc.set_basic_output(2, 0)
+        time.sleep(1)
+        self.mc.set_basic_output(2, 1)
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mycobot280
+        # send Angle to move mycobot320
         print(color)
-        self.mc.send_angles(self.move_angles[1], 25)
+        print('x,y:', round(x, 2), round(y, 2))
+        self.mc.send_angles(self.move_angles[2], 50)
         time.sleep(3)
 
         # send coordinates to move mycobot
-        self.mc.send_coords([x, y,  170.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
-        time.sleep(3)
-        
-        # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
-        # time.sleep(3)
+        self.mc.send_coords([x, y, 250, -173.84, -0.14, -74.37], 100, 1)
+        time.sleep(2.5)
 
-        self.mc.send_coords([x, y, 103, 179.87, -3.78, -62.75], 25, 0)
+        self.mc.send_coords([x, y, 150, -173.84, -0.14, -74.37], 100, 1)
         time.sleep(3)
 
         # open pump
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_on()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(True)
+        self.pump_on()
         time.sleep(1.5)
 
         tmp = []
@@ -197,12 +178,8 @@ class Object_detect(Movement):
         time.sleep(3)
        
         # close pump
- 
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_off()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(False)
-        time.sleep(5)
+        self.pump_off()
+        time.sleep(6.5)
         
         if color == 1:
             self.pub_marker(
@@ -228,16 +205,11 @@ class Object_detect(Movement):
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
             self.move(x, y, color)
 
-    # init mycobot280
+    # init mycobot320
     def run(self):
-        if "dev" in self.robot_wio :
-            self.mc = MyCobot(self.robot_wio, 115200) 
-        elif "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
-        elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
-        if not self.raspi:
-            self.pub_pump(False, self.Pin)
+        if "dev" in self.robot_raspi:
+            self.mc = MyCobot(self.robot_raspi, 115200)
+        self.pump_off()
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
         time.sleep(2.5)
 
@@ -292,14 +264,14 @@ class Object_detect(Movement):
         self.x2 = int(x2)
         self.y2 = int(y2)
 
-    # set parameters to calculate the coords between cube and mycobot280
+    # set parameters to calculate the coords between cube and mycobot320
     # 设置参数以计算立方体和 mycobot 之间的坐标
     def set_params(self, c_x, c_y, ratio):
         self.c_x = c_x
         self.c_y = c_y
         self.ratio = 220.0/ratio
 
-    # calculate the coords between cube and mycobot280
+    # calculate the coords between cube and mycobot320
     # 计算立方体和 mycobot 之间的坐标
     def get_position(self, x, y):
         return ((y - self.c_y)*self.ratio + self.camera_x), ((x - self.c_x)*self.ratio + self.camera_y)
@@ -379,7 +351,7 @@ class Object_detect(Movement):
                     cv2.rectangle(img, (x, y), (x+w, y+h), (153, 153, 0), 2)
                     # calculate the rectangle center 计算矩形中心
                     x, y = (x*2+w)/2, (y*2+h)/2
-                    # calculate the real coordinates of mycobot280 relative to the target
+                    # calculate the real coordinates of mycobot320 relative to the target
                     #  计算 mycobot 相对于目标的真实坐标
                     
                     if mycolor  == "yellow":
@@ -418,7 +390,7 @@ if __name__ == "__main__":
         cap.open()
     # init a class of Object_detect
     detect = Object_detect()
-    # init mycobot280
+    # init mycobot320
     detect.run()
 
     _init_ = 20  
@@ -461,7 +433,7 @@ if __name__ == "__main__":
             init_num += 1
             continue
 
-        # calculate params of the coords between cube and mycobot280 计算立方体和 mycobot 之间坐标的参数
+        # calculate params of the coords between cube and mycobot320 计算立方体和 mycobot 之间坐标的参数
         if nparams < 10:
             if detect.get_calculate_params(frame) is None:
                 cv2.imshow("figure", frame)
@@ -478,7 +450,7 @@ if __name__ == "__main__":
                 continue
         elif nparams == 10:
             nparams += 1
-            # calculate and set params of calculating real coord between cube and mycobot280
+            # calculate and set params of calculating real coord between cube and mycobot320
             # 计算和设置计算立方体和mycobot之间真实坐标的参数
             detect.set_params(
                 (detect.sum_x1+detect.sum_x2)/20.0,
@@ -496,7 +468,7 @@ if __name__ == "__main__":
             continue
         else:
             x, y = detect_result
-            # calculate real coord between cube and mycobot280 计算立方体和 mycobot 之间的真实坐标
+            # calculate real coord between cube and mycobot320 计算立方体和 mycobot 之间的真实坐标
             real_x, real_y = detect.get_position(x, y)
             # print('real_x',round(real_x, 3),round(real_y, 3))
             if num == 20:

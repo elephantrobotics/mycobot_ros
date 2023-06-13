@@ -52,16 +52,7 @@ def take_photo():
 
 def cut_photo():
     
-    path1 = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_280_pi'    # pi
-    path2 = r'D:/BaiduSyncdisk/PythonProject/OpenCV'         # m5
-
-    if os.path.exists(path1):
-        path = path1
-    elif os.path.exists(path2):
-        path = path2
-    else:
-        print("invalid file path! Please check whether the file path exists or modify it!")
-
+    path = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_320_pi'    # pi
 
     path_red = path + '/res/A'
     for i, j, k in os.walk(path_red):
@@ -80,17 +71,10 @@ def cut_photo():
         file_len_blue = len(k)
     print("请截取要识别的部分")
     print("Please intercept the part to be identified")
-    # root = tk.Tk()
-    # root.withdraw()
-    # temp1=filedialog.askopenfilename(parent=root)   #rgb
-    # temp2=Image.open(temp1,mode='r')
-    # temp2= cv.cvtColor(np.asarray(temp2),cv.COLOR_RGB2BGR)
-    # cut = np.array(temp2)
 
     cut = cv2.imread(r"res/takephoto.jpeg")
 
     cv2.imshow('original', cut)
-    # C:\Users\Elephant\Desktop\pymycobot+opencv\local_photo/takephoto.jpeg
 
     # 选择ROI
     roi = cv2.selectROI(windowName="original",

@@ -7,7 +7,6 @@ import os
 import rospy
 from visualization_msgs.msg import Marker
 from moving_utils import Movement
-import RPi.GPIO as GPIO
 
 # y轴偏移量
 pump_y = -55
@@ -24,29 +23,6 @@ class Detect_marker(Movement):
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
-        self.raspi = False
-        
-        if "dev" in self.robot_m5:
-            self.Pin = [2, 5]
-        elif "dev" in self.robot_wio:
-            # self.Pin = [20, 21]
-            self.Pin = [2, 5]
-
-            # for i in self.move_coords:
-            #     i[2] -= 20
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            import RPi.GPIO as GPIO
-            GPIO.setwarnings(False)
-            self.GPIO = GPIO
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(20, GPIO.OUT)
-            GPIO.setup(21, GPIO.OUT)
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
-            self.raspi = True
-        if self.raspi:
-            self.pub_pump(False)
-        
         
         # Creating a Camera Object
         cap_num = 0
@@ -76,7 +52,7 @@ class Detect_marker(Movement):
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
 
         self.marker = Marker()
-        self.marker.header.frame_id = "joint1"
+        self.marker.header.frame_id = "base"
         self.marker.ns = "cube"
         self.marker.type = self.marker.CUBE
         self.marker.action = self.marker.ADD
@@ -102,11 +78,15 @@ class Detect_marker(Movement):
     # 控制吸泵      
     def pub_pump(self, flag):
         if flag:
-            GPIO.output(20, 0)
-            GPIO.output(21, 0)
+            """start the suction pump"""
+            self.mc.set_basic_output(1, 0)
+            self.mc.set_basic_output(2, 1)
         else:
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
+            """stop suction pump"""
+            self.mc.set_basic_output(1, 1)
+            self.mc.set_basic_output(2, 0)
+            time.sleep(1)
+            self.mc.set_basic_output(2, 1)
 
     # Grasping motion
     def move(self, x, y, color):
@@ -114,17 +94,19 @@ class Detect_marker(Movement):
         print(color)
         
         angles = [
-            [0.61, 45.87, -92.37, -41.3, 2.02, 9.58], # init to point
-            [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],
+            [0.61, 45.87, -92.37, -41.3, 89.56, 9.58],  # init to point
+            [18.8, -7.91, -54.49, -23.02, 89.56, -14.76],
+            [17.22, -5.27, -52.47, -25.75, 89.73, -0.26],
         ]
 
         coords = [
-            [145.6, -65.5, 285.1, 178.99, 7.67, 179.9], # 初始化点 init point
-            [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # A分拣区 A sorting area
-            [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # B分拣区  B sorting area
-            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # C分拣区 C sorting area
-            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # D分拣区 D sorting area
+            [145.0, -65.5, 280.1, 178.99, 7.67, -179.9],  # 初始化点 init point
+            [253.8, 236.8, 224.6, -170, 6.87, -77.91],  # A分拣区 A sorting area
+            [35.9, 235.4, 211.8, -169.33, -9.27, 88.3],  # B分拣区  B sorting area
+            [266.5, -219.7, 209.3, -170, -3.64, -94.62],  # C分拣区 C sorting area
+            [32, -228.3, 201.6, -168.07, -7.17, -92.56],  # D分拣区 D sorting area
         ]
+        print('real_x, real_y:', round(coords[0][0] + x, 2), round(coords[0][1] + y, 2))
         
         # publish marker
         self.marker.header.stamp = rospy.Time.now()
@@ -133,18 +115,13 @@ class Detect_marker(Movement):
         self.pub.publish(self.marker)
 
         # send coordinates to move mycobot
-        self.mc.send_angles(angles[1], 25)
+        self.mc.send_angles(angles[2], 50)
         time.sleep(3)
         
-        #self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 240, 178.99, 5.38, -62.9], 25, 0)
-        #time.sleep(2)
-        self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 200, 178.99, -3.78, -62.9], 25, 0)
+        self.mc.send_coords([coords[0][0] + x, coords[0][1] + y, 240, 178.99, -3.78, -62.9], 100, 1)
         time.sleep(2)
-        # self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 105, 178.99, -3.78, -62.9], 25, 0)
-        # time.sleep(2)
-        self.mc.send_coords([coords[0][0]+x, coords[0][1]+y, 65.5, 178.99, -3.78, -62.9], 25, 0)
-        
-        time.sleep(3.5)
+        self.mc.send_coords([coords[0][0] + x, coords[0][1] + y, 100.5, 178.99, -3.78, -62.9], 100, 1)
+        time.sleep(2.5)
         
         # open pump
         if "dev" in self.robot_raspi:
@@ -163,13 +140,13 @@ class Detect_marker(Movement):
         self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(3)
         
-        self.mc.send_coords(coords[color], 25, 1) # coords[1] 为A分拣区，coords[2] 为B分拣区, coords[3] 为C分拣区，coords[4] 为D分拣区
-        time.sleep(4)
+        self.mc.send_coords(coords[color], 100, 1) # coords[1] 为A分拣区，coords[2] 为B分拣区, coords[3] 为C分拣区，coords[4] 为D分拣区
+        time.sleep(6.5)
         
         # close pump
         if "dev" in self.robot_raspi:
             self.pub_pump(False)  
-        time.sleep(5)
+        time.sleep(6.5)
         
         # publish marker
         time.sleep(1)
@@ -179,7 +156,7 @@ class Detect_marker(Movement):
         self.pub.publish(self.marker)
         
         self.mc.send_angles(angles[0], 25)
-        time.sleep(2)
+        time.sleep(4.5)
 
     # decide whether grab cube
     def decide_move(self, x, y, color):
@@ -192,15 +169,14 @@ class Detect_marker(Movement):
         else:
             self.cache_x = self.cache_y = 0
             # 调整吸泵吸取位置，y增大,向左移动;y减小,向右移动;x增大,前方移动;x减小,向后方移动
-            self.move(x-15, y+145, color)
+            self.move(x + 105, y + 130, color)
 
     # init mycobot
     def init_mycobot(self):
         if "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
+            self.mc = MyCobot(self.robot_raspi, 115200)
         self.pub_pump(False)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
-        # self.mc.send_coords([135.0, -65.5, 280.1, 178.99, 5.38, -179.9], 20, 1)
         time.sleep(2.5)
         
 

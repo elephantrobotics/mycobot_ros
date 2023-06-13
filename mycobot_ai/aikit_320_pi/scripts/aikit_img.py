@@ -15,7 +15,7 @@ __version__ = "1.0"  # Adaptive seeed
 
 class Object_detect(Movement):
 
-    def __init__(self, camera_x = 160, camera_y = 10):
+    def __init__(self, camera_x = 263, camera_y = 0):
         # inherit the parent class
         super(Object_detect, self).__init__()
 
@@ -23,16 +23,17 @@ class Object_detect(Movement):
         self.mc = None
         # 移动角度
         self.move_angles = [
-            [0.61, 45.87, -92.37, -41.3, 2.02, 9.58],  # init the point
-            [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],  # point to grab
+            [0.61, 45.87, -92.37, -41.3, 89.56, 9.58],  # init the point
+            [18.8, -7.91, -54.49, -23.02, 89.56, -14.76],  # point to grab
+            [17.22, -5.27, -52.47, -25.75, 89.73, -0.26],
         ]
 
         # 移动坐标
         self.move_coords = [
-            [132.2, -136.9, 200.8, -178.24, -3.72, -107.17],  # D Sorting area
-            [238.8, -124.1, 204.3, -169.69, -5.52, -96.52], # C Sorting area
-            [115.8, 177.3, 210.6, 178.06, -0.92, -6.11], # A Sorting area
-            [-6.9, 173.2, 201.5, 179.93, 0.63, 33.83], # B Sorting area
+            [32, -228.3, 201.6, -168.07, -7.17, -92.56],  # D Sorting area
+            [266.5, -219.7, 209.3, -170, -3.64, -94.62],  # C Sorting area
+            [253.8, 236.8, 224.6, -170, 6.87, -77.91],  # A Sorting area
+            [35.9, 235.4, 211.8, -169.33, -9.27, 88.3],  # B Sorting area
         ]
         
         # which robot: USB* is m5; ACM* is wio; AMA* is raspi
@@ -40,28 +41,7 @@ class Object_detect(Movement):
         self.robot_wio = os.popen("ls /dev/ttyACM*").readline()[:-1]
         self.robot_raspi = os.popen("ls /dev/ttyAMA*").readline()[:-1]
         self.robot_jes = os.popen("ls /dev/ttyTHS1").readline()[:-1]
-        self.raspi = False
-        if "dev" in self.robot_m5:
-            self.Pin = [2, 5]
-        elif "dev" in self.robot_wio:
-            # self.Pin = [20, 21]
-            self.Pin = [2, 5]
-
-            for i in self.move_coords:
-                i[2] -= 20
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            import RPi.GPIO as GPIO
-            GPIO.setwarnings(False)
-            self.GPIO = GPIO
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(20, GPIO.OUT)
-            GPIO.setup(21, GPIO.OUT)
-            GPIO.output(20, 1)
-            GPIO.output(21, 1)
-            self.raspi = True
-        if self.raspi:
-            self.gpio_status(False)
-   
+        
         # choose place to set cube
         self.color = 0
         # parameters to calculate camera clipping parameters
@@ -87,7 +67,7 @@ class Object_detect(Movement):
         self.pub = rospy.Publisher('/cube', Marker, queue_size=1)
         # init a Marker
         self.marker = Marker()
-        self.marker.header.frame_id = "joint1"
+        self.marker.header.frame_id = "base"
         self.marker.ns = "cube"
         self.marker.type = self.marker.CUBE
         self.marker.action = self.marker.ADD
@@ -121,49 +101,44 @@ class Object_detect(Movement):
     # pump_control pi
     def gpio_status(self, flag):
         if flag:
-            self.GPIO.output(20, 0)
-            self.GPIO.output(21, 0)
+            """start the suction pump"""
+            self.mc.set_basic_output(1, 0)
+            self.mc.set_basic_output(2, 1)
         else:
-            self.GPIO.output(20, 1)
-            self.GPIO.output(21, 1)
+            """stop suction pump"""
+            self.mc.set_basic_output(1, 1)
+            self.mc.set_basic_output(2, 0)
+            time.sleep(1)
+            self.mc.set_basic_output(2, 1)
 
-    # 开启吸泵 m5
     def pump_on(self):
-        # 让2号位工作
-        self.mc.set_basic_output(2, 0)
-        # 让5号位工作
-        self.mc.set_basic_output(5, 0)
-
-    # 停止吸泵 m5
-    def pump_off(self):
-        # 让2号位停止工作
+        """Start the suction pump"""
+        self.mc.set_basic_output(1, 0)
         self.mc.set_basic_output(2, 1)
-        # 让5号位停止工作
-        self.mc.set_basic_output(5, 1)
+
+    def pump_off(self):
+        """stop suction pump m5"""
+        self.mc.set_basic_output(1, 1)
+        self.mc.set_basic_output(2, 0)
+        time.sleep(1)
+        self.mc.set_basic_output(2, 1)
 
     # Grasping motion
     def move(self, x, y, color):
-        # send Angle to move mycobot 280
-        self.mc.send_angles(self.move_angles[1], 25)
+        print(color)
+        print('x,y:', round(x, 2), round(y, 2))
+        # send Angle to move mycobot320
+        self.mc.send_angles(self.move_angles[2], 50)
         time.sleep(3)
 
         # send coordinates to move mycobot
-        self.mc.send_coords([x, y,  170.6, 179.87, -3.78, -62.75], 25, 1) # usb :rx,ry,rz -173.3, -5.48, -57.9
+        self.mc.send_coords([x, y, 230, -173.84, -0.14, -74.37], 100, 1)
+        time.sleep(2.5)
+        self.mc.send_coords([x, y, 100, -173.84, -0.14, -74.37], 100, 1)  #
         time.sleep(3)
-        
-        # self.mc.send_coords([x, y, 150, 179.87, -3.78, -62.75], 25, 0)
-        # time.sleep(3)
-
-        self.mc.send_coords([x, y, 65, 179.87, -3.78, -62.75], 25, 0)
-        # self.mc.send_coords([x, y, 103, 179.87, -3.78, -62.75], 25, 0)
-        
-        time.sleep(4)
 
         # open pump
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_on()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(True)
+        self.gpio_status(True)
         time.sleep(1.5)
 
         tmp = []
@@ -180,19 +155,16 @@ class Object_detect(Movement):
 
 
 
-        self.mc.send_coords(self.move_coords[color], 25, 1)
+        self.mc.send_coords(self.move_coords[color], 100, 1)
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color][1]/1000.0,
                         self.move_coords[color][2]/1000.0)
-        time.sleep(4)
+        time.sleep(6.5)
 
         # close pump
-        if "dev" in self.robot_m5 or "dev" in self.robot_wio:
-            self.pump_off()
-        elif "dev" in self.robot_raspi or "dev" in self.robot_jes:
-            self.gpio_status(False)
-        time.sleep(5)
+        self.gpio_status(False)
+        time.sleep(6.5)
 
-        self.mc.send_angles(self.move_angles[0], 25)
+        self.mc.send_angles(self.move_angles[0], 50)
         time.sleep(4.5)
 
     # decide whether grab cube
@@ -211,15 +183,10 @@ class Object_detect(Movement):
 
     # init mycobot
     def run(self):
-    
-        if "dev" in self.robot_wio :
-            self.mc = MyCobot(self.robot_wio, 115200) 
-        elif "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
-        elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
-        if not self.raspi:
-            self.pub_pump(False, self.Pin)
+     
+        if "dev" in self.robot_raspi:
+            self.mc = MyCobot(self.robot_raspi, 115200)
+        self.gpio_status(False)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
         time.sleep(2.5)
 
@@ -336,13 +303,6 @@ class Object_detect(Movement):
         kp = kp_list
         des = desc_list
 
-        # for i in goal:
-        #     kp0, des0 = sift.detectAndCompute(i, None)
-        #     kp.append(kp0)
-        #     des.append(des0)
-
-        # kp1, des1 = sift.detectAndCompute(goal, None)
-        # kp2, des2 = sift.detectAndCompute(img, None)
         kp2, des2 = kp_img, desc_img
 
         # FLANN parameters
@@ -407,15 +367,8 @@ class Object_detect(Movement):
 # The path to save the image folder
 def parse_folder(folder):
     restore = []
-    path = ''
-    path1 = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_280_pi/' + folder    # pi
-    path2 = r'D:/BaiduSyncdisk/PythonProject/OpenCV/' + folder    # windows
-
-    if os.path.exists(path1):
-        path = path1
-    elif os.path.exists(path2):
-        path = path2
-
+    path = '/home/er/catkin_ws/src/mycobot_ros/mycobot_ai/aikit_320_pi/' + folder    # pi
+   
     for i, j, k in os.walk(path):
         for l in k:
             restore.append(cv2.imread(folder + '/{}'.format(l)))
