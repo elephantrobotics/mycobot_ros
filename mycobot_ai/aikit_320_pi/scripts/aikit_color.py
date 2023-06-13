@@ -24,7 +24,7 @@ class Object_detect(Movement):
 
         # 移动角度
         self.move_angles = [
-            [0.61, 45.87, -92.37, -41.3, 2.02, 9.58],  # init the point
+            [0.61, 45.87, -92.37, -41.3, 89.56, 9.58],  # init the point
             [18.8, -7.91, -54.49, -23.02, -0.79, -14.76],  # point to grab
             [17.22, -5.27, -52.47, -25.75, 89.73, -0.26],
         ]
@@ -167,12 +167,12 @@ class Object_detect(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, 89.56, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(3)
         
         self.pub_marker(self.move_coords[2][0]/1000.0, self.move_coords[2][1]/1000.0, self.move_coords[2][2]/1000.0)
         
-        self.mc.send_coords(self.move_coords[color], 25, 1)
+        self.mc.send_coords(self.move_coords[color], 100, 1)
         
         self.pub_marker(self.move_coords[color][0]/1000.0, self.move_coords[color][1]/1000.0, self.move_coords[color][2]/1000.0)
         time.sleep(3)
@@ -210,7 +210,7 @@ class Object_detect(Movement):
         if "dev" in self.robot_raspi:
             self.mc = MyCobot(self.robot_raspi, 115200)
         self.pump_off()
-        self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
+        self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 89.56, 9.58], 20)
         time.sleep(2.5)
 
     # draw aruco

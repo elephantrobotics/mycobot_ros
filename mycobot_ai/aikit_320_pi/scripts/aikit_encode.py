@@ -137,7 +137,7 @@ class Detect_marker(Movement):
         time.sleep(0.5)
         
         # print(tmp)
-        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, -0.79, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
+        self.mc.send_angles([tmp[0], -0.71, -54.49, -23.02, 89.56, tmp[5]],25) # [18.8, -7.91, -54.49, -23.02, -0.79, -14.76]
         time.sleep(3)
         
         self.mc.send_coords(coords[color], 100, 1) # coords[1] 为A分拣区，coords[2] 为B分拣区, coords[3] 为C分拣区，coords[4] 为D分拣区
@@ -176,7 +176,7 @@ class Detect_marker(Movement):
         if "dev" in self.robot_raspi:
             self.mc = MyCobot(self.robot_raspi, 115200)
         self.pub_pump(False)
-        self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
+        self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 89.56, 9.58], 20)
         time.sleep(2.5)
         
 
