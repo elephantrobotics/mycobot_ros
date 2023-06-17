@@ -50,8 +50,11 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>new_mycobot_320</build_depend>
+  <build_depend>new_mycobot_320_pi</build_depend>
   <build_export_depend>new_mycobot_320</build_export_depend>
+  <build_export_depend>new_mycobot_320_pi</build_export_depend>
   <exec_depend>new_mycobot_320</exec_depend>
+  <exec_depend>new_mycobot_320_pi</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
