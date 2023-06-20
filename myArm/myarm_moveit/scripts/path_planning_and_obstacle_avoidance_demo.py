@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import rospy, roslib, sys
@@ -32,7 +32,7 @@ class MoveItPlanningDemo:
 
         # Set the reference coordinate system used for the target position
         # 设置目标位置所使用的参考坐标系
-        self.reference_frame = "joint1"
+        self.reference_frame = "base"
         self.arm.set_pose_reference_frame(self.reference_frame)
 
         # Allow replanning when motion planning fails,当运动规划失败后，允许重新规划
@@ -72,10 +72,9 @@ class MoveItPlanningDemo:
         # Set the target pose of the terminal motion of the robotic arm
         # 设置机械臂终端运动的目标位姿
         self.arm.set_pose_target(target_pose, self.end_effector_link)
-
         # Plan the movement path,规划运动路径
         traj = self.arm.plan()
-
+        print('traj:', traj)
         # Control the motion of the robotic arm according to the planned motion path
         # 按照规划的运动路径控制机械臂运动
         self.arm.execute(traj)
