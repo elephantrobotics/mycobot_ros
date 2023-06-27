@@ -8,8 +8,8 @@ project(aikit_320_pi)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  new_mycobot_320
-  new_mycobot_320_pi
+  # new_mycobot_320
+  # new_mycobot_320_pi
 )
 
 ## System dependencies are found with CMake's conventions
