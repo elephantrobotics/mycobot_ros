@@ -161,13 +161,13 @@ robot_msg = """
 MyArm Status
 --------------------------------
 Joint Limit:
-    joint 1: -180 ~ +180
-    joint 2: -170 ~ +170
-    joint 3: -170 ~ +170
-    joint 4: -170 ~ +170
-    joint 5: -170 ~ +170
-    joint 6: -180 ~ +180
-    joint 7: -180 ~ +180
+    joint 1: -160 ~ +160
+    joint 2: -80 ~ +80
+    joint 3: -165 ~ +165
+    joint 4: -100 ~ +80
+    joint 5: -165 ~ +165
+    joint 6: -110 ~ +110
+    joint 7: -165 ~ +165
 
 Connect Status: %s
 
