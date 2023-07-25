@@ -165,7 +165,7 @@ planner_configs:
     use_strict_queue_ordering: 0  # sort edges in the queue at the end of the batch (0) or after each rewiring (1). Default: 0
     find_approximate_solutions: 0  # track approximate solutions (1) or not (0). Default: 0
 arm_group:
-  default_planner_config: RRT
+  default_planner_config: RRTConnect
   planner_configs:
     - AnytimePathShortening
     - SBL
