@@ -8,7 +8,7 @@ Passable parameters:
     port: serial prot string. Defaults is '/dev/ttyUSB0'
     baud: serial prot baudrate. Defaults is 115200.
 """
-
+import math
 import rospy
 from sensor_msgs.msg import JointState
 
@@ -23,9 +23,11 @@ def callback(data):
     print(data.position)
     data_list = []
     for index, value in enumerate(data.position):
-        data_list.append(value)
+        radians_to_angles = math.degrees(value)
+        data_list.append(radians_to_angles)
 
-    mc.send_radians(data_list, 80)
+    # mc.send_radians(data_list, 80)
+    mc.send_angles(data_list, 80)
     # time.sleep(0.5)
 
 

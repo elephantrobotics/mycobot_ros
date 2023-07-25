@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import sys
 import rospy
@@ -22,14 +23,7 @@ class MoveItPlanningDemo:
 
         # 创建MoveGroupCommander对象
         self.arm_group = moveit_commander.MoveGroupCommander("arm_group")
-        # 切换规划器为ompl
-        # self.arm_group.set_planner_id("ompl")
-        # planner_params = {"clearance": 0.1}  # 设置障碍物清除参数为0.1米（可以根据实际情况调整值）
-        # arm_group.set_planner_params("ompl", planner_params)
-
-        # 设置 OMPL 规划器的名称
-        # self.arm_group.set_planner_id("RRTConnectkConfigDefault")
-
+        
         # 获取末端关节的名称
         self.end_effector_link = self.arm_group.get_end_effector_link()
         
@@ -85,7 +79,7 @@ class MoveItPlanningDemo:
         # 控制机械臂回到初始化位置
         self.arm_group.set_named_target('init_pose')
         self.arm_group.go()
-        rospy.sleep(5)
+        rospy.sleep(3)
 
         
         # 设置机械臂运动的目标点，使用笛卡尔空间坐标位置表示（单位：米），姿态使用四元数表示
@@ -100,10 +94,6 @@ class MoveItPlanningDemo:
         target_pose.pose.orientation.z = 0.0
         target_pose.pose.orientation.w = 0.014
         
-        # 移除所有障碍物
-        # scene.remove_world_object("cylinder1")
-        # scene.remove_world_object("cylinder2")
-
         # 更新当前的位姿
         self.arm_group.set_start_state_to_current_state()
 
@@ -120,7 +110,7 @@ class MoveItPlanningDemo:
         # print('plan point:', plan[1])
         # 执行运动
         self.arm_group.execute(plan[1])
-        rospy.sleep(5)
+        rospy.sleep(3)
         # 获取末端执行器的姿态
         end_effector_pose = self.arm_group.get_current_pose().pose
 
@@ -146,8 +136,8 @@ class MoveItPlanningDemo:
         
     def run(self):
         # 移除所有障碍物
-        self.scene.remove_world_object("cylinder1")
-        self.scene.remove_world_object("cylinder2")
+        # self.scene.remove_world_object("cylinder1")
+        # self.scene.remove_world_object("cylinder2")
         # 没有障碍物运行一次
         # self.robot_move()
         
