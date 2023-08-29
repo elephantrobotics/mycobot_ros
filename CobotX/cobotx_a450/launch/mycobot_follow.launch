@@ -1,0 +1,13 @@
+<launch>
+	<!-- Load URDF file,加载URDF文件 -->
+	<arg name="model" default="$(find mycobot_description)/urdf/cobotx_a450/cobotx_a450.urdf"/>
+	<arg name="rvizconfig" default="$(find cobotx_a450)/config/cobotx_a450.rviz" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+	<!-- Combinejoin values to TF ，将值合并到TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
+	</node>
+	<!-- show in Rviza,显示在Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

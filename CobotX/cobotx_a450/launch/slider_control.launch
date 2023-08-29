@@ -1,0 +1,24 @@
+<launch>
+	<!-- <arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" /> -->
+	<!-- Load file model ，加载文件模型-->	
+	<arg name="model" default="$(find mycobot_description)/urdf/cobotx_a450/cobotx_a450.urdf"/>
+	<arg name="rvizconfig" default="$(find cobotx_a450)/config/cobotx_a450.rviz" />
+	<arg name="gui" default="true" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF，将值合并到TF -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"> 
+		<!-- <param name="use_gui" value="$(arg gui)" />	 -->
+		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
+	</node>
+	<!-- Open control script -->
+	<!-- <node name="control_slider" pkg="mycobot_280" type="slider_control.py"> 
+		<param name="port" type="string" value="$(arg port)" />
+		<param name="baud" type="int" value="$(arg baud)" />
+	</node> -->
+	<!-- Show in Rviz ，显示在Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>
