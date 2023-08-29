@@ -13,7 +13,7 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real CobotX...")
-    port = rospy.get_param("~port", "/dev/ttyAMA0")
+    port = rospy.get_param("~port", "/dev/ttyAMA1")
     baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:

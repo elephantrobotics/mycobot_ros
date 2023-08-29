@@ -73,7 +73,8 @@ class CobotXTopics(object):
         rospy.init_node("cobotx_topics_pi")
         rospy.loginfo("start ...")
         # problem
-        port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
+        # port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
+        port = rospy.get_param("~port", "/dev/ttyAMA1")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = CobotX(port, baud)
