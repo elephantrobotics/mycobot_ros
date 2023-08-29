@@ -493,7 +493,7 @@ class Window:
 
 def main():
     window = tk.Tk()
-    window.title("myarm ros GUI")
+    window.title("CobotX ros GUI")
     Window(window).run()
 
 

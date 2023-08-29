@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import time
-
+import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
@@ -28,7 +28,7 @@ def talker():
         """
         )
         exit(1)
-    mc.release_all_servos(0)
+    mc.release_all_servos()
     time.sleep(0.1)
     print("Rlease all servos over.\n")
 
@@ -60,10 +60,11 @@ def talker():
     while not rospy.is_shutdown():
         joint_state_send.header.stamp = rospy.Time.now()
 
-        angles = mc.get_radians()
+        angles = mc.get_angles()
         data_list = []
         for index, value in enumerate(angles):
-            data_list.append(value)
+            radians = math.radians(value)
+            data_list.append(radians)
 
         # rospy.loginfo('{}'.format(data_list))
         joint_state_send.position = data_list

@@ -56,7 +56,7 @@ class Raw(object):
 def teleop_keyboard():
     rospy.init_node("teleop_keyboard")
 
-    model = 0
+    model = 1
     speed = rospy.get_param("~speed", 50)
     change_percent = rospy.get_param("~change_percent", 5)
 
@@ -81,9 +81,9 @@ def teleop_keyboard():
         exit(1)
 
     init_pose = [0, 0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 0, 0, -90, 0, 0, 0, speed]
+    home_pose = [0, 0, 0, -90, 0, 90, 0, speed]
 
-    # rsp = set_angles(*init_pose)
+    rsp = set_angles(*home_pose)
 
     while True:
         res = get_coords()
@@ -92,7 +92,7 @@ def teleop_keyboard():
         time.sleep(0.1)
 
     record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
-    print(record_coords)
+    print('init_coords:', record_coords)
 
     try:
         print(msg)
@@ -149,6 +149,11 @@ def teleop_keyboard():
                     rsp = set_angles(*init_pose)
                 elif key in "2":
                     rsp = set_angles(*home_pose)
+                    time.sleep(3)
+                    res = get_coords()
+                    time.sleep(0.1)
+                    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
+                    print('home_coords:', record_coords)
                 elif key in "3":
                     rep = get_angles()
                     home_pose[0] = rep.joint_1
