@@ -1,0 +1,13 @@
+<launch>
+	<!-- Select connecting device and serial port ，选择连接设备及串口-->
+
+	<arg name="port" default="/dev/ttyAMA1" />
+	<arg name="baud" default="115200" />
+
+
+	<!-- Open communication service ，开启通讯服务-->
+	<node name="cobotx_services" pkg="cobotx_a450_communication" type="cobotx_services.py" output="screen">
+		<param name="port" type="string" value="$(arg port)" />
+		<param name="baud" type="int" value="$(arg baud)" />
+    </node>
+</launch>
