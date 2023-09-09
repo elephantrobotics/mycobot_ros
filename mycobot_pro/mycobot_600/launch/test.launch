@@ -2,17 +2,15 @@
 	<!-- Load URDF, rviz, etc. on the parameter server,加载参数服务器上的URDF、rviz等 -->
 	<arg name="model" default="$(find mycobot_description)/urdf/600_urdf/mycobot_600_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_600)/config/mycobot_600.rviz" />
-	<!-- <arg name="gui" default="true" /> -->
+	<arg name="gui" default="true" />
 	
 	
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
 	<!-- Combinejoin values to TF -->
-	<!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
-	<!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" /> -->
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
-		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
-	</node>
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+
 	<!-- Show in Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 </launch>
