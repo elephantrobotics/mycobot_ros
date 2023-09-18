@@ -25,10 +25,8 @@ def callback(data):
 def listener():
     global mc
     rospy.init_node("mycobot_reciver", anonymous=True)
-    port = subprocess.check_output(['echo -n /dev/ttyUSB*'], 
-                                    shell=True)
 
-    port = rospy.get_param("~port", port)
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
     baud = rospy.get_param("~baud", 115200)
     # 1000000
     mc = MyCobot(port, baud)
