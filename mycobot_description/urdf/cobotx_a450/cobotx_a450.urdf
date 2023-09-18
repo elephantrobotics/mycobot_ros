@@ -195,7 +195,7 @@
     <limit effort = "1000.0" lower = "-2.8797" upper = "2.8797" velocity = "0"/>
     <parent link="joint6"/>
     <child link="joint7"/>
-    <origin xyz= "0.038 -0.046 0" rpy = "-1.5708 0 0"/>  
+    <origin xyz= "0.038 -0.046 0" rpy = "1.5708 0 0"/>  
   </joint>
 
 
