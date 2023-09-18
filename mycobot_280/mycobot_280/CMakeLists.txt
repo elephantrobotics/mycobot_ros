@@ -30,6 +30,8 @@ catkin_install_python(PROGRAMS
   scripts/following_marker.py
   scripts/follow_and_pump.py
   scripts/simple_gui.py
+  scripts/follow_display_gripper.py
+  scripts/slider_control_gripper.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
