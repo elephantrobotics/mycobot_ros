@@ -70,6 +70,7 @@ def teleop_keyboard():
     rospy.wait_for_service("switch_gripper_status")
     print("service ready.")
     try:
+        print("start service...")
         get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
         set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
         get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
@@ -87,8 +88,12 @@ def teleop_keyboard():
 
     while True:
         res = get_coords()
+        print('current coords: {}'.format(res))
         if res.x > 1:
             break
+        else:
+            print('res.X < 1 {}'.format(res))
+            print('Please adjust the robot joint location')
         time.sleep(0.1)
 
     record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
