@@ -93,7 +93,7 @@ def teleop_keyboard():
             break
         else:
             print('res.X < 1 {}'.format(res))
-            print('Please adjust the robot joint location')
+            print('Please adjust the joint position of the robot and run program again !!!')
         time.sleep(0.1)
 
     record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
