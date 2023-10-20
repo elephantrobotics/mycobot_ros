@@ -1,0 +1,23 @@
+<launch>
+	<!-- Select connecting device and serial port ，选择连接设备及串口-->
+	<arg name="port" default="/dev/ttyAMA1" />
+	<arg name="baud" default="115200" />
+
+	<arg name="model" default="$(find mycobot_description)/urdf/cobotx_a450/cobotx_a450.urdf"/>
+	<arg name="rvizconfig" default="$(find cobotx_a450)/config/cobotx_a450.rviz" />
+	<arg name="gui" default="false" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF ，将值合并到TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<!-- Show in Rviz ，显示在Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <include file="$(find cobotx_a450_communication)/launch/communication_service.launch">
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+    </include>
+	<!-- listen and pub the real angles ，监听并发布真实角度-->
+	<node name="real_listener" pkg="cobotx_a450" type="listen_real.py" />
+</launch>
