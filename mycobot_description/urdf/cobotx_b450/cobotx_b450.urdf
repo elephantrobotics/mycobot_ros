@@ -411,7 +411,7 @@
     <limit effort = "1000.0" lower = "-2.0594" upper = "2.0594" velocity = "0"/>
     <parent link="base"/>
     <child link="link_body"/>
-    <origin xyz= " 0 0 0.22   " rpy = "0 0 0"/>  
+    <origin xyz= " 0 0 0.231   " rpy = "0 0 0"/>  
   </joint>
 
 </robot>

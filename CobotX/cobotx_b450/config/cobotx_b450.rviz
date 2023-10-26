@@ -11,6 +11,7 @@ Panels:
         - /RobotModel1/Links1/link1_L1/Position1
         - /Axes1
         - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 584
   - Class: rviz/Selection
@@ -71,21 +72,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        body:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        head:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        head_eye:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         link1_L:
           Alpha: 1
           Show Axes: false
@@ -152,6 +138,21 @@ Visualization Manager:
           Show Trail: false
           Value: true
         link7_R:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_body:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_eye:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_head:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -180,12 +181,6 @@ Visualization Manager:
         All Enabled: false
         base:
           Value: true
-        body:
-          Value: true
-        head:
-          Value: true
-        head_eye:
-          Value: true
         link1_L:
           Value: true
         link1_R:
@@ -214,6 +209,12 @@ Visualization Manager:
           Value: true
         link7_R:
           Value: true
+        link_body:
+          Value: true
+        link_eye:
+          Value: true
+        link_head:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 0.10000000149011612
       Name: TF
@@ -222,10 +223,7 @@ Visualization Manager:
       Show Names: true
       Tree:
         base:
-          body:
-            head:
-              head_eye:
-                {}
+          link_body:
             link1_L:
               link2_L:
                 link3_L:
@@ -242,6 +240,9 @@ Visualization Manager:
                       link6_R:
                         link7_R:
                           {}
+            link_head:
+              link_eye:
+                {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -272,7 +273,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.5918537378311157
+      Distance: 1.6387460231781006
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -288,9 +289,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5247960090637207
+      Pitch: 0.4097958207130432
       Target Frame: <Fixed Frame>
-      Yaw: 6.275412082672119
+      Yaw: 6.260410308837891
     Saved: ~
 Window Geometry:
   Displays:
