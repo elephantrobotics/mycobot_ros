@@ -94,7 +94,7 @@ def talker():
             # print(f'error:{e}')
             print("--------------error",e)
     
-    rospy.loginfo("start loop ...")
+    # rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
         # get real angles from server.从服务器获得真实的角度。
         res = func()
@@ -116,7 +116,7 @@ def talker():
                 res.joint_6 * (math.pi / 180),
             ]
             radians_list.append(gripper_value)
-            rospy.loginfo("res: {}".format(radians_list))
+            # rospy.loginfo("res: {}".format(radians_list))
 
             # publish angles.发布角度
             joint_state_send.header.stamp = rospy.Time.now()
