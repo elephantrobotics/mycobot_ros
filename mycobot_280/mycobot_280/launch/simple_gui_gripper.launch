@@ -20,6 +20,6 @@
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
-	<node name="real_listener" pkg="mycobot_280" type="listen_real.py" />
+	<node name="real_listener_gripper" pkg="mycobot_280" type="listen_real_gripper.py" />
 	<node name="simple_gui" pkg="mycobot_280" type="simple_gui.py" />
 </launch>
