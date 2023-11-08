@@ -21,5 +21,9 @@
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 	<!-- listen and pub the real angles ，监听并发布真实角度-->
-	<node name="real_listener" pkg="mycobot_280" type="listen_real.py" />
+	<!-- <node name="real_listener_gripper" pkg="mycobot_280" type="listen_real_gripper.py" /> -->
+	<node name="real_listener_gripper" pkg="mycobot_280" type="listen_real_gripper.py" output="screen">
+        <param name="port" value="$(arg port)" />
+        <param name="baud" value="$(arg baud)" />
+    </node>
 </launch>

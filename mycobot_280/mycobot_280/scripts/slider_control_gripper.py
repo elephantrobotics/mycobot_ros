@@ -30,7 +30,7 @@ def callback(data):
     mc.send_radians(data_list[:6], 80)
     gripper_value = int(abs(-0.7-data_list[6])* 117)
     print("gripper_value:%s"%gripper_value)
-    mc.set_gripper_value(gripper_value, 80)
+    mc.set_gripper_value(gripper_value, 80, 1)
     
 
 def listener():

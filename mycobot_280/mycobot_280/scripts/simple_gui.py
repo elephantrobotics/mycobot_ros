@@ -4,7 +4,7 @@ try:
     import tkinter as tk
 except ImportError:
     import Tkinter as tk
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus, PumpStatus
 import rospy
 import time
 from rospy import ServiceException
@@ -36,7 +36,7 @@ class Window:
         # 计算 Tk 根窗口的 x 和 y 坐标
         x = int((self.ws / 2) - 190)
         y = int((self.hs / 2) - 250)
-        self.win.geometry("430x400+{}+{}".format(x, y))
+        self.win.geometry("440x440+{}+{}".format(x, y))
         # layout,布局
         self.set_layout()
         # input section,输入部分
@@ -56,10 +56,17 @@ class Window:
 
         # Gripper switch button,夹爪开关按钮
         tk.Button(self.frmLB, text="夹爪(开)", command=self.gripper_open, width=5).grid(
-            row=1, column=0, sticky="w", padx=3, pady=50
+            row=1, column=0, sticky="w", padx=3, pady=20
         )
         tk.Button(self.frmLB, text="夹爪(关)", command=self.gripper_close, width=5).grid(
             row=1, column=1, sticky="w", padx=3, pady=2
+        )
+        
+        tk.Button(self.frmLB, text=" 吸泵(开)", command=self.pump_open, width=5).grid(
+            row=2, column=0, sticky="w", padx=3, pady=20
+        )
+        tk.Button(self.frmLB, text="吸泵(关)", command=self.pump_close, width=5).grid(
+            row=2, column=1, sticky="w", padx=3, pady=2
         )
 
     def connect_ser(self):
@@ -70,6 +77,7 @@ class Window:
         rospy.wait_for_service("get_joint_coords")
         rospy.wait_for_service("set_joint_coords")
         rospy.wait_for_service("switch_gripper_status")
+        rospy.wait_for_service("switch_pump_status")
         try:
             self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
             self.set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
@@ -77,6 +85,9 @@ class Window:
             self.set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
             self.switch_gripper = rospy.ServiceProxy(
                 "switch_gripper_status", GripperStatus
+            )
+            self.switch_pump = rospy.ServiceProxy(
+                "switch_pump_status", PumpStatus
             )
         except:
             print("start error ...")
@@ -370,6 +381,20 @@ class Window:
     def gripper_close(self):
         try:
             self.switch_gripper(False)
+        except ServiceException:
+            pass
+    
+    def pump_open(self):
+        try:
+            self.switch_pump(True,2, 5)
+        except ServiceException:
+            # Probably because the method has no return value, the service throws an unhandled error
+            # 可能由于该方法没有返回值，服务抛出无法处理的错误
+            pass
+
+    def pump_close(self):
+        try:
+            self.switch_pump(False, 2, 5)
         except ServiceException:
             pass
 
