@@ -65,42 +65,12 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        camera_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         g_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_left1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_left2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_left3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_right1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_right2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        gripper_right3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -136,6 +106,16 @@ Visualization Manager:
           Show Trail: false
           Value: true
         joint6_flange:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pump_box:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pump_head:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -153,21 +133,9 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        camera_flange:
+          Value: true
         g_base:
-          Value: true
-        gripper_base:
-          Value: true
-        gripper_left1:
-          Value: true
-        gripper_left2:
-          Value: true
-        gripper_left3:
-          Value: true
-        gripper_right1:
-          Value: true
-        gripper_right2:
-          Value: true
-        gripper_right3:
           Value: true
         joint1:
           Value: true
@@ -182,6 +150,10 @@ Visualization Manager:
         joint6:
           Value: true
         joint6_flange:
+          Value: true
+        pump_box:
+          Value: true
+        pump_head:
           Value: true
       Marker Alpha: 1
       Marker Scale: 0.10000000149011612
@@ -198,17 +170,11 @@ Visualization Manager:
                   joint5:
                     joint6:
                       joint6_flange:
-                        gripper_base:
-                          gripper_left2:
+                        camera_flange:
+                          pump_head:
                             {}
-                          gripper_left3:
-                            gripper_left1:
-                              {}
-                          gripper_right2:
-                            {}
-                          gripper_right3:
-                            gripper_right1:
-                              {}
+          pump_box:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
@@ -247,7 +213,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.1026314496994019
+      Distance: 1.0996487140655518
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -263,9 +229,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7153984904289246
+      Pitch: 0.5753980875015259
       Target Frame: <Fixed Frame>
-      Yaw: 3.8853836059570312
+      Yaw: 3.950380325317383
     Saved: ~
 Window Geometry:
   Displays:
