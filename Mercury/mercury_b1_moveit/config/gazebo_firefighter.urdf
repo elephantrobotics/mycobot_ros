@@ -1,0 +1,645 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+    <xacro:property name="width" value=".2" />
+    <!-- 底部 -->
+    <link name="base">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/base.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/base.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <!-- 腰部 -->
+    <link name="link_body">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/body.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.11 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/body.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.11 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <!-- 屏幕头部 -->
+    <link name="link_head">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/head.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.1 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/head.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.1 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <!-- 摄像头 -->
+    <link name="link_eye">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.0 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.1 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link1_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint1_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint1_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link2_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint2_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0.0 " rpy=" 3.14159 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint2_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0.0 " rpy=" 3.14159 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link3_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint3_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint3_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link4_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint4_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint4_L.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link5_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint5_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint5_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link6_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint6_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint6_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link7_L">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint7_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint7_L.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link1_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint1_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint1_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link2_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint2_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 3.14159 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint2_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 3.14159 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link3_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint3_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint3_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link4_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint4_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint4_R.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link5_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint5_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint5_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link6_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint6_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint6_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <link name="link7_R">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint7_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mercury_b1/joint7_R.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+    <joint name="joint1_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link_body" />
+        <child link="link1_L" />
+        <origin xyz=" 0.075 0.186 0.085   " rpy="-1.5708 0 -0.5235" />
+    </joint>
+    <joint name="joint2_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-1.4311" upper="2.2689" velocity="0" />
+        <parent link="link1_L" />
+        <child link="link2_L" />
+        <origin xyz=" 0 0 0  " rpy="-1.5708 0 0" />
+    </joint>
+    <joint name="joint3_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link2_L" />
+        <child link="link3_L" />
+        <origin xyz=" 0 -0.11 0  " rpy="1.5708 0 0" />
+    </joint>
+    <joint name="joint4_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.0543" upper="0.2617" velocity="0" />
+        <parent link="link3_L" />
+        <child link="link4_L" />
+        <origin xyz=" 0.03 0 0.095" rpy="-1.5708 0 3.14159" />
+    </joint>
+    <joint name="joint5_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link4_L" />
+        <child link="link5_L" />
+        <origin xyz=" 0.03 -0.126 0" rpy="1.5708 3.14159 0" />
+    </joint>
+    <joint name="joint6_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-0.0174" upper="2.9321" velocity="0" />
+        <parent link="link5_L" />
+        <child link="link6_L" />
+        <origin xyz=" 0 0 0.08" rpy="1.5708 0 0" />
+    </joint>
+    <joint name="joint7_L" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link6_L" />
+        <child link="link7_L" />
+        <origin xyz=" 0.038 -0.046 0" rpy="1.5708 0 0" />
+    </joint>
+    <joint name="joint1_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link_body" />
+        <child link="link1_R" />
+        <origin xyz=" 0.075 -0.186 0.085   " rpy="1.5708 0 0.5235" />
+    </joint>
+    <joint name="joint2_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-1.4311" upper="2.2689" velocity="0" />
+        <parent link="link1_R" />
+        <child link="link2_R" />
+        <origin xyz=" 0 0 0  " rpy="-1.5708 0 0" />
+    </joint>
+    <joint name="joint3_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link2_R" />
+        <child link="link3_R" />
+        <origin xyz=" 0 -0.11 0  " rpy="1.5708 0 0" />
+    </joint>
+    <joint name="joint4_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.0543" upper="0.2617" velocity="0" />
+        <parent link="link3_R" />
+        <child link="link4_R" />
+        <origin xyz=" 0.03 0 0.095" rpy="-1.5708 0 3.14159" />
+    </joint>
+    <joint name="joint5_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link4_R" />
+        <child link="link5_R" />
+        <origin xyz=" 0.03 -0.126 0" rpy="1.5708 3.14159 0" />
+    </joint>
+    <joint name="joint6_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-0.0174" upper="2.9321" velocity="0" />
+        <parent link="link5_R" />
+        <child link="link6_R" />
+        <origin xyz=" 0 0 0.08" rpy="1.5708 0 0" />
+    </joint>
+    <joint name="joint7_R" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-3.1066" upper="3.1066" velocity="0" />
+        <parent link="link6_R" />
+        <child link="link7_R" />
+        <origin xyz=" 0.038 -0.046 0" rpy="1.5708 0 0" />
+    </joint>
+    <joint name="eye" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="0" upper="0.8377" velocity="0" />
+        <parent link="link_head" />
+        <child link="link_eye" />
+        <origin xyz=" 0.03 0 -0.08   " rpy="1.5708 0 0" />
+    </joint>
+    <joint name="head" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-2.4085" upper="3.2812" velocity="0" />
+        <parent link="link_body" />
+        <child link="link_head" />
+        <origin xyz=" 0 0 0.22   " rpy="0 0 0" />
+    </joint>
+    <joint name="body" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-2.0594" upper="2.0594" velocity="0" />
+        <parent link="base" />
+        <child link="link_body" />
+        <origin xyz=" 0 0 0.22   " rpy="0 0 0" />
+    </joint>
+    <transmission name="trans_joint1_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint1_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint1_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint2_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint2_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint2_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint3_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint3_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint3_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint4_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint4_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint4_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint5_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint5_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint5_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint6_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint6_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint6_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint7_L">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint7_L">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint7_L_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint1_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint1_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint1_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint2_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint2_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint2_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint3_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint3_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint3_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint4_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint4_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint4_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint5_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint5_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint5_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint6_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint6_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint6_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint7_R">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint7_R">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint7_R_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_eye">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="eye">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="eye_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_head">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="head">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="head_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_body">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="body">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="body_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo>
+        <plugin name="gazebo_ros_control">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>
+
