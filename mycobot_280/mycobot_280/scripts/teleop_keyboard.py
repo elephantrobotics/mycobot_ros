@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import print_function
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus, PumpStatus
 import rospy
 import sys
 import select
@@ -27,6 +27,10 @@ j(rx-)   k(ry-)   l(rz-)
 Gripper control:
     g - open
     h - close
+
+Pump control:
+    b - open
+    m - close
 
 Other:
     1 - Go to init pose
@@ -68,6 +72,7 @@ def teleop_keyboard():
     rospy.wait_for_service("get_joint_coords")
     rospy.wait_for_service("set_joint_coords")
     rospy.wait_for_service("switch_gripper_status")
+    rospy.wait_for_service("switch_pump_status")
     print("service ready.")
     try:
         get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
@@ -76,6 +81,8 @@ def teleop_keyboard():
         set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
         switch_gripper = rospy.ServiceProxy(
             "switch_gripper_status", GripperStatus)
+        switch_pump = rospy.ServiceProxy(
+            "switch_pump_status", PumpStatus)
     except:
         print("start error ...")
         exit(1)
@@ -145,6 +152,10 @@ def teleop_keyboard():
                     switch_gripper(True)
                 elif key in ["h", "H"]:
                     switch_gripper(False)
+                elif key in ["b", "B"]:
+                    switch_pump(True, 2, 5)
+                elif key in ["m", "M"]:
+                    switch_pump(False, 2, 5)
                 elif key == "1":
                     rsp = set_angles(*init_pose)
                 elif key in "2":

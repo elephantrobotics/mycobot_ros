@@ -145,11 +145,11 @@ def toggle_pump(req):
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         if req.Status:
-            mc.set_basic_output(req.Pin1, 0)
-            mc.set_basic_output(req.Pin2, 0)
+            mc.set_basic_output(2, 0)
+            mc.set_basic_output(5, 0)
         else:
-            mc.set_basic_output(req.Pin1, 1)
-            mc.set_basic_output(req.Pin2, 1)
+            mc.set_basic_output(2, 1)
+            mc.set_basic_output(5, 1)
         release(lock)
 
 
