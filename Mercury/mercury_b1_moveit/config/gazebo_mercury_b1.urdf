@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
     <xacro:property name="width" value=".2" />
-    <!-- 底部 -->
+
+    <link name="base_footprint" />
     <link name="base">
         <visual>
             <geometry>
@@ -15,13 +16,14 @@
             </geometry>
             <origin xyz="0 0 0 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
-            <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
+        
+<inertial>
+            <mass value="100" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
-    <!-- 腰部 -->
+
     <link name="link_body">
         <visual>
             <geometry>
@@ -35,13 +37,14 @@
             </geometry>
             <origin xyz="0 0 -0.11 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
-    <!-- 屏幕头部 -->
+
     <link name="link_head">
         <visual>
             <geometry>
@@ -55,13 +58,14 @@
             </geometry>
             <origin xyz="0 0 -0.1 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
-    <!-- 摄像头 -->
+
     <link name="link_eye">
         <visual>
             <geometry>
@@ -75,11 +79,12 @@
             </geometry>
             <origin xyz="0 0 -0.1 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link1_L">
         <visual>
@@ -94,11 +99,12 @@
             </geometry>
             <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link2_L">
         <visual>
@@ -113,11 +119,12 @@
             </geometry>
             <origin xyz="0 0 0.0 " rpy=" 3.14159 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link3_L">
         <visual>
@@ -132,11 +139,12 @@
             </geometry>
             <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link4_L">
         <visual>
@@ -151,11 +159,12 @@
             </geometry>
             <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link5_L">
         <visual>
@@ -170,11 +179,12 @@
             </geometry>
             <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link6_L">
         <visual>
@@ -189,11 +199,12 @@
             </geometry>
             <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link7_L">
         <visual>
@@ -208,11 +219,12 @@
             </geometry>
             <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link1_R">
         <visual>
@@ -227,11 +239,12 @@
             </geometry>
             <origin xyz="0 0 -0.084 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link2_R">
         <visual>
@@ -246,11 +259,12 @@
             </geometry>
             <origin xyz="0 0 0 " rpy=" 3.14159 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link3_R">
         <visual>
@@ -265,11 +279,12 @@
             </geometry>
             <origin xyz="0 0 0.038 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link4_R">
         <visual>
@@ -284,11 +299,12 @@
             </geometry>
             <origin xyz="0 0 0 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link5_R">
         <visual>
@@ -303,11 +319,12 @@
             </geometry>
             <origin xyz="0 0 -0.069 " rpy=" 0 0 0" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link6_R">
         <visual>
@@ -322,11 +339,12 @@
             </geometry>
             <origin xyz="0 0 -0.025 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <link name="link7_R">
         <visual>
@@ -341,11 +359,12 @@
             </geometry>
             <origin xyz="0 0 -0.002 " rpy=" 0 0 -1.5708" />
         </collision>
-        <inertial>
+        
+<inertial>
             <mass value="0.1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
         </inertial>
+
     </link>
     <joint name="joint1_L" type="revolute">
         <axis xyz=" 0 0 1" />
@@ -464,9 +483,15 @@
         <limit effort="1000.0" lower="-2.0594" upper="2.0594" velocity="0" />
         <parent link="base" />
         <child link="link_body" />
-        <origin xyz=" 0 0 0.22   " rpy="0 0 0" />
+        <origin xyz=" 0 0 0.231   " rpy="0 0 0" />
     </joint>
-    <transmission name="trans_joint1_L">
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base" />
+    </joint>
+
+    
+<transmission name="trans_joint1_L">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="joint1_L">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
@@ -637,9 +662,8 @@
         </actuator>
     </transmission>
     <gazebo>
-        <plugin name="gazebo_ros_control">
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
         </plugin>
     </gazebo>
 </robot>
-
