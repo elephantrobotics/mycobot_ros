@@ -57,13 +57,13 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae"/>
       </geometry>
-      <origin xyz = "0 0 -0.0 " rpy = " 0 0 0"/>
+      <origin xyz = "0 0 -0.0 " rpy = " 0 0 3.14159"/>
     </visual>
     <collision>
      <geometry>
        <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae"/>
       </geometry>
-      <origin xyz = "0 0 -0.1 " rpy = " 0 0 0"/>
+      <origin xyz = "0 0 -0.1 " rpy = " 0 0 3.14159"/>
     </collision>
   </link>
 
@@ -319,7 +319,7 @@
 
   <joint name="joint6_L" type="revolute">
     <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "-0.0174" upper = "2.9321" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-0.0349" upper = "2.9321" velocity = "0"/>
     <parent link="link5_L"/>
     <child link="link6_L"/>
     <origin xyz= " 0 0 0.08" rpy = "1.5708 0 0"/>  
@@ -375,7 +375,7 @@
 
   <joint name="joint6_R" type="revolute">
     <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "-0.0174" upper = "2.9321" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-0.0349" upper = "2.9321" velocity = "0"/>
     <parent link="link5_R"/>
     <child link="link6_R"/>
     <origin xyz= " 0 0 0.08" rpy = "1.5708 0 0"/>  
@@ -395,7 +395,7 @@
     <limit effort = "1000.0" lower = "0" upper = "0.8377" velocity = "0"/>
     <parent link="link_head"/>
     <child link="link_eye"/>
-    <origin xyz= " 0.03 0 -0.08   " rpy = "1.5708 0 0"/>  
+    <origin xyz= " 0.03 0 -0.08   " rpy = "1.5708 0 3.14"/>  
   </joint>
 
   <joint name="head" type="revolute">
