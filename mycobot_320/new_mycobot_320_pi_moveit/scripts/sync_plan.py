@@ -18,7 +18,7 @@ def callback(data):
     for index, value in enumerate(data.position):
         radians_to_angles = round(math.degrees(value), 2)
         data_list.append(radians_to_angles)
-    rospy.loginfo(rospy.get_caller_id() + "%s", data)
+    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
     # mc.send_radians(data_list, 80)
     mc.send_angles(data_list, 60)
 
