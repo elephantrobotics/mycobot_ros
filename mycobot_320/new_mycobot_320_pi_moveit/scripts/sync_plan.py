@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import time
+import math
 import subprocess
 import rospy
 from sensor_msgs.msg import JointState
@@ -12,14 +13,14 @@ mc = None
 
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "%s", data)
+    # rospy.loginfo(rospy.get_caller_id() + "%s", data)
     data_list = []
     for index, value in enumerate(data.position):
-        # if index != 2:
-        #     value *= -1
-        data_list.append(value)
-
-    mc.send_radians(data_list, 80)
+        radians_to_angles = round(math.degrees(value), 2)
+        data_list.append(radians_to_angles)
+    rospy.loginfo(rospy.get_caller_id() + "%s", data)
+    # mc.send_radians(data_list, 80)
+    mc.send_angles(data_list, 60)
 
 
 def listener():
@@ -34,7 +35,10 @@ def listener():
     rospy.Subscriber("joint_states", JointState, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+    # rospy.spin()
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        rate.sleep()
 
 
 if __name__ == "__main__":
