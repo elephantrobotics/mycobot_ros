@@ -13,17 +13,17 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real Mercury...")
-    port1 = rospy.get_param("~port1", "/dev/ttyS0")
-    port2 = rospy.get_param("~port2", "/dev/ttyTHS1")
+    port1 = rospy.get_param("~port1", "/dev/ttyTHS1")
+    port2 = rospy.get_param("~port2", "/dev/ttyS0")
     baud = rospy.get_param("~baud", 115200)
     print("port1: {}, baud: {}\n".format(port1, baud))
     print("port2: {}, baud: {}\n".format(port2, baud))
     try:
         # left arm
-        cx1 = Mercury(port1, baud)
+        l = Mercury(port1, baud)
         time.sleep(0.02)
         # right arm
-        cx2 = Mercury(port2, baud)
+        r = Mercury(port2, baud)
     except Exception as e:
         print(e)
         print(
@@ -34,9 +34,9 @@ def talker():
         """
         )
         exit(1)
-    cx1.release_all_servos()
+    l.release_all_servos()
     time.sleep(0.02)
-    cx2.release_all_servos()
+    r.release_all_servos()
     time.sleep(0.1)
     print("Rlease all servos over.\n")
 
@@ -79,11 +79,11 @@ def talker():
     while not rospy.is_shutdown():
         joint_state_send.header.stamp = rospy.Time.now()
 
-        left_angles = cx1.get_angles()
-        right_angles = cx2.get_angles()
-        eye_angle = cx2.get_angle(11)
-        head_angle = cx2.get_angle(12)
-        body_angle = cx2.get_angle(13)
+        left_angles = l.get_angles()
+        right_angles = r.get_angles()
+        eye_angle = r.get_angle(11)
+        head_angle = r.get_angle(12)
+        body_angle = r.get_angle(13)
         
         print('left:', left_angles)
         print('right:', right_angles)
@@ -102,15 +102,15 @@ def talker():
 
         pub.publish(joint_state_send)
 
-        left_coords = cx1.get_coords()
+        left_coords = l.get_coords()
         
-        right_coords = cx2.get_coords()
+        right_coords = r.get_coords()
         
-        eye_coords = cx2.get_angle(11)
+        eye_coords = r.get_angle(11)
         
-        head_coords = cx2.get_angle(12)
+        head_coords = r.get_angle(12)
         
-        body_coords = cx2.get_angle(13)
+        body_coords = r.get_angle(13)
         
         
         # marker
