@@ -21,17 +21,13 @@ mc = None
 
 def callback(data):
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    # print(data.position)
-    rounded_data_tuple = tuple(round(value, 2) for value in data.position)
-    rospy.loginfo(rospy.get_caller_id() + "%s", rounded_data_tuple)
     data_list = []
     for index, value in enumerate(data.position):
         radians_to_angles = round(math.degrees(value), 2)
         data_list.append(radians_to_angles)
-
-    # mc.send_radians(data_list, 80)
-    mc.send_angles(data_list, 80)
-    # time.sleep(0.5)
+        
+    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+    mc.send_angles(data_list, 25)
 
 
 def listener():

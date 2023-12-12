@@ -24,8 +24,7 @@ r = None
 
 def callback(data):
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    rounded_data_tuple = tuple(round(value, 2) for value in data.position)
-    # print(rounded_data_tuple)
+
     data_list = []
     for index, value in enumerate(data.position):
         radians_to_angles = round(math.degrees(value), 2)
@@ -39,15 +38,15 @@ def callback(data):
     print('right_arm:', right_arm)
     print('middle_arm:', middle_arm)
     
-    l.send_angles(left_arm, 50)
+    l.send_angles(left_arm, 25)
     time.sleep(0.02)
-    r.send_angles(right_arm, 50)
+    r.send_angles(right_arm, 25)
     time.sleep(0.02)
-    r.send_angle(11, middle_arm[0], 50)
+    r.send_angle(11, middle_arm[0], 25)
     time.sleep(0.02)
-    r.send_angle(12, middle_arm[1], 50)
+    r.send_angle(12, middle_arm[1], 25)
     time.sleep(0.02)
-    r.send_angle(13, middle_arm[2], 50)
+    r.send_angle(13, middle_arm[2], 25)
     time.sleep(0.02)
 
 
@@ -63,7 +62,10 @@ def listener():
     print(port2, baud)
     l = Mercury(port1, baud)
     r = Mercury(port2, baud)
-
+    time.sleep(0.05)
+    l.set_free_mode(1)
+    r.set_free_mode(1)
+    time.sleep(0.05)
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止
     print("spin ...")
