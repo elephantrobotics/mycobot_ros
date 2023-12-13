@@ -38,18 +38,13 @@ def callback(data):
     
     print('left_angles: {}'.format(left_arm))
     print('right_angles: {}'.format(right_arm))
-    print('middle_arm: {}'.format(middle_arm))
+    print('middle_angles: {}'.format(middle_arm))
     
     l.send_angles(left_arm, 25)
-    time.sleep(0.02)
     r.send_angles(right_arm, 25)
-    time.sleep(0.02)
     r.send_angle(11, middle_arm[0], 25)
-    time.sleep(0.02)
     r.send_angle(12, middle_arm[1], 25)
-    time.sleep(0.02)
     r.send_angle(13, middle_arm[2], 25)
-    time.sleep(0.02)
 
 
 def listener():
