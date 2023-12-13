@@ -57,7 +57,9 @@ def create_handle():
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
     mc = Mercury(port, baud)
-
+    time.sleep(0.05)
+    mc.set_fresh_mode(1)
+    time.sleep(0.05)
 
 def create_services():
     rospy.Service("set_joint_angles", SetAngles, set_angles)

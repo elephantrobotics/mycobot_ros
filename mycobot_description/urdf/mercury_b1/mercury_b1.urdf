@@ -3,7 +3,7 @@
 	
 <xacro:property name="width" value=".2" />
 
-  <!-- 底部 -->
+  <!-- base -->
   <link name="base">
     <visual>
       <geometry>
@@ -19,7 +19,7 @@
     </collision>
   </link>
 
-  <!-- 腰部 -->
+  <!-- body -->
   <link name="link_body">
     <visual>
       <geometry>
@@ -35,7 +35,7 @@
     </collision>
   </link>
 
-  <!-- 屏幕头部 -->
+  <!-- screen head -->
   <link name="link_head">
     <visual>
       <geometry>
@@ -51,19 +51,19 @@
     </collision>
   </link>
 
-  <!-- 摄像头 -->
+  <!-- camera -->
   <link name="link_eye">
     <visual>
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae"/>
       </geometry>
-      <origin xyz = "0 0 -0.0 " rpy = " 0 0 3.14159"/>
+      <origin xyz = "0 0 -0.0 " rpy = " 0 0 -0.6981"/>
     </visual>
     <collision>
      <geometry>
        <mesh filename="package://mycobot_description/urdf/mercury_b1/head_eye.dae"/>
       </geometry>
-      <origin xyz = "0 0 -0.1 " rpy = " 0 0 3.14159"/>
+      <origin xyz = "0 0 -0.1 " rpy = " 0 0 -0.6981"/>
     </collision>
   </link>
 
@@ -392,10 +392,10 @@
 
   <joint name="eye" type="revolute">
     <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "0" upper = "0.8377" velocity = "0"/>
+    <limit effort = "1000.0" lower = "0" upper = "0.83" velocity = "0"/>
     <parent link="link_head"/>
     <child link="link_eye"/>
-    <origin xyz= " 0.03 0 -0.08   " rpy = "1.5708 0 3.14"/>  
+    <origin xyz= " 0.03 0 -0.08   " rpy = "1.5708 0 0"/>  
   </joint>
 
   <joint name="head" type="revolute">
