@@ -60,9 +60,9 @@ def listener():
     l = Mercury(port1, baud)
     r = Mercury(port2, baud)
     time.sleep(0.05)
-    l.set_fresh_mode(1)
-    r.set_fresh_mode(1)
-    time.sleep(0.05)
+    # l.set_fresh_mode(1)
+    # r.set_fresh_mode(1)
+    # time.sleep(0.05)
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止
     print("spin ...")
