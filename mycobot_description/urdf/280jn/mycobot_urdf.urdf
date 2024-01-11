@@ -12,6 +12,12 @@
       </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 3.14159"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint1_jet.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 0" rpy = "0 0 3.14159"/>
+    </collision>
   </link>
 
   <link name="joint2">
@@ -21,6 +27,12 @@
       </geometry>
     <origin xyz = "0.0 0 -0.06096 " rpy = " 0 0 -1.5708"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint2.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 -0.06096" rpy = "0 0 -1.5708"/>
+    </collision>
   </link>
 
 
@@ -32,6 +44,12 @@
       </geometry>
     <origin xyz = "0.0 0 0.03256 " rpy = " 0 -1.5708 0"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint3.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 0.03256" rpy = "0 -1.5708 0"/>
+    </collision>
   </link>
 
 
@@ -43,6 +61,12 @@
       </geometry>
     <origin xyz = "0.0 0 0.03056 " rpy = " 0 -1.5708 0"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint4.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 0.03056" rpy = "0 -1.5708 0"/>
+    </collision>
   </link>
 
 
@@ -56,6 +80,12 @@
       </geometry>
     <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint5.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 -0.03356" rpy = "0 -1.5708 1.5708"/>
+    </collision>
   </link>
 
 
@@ -67,6 +97,12 @@
       </geometry>
     <origin xyz = "0 0.00 -0.038 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint6.dae"/>
+      </geometry>
+      <origin xyz = "0 0.00 -0.038" rpy = "0 0 0"/>
+    </collision>
   </link>
 
 
@@ -78,13 +114,16 @@
       </geometry>
     <origin xyz = "0.0 0 -0.012 " rpy = " 0 0 0"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/280jn/joint7.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0 -0.012" rpy = "0 0 0"/>
+    </collision>
   </link>
 
 
-
-
-
-    <joint name="joint2_to_joint1" type="revolute">
+  <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/>
     <parent link="joint1"/>
