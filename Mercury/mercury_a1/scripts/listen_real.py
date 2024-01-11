@@ -39,26 +39,29 @@ def talker():
 
     rospy.loginfo("start loop ...")
     while not rospy.is_shutdown():
-        # get real angles from server.从服务器获得真实的角度。
-        res = func()
-        if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
-            continue
-        radians_list = [
-            res.joint_1 * (math.pi / 180),
-            res.joint_2 * (math.pi / 180),
-            res.joint_3 * (math.pi / 180),
-            res.joint_4 * (math.pi / 180),
-            res.joint_5 * (math.pi / 180),
-            res.joint_6 * (math.pi / 180),
-            res.joint_7 * (math.pi / 180),
-        ]
-        rospy.loginfo("res: {}".format(radians_list))
+        try:
+            # get real angles from server.从服务器获得真实的角度。
+            res = func()
+            if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
+                continue
+            radians_list = [
+                res.joint_1 * (math.pi / 180),
+                res.joint_2 * (math.pi / 180),
+                res.joint_3 * (math.pi / 180),
+                res.joint_4 * (math.pi / 180),
+                res.joint_5 * (math.pi / 180),
+                res.joint_6 * (math.pi / 180),
+                res.joint_7 * (math.pi / 180),
+            ]
+            rospy.loginfo("res: {}".format(radians_list))
 
-        # publish angles.发布角度
-        joint_state_send.header.stamp = rospy.Time.now()
-        joint_state_send.position = radians_list
-        pub.publish(joint_state_send)
-        rate.sleep()
+            # publish angles.发布角度
+            joint_state_send.header.stamp = rospy.Time.now()
+            joint_state_send.position = radians_list
+            pub.publish(joint_state_send)
+            rate.sleep()
+        except Exception as e:
+            pass
 
 
 if __name__ == "__main__":

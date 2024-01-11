@@ -83,16 +83,24 @@ def teleop_keyboard():
 
     rsp = set_angles(*home_pose)
 
-    while True:
-        res = get_coords()
-        if res.x > 1:
-            break
-        time.sleep(0.1)
+    # while True:
+    #     res = get_coords()
+    #     if res.x > 1:
+    #         break
+    #     time.sleep(0.1)
 
-    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
-    print('init_coords:', record_coords)
+    # record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
+    # print('init_coords:', record_coords)
 
     try:
+        while True:
+            res = get_coords()
+            if res.x > 1:
+                break
+            time.sleep(0.1)
+
+        record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
+        print('init_coords:', record_coords)
         print(msg)
         print(vels(speed, change_percent))
         # Keyboard keys call different motion functions. 键盘按键调用不同的运动功能

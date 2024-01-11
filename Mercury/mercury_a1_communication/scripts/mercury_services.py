@@ -95,11 +95,14 @@ def set_angles(req):
 
 def get_angles(req):
     """get angles,获取角度"""
-    if mc:
-        lock = acquire("/tmp/mercury_lock")
-        angles = mc.get_angles()
-        release(lock)
-        return GetAnglesResponse(*angles)
+    try:
+        if mc:
+            lock = acquire("/tmp/mercury_lock")
+            angles = mc.get_angles()
+            release(lock)
+            return GetAnglesResponse(*angles)
+    except Exception as e:
+        pass
 
 
 def set_coords(req):
@@ -123,11 +126,14 @@ def set_coords(req):
 
 
 def get_coords(req):
-    if mc:
-        lock = acquire("/tmp/mercury_lock")
-        coords = mc.get_coords()
-        release(lock)
-        return GetCoordsResponse(*coords)
+    try:
+        if mc:
+            lock = acquire("/tmp/mercury_lock")
+            coords = mc.get_coords()
+            release(lock)
+            return GetCoordsResponse(*coords)
+    except Exception as e:
+        pass
 
 
 def switch_status(req):
