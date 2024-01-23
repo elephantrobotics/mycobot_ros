@@ -52,8 +52,8 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
-    port1 = rospy.get_param("~port1", "/dev/ttyTHS1")
-    port2 = rospy.get_param("~port2", "/dev/ttyS0")
+    port1 = rospy.get_param("~port1", "/dev/ttyTHS0")
+    port2 = rospy.get_param("~port2", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print('left arm: {}, {}'.format(port1, baud))
     print('right arm: {}, {}'.format(port2, baud))

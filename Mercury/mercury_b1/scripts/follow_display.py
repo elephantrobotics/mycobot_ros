@@ -14,8 +14,8 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real Mercury...")
-    port1 = rospy.get_param("~port1", "/dev/ttyTHS1")
-    port2 = rospy.get_param("~port2", "/dev/ttyS0")
+    port1 = rospy.get_param("~port1", "/dev/ttyTHS0")
+    port2 = rospy.get_param("~port2", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print("left arm: {}, baud: {}\n".format(port1, baud))
     print("right arm: {}, baud: {}\n".format(port2, baud))
@@ -106,11 +106,11 @@ def talker():
             
             right_coords = r.get_coords()
             
-            eye_coords = r.get_angle(11)
+            eye_coords = [r.get_angle(11)]
             
-            head_coords = r.get_angle(12)
+            head_coords = [r.get_angle(12)]
             
-            body_coords = r.get_angle(13)
+            body_coords = [r.get_angle(13)]
             
             # marker
             marker_.header.stamp = rospy.Time.now()
