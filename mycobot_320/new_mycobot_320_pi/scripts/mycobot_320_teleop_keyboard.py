@@ -82,14 +82,13 @@ def teleop_keyboard():
         exit(1)
 
     init_pose = [0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 8, -127, 40, 0, 0, speed]
+    home_pose = [0, 8, -127, 40, 90, 0, speed]
 
     # rsp = set_angles(*init_pose)
 
     while True:
         res = get_coords()
-        if res.x > 1:
-            print("joint1's angle : "+str(res.x)+"is not > 1,please calibrate the joint1's angle")
+        if res:
             break
         time.sleep(0.1)
     
