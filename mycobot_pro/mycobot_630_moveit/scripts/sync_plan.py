@@ -24,7 +24,7 @@ def callback(data):
         data_list.append(radians_to_angles)
         
     rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
-    mc.write_angles(data_list, 1000)
+    mc.write_angles(data_list, 800)
 
 
 def listener():
