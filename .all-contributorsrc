@@ -1,0 +1,172 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "apockill",
+      "name": "Alex Thiele",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1740412?v=4",
+      "profile": "https://www.youtube.com/user/Apockill",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nisshan-x",
+      "name": "Shinya Nishimoto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67353276?v=4",
+      "profile": "https://github.com/nisshan-x",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "OTL",
+      "name": "Takashi Ogura",
+      "avatar_url": "https://avatars.githubusercontent.com/u/207142?v=4",
+      "profile": "https://www.smilerobotics.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "toyoshi",
+      "name": "Ryuichiro Toyoshi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/188394?v=4",
+      "profile": "https://github.com/toyoshi",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Ry0",
+      "name": "Ryo Kabutan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8924325?v=4",
+      "profile": "https://ry0.github.io/",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "dieu-detruit",
+      "name": "Takafumi Watanabe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27790373?v=4",
+      "profile": "https://github.com/dieu-detruit",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "graziegrazie",
+      "name": "Yoshiaki Watanabe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11900858?v=4",
+      "profile": "https://github.com/graziegrazie",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mertcookimg",
+      "name": "Masato Kobayashi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58113372?v=4",
+      "profile": "https://github.com/mertcookimg",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Tiryoh",
+      "name": "Daisuke Sato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3256629?v=4",
+      "profile": "https://profile.tiryoh.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "eacousineau",
+      "name": "Eric Cousineau",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2806276?v=4",
+      "profile": "https://www.eacousineau.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "thandal",
+      "name": "thandal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2613832?v=4",
+      "profile": "https://github.com/thandal",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nakano16180",
+      "name": "nakano16180",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36945685?v=4",
+      "profile": "https://github.com/nakano16180",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "comoc",
+      "name": "Akihiro Komori",
+      "avatar_url": "https://avatars.githubusercontent.com/u/843396?v=4",
+      "profile": "https://twitter.com/comocc",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mostlyjason",
+      "name": "Jason Skowronski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6370704?v=4",
+      "profile": "https://github.com/mostlyjason",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "2929ss",
+      "name": "2929ss",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51234222?v=4",
+      "profile": "https://github.com/2929ss",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "takasumasakazu",
+      "name": "TAKASU Masakazu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1667148?v=4",
+      "profile": "https://medium.com/@tks/takasu-profile-c50feee078ac",
+      "contributions": [
+        "promotion"
+      ]
+    },
+    {
+      "login": "3110",
+      "name": "SAITO, Tetsuya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/114928?v=4",
+      "profile": "https://scrapbox.io/saitotetsuya/",
+      "contributions": [
+        "promotion"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "mycobot_ros",
+  "projectOwner": "elephantrobotics"
+}

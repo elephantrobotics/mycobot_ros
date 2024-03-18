@@ -1,4 +1,5 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
 import time
 import os
 import sys
@@ -17,8 +18,8 @@ from mycobot_communication.msg import (
 )
 
 
-
-from pymycobot import MyCobotSocket
+from pymycobot import MyCobot
+# from pymycobot import MyCobotSocket
 
 
 class Watcher:
@@ -40,7 +41,8 @@ class Watcher:
     def __init__(self):
         """Creates a child thread, which returns.  The parent
         thread waits for a KeyboardInterrupt and then kills
-        the child thread.
+        the child thread.创建一个返回的子线程。 父线程等待 KeyboardInterrupt 
+        然后杀死子线程。
         """
         self.child = os.fork()
         if self.child == 0:
@@ -72,11 +74,12 @@ class MycobotTopics(object):
         rospy.init_node("mycobot_topics_pi")
         rospy.loginfo("start ...")
         # problem
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        port = rospy.get_param("~port", os.popen("ls /dev/ttyAMA*").readline()[:-1])
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyCobotSocket(port, baud) # port
-        self.mc.connect()   #pi
+        # self.mc = MyCobotSocket(port, baud) # port
+        # self.mc.connect()   #pi
+        self.mc = MyCobot(port, baud)
         self.lock = threading.Lock()
 
     def start(self):
@@ -108,6 +111,8 @@ class MycobotTopics(object):
         sp.join()
 
     def pub_real_angles(self):
+        """Publish real angle"""
+        """发布真实角度"""
         pub = rospy.Publisher("mycobot/angles_real", MycobotAngles, queue_size=5)
         ma = MycobotAngles()
         while not rospy.is_shutdown():
@@ -125,6 +130,8 @@ class MycobotTopics(object):
             time.sleep(0.25)
 
     def pub_real_coords(self):
+        """publish real coordinates"""
+        """发布真实坐标"""
         pub = rospy.Publisher("mycobot/coords_real", MycobotCoords, queue_size=5)
         ma = MycobotCoords()
 
@@ -143,6 +150,8 @@ class MycobotTopics(object):
             time.sleep(0.25)
 
     def sub_set_angles(self):
+        """subscription angles"""
+        """订阅角度"""
         def callback(data):
             angles = [
                 data.joint_1,
@@ -173,6 +182,8 @@ class MycobotTopics(object):
         rospy.spin()
 
     def sub_gripper_status(self):
+        """Subscribe to Gripper Status"""
+        """订阅夹爪状态"""
         def callback(data):
             if data.Status:
                 self.mc.set_gripper_state(0, 80)

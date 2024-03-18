@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/320_urdf/mycobot_pro_320_gripper.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: wwj
+    author_email: wwj@elephantrobot.com
+    generated_timestamp: 1683628879

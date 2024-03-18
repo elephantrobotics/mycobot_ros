@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>new_mycobot_320_pi_moveit</name>
+  <version>0.0.0</version>
+  <description>The new_mycobot_320_pi_moveit package</description>
+
+ <author email="weijian.wang@elephantrobotics.com">zachary</author>
+  <maintainer email="weijian.wang@elephantrobotics.com">zachary</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://moveit.ros.org/</url>
+  <url type="bugtracker">https://github.com/ros-planning/moveit/issues</url>
+  <url type="repository">https://github.com/ros-planning/moveit</url>
+
+ 
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_fake_controller_manager</exec_depend>
+  <exec_depend>moveit_kinematics</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_ros_visualization</exec_depend>
+  <exec_depend>moveit_setup_assistant</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
+  <!-- <exec_depend>warehouse_ros_mongo</exec_depend> -->
+  <build_depend>mycobot_description</build_depend>
+  <exec_depend>mycobot_description</exec_depend>
+</package>
