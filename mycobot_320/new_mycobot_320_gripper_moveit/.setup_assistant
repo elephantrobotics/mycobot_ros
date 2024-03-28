@@ -1,7 +1,7 @@
 moveit_setup_assistant_config:
   URDF:
     package: mycobot_description
-    relative_path: urdf/new_320_urdf/new_mycobot_pro_320_gripper.urdf
+    relative_path: urdf/mycobot_320_m5_2022/new_mycobot_pro_320_m5_2022_gripper.urdf
     xacro_args: ""
   SRDF:
     relative_path: config/firefighter.srdf

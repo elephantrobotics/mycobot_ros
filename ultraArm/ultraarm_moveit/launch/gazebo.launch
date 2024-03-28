@@ -13,7 +13,7 @@
   </include>
 
   <!-- send robot urdf to param server -->
-  <param name="robot_description" textfile="$(find mycobot_description)/urdf/ultraArm_urdf/ultraArm.urdf" />
+  <param name="robot_description" textfile="$(find mycobot_description)/urdf/ultraArm_p340/ultraArm_p340.urdf" />
 
   <!-- unpause only after loading robot model -->
   <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />

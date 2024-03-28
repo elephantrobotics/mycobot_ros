@@ -2,7 +2,7 @@
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/260_urdf/mypal_260_aikit.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mypalletizer_260_m5/mypalletizer_260_m5_aikit.urdf"/>
 	<arg name="rvizconfig" default="$(find mypalletizer_260)/config/mypal_260.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 

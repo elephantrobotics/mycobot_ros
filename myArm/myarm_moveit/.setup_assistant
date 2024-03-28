@@ -1,7 +1,7 @@
 moveit_setup_assistant_config:
   URDF:
     package: mycobot_description
-    relative_path: urdf/myarm/myarm_urdf.urdf
+    relative_path: urdf/myarm_300_pi/myarm_300_pi.urdf
     xacro_args: "--inorder "
   SRDF:
     relative_path: config/firefighter.srdf

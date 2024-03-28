@@ -1,7 +1,7 @@
 moveit_setup_assistant_config:
   URDF:
     package: mycobot_description
-    relative_path: urdf/mira_urdf/mira.urdf
+    relative_path: urdf/ultraArm_p340/ultraArm_p340.urdf
     xacro_args: ""
   SRDF:
     relative_path: config/firefighter.srdf

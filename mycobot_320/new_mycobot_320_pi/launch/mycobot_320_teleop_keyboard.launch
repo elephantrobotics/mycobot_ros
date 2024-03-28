@@ -2,7 +2,7 @@
 	<arg name="port" default="/dev/ttyAMA0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/new_320_pi/new_mycobot_pro_320_pi.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_320_pi_2022/new_mycobot_pro_320_pi_2022.urdf"/>
 	<arg name="rvizconfig" default="$(find new_mycobot_320_pi)/config/new_mycobot_320_pi.rviz" />
 	<arg name="gui" default="false" />
 

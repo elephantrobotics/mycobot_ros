@@ -6,7 +6,7 @@
 	<!-- Load file model ，加载文件模型-->
 	<!-- <arg name="model" default="$(find mycobot_description)/urdf/260_urdf/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" /> -->
-	<arg name="model" default="$(find mycobot_description)/urdf/mecharm/mecharm_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mecharm_270_m5/mecharm_270_m5.urdf"/>
 	<arg name="rvizconfig" default="$(find mecharm)/config/mecharm.rviz" />
 	<arg name="gui" default="false" />
 
