@@ -14,6 +14,7 @@ import rospy
 from sensor_msgs.msg import JointState
 
 from pymycobot.myarm import MyArm
+from pymycobot.myarmc import MyArmC
 
 
 mc = None
