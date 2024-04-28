@@ -2,7 +2,7 @@
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/mecharm/mecharm_aikit.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mecharm_270_m5/mecharm_270_m5_aikit.urdf"/>
 	<arg name="rvizconfig" default="$(find mecharm)/config/mecharm.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 

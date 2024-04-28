@@ -3,7 +3,7 @@
 	<arg name="port" default="/dev/ttyTHS1" />
 	<arg name="baud" default="1000000" />
 	<!-- Load URDF, rviz, etc. on the parameter server,加载参数服务器上的URDF、rviz等 -->
-	<arg name="model" default="$(find mycobot_description)/urdf/280jn/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_jn/mycobot_280_jn.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280jn)/config/mycobot_jn.rviz" />
 	<arg name="gui" default="false" />
 

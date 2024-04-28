@@ -28,12 +28,12 @@ def callback(data):
 
     data_list = data_list[:7]
     print("radians:%s"%data_list[:6])
-    mc.send_radians(data_list[:6], 80)
+    mc.send_radians(data_list[:6], 25)
     gripper_value = int(abs(-0.7-data_list[6])* 117)
     print("gripper_value:%s"%gripper_value)
     # mc.set_gripper_mode(0)
     # time.sleep(1)
-    mc.set_gripper_value(gripper_value, 100)
+    mc.set_gripper_value(gripper_value, 90)
     
 def listener():
     global mc
@@ -46,10 +46,15 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
- 
+    time.sleep(0.05)
+    mc.set_fresh_mode(1)
+    time.sleep(0.05)
     # spin() simply keeps python from exiting until this node is stopped
     print("spin ...")
-    rospy.spin()
+    # rospy.spin()
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        rate.sleep()
 
 
 if __name__ == "__main__":

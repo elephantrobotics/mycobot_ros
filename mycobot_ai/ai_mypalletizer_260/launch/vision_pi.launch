@@ -2,7 +2,7 @@
 <arg name="port" default="/dev/ttyAMA0" />
 	<arg name="baud" default="1000000" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/260_pi/mypal_260_pi_aikit.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mypalletizer_260_pi/mypalletizer_260_pi_aikit.urdf"/>
 	<arg name="rvizconfig" default="$(find mypalletizer_260_pi)/config/mypal_260_pi.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 

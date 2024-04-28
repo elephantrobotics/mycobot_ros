@@ -13,42 +13,28 @@ from pymycobot.elephantrobot import ElephantRobot
 
 global mc
 
-old_list = []
-
 
 def callback(data):
     """callback function,回调函数"""
-    satrt_time=time.time()
-    global old_list
     # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    print("position:", data.position)
+
     data_list = []
     for index, value in enumerate(data.position):
-        value = value * 180 / math.pi
-        data_list.append(value)
-    print ("data", data_list)
+        radians_to_angles = round(math.degrees(value), 2)
+        data_list.append(radians_to_angles)
+        
+    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+    mc.write_angles(data_list, 1000)
 
-    if not old_list:
-        old_list = data_list
-        mc.write_angles(data_list, 1999)
-    elif old_list != data_list:
-        old_list = data_list
-        # if mc.check_running():
-            # mc.task_stop()
-            # time.sleep(0.05)
-            
-        mc.write_angles(data_list, 1999)
-
-        end_time=time.time()
-        print('loop_time:',end_time-satrt_time)
 
 def listener():
     global mc
     rospy.init_node("control_slider", anonymous=True)
 
     ip = rospy.get_param("~ip", "192.168.1.159")
-    print (ip)
-    mc = ElephantRobot(ip, 5001)
+    port = rospy.get_param("~port", 5001)
+    print (ip, port)
+    mc = ElephantRobot(ip, int(port))
     # START CLIENT,启动客户端
     res = mc.start_client()
     if res != "":

@@ -1,5 +1,5 @@
 <launch>
-	<arg name="model" default="$(find mycobot_description)/urdf/new_320_pi/new_mycobot_pro_320_pi.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_320_pi_2022/new_mycobot_pro_320_pi_2022.urdf"/>
 	<arg name="rvizconfig" default="$(find new_mycobot_320_pi)/config/mycobot_320_with_marker.rviz" />
 	<arg name="gui" default="true" />
 

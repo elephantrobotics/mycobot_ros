@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
 """[summary]
@@ -9,7 +9,8 @@ Passable parameters:
     port: serial prot string. Defaults is '/dev/ttyAMA0'
     baud: serial prot baudrate. Defaults is 1000000.
 """
-
+import time
+import math
 import rospy
 from sensor_msgs.msg import JointState
 
@@ -25,11 +26,11 @@ def callback(data):
     print(data.position)
     data_list = []
     for index, value in enumerate(data.position):
-        data_list.append(value)
-
-    # print(data_list)
-    mc.send_radians(data_list, 80)
-    # time.sleep(0.5)
+        radians_to_angles = round(math.degrees(value), 2)
+        data_list.append(radians_to_angles)
+        
+    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+    mc.send_angles(data_list, 25)
 
 
 def listener():
@@ -41,6 +42,9 @@ def listener():
     baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
     mc = MyCobot(port, baud)
+    time.sleep(0.05)
+    mc.set_free_mode(1)
+    time.sleep(0.05)
 
     # spin() simply keeps python from exiting until this node is stopped
     # spin() 只是阻止python退出，直到该节点停止

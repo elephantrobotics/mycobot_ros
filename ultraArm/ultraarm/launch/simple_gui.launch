@@ -3,7 +3,7 @@
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" />
 	<!-- Load file model ，加载文件模型-->
-	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_urdf/ultraArm.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p340/ultraArm_p340.urdf"/>
 	<arg name="rvizconfig" default="$(find ultraarm)/config/ultraArm.rviz" />
 	<arg name="gui" default="false" />
 

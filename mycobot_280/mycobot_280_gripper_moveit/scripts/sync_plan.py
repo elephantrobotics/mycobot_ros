@@ -7,25 +7,19 @@ from pymycobot.mycobot import MyCobot
 
 
 def callback(data):
-    # port = rospy.get_param("~port", "/dev/ttyUSB0")
-    # baud = rospy.get_param("~baud", 115200)
-    # # print(port, baud)
-    # mc = MyCobot(port, baud)
-
+    
     data_list = []
     for index, value in enumerate(data.position):
         data_list.append(round(value, 3))
     data_list = data_list[:7]
     print("radians:%s" % data_list[:6])
     # t1 = time.time()
-    mc.send_radians(data_list[:6], 80)
+    mc.send_radians(data_list[:6], 25)
     # time.sleep(0.02)
     gripper_value = int(abs(-0.7 - data_list[6]) * 117)
     print("gripper_value:%s\n" % gripper_value)
     mc.set_gripper_value(gripper_value, 80)
-    # t2 = time.time() - t1
-    # print("cost time:", t2)
-    # time.sleep(1)
+
 
 
 def listener():
@@ -35,6 +29,10 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
+    time.sleep(0.05)
+    mc.set_free_mode(1)
+    time.sleep(0.05)
+    
     rospy.Subscriber("joint_states", JointState, callback)
 
     # spin() simply keeps python from exiting until this node is stopped

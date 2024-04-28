@@ -2,7 +2,7 @@
 	<!-- <arg name="port" default="/dev/ttyACM0" />
 	<arg name="baud" default="115200" /> -->
 
-	<arg name="model" default="$(find mycobot_description)/urdf/280_arduino/mycobot_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_arduino/mycobot_280_arduino.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280arduino)/config/mycobot.rviz" />
 	<arg name="gui" default="true" />
 

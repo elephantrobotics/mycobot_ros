@@ -1,6 +1,6 @@
 <launch>
 	<!-- Load URDF file,加载URDF文件 -->
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm/myarm_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
 	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />

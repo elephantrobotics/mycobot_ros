@@ -2,7 +2,7 @@
 <launch>
   <arg name="paused" default="false"/>
   <arg name="gazebo_gui" default="true"/>
-  <arg name="urdf_path" default="$(find mycobot_description)/urdf/320_pi/mycobot_pro_320_pi_moveit.urdf"/>
+  <arg name="urdf_path" default="$(find mycobot_description)/urdf/mycobot_320_pi_2022/new_mycobot_pro_320_pi_moveit_2022.urdf"/>
 
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

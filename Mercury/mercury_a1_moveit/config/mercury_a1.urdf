@@ -1,6 +1,11 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
     <xacro:property name="width" value=".2" />
+    <link name="world"/>
+    <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base"/>
+    </joint>
     <link name="base">
         <visual>
             <geometry>

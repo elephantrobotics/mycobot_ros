@@ -2,7 +2,7 @@
 	<!-- <arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" /> -->
 	<!-- Load file model ，加载文件模型-->	
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pi/mycobot_with_camera_flange_pump.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_pi/mycobot_280pi_with_camera_flange_pump.urdf"/>
 
 	<arg name="rvizconfig" default="$(find mycobot_280pi)/config/mycobot.rviz" />
 	<arg name="gui" default="true" />

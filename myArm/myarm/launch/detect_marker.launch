@@ -1,6 +1,6 @@
 <launch>
 	<!-- Load file model ，加载文件模型-->
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm/myarm_urdf.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
 	<arg name="rvizconfig" default="$(find myarm)/config/mycobot_with_marker.rviz" />
 	<arg name="gui" default="true" />
 

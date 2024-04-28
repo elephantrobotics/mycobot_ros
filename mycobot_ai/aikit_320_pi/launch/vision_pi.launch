@@ -3,7 +3,7 @@
 	<arg name="baud" default="115200" />
 
 	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_with_vision.urdf"/> -->
-	<arg name="model" default="$(find mycobot_description)/urdf/new_320_pi/new_mycobot_vision_v2.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_320_pi_2022/new_mycobot_vision_v2_2022.urdf"/>
 	<arg name="rvizconfig" default="$(find aikit_320_pi)/config/aikit_320_pi.rviz" />
 	<!-- <arg name="gui" default="false" /> -->
 

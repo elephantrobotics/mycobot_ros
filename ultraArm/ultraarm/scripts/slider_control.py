@@ -24,11 +24,11 @@ def callback(data):
     print(data.position)
     data_list = []
     for index, value in enumerate(data.position):
-        data_list.append(round(value,3))
-  
-    print('data_list:',data_list)
-    ua.set_radians(data_list, 80)
-    # time.sleep(0.5)
+        radians_to_angles = round(math.degrees(value), 2)
+        data_list.append(radians_to_angles)
+        
+    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+    ua.set_angles(data_list, 25)
 
 
 def listener():

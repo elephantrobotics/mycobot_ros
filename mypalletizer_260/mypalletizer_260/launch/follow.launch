@@ -1,6 +1,6 @@
 <launch>
 	<!-- Load file model .加载文件模型-->
-	<arg name="model" default="$(find mycobot_description)/urdf/260_urdf/mypal_260.urdf"/>
+	<arg name="model" default="$(find mycobot_description)/urdf/mypalletizer_260_m5/mypalletizer_260_m5.urdf"/>
 	<arg name="rvizconfig" default="$(find mypalletizer_260)/config/mypal_260.rviz" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
