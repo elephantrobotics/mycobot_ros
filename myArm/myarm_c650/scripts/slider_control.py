@@ -38,10 +38,10 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     rospy.Subscriber("joint_states", JointState, callback)
-    port = rospy.get_param("~port", "/dev/ttyAMA0")
-    baud = rospy.get_param("~baud", 115200)
+    port = rospy.get_param("~port", "/dev/ttyACM0")
+    baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
-    mc = MyArm(port, baud)
+    mc = MyArmC(port, baud)
     time.sleep(0.05)
     mc.set_free_mode(1)
     time.sleep(0.05)

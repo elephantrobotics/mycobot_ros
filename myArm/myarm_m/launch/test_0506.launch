@@ -1,0 +1,41 @@
+<launch>
+    <arg name="rvizconfig" default="$(find myarm_m)/config/myarm_m_with_myarm_c650.rviz" />
+    <arg name="gui" default="true" />
+    <arg name="ns1" default="myarm_m" />
+    <arg name="ns2" default="myarm_c650" />
+
+    <!-- myarm_m -->
+    <group ns="$(arg ns1)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_m/myarm_m.urdf.xacro ns:=$(arg ns1)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns1)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="0 0.5 0 0 0 0 /map /$(arg ns1)/base" />        
+    </group>
+
+    <!-- myarm_c650 -->
+    <group ns="$(arg ns2)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_c650/myarm_c650.urdf.xacro ns:=$(arg ns2)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns2)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="0 -0.5 0 0 0 0 /map /$(arg ns2)/base" />        
+    </group>
+
+	<!-- Show in Rviz ，显示在Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

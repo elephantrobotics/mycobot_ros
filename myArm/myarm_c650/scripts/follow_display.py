@@ -6,18 +6,19 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
 
-from pymycobot.myarm import MyArm
+# from pymycobot.myarm import MyArm
+from pymycobot.myarmc import MyArmC
 
 
 def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mycobot...")
-    port = rospy.get_param("~port", "/dev/ttyAMA0")
-    baud = rospy.get_param("~baud", 115200)
+    port = rospy.get_param("~port", "/dev/ttyACM0")
+    baud = rospy.get_param("~baud", 1000000)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
-        mycobot = MyArm(port, baud)
+        mycobot = MyArmC(port, baud)
     except Exception as e:
         print(e)
         print(
@@ -46,8 +47,7 @@ def talker():
         "joint3_to_joint2",
         "joint4_to_joint3",
         "joint5_to_joint4",
-        "joint6_to_joint5",
-        "joint7_to_joint6",
+        "endeffector_to_joint5",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []

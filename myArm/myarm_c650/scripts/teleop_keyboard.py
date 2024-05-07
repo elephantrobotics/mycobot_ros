@@ -12,7 +12,7 @@ import roslib
 
 # Terminal output prompt information. 终端输出提示信息
 msg = """\
-MyArm Teleop Keyboard Controller
+MyArmC Teleop Keyboard Controller
 ---------------------------
 Movimg options(control coordinations [x,y,z,rx,ry,rz]):
               w(x+)

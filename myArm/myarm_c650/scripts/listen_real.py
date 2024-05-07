@@ -26,8 +26,7 @@ def talker():
         "joint3_to_joint2",
         "joint4_to_joint3",
         "joint5_to_joint4",
-        "joint6_to_joint5",
-        "joint7_to_joint6",
+        "endeffector_to_joint5",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []
@@ -49,8 +48,7 @@ def talker():
             res.joint_3 * (math.pi / 180),
             res.joint_4 * (math.pi / 180),
             res.joint_5 * (math.pi / 180),
-            res.joint_6 * (math.pi / 180),
-            res.joint_7 * (math.pi / 180),
+            res.endeffector * (math.pi / 180),
         ]
         rospy.loginfo("res: {}".format(radians_list))
 

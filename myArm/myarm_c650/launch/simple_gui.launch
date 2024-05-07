@@ -1,10 +1,10 @@
 <launch>
 	<!-- Select connecting device and serial port ，选择连接设备及串口-->
-	<arg name="port" default="/dev/ttyAMA0" />
-	<arg name="baud" default="115200" />
+	<arg name="port" default="/dev/ttyACM0" />
+	<arg name="baud" default="1000000" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
-	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_c650/myarm_c650.urdf"/>
+	<arg name="rvizconfig" default="$(find myarm_c650)/config/myarm_c650.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -18,6 +18,6 @@
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
-	<node name="real_listener" pkg="myarm" type="listen_real.py" />
-	<node name="simple_gui" pkg="myarm" type="simple_gui.py" />
+	<node name="real_listener" pkg="myarm_c650" type="listen_real.py" />
+	<node name="simple_gui" pkg="myarm_c650" type="simple_gui.py" />
 </launch>

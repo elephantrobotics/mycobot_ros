@@ -2,8 +2,8 @@
 	<!-- <arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="115200" /> -->
 	<!-- Load file model ，加载文件模型-->	
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
-	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_c650/myarm_c650.urdf"/>
+	<arg name="rvizconfig" default="$(find myarm_c650)/config/myarm_c650.rviz" />
 	<arg name="gui" default="true" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />

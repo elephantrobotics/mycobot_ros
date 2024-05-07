@@ -287,7 +287,7 @@ class Window:
             self.show_j4,
             self.show_j5,
             self.show_j6,
-            self.show_j7,
+            # self.show_j7,
         ]
 
         # show,显示
@@ -463,7 +463,7 @@ class Window:
             round(self.angles.joint_4, 2),
             round(self.angles.joint_5, 2),
             round(self.angles.joint_6, 2),
-            round(self.angles.joint_7, 2),
+            # round(self.angles.joint_7, 2),
         ]
         # print('coord:',self.record_coords)
         # print('angles:',self.res_angles)
@@ -493,7 +493,7 @@ class Window:
 
 def main():
     window = tk.Tk()
-    window.title("myarm ros GUI")
+    window.title("myarmc ros GUI")
     Window(window).run()
 
 

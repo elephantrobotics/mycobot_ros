@@ -1,7 +1,7 @@
 <launch>
 	<!-- Load URDF file,加载URDF文件 -->
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
-	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_c650/myarm_c650.urdf"/>
+	<arg name="rvizconfig" default="$(find myarm_c650)/config/myarm_c650.rviz" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 	<!-- Combinejoin values to TF ，将值合并到TF-->
