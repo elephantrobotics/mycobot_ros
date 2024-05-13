@@ -17,7 +17,7 @@ def talker():
     rospy.init_node('joint_state_publisher')
 
     # 创建发布器，发布到'joint_states'话题，消息类型为JointState
-    pub = rospy.Publisher('joint_states', JointState, queue_size=10)
+    pub = rospy.Publisher('/joint_states', JointState, queue_size=10)
 
     # 设置发布频率
     rate = rospy.Rate(10) 

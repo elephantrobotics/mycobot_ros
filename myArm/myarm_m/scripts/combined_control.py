@@ -8,6 +8,7 @@ from math import pi
 import subprocess
 import sys
 import time
+import datetime
 
 def shutdown_ros_node(node_name):
     try:
@@ -18,15 +19,18 @@ def shutdown_ros_node(node_name):
 
 
 
-def set_angle(mam, angles, speed):
+def set_angle(mam, angles, speed=40):
     # 弧度转角度
-    angle = [-int(a*180/pi) for a in angles]
-    joint_id = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6}
+    angle = [int(a*180/pi) for a in angles]
+    angle.append(0)
+    # joint_id = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6}
+    # joint_id = [0,1,2,3,4,5,6]
+    mam.set_joints_angle(angle, speed)
     
-    for i in range(6):
-        # if joint_id[i] == 2 or joint_id[i] == 5:
-        #     angle[i] *= -1
-        mam.set_joint_angle(joint_id[i], -angle[i], 20)
+    # for i in range(6):
+    #     # if joint_id[i] == 2 or joint_id[i] == 5:
+    #     #     angle[i] *= -1
+    #     mam.set_joint_angle(joint_id[i], -angle[i], 50)
 def main():
     # 初始化ROS节点
     rospy.init_node("combined_control", anonymous=True)
@@ -63,12 +67,17 @@ def main():
         joint_state.velocity = []
         # 发布消息
         pub_m.publish(joint_state)
+        current_time1 = datetime.datetime.now()
         joint_state.position = angle_c
         pub_c.publish(joint_state)
+        current_time2 = datetime.datetime.now()
         set_angle(myarm_m, angle_m, 30)
+        current_time = current_time2-current_time1
         rospy.loginfo('消息成功发布')
+        rospy.loginfo(current_time)
         # 等待，允许其他节点处理
         rate.sleep()
+        
 
 
 

@@ -15,6 +15,21 @@ from std_msgs.msg import Header
 from pymycobot.myarmc import MyArmC
 import rosnode
     
+def linear_transform(x):
+    # 两个已知数据点
+    x1, y1 = -89.5, 0.022
+    x2, y2 = 0, 0
+    
+    # 计算斜率
+    m = (y2 - y1) / (x2 - x1)
+    
+    # 计算截距
+    c = y1 - m * x1
+    
+    # 应用线性变换
+    y = m * x + c
+    
+    return y
 
 global mam
 mam = MyArmC('/dev/ttyACM0', debug=False)
@@ -27,7 +42,7 @@ rospy.loginfo("已成功杀死节点")
 # 创建发布者
 pub = rospy.Publisher('/joint_states', JointState, queue_size=10)
 # 设置发布频率
-rate = rospy.Rate(50) # 50Hz
+rate = rospy.Rate(100) # 100Hz
 # 消息实例
 joint_state = JointState()
 # 发布消息
@@ -35,11 +50,14 @@ while not rospy.is_shutdown():
     joint_state.header = Header()
     # 填充消息内容，例如关节名称、位置、速度和力
     joint_state.header.stamp = rospy.Time.now()
-    joint_state.name = ['joint1_to_base', 'joint2_to_joint1', 'joint3_to_joint2','joint4_to_joint3', 'joint5_to_joint4', 'endeffector_to_joint5']
+    joint_state.name = ['joint1', 'joint2', 'joint3','joint4', 'joint5', 'joint6','gripper']
     angles = mam.get_joints_angle()
-    angles.pop(6)
+    gripper_angle =  angles.pop(6)
     angle = [a/180*pi for a in angles]
-
+    gripper_angle = linear_transform(gripper_angle)
+    # gripper_angle = linear_transform(-107.66)
+    angle.append(gripper_angle)
+    
     joint_state.position = angle
     joint_state.effort = []
     joint_state.velocity = []

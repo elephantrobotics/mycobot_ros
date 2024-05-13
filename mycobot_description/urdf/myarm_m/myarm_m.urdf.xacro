@@ -2,171 +2,214 @@
 <robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="myarm_m" >
 	
 <xacro:property name="ns" value="$(arg ns)/" />
-    
   
 <link name="base">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/base.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/myarm_m_base.dae"/>
     </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   </visual>
   <collision>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/base.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/myarm_m_base.dae"/>
       </geometry>
       <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
   </collision>
 </link>
 
-<link name="joint1">
+<link name="link1">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint1.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link1.dae"/>
     </geometry>
     <origin xyz = "0.0 0 -0.1 " rpy = " 0 3.14 0"/>
   </visual>
   <collision>
    <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint1.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link1.dae"/>
     </geometry>
     <origin xyz = "0.0 0 -0.1 " rpy = "0 3.14 0"/>
   </collision>
 </link>
 
-<link name="joint2">
+<link name="link2">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint2.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link2.dae"/>
     </geometry>
   <origin xyz = "0.0 0 0 " rpy = "0 3.14159 0"/>
   </visual>
   <collision>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint2.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link2.dae"/>
     </geometry>
     <origin xyz = "0.0 0 0 " rpy = "0 3.14159 0"/>
   </collision>
 </link>
 
 
-<link name="joint3">
+<link name="link3">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint3.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link3.dae"/>
     </geometry>
     <origin xyz = "0.0 0 0" rpy = "0 3.14159 0"/>
   </visual>
   <collision>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint3.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link3.dae"/>
     </geometry>
     <origin xyz = "0.0 0 0.0" rpy = "0 3.14159 0"/>
   </collision>
 </link>
 
 
-<link name="joint4">
+<link name="link4">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint4.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link4.dae"/>
     </geometry>
   <origin xyz = "0.0 0 0 " rpy = " 0 3.14159 -1.5708"/>
   </visual>
   <collision>
      <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint4.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link4.dae"/>
     </geometry>
     <origin xyz = "0.0 0 0 " rpy = " 0 3.14159  -1.5708"/>
   </collision>
 </link>
 
 
-<link name="joint5">
+<link name="link5">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint5.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link5.dae"/>
     </geometry>
   <origin xyz = "0 0.00 0" rpy = " 0 0 0"/>
   </visual>
   <collision>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/joint5.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/link5.dae"/>
     </geometry>
   <origin xyz = "0 0.00 0 " rpy = " 0 0 0"/>
   </collision>
 </link>
 
 
-
-<link name="endeffector">
+<link name="gripper">
   <visual>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/endeffector.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_holder.dae"/>
     </geometry>
   <origin xyz = "0 0.00 0" rpy = " 0 3.14159 -1.57079"/>
   </visual>
   <collision>
     <geometry>
-     <mesh filename="package://mycobot_description/urdf/myarm_m/endeffector.dae"/>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_holder.dae"/>
     </geometry>
   <origin xyz = "0 0.00 0" rpy = " 0 3.14159 -1.57079"/>
   </collision>
 </link>
 
+<link name="gripper_left">
+  <visual>
+    <geometry>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_left.dae"/>
+    </geometry>
+  <origin xyz = "0 0.00 0" rpy = " 0 3.14159 -1.57079"/>
+  </visual>
+  <collision>
+    <geometry>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_left.dae"/>
+    </geometry>
+  <origin xyz = "0 0.00 0" rpy = " 0 0 0"/>
+  </collision>
+</link>
 
-<joint name="joint1_to_base" type="revolute">
+
+<link name="gripper_right">
+  <visual>
+    <geometry>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_right.dae"/>
+    </geometry>
+  <origin xyz = "0 0.00 0" rpy = " 0 3.14159 -1.57079"/>
+  </visual>
+  <collision>
+    <geometry>
+     <mesh filename="package://mycobot_description/urdf/myarm_m/finger_right.dae"/>
+    </geometry>
+  <origin xyz = "0 0.00 0" rpy = " 0 3.14159 -1.57079"/>
+  </collision>
+</link>
+
+<joint name="joint1" type="revolute">
   <axis xyz="0 0 1"/>
   <limit effort = "1000.0" lower = "-3.0368" upper = "2.9147" velocity = "0"/>
   <parent link="base"/>
-  <child link="joint1"/>
+  <child link="link1"/>
   <origin xyz= "0 0 0" rpy = "0 3.14 0"/>  
 </joint>
 
-<joint name="joint2_to_joint1" type="revolute">
+<joint name="joint2" type="revolute">
   <axis xyz="0 0 1"/>
   <limit effort = "1000.0" lower = "-1.6057" upper = "1.6232" velocity = "0"/>
-  <parent link="joint1"/>
-  <child link="joint2"/>
+  <parent link="link1"/>
+  <child link="link2"/>
   <origin xyz= "0 0 -0.175" rpy = "-1.57079 -1.57079 0"/>  
 </joint>
 
- <joint name="joint3_to_joint2" type="revolute">
+ <joint name="joint3" type="revolute">
   <axis xyz=" 0 0 1"/>
   <limit effort = "1000.0" lower = "-1.5882" upper = "1.7977" velocity = "0"/>
-  <parent link="joint2"/>
-  <child link="joint3"/>
+  <parent link="link2"/>
+  <child link="link3"/>
   <origin xyz= "-0.303 -0.057 0   " rpy = "0 3.14159 -1.57079"/>  
 </joint>
 
 
-<joint name="joint4_to_joint3" type="revolute">
+<joint name="joint4" type="revolute">
   <axis xyz=" 0 0 1"/>
   <limit effort = "1000.0" lower = "-2.9671" upper = "2.9671" velocity = "0"/>
-  <parent link="joint3"/>
-  <child link="joint4"/>
+  <parent link="link3"/>
+  <child link="link4"/>
   <origin xyz= "-0.08 0 0" rpy = "0 1.57079 0"/>  
 </joint>
 
 
-<joint name="joint5_to_joint4" type="revolute">
+<joint name="joint5" type="revolute">
   <axis xyz="0 0 1"/>
   <limit effort = "1000.0" lower = "-1.6755" upper = "1.5533" velocity = "0"/>
-  <parent link="joint4"/>
-  <child link="joint5"/>
+  <parent link="link4"/>
+  <child link="link5"/>
   <origin xyz= "0 0 -0.258" rpy = "0 1.57079 0"/>  
 </joint>
 
-
-
-<joint name="endeffector_to_joint5" type="revolute">
+<joint name="joint6" type="revolute">
   <axis xyz="0 0 1"/>
   <limit effort = "1000.0" lower = "-2.9671" upper = "2.9671" velocity = "0"/>
-  <parent link="joint5"/>
-  <child link="endeffector"/>
+  <parent link="link5"/>
+  <child link="gripper"/>
   <origin xyz= "0.07 0 0" rpy = "0 -1.57079 0"/>  
 </joint>
 
 
-  
+<joint name="gripper" type="prismatic">
+  <axis xyz="0 0 1"/>
+  <limit effort = "1000.0" lower = "0" upper = "0.0345" velocity = "0"/>
+  <parent link="gripper"/>
+  <child link="gripper_left"/>
+  <origin xyz= "0.008 0 -0.036" rpy = "-1.57 0 -1.57"/>  
+</joint>
+
+<joint name="gripper_r" type="prismatic">
+  <axis xyz="0 0 -1"/>
+  <limit effort = "1000.0" lower = "0" upper = "0.06" velocity = "0"/>
+  <parent link="gripper"/>
+  <child link="gripper_right"/>
+  <origin xyz= "-0.008 0 -0.036" rpy = "-1.57 0 -1.57"/>
+  <!-- 跟随左手指运动 -->
+  <mimic joint="gripper" multiplier="1.0" offset="0" />
+</joint>
+
 </robot>
