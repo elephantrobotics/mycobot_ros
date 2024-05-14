@@ -13,7 +13,7 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/myarm_c650/bamyarm_basic_basese.dae"/>
+       <mesh filename="package://mycobot_description/urdf/myarm_c650/myarm_basic_base.dae"/>
         </geometry>
         <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
     </collision>

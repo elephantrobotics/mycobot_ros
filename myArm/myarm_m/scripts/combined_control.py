@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 import datetime
-
+import copy
 def shutdown_ros_node(node_name):
     try:
         subprocess.run(['rosnode', 'kill', node_name])
@@ -18,11 +18,27 @@ def shutdown_ros_node(node_name):
         print(f"Error: {e}")
 
 
+def linear_transform(x):
+    # 两个已知数据点
+    x1, y1 = -89.5, 0.022
+    x2, y2 = 0, 0
+    
+    # 计算斜率
+    m = (y2 - y1) / (x2 - x1)
+    
+    # 计算截距
+    c = y1 - m * x1
+    
+    # 应用线性变换
+    y = m * x + c
+    
+    return y
 
-def set_angle(mam, angles, speed=40):
+
+def set_angle(mam, angle, speed=40):
     # 弧度转角度
-    angle = [int(a*180/pi) for a in angles]
-    angle.append(0)
+    # angle = [int(a*180/pi) for a in angles]
+    # angle.append(0)
     # joint_id = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6}
     # joint_id = [0,1,2,3,4,5,6]
     mam.set_joints_angle(angle, speed)
@@ -56,11 +72,22 @@ def main():
         joint_state.header = Header()
         # 填充消息内容，例如关节名称、位置、速度和力
         joint_state.header.stamp = rospy.Time.now()
-        joint_state.name = ['joint1_to_base', 'joint2_to_joint1', 'joint3_to_joint2','joint4_to_joint3', 'joint5_to_joint4', 'endeffector_to_joint5']
-        angles = myarm_c.get_joints_angle()
-        angles.pop(6)
-        angle_c = [a/180*pi for a in angles]
-        angle_m = angle_c.copy()
+        joint_state.name = ['joint1', 'joint2', 'joint3','joint4', 'joint5', 'joint6','gripper']
+        anglesc = myarm_c.get_joints_angle()
+        anglesm = copy.deepcopy(anglesc)
+        
+        gripper_angle_c_real = anglesc.pop(6)
+        angle_c = [a/180*pi for a in anglesc]
+        gripper_angle_c_sim = linear_transform(gripper_angle_c_real)
+        angle_c.append(gripper_angle_c_sim)
+        
+        gripper_angle_c_real = anglesm.pop(6) # 原来的夹角
+        gripper_angle_m_sim = gripper_angle_c_sim/0.022*0.0345
+        angle_m = [a*pi/180 for a in anglesm]
+        angle_m.append(gripper_angle_m_sim)
+        # gripper_angle_m /= -3500
+        # angle:弧度 angles:角度
+        
         angle_m[2]*=-1
         joint_state.position = angle_m
         joint_state.effort = []
@@ -71,8 +98,13 @@ def main():
         joint_state.position = angle_c
         pub_c.publish(joint_state)
         current_time2 = datetime.datetime.now()
-        set_angle(myarm_m, angle_m, 30)
+        gripper_angle_m_sim = angle_m.pop(6)
+        gripper_angle_m_real = gripper_angle_m_sim*(-3500)
+        angle_m = [a*180/pi for a in angle_m]
+        angle_m.append(gripper_angle_m_real)
+        myarm_m.set_joints_angle(angle_m, 30)
         current_time = current_time2-current_time1
+        print(angle_m)
         rospy.loginfo('消息成功发布')
         rospy.loginfo(current_time)
         # 等待，允许其他节点处理
