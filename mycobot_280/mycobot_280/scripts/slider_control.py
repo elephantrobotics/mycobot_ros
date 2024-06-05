@@ -29,7 +29,6 @@ def callback(data):
         
     rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
     mc.send_angles(data_list, 25)
-    mc.get_system_version()
 
 
 def listener():
