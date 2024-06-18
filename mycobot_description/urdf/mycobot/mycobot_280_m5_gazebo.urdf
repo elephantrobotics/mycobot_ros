@@ -1,0 +1,323 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+    <xacro:property name="width" value=".2" />
+    <link name="g_base">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/G_base.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.03" rpy="0 0 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/G_base.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.03" rpy="0 0 1.5708" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <!-- <inertial>
+            <mass value="1000.0" />
+            <inertia ixx="100" iyy="100" izz="100" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial> -->
+    </link>
+
+    <link name="joint1">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint1.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint1.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="1000.0" />
+            <inertia ixx="100" iyy="100" izz="100" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint2">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint2.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.06096 " rpy=" 0 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint2.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.06096 " rpy=" 0 0 -1.5708" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="10" />
+            <inertia ixx="1" iyy="1" izz="1" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint3">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint3.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0.03256 " rpy=" 0 -1.5708 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint3.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0.03256 " rpy=" 0 -1.5708 0" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="5" />
+            <inertia ixx="0.5" iyy="0.5" izz="0.5" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint4">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint4.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0.03056 " rpy=" 0 -1.5708 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint4.dae" />
+            </geometry>
+            <origin xyz="0.0 0 0.03056 " rpy=" 0 -1.5708 0" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="5" />
+            <inertia ixx="0.5" iyy="0.5" izz="0.5" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint5">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint5.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.03356 " rpy=" -1.5708 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint5.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.03356 " rpy=" -1.5708 0 0" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="2" />
+            <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint6">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint6.dae" />
+            </geometry>
+            <origin xyz="0 0.00 -0.038 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint6.dae" />
+            </geometry>
+            <origin xyz="0 0.00 -0.038 " rpy=" 0 0 0" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="2" />
+            <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <link name="joint6_flange">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint7.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.012 " rpy=" 0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/mycobot/joint7.dae" />
+            </geometry>
+            <origin xyz="0.0 0 -0.012 " rpy=" 0 0 0" />
+        </collision>
+        <selfCollide>true</selfCollide>
+        <inertial>
+            <mass value="1" />
+            <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+    </link>
+
+    <joint name="g_base_to_joint1" type="fixed">
+        <axis xyz="0 0 0" />
+        <limit effort="1000.0" lower="0" upper="0" velocity="1" />
+        <parent link="g_base" />
+        <child link="joint1" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint2_to_joint1" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-2.93" upper="2.9321" velocity="1" />
+        <parent link="joint1" />
+        <child link="joint2" />
+        <origin xyz="0 0 0.13156" rpy="0 0 0" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint3_to_joint2" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-2.36" upper="2.3561" velocity="1" />
+        <parent link="joint2" />
+        <child link="joint3" />
+        <origin xyz="0 0 0" rpy="0 1.5708 -1.5708" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint4_to_joint3" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-2.62" upper="2.6179" velocity="1" />
+        <parent link="joint3" />
+        <child link="joint4" />
+        <origin xyz="  -0.1104 0 0   " rpy="0 0 0" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint5_to_joint4" type="revolute">
+        <axis xyz=" 0 0 1" />
+        <limit effort="1000.0" lower="-2.53" upper="2.5307" velocity="1" />
+        <parent link="joint4" />
+        <child link="joint5" />
+        <origin xyz="-0.096 0 0.06462" rpy="0 0 -1.5708" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint6_to_joint5" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-2.88" upper="2.8797" velocity="1" />
+        <parent link="joint5" />
+        <child link="joint6" />
+        <origin xyz="0 -0.07318 0" rpy="1.5708 -1.5708 0" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <joint name="joint6output_to_joint6" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-3.14" upper="3.14159" velocity="1" />
+        <parent link="joint6" />
+        <child link="joint6_flange" />
+        <origin xyz="0 0.0456 0" rpy="-1.5708 0 0" />
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    
+    <transmission name="trans_joint2_to_joint1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint2_to_joint1">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint2_to_joint1_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint3_to_joint2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint3_to_joint2">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint3_to_joint2_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint4_to_joint3">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint4_to_joint3">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint4_to_joint3_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint5_to_joint4">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint5_to_joint4">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint5_to_joint4_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint6_to_joint5">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint6_to_joint5">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint6_to_joint5_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint6output_to_joint6">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint6output_to_joint6">
+            <!-- <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface> -->
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint6output_to_joint6_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+            <!-- <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> -->
+        </plugin>
+    </gazebo>
+    <gazebo reference="g_base">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint1">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint2">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint3">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint4">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint5">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint6">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="joint6_flange">
+        <selfCollide>true</selfCollide>
+    </gazebo>
+</robot>
