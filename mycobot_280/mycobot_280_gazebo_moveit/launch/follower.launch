@@ -1,0 +1,38 @@
+<launch>
+    <arg name="paused" default="false"/>
+    <arg name="gazebo_gui" default="true"/>
+
+	<!-- Load URDF file,加载URDF文件 -->
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_280_m5_gazebo.urdf"/>
+	<!-- <arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" /> -->
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" default="worlds/empty.world"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="gui" value="$(arg gazebo_gui)"/>
+    </include>
+
+    <param name="robot_description" textfile="$(arg model)" />
+	<!-- Combinejoin values to TF ，将值合并到TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+		<!-- <rosparam param="source_list" subst_value="true">["/joint_states"]</rosparam> -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+        <!-- <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam> -->
+        <!-- <rosparam param="source_list">[/joint_states]</rosparam> -->
+	<!-- show in Rviza,显示在Rviz -->
+	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+    <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+    
+    <include file="$(find mycobot_280_gazebo_moveit)/launch/move_group.launch">
+        <arg name="allow_trajectory_execution" value="true"/>
+        <arg name="fake_execution" value="false"/>
+        <arg name="info" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="load_robot_description" value="false"/>
+    </include>
+
+    <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 1"
+        respawn="false" output="screen" />
+
+    <include file="$(find mycobot_280_gazebo_moveit)/launch/ros_controllers.launch"/>
+</launch>
