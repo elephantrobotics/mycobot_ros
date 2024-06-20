@@ -41,6 +41,9 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mb = MyBuddy(port, baud)
+    time.sleep(0.05)
+    mb.set_fresh_mode(1)
+    time.sleep(0.05)
 
     rospy.Subscriber("joint_states", JointState, callback)
 
