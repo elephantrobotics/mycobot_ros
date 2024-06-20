@@ -31,7 +31,7 @@ def listener():
     print(port, baud)
     mc = MyPalletizer(port, baud)
     time.sleep(0.05)
-    mc.set_free_mode(1)
+    mc.set_fresh_mode(1)
     time.sleep(0.05)
     rospy.Subscriber("joint_states", JointState, callback)
 

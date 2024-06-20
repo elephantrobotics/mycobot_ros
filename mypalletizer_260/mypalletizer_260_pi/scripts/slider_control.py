@@ -41,7 +41,7 @@ def listener():
     print(port, baud)
     mc = MyPalletizer(port, baud)
     time.sleep(0.05)
-    mc.set_free_mode(1)
+    mc.set_fresh_mode(1)
     time.sleep(0.05)
     # spin() simply keeps python from exiting until this node is stopped
     # spin() 只是阻止python退出，直到该节点停止
