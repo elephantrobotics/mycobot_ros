@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function
 from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus, PumpStatus
 import rospy
@@ -92,11 +94,13 @@ def teleop_keyboard():
 
     # rsp = set_angles(*init_pose)
 
-    while True:
-        res = get_coords()
-        if res.x > 1:
-            break
-        time.sleep(0.1)
+    # while True:
+    #     res = get_coords()
+    #     if res.x > 1:
+    #         break
+    #     time.sleep(0.1)
+
+    res = get_coords()
 
     record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
     print(record_coords)
