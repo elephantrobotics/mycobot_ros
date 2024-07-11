@@ -131,10 +131,10 @@
 
   <joint name="joint2_to_joint1" type="revolute">
     <axis xyz="0 0 -1"/>
-    <limit effort = "1000.0" lower = "-4.71" upper = "1.5707" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-3.1415" upper = "3.1415" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz= "0 0  0" rpy = "1.5707 0 0"/>
+    <origin xyz= "0 0  0" rpy = "1.5707 3.1415 0"/>
   </joint>
 
 
@@ -148,10 +148,10 @@
 
   <joint name="joint4_to_joint3" type="revolute">
     <axis xyz=" 0 0 -1"/>
-    <limit effort = "1000.0" lower = "-4.53" upper = "1.3962" velocity = "0"/>
+    <limit effort = "1000.0" lower = "-2.9594" upper = "2.9668" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "0.267 0  -0.0745" rpy = "0 0 0"/>  
+    <origin xyz= "0.267 0  -0.0745" rpy = "3.1415 3.1415 0"/>  
   </joint>
 
   <joint name="joint5_to_joint4" type="revolute">
@@ -173,4 +173,3 @@
 
 
 </robot>
-
