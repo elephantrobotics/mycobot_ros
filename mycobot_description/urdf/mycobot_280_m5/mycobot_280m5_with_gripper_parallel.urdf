@@ -373,6 +373,5 @@
     <mimic joint="gripper_controller" multiplier="1.0" offset="0" />
   </joint>
   
-
 </robot>
 
