@@ -310,6 +310,7 @@
     <origin xyz= "0 0.0456 0" rpy = "-1.5708 0 0"/>  
   </joint>
 
+
   <joint name="joint6output_to_gripper_base" type="fixed">
     <!-- <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14159" velocity = "0"/> -->
@@ -327,7 +328,6 @@
     <origin xyz= "-0.012 0.005 0" rpy = "0 0 0"/> 
   </joint>
 
-
   <joint name="gripper_base_to_gripper_left2" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-0.8" upper = "0.5" velocity = "0"/>
@@ -337,7 +337,6 @@
     <mimic joint="gripper_controller" multiplier="1.0" offset="0" />
   </joint>
 
-
   <joint name="gripper_left3_to_gripper_left1" type="revolute">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-0.5" upper = "0.5" velocity = "0"/>
@@ -346,7 +345,6 @@
     <origin xyz= "-0.027 0.016 0" rpy = "0 0 0"/> 
     <mimic joint="gripper_controller" multiplier="-1.0" offset="0" />
   </joint>
-
 
   <joint name="gripper_base_to_gripper_right3" type="revolute">
     <axis xyz="0 0 1"/>
