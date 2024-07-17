@@ -14,7 +14,7 @@ roslaunch mycobot_280 slider_control.launch
 
 如果上述的安装与配置都正常的话，将会出现如下的界面，通过拖动滑块，可以操控机械臂各个关节的位姿。
 
-<img src="file:///C:/Users/12174/Desktop/Pro630/image/1.png" title="" alt="1.png" data-align="center">
+<img src="1.png" title="" alt="1.png" data-align="center">
 
 ### 1.2 pymycobot库的安装与配置
 
