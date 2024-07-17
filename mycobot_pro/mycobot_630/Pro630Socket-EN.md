@@ -14,7 +14,7 @@ roslaunch mycobot_280 slider_control.launch
 
 If the above installations and configurations are proper, the user can see the user interface shown in the following image. By dragging the sliders, you can manipulate the position of each joint of the robot arm
 
-<img src="file:///C:/Users/12174/Desktop/Pro630/image/1.png" title="" alt="1.png" data-align="center">
+<img src="1.png" title="" alt="1.png" data-align="center">
 
 ### 1.2 Installation and configuration of the pymycobot library
 
