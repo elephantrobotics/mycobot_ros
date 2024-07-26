@@ -14,8 +14,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from pymycobot.mycobot import MyCobot
-import copy
+# from pymycobot.mycobot import MyCobot
 
 mc, pub_command = None, None
 
@@ -37,7 +36,7 @@ def callback(data):
     joint_trajectory.points.append(point)
 
     pub_command.publish(joint_trajectory)  # Publish the joint trajectory
-    mc.send_angles(data_list, 25)
+    # mc.send_angles(data_list, 25)
     # rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
 
 def listener():
@@ -45,17 +44,17 @@ def listener():
 
     rospy.init_node("control_slider", anonymous=True)
 
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
-    baud = rospy.get_param("~baud", 115200)
-    print(port, baud)
-    mc = MyCobot(port, baud)
+    # port = rospy.get_param("~port", "/dev/ttyUSB0")
+    # baud = rospy.get_param("~baud", 115200)
+    # print(port, baud)
+    # mc = MyCobot(port, baud)
 
     pub_command = rospy.Publisher("/mycobot_position_controller/command", JointTrajectory, queue_size=10)
     rospy.Subscriber("/joint_states", JointState, callback)
 
-    time.sleep(0.05)
-    mc.set_fresh_mode(1)
-    time.sleep(0.05)
+    # time.sleep(0.05)
+    # mc.set_fresh_mode(1)
+    # time.sleep(0.05)
 
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止
