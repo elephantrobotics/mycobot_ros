@@ -21,14 +21,15 @@ import moveit_commander
 from geometry_msgs.msg import Pose
 
 global mam
-mam = MyArmM('/dev/ttyACM1', debug=False)
+mam = MyArmC('/dev/ttyACM0', debug=False)
 angle = mam.get_joints_angle()
 print(angle)
-# mam.set_tool_led_color(255,255,255)
+# mam.set_tool_led_color(0,255,0)
 # for i in range(8):
 #     mam.set_servo_calibrate(i)
 #     time.sleep(0.5)
-
+# angle = mam.get_joints_angle()
+# print(angle)
 # def linear_transform(x):
 #     # 两个已知数据点
 #     x1, y1 = -89.5, 0.022

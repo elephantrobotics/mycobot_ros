@@ -32,7 +32,7 @@
     <virtual_joint name="vitual_joint" type="fixed" parent_frame="basic" child_link="base" />
 
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="base" link2="link1" reason="Adjacent" />
+    <!-- <disable_collisions link1="base" link2="link1" reason="Adjacent" />
     <disable_collisions link1="base" link2="link2" reason="Never" />
     <disable_collisions link1="base" link2="link3" reason="Never" />
     <disable_collisions link1="base" link2="link4" reason="Never" />
@@ -49,6 +49,18 @@
     <disable_collisions link1="link2" link2="link6" reason="Never" />
     <disable_collisions link1="link3" link2="link4" reason="Adjacent" />
     <disable_collisions link1="link3" link2="link5" reason="Never" />
+    <disable_collisions link1="link3" link2="link6" reason="Never" />
+    <disable_collisions link1="link4" link2="link5" reason="Adjacent" />
+    <disable_collisions link1="link4" link2="link6" reason="Never" />
+    <disable_collisions link1="link5" link2="link6" reason="Adjacent" /> -->
+
+    <disable_collisions link1="base" link2="link1" reason="Adjacent" />
+    <disable_collisions link1="base" link2="link2" reason="Never" />
+    <disable_collisions link1="link1" link2="link2" reason="Adjacent" />
+    <disable_collisions link1="link1" link2="link6" reason="Never" />
+    <disable_collisions link1="link2" link2="link3" reason="Adjacent" />
+    <disable_collisions link1="link2" link2="link6" reason="Never" />
+    <disable_collisions link1="link3" link2="link4" reason="Adjacent" />
     <disable_collisions link1="link3" link2="link6" reason="Never" />
     <disable_collisions link1="link4" link2="link5" reason="Adjacent" />
     <disable_collisions link1="link4" link2="link6" reason="Never" />
