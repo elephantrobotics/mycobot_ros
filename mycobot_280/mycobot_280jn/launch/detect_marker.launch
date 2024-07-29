@@ -14,9 +14,7 @@
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_jn/mycobot_280_jn.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot_with_marker.rviz" />
 	<arg name="gui" default="true" />
-
 	<arg name="num" default="0" />
-
     <include file="$(find mycobot_280)/launch/slider_control.launch">
 		<arg name="model" value="$(arg model)" />
 		<arg name="rvizconfig" value="$(arg rvizconfig)" />
