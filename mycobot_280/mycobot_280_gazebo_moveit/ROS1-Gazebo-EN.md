@@ -15,7 +15,7 @@ roslaunch mycobot_280 test.launch
 
 If you can see the screen as shown below and can manipulate the position of the robot arm model in Rviz by using the sliders, which means that the installation and configuration are all correct.
 
-![2.png](.\image\2.png)
+<img src="./image/2.png" title="" alt="2.png" data-align="center">
 
 ### 1.2 Installation and Configuration of Gazebo
 
@@ -67,7 +67,7 @@ roslaunch mycobot_280_gazebo_moveit slider_control_gazebo.launch
 
 You will see the interface as shown below
 
-![11.png](.\image\11.png)
+<img src="./image/11.png" title="" alt="11.png" data-align="center">
 
 Open another terminal, again go to the `catkin_ws` path and enter
 
