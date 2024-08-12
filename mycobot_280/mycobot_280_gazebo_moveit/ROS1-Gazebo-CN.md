@@ -15,7 +15,7 @@ roslaunch mycobot_280 test.launch
 
 如果能看到如下所示的画面并能够通过滑块操控Rviz中机械臂模型的位姿，则说明安装与配置都一切正常
 
-<img src="file:///C:/Users/12174/Desktop/mycobot_280_m5/image/2.png" title="" alt="2.png" data-align="center">
+<img src="./image/2.png" title="" alt="2.png" data-align="center">
 
 ### 1.2 安装和配置Gazebo
 
@@ -27,7 +27,7 @@ gazebo
 
 如果一切正常，Gazebo将会加载一个空的世界，如下图
 
-<img src="file:///C:/Users/12174/Desktop/mycobot_280_m5/image/10.png" title="" alt="10.png" data-align="center">
+<img src="./image/10.png" title="" alt="10.png" data-align="center">
 
 你还可以通过`gazebo --version`命令查看其版本，你将得到输出
 
@@ -77,7 +77,7 @@ roslaunch mycobot_280_gazebo_moveit slider_control_gazebo.launch
 
 你将会看到如下图所示的界面
 
-<img src="file:///C:/Users/12174/Desktop/mycobot_280_m5/image/11.png" title="" alt="11.png" data-align="center">
+<img src="./image/11.png" title="" alt="11.png" data-align="center">
 
 另外打开一个终端，同样地进入到`catkin_ws`路径下并输入
 
