@@ -49,7 +49,7 @@ This description uses the `melodic` version, if you are using a different versio
 Immediately after you need to add the setup script source for the .bashrc file, enter the command:
 
 ```bash
-source /opt/ros/molodic/setup.bash
+source /opt/ros/melodic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 ```
 
