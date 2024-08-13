@@ -55,7 +55,7 @@ sudo apt-get install ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control
 紧接着你需要为`.bashrc`文件添加`setup`脚本源，输入命令：
 
 ```bash
-source /opt/ros/molodic/setup.bash
+source /opt/ros/melodic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 ```
 
