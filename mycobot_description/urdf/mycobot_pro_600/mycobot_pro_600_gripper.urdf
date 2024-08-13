@@ -291,8 +291,8 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <!-- <origin xyz= "0 0  0" rpy = "1.5708 -1.5708 0"/>   -->
-    <origin xyz= "0 0.04  0.085" rpy = "1.5708 0 0"/>
+    <!-- <origin xyz= "0 0  0" rpy = "1.5708 0 0"/>   -->
+    <origin xyz= "0 0.04  0.085" rpy = "1.5706 1.5706 0"/>
   </joint>
 
 
@@ -310,8 +310,8 @@
     <limit effort = "1000.0" lower = "-2.97" upper = "2.97" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <!-- <origin xyz= "0.25 0  -0.1091" rpy = "0 0 1.5708"/>   -->
-    <origin xyz= "0 0.25  0.025" rpy = "0 0 0"/>  
+    <!-- <origin xyz= "0.25 0  -0.1091" rpy = "0 0 0"/>   -->
+    <origin xyz= "0 0.25  0.025" rpy = "0 0 -1.5706"/>  
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
@@ -330,7 +330,7 @@
     <origin xyz= "-0.076 0 0.05" rpy = "-1.57080 0 0 "/>  
   </joint>
 
-  <joint name="joint6output_to_tool1" type="revolute">
+  <joint name="joint6output_to_tool1" type="fixed">
     <axis xyz="0 1 0"/>
     <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/>
     <parent link="link6" />

@@ -5,14 +5,13 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
-        - /MotionPlanning1/Status1
         - /MotionPlanning1/Scene Geometry1
         - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
         - /RobotModel1
       Splitter Ratio: 0.4869215190410614
-    Tree Height: 274
+    Tree Height: 396
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -82,6 +81,41 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          gripper_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           joint1:
             Alpha: 1
             Show Axes: false
@@ -112,6 +146,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          tool1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          tool2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
         Loop Animation: false
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -133,9 +177,9 @@ Visualization Manager:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
         Goal State Color: 250; 128; 0
-        Interactive Marker Size: 0.10000000149011612
+        Interactive Marker Size: 0.20000000298023224
         Joint Violation Color: 255; 0; 255
-        Planning Group: arm_group
+        Planning Group: arm
         Query Goal State: true
         Query Start State: true
         Show Workspace: false
@@ -163,6 +207,41 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          gripper_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           joint1:
             Alpha: 1
             Show Axes: false
@@ -189,6 +268,16 @@ Visualization Manager:
             Show Trail: false
             Value: true
           joint6:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          tool1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          tool2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -224,6 +313,41 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          gripper_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_left3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gripper_right3:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           joint1:
             Alpha: 1
             Show Axes: false
@@ -254,6 +378,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          tool1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          tool2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
         Robot Alpha: 1
         Show Robot Collision: false
         Show Robot Visual: true
@@ -269,6 +403,41 @@ Visualization Manager:
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
         base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_left1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_left2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_left3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_right1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_right2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gripper_right3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -303,6 +472,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        tool1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tool2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -333,17 +512,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.06067162752151489
-        Y: 0.045795738697052
+        X: 0.041976600885391235
+        Y: -0.019326984882354736
         Z: 1.490174383889098e-08
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.25979647040367126
+      Pitch: 0.5597964525222778
       Target Frame: base
-      Yaw: 3.2899534702301025
+      Yaw: 6.1299567222595215
     Saved: ~
 Window Geometry:
   Displays:
@@ -357,7 +536,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000039efc0200000007fb000000100044006900730070006c006100790073010000003d0000014f000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720100000192000000530000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001eb000001f00000018800ffffff0000053f0000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000039efc0200000007fb000000100044006900730070006c006100790073010000003d000001c9000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c0069006400650072010000020c000000410000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000253000001880000018800ffffff0000053f0000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1848

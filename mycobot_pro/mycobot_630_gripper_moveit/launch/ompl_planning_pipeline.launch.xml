@@ -20,5 +20,7 @@
   <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
 
   <rosparam command="load" file="$(find mycobot_630_gripper_moveit)/config/ompl_planning.yaml"/>
+  <!-- <rosparam command="load" file="$(find mycobot_630_moveit)/config/ompl_planning.yaml"/> -->
+
 
 </launch>

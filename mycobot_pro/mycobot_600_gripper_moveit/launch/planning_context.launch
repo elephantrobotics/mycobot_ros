@@ -6,9 +6,11 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_320_m5_2020/mycobot_pro_320_m5_2020_gripper.urdf"/> -->
   <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_gripper.urdf"/>
 
-  <!-- The semantic description that corresponds to the URDF -->
+  <!-- The semantic description that corresponds to the SRDF -->
+  <!-- <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_600_gripper_moveit)/config/firefighter.srdf" /> -->
   <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_600_gripper_moveit)/config/firefighter.srdf" />
 
   <!-- Load updated joint limits (override information from URDF) -->

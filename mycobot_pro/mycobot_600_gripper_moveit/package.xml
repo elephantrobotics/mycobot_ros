@@ -5,21 +5,21 @@
   <description>
      An automatically generated package with all the configuration and launch files for using the firefighter with the MoveIt Motion Planning Framework
   </description>
-  <author email="aa@123.com">aa</author>
-  <maintainer email="aa@123.com">aa</maintainer>
+  <author email="jz@elephantrobot.com">jz</author>
+  <maintainer email="jz@elephantrobot.com">jz</maintainer>
 
   <license>BSD</license>
 
   <url type="website">http://moveit.ros.org/</url>
-  <url type="bugtracker">https://github.com/moveit/moveit/issues</url>
-  <url type="repository">https://github.com/moveit/moveit</url>
+  <url type="bugtracker">https://github.com/ros-planning/moveit/issues</url>
+  <url type="repository">https://github.com/ros-planning/moveit</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
   <run_depend>moveit_ros_move_group</run_depend>
   <run_depend>moveit_fake_controller_manager</run_depend>
   <run_depend>moveit_kinematics</run_depend>
-  <run_depend>moveit_planners</run_depend>
+  <run_depend>moveit_planners_ompl</run_depend>
   <run_depend>moveit_ros_visualization</run_depend>
   <run_depend>moveit_setup_assistant</run_depend>
   <run_depend>moveit_simple_controller_manager</run_depend>
