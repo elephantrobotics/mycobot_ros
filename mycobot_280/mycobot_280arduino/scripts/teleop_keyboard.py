@@ -84,9 +84,10 @@ def teleop_keyboard():
     home_pose = [0, 8, -127, 40, 0, 0, speed]
 
     # rsp = set_angles(*init_pose)
-
     while True:
         res = get_coords()
+        time.sleep(1)
+        print('res:', res)
         if res.x > 1:
             break
         time.sleep(0.1)

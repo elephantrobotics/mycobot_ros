@@ -57,6 +57,7 @@ def create_handle():
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
     mc = MyCobot(port, baud)
+    time.sleep(2) # open serial need wait
 
 
 def create_services():

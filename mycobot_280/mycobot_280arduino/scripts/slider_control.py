@@ -20,15 +20,14 @@ mc = None
 
 
 def callback(data):
-    # rospy.loginfo(rospy.get_caller_id() + "%s", data.position)
-    data_list = []
-    for index, value in enumerate(data.position):
-        radians_to_angles = round(math.degrees(value), 2)
-        data_list.append(radians_to_angles)
-        
-    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
-    mc.send_angles(data_list, 25)
+    global latest_data
+    latest_data = [round(math.degrees(value), 2) for value in data.position]
+    rospy.loginfo(f"Joint angles: {latest_data}")
 
+def control_loop(event):
+    if latest_data:
+        rospy.loginfo(f"Sending angles: {latest_data}")
+        mc.send_angles(latest_data, 25)
 
 def listener():
     global mc
@@ -39,13 +38,13 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot(port, baud)
-    time.sleep(0.05)
-    # mc.set_fresh_mode(1)
-    time.sleep(0.05)
+    time.sleep(2) # open port,need wait
 
-    # spin() simply keeps python from exiting until this node is stopped
-    print("spin ...")
+    # 启动定时器，每0.5秒执行一次控制循环
+    rospy.Timer(rospy.Duration(0.5), control_loop)
+
     rospy.spin()
+
 
 
 if __name__ == "__main__":
