@@ -6,8 +6,9 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_630.urdf"/>
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_630.urdf"/> -->
   <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_630_gripper.urdf"/> -->
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/my630.urdf"/>
 
 
 

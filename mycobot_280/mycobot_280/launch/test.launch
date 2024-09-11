@@ -1,5 +1,6 @@
 <launch>
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_m5/mycobot_280_m5.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/flange/flange.urdf"/> -->
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
 	<arg name="gui" default="true" />
 

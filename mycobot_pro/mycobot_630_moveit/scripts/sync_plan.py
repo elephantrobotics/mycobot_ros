@@ -29,26 +29,28 @@ def callback(data):
 
 def listener():
     global mc
-    rospy.init_node("control_slider", anonymous=True)
+    try:
+        rospy.init_node("control_slider", anonymous=True)
 
-    ip = rospy.get_param("~ip", "192.168.1.161")
-    port = rospy.get_param("~port", 5001)
-    print (ip, port)
-    mc = ElephantRobot(ip, int(port))
-    # START CLIENT,启动客户端
-    res = mc.start_client()
-    if res != "":
-        sys.exit(1)
+        ip = rospy.get_param("~ip", "192.168.1.17")
+        port = rospy.get_param("~port", 5001)
+        print (ip, port)
+        mc = ElephantRobot(ip, int(port))
+        # START CLIENT,启动客户端
+        res = mc.start_client()
+        if res != "":
+            sys.exit(1)
 
-    mc.set_speed(90)
+        mc.set_speed(90)
 
-    rospy.Subscriber("joint_states", JointState, callback)
+        rospy.Subscriber("joint_states", JointState, callback)
 
-    # spin() simply keeps python from exiting until this node is stopped
-    # spin()只是阻止python退出，直到该节点停止
-    print ("sping ...")
-    rospy.spin()
-
+        # spin() simply keeps python from exiting until this node is stopped
+        # spin()只是阻止python退出，直到该节点停止
+        print ("sping ...")
+        rospy.spin()
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     listener()
