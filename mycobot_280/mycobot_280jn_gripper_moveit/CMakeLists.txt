@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.3)
-project(mycobot_280jn_moveit)
+project(mycobot_280jn_gripper_moveit)
 
 find_package(catkin REQUIRED)
 
