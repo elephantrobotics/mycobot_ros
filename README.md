@@ -20,6 +20,7 @@ Control or simulate myCobot series robots in ROS.
    * Ubuntu 18.04 / ROS Melodic
    * Ubuntu 20.04 / ROS Noetic
 
+* The urdf model of a single gripper in this article is applicable to all machines that support this accessory.
 <!-- **If your `Atom` is 2.3 or before, or `pymycobot` is 1.\*, Please check branch [before](https://github.com/elephantrobotics/myCobotRos/tree/before)** -->
 
 ## Installation
@@ -183,6 +184,14 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 
 ![280 jn](./demo_img/280jn/280jn.png)
 
+[mycobot 280 JetsonNano Adaptive gripper](./mycobot_description/urdf/mycobot_280_jn/mycobot_280_jn_adaptive_gripper_parallel.urdf)
+
+![280 jn](./demo_img/280jn/mycobot_280jn_adaptive_gripper.png)
+
+[mycobot 280 JetsonNano Parallel gripper](./mycobot_description/urdf/mycobot_280_jn/mycobot_280_jn_parallel_gripper.urdf)
+
+![280 jn](./demo_img/280jn/mycobot_280jn_parallel_gripper.png)
+
 [mycobot 280 Arduino](./mycobot_description/urdf/mycobot_280_arduino/mycobot_280_arduino.urdf)
 
 ![280 ar](./demo_img/280arduino/280_arduino.png)
@@ -246,6 +255,22 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 [mycobot pro 630](./mycobot_description/urdf/mycobot_pro_630/mycobot_pro_630.urdf)
 
 ![pro630](./demo_img/pro630/pro630.png)
+
+## Single Gripper URDF Model Graph
+
+>> **This urdf model is applicable to all machines that support this accessory**
+
+[mycobot Adaptive gripper](./mycobot_description/urdf/adaptive_gripper/mycobot_adaptive_gripper.urdf)
+
+![280 jn](./demo_img/single_gripper/mycobot_adaptive_gripper.png)
+
+[mycobot Parallel gripper](./mycobot_description/urdf/parallel_gripper/mycobot_parallel_gripper.urdf)
+
+![280 jn](./demo_img/single_gripper/mycobot_adaptive_gripper.png)
+
+[mycobot Pro Adaptive gripper](./mycobot_description/urdf/pro_adaptive_gripper/mycobot_pro_adaptive_gripper.urdf)
+
+![280 jn](./demo_img/single_gripper/mycobot_pro_adaptive_gripper.png)
 
 ## Contributors
 
