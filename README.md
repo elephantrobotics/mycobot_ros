@@ -266,7 +266,7 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 
 [mycobot Parallel gripper](./mycobot_description/urdf/parallel_gripper/mycobot_parallel_gripper.urdf)
 
-![280 jn](./demo_img/single_gripper/mycobot_adaptive_gripper.png)
+![280 jn](./demo_img/single_gripper/mycobot_parallel_gripper.png)
 
 [mycobot Pro Adaptive gripper](./mycobot_description/urdf/pro_adaptive_gripper/mycobot_pro_adaptive_gripper.urdf)
 
