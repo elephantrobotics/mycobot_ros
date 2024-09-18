@@ -70,8 +70,6 @@ def callback(data):
     num2 = num2[1]
     mc.set_gripper_value(num2,100)
     rospy.loginfo(num2)
-    
-
 
 
 def listener():

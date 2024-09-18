@@ -7,7 +7,8 @@
 
   <!-- Load universal robot description format (URDF) -->
   <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600.urdf"/> -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/>
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/> -->
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/new_mycobot_pro_600_moveit.urdf"/>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_600_moveit)/config/firefighter.srdf" />

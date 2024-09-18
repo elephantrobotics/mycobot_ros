@@ -132,13 +132,22 @@
 
     <disable_collisions link1="base" link2="link1" reason="Adjacent"/>
     <disable_collisions link1="base" link2="link2" reason="Never"/>
+    <disable_collisions link1="base" link2="link3" reason="Never"/>
+    <disable_collisions link1="base" link2="link4" reason="Never"/>
+    <disable_collisions link1="base" link2="link5" reason="Never"/>
+    <disable_collisions link1="base" link2="link6" reason="Never"/>
+    <disable_collisions link1="base" link2="tool2" reason="Never"/>
     <disable_collisions link1="base" link2="gripper_base" reason="Never"/>
+    <!-- <disable_collisions link1="base" link2="gripper_left3" reason="Never"/>
+    <disable_collisions link1="base" link2="gripper_right3" reason="Never"/> -->
+    <disable_collisions link1="base" link2="gripper_left1" reason="Never"/>
+    <disable_collisions link1="base" link2="gripper_left2" reason="Never"/>
     <disable_collisions link1="base" link2="gripper_left3" reason="Never"/>
+    <disable_collisions link1="base" link2="gripper_right1" reason="Never"/>
+    <disable_collisions link1="base" link2="gripper_right2" reason="Never"/>
     <disable_collisions link1="base" link2="gripper_right3" reason="Never"/>
-    <!-- <disable_collisions link1="base" link2="gripper_base" reason="Default"/>
-    <disable_collisions link1="base" link2="gripper_base" reason="Default"/>
-    <disable_collisions link1="base" link2="gripper_base" reason="Default"/>
-    <disable_collisions link1="base" link2="gripper_base" reason="Default"/> -->
+    
+    
     <disable_collisions link1="gripper_base" link2="gripper_left1" reason="Never"/>
     <disable_collisions link1="gripper_base" link2="gripper_left2" reason="Adjacent"/>
     <disable_collisions link1="gripper_base" link2="gripper_left3" reason="Adjacent"/>
@@ -146,8 +155,10 @@
     <disable_collisions link1="gripper_base" link2="gripper_right2" reason="Adjacent"/>
     <disable_collisions link1="gripper_base" link2="gripper_right3" reason="Adjacent"/>
     <disable_collisions link1="gripper_base" link2="link5" reason="Never"/>
-    <disable_collisions link1="gripper_base" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_base" link2="tool1" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_base" link2="link6" reason="Never"/> -->
+    <disable_collisions link1="gripper_base" link2="link3" reason="Never"/>
+    <disable_collisions link1="gripper_base" link2="link2" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_base" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_base" link2="tool2" reason="Adjacent"/>
     <disable_collisions link1="gripper_left1" link2="gripper_left2" reason="Adjacent"/>
     <disable_collisions link1="gripper_left1" link2="gripper_left3" reason="Adjacent"/>
@@ -156,7 +167,8 @@
     <disable_collisions link1="gripper_left1" link2="gripper_right3" reason="Never"/>
     <disable_collisions link1="gripper_left1" link2="link5" reason="Never"/>
     <disable_collisions link1="gripper_left1" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_left1" link2="tool1" reason="Never"/>
+    
+    <!-- <disable_collisions link1="gripper_left1" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_left1" link2="tool2" reason="Never"/>
     <disable_collisions link1="gripper_left2" link2="gripper_left3" reason="Default"/>
     <disable_collisions link1="gripper_left2" link2="gripper_right1" reason="Never"/>
@@ -164,41 +176,58 @@
     <disable_collisions link1="gripper_left2" link2="gripper_right3" reason="Never"/>
     <disable_collisions link1="gripper_left2" link2="link5" reason="Never"/>
     <disable_collisions link1="gripper_left2" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_left2" link2="tool1" reason="Never"/>
+    
+    <!-- <disable_collisions link1="gripper_left2" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_left2" link2="tool2" reason="Never"/>
     <disable_collisions link1="gripper_left3" link2="gripper_right1" reason="Never"/>
     <disable_collisions link1="gripper_left3" link2="gripper_right2" reason="Never"/>
     <disable_collisions link1="gripper_left3" link2="gripper_right3" reason="Never"/>
     <disable_collisions link1="gripper_left3" link2="link5" reason="Never"/>
     <disable_collisions link1="gripper_left3" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_left3" link2="tool1" reason="Never"/>
+    
+    <!-- <disable_collisions link1="gripper_left3" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_left3" link2="tool2" reason="Never"/>
     <disable_collisions link1="gripper_right1" link2="gripper_right2" reason="Adjacent"/>
     <disable_collisions link1="gripper_right1" link2="gripper_right3" reason="Adjacent"/>
     <disable_collisions link1="gripper_right1" link2="link5" reason="Never"/>
-    <disable_collisions link1="gripper_right1" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_right1" link2="tool1" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_right1" link2="link6" reason="Never"/> -->
+    <disable_collisions link1="gripper_right1" link2="link3" reason="Never"/>
+    <disable_collisions link1="gripper_right1" link2="link2" reason="Never"/>
+    
+    <!-- <disable_collisions link1="gripper_right1" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_right1" link2="tool2" reason="Never"/>
     <disable_collisions link1="gripper_right2" link2="gripper_right3" reason="Default"/>
     <disable_collisions link1="gripper_right2" link2="link5" reason="Never"/>
-    <disable_collisions link1="gripper_right2" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_right2" link2="tool1" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_right2" link2="link6" reason="Never"/> -->
+    <disable_collisions link1="gripper_right2" link2="link3" reason="Never"/>
+    <disable_collisions link1="gripper_right2" link2="link2" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_right2" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_right2" link2="tool2" reason="Never"/>
     <disable_collisions link1="gripper_right3" link2="link5" reason="Never"/>
     <disable_collisions link1="gripper_right3" link2="link6" reason="Never"/>
-    <disable_collisions link1="gripper_right3" link2="tool1" reason="Never"/>
+    <disable_collisions link1="gripper_right3" link2="link3" reason="Never"/>
+    <disable_collisions link1="gripper_right3" link2="link2" reason="Never"/>
+    <!-- <disable_collisions link1="gripper_right3" link2="link4" reason="Never"/> -->
     <disable_collisions link1="gripper_right3" link2="tool2" reason="Never"/>
     <disable_collisions link1="link1" link2="link2" reason="Adjacent"/>
-    <disable_collisions link1="link1" link2="tool2" reason="Never"/>
+    <!-- <disable_collisions link1="link1" link2="tool2" reason="Never"/> -->
+    <disable_collisions link1="link1" link2="link3" reason="Never"/>
+
     <disable_collisions link1="link2" link2="link3" reason="Adjacent"/>
-    <disable_collisions link1="link2" link2="tool2" reason="Never"/>
+    <!-- <disable_collisions link1="link2" link2="tool2" reason="Never"/> -->
+    <disable_collisions link1="link2" link2="link4" reason="Never"/>
+
     <disable_collisions link1="link3" link2="link4" reason="Adjacent"/>
-    <disable_collisions link1="link3" link2="tool2" reason="Never"/>
+    <!-- <disable_collisions link1="link3" link2="tool2" reason="Never"/> -->
+    <disable_collisions link1="link3" link2="link5" reason="Never"/>
+
     <disable_collisions link1="link4" link2="link5" reason="Adjacent"/>
-    <disable_collisions link1="link4" link2="tool2" reason="Never"/>
+    <!-- <disable_collisions link1="link4" link2="tool2" reason="Never"/> -->
+    <disable_collisions link1="link4" link2="link6" reason="Never"/>
+
     <disable_collisions link1="link5" link2="link6" reason="Adjacent"/>
     <disable_collisions link1="link5" link2="tool2" reason="Never"/>
-    <disable_collisions link1="link6" link2="tool1" reason="Adjacent"/>
-    <disable_collisions link1="link6" link2="tool2" reason="Never"/>
-    <disable_collisions link1="tool1" link2="tool2" reason="Adjacent"/>
+    <!-- <disable_collisions link1="link6" link2="tool1" reason="Adjacent"/> -->
+    <disable_collisions link1="link6" link2="tool2" reason="Adjacent"/>
+    <!-- <disable_collisions link1="tool1" link2="tool2" reason="Adjacent"/> -->
 </robot>

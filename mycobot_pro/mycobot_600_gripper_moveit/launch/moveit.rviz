@@ -9,7 +9,7 @@ Panels:
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5
-    Tree Height: 200
+    Tree Height: 245
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -53,7 +53,7 @@ Visualization Manager:
       MoveIt_Allow_Sensor_Positioning: false
       MoveIt_Planning_Attempts: 10
       MoveIt_Planning_Time: 5
-      MoveIt_Use_Cartesian_Path: true
+      MoveIt_Use_Cartesian_Path: false
       MoveIt_Use_Constraint_Aware_IK: true
       MoveIt_Workspace:
         Center:
@@ -114,37 +114,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          joint1:
+          link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint2:
+          link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint3:
+          link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint4:
+          link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint5:
+          link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          tool1:
+          link6:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -240,37 +235,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          joint1:
+          link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint2:
+          link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint3:
+          link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint4:
+          link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint5:
+          link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          joint6:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          tool1:
+          link6:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -335,17 +325,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: -0.07944566011428833
-        Y: 0.29104751348495483
-        Z: 0.29134249687194824
+        X: 0.4045429229736328
+        Y: 0.17718593776226044
+        Z: 0.2918968200683594
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0449998378753662
+      Pitch: 0.20500031113624573
       Target Frame: base
-      Yaw: 6.149951934814453
+      Yaw: 2.056767225265503
     Saved:
       - Class: rviz/Orbit
         Distance: 2
@@ -370,7 +360,7 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 820
+  Height: 934
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -379,9 +369,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001f3000002dafc0200000007fb000000100044006900730070006c006100790073010000003d00000105000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720100000148000000410000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000018f000001880000017d00ffffff00000539000002da00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000034cfc0200000007fb000000100044006900730070006c006100790073010000003d00000132000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720100000175000000410000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001bc000001cd0000017d00ffffff0000053d0000034c00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1842
+  Width: 1846
   X: 72
   Y: 27

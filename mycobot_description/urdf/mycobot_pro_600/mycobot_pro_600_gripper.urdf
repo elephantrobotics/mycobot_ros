@@ -8,31 +8,31 @@
     <visual>
       <geometry>
 	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J1-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J1-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = " 1.5706 0 0"/>
     </visual>
     <collision>
-    <geometry>
+      <geometry>
 	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J1-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J1-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0 0 " rpy = " 1.5706 0 0"/>
     </collision>
   </link>
 
   <link name="link1">
     <visual>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J2-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J2-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = "0 0 0"/>
+    <origin xyz = "0 0.05 -0.08 " rpy = "0 0 3.14159"/>
     </visual>
      <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J2-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J2-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    <origin xyz = "0 0.05 -0.08 " rpy = " 0 0 3.14159"/>
     </collision>
   </link>
 
@@ -40,15 +40,15 @@
   <link name="link2">
     <visual>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J3-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J3-W.dae"/>
       </geometry>
-    <origin xyz = "0 0.0 0.0 " rpy = " 3.1415926 0 3.1415926"/>
+    <origin xyz = "0 -0.092 0.044 " rpy = " 0 -1.5706 0"/>
     </visual>
      <collision>
      <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J3-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J3-W.dae"/>
       </geometry>
-    <origin xyz = "0 0.0 0.0 " rpy = " 3.1415926 0 3.1415926"/>
+    <origin xyz = "0 -0.092 0.044 " rpy = " 0 -1.5706 0"/>
     </collision>
   </link>
 
@@ -57,16 +57,16 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J4-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J4-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.0 " rpy = " 3.1415926 3.14159 3.1415926"/>
+    <origin xyz = "0 -0.09 -0.01 " rpy = " 0 1.5706 0"/>
     </visual>
      <collision>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J4-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J4-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0.0 " rpy = "3.1415926 03.14159 3.1415926"/>
+    <origin xyz = "0 -0.09 -0.01 " rpy = "0 1.5706 0"/>
     </collision>
   </link>
 
@@ -76,16 +76,16 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J5-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J5-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 3.1415926 0"/>
+    <origin xyz = "0 -0.6987 0 " rpy = " 0 0 0"/>
     </visual>
      <collision>
-     <geometry>
+      <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J5-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J5-W.dae"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 0 3.1415926 0"/>
+    <origin xyz = "0 -0.6987 0 " rpy = " 0 0 0"/>
     </collision>
   </link>
 
@@ -94,16 +94,16 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-W.dae"/>
       </geometry>
-    <origin xyz = "0 0  0 " rpy = " 0  0 -1.5706"/>
+    <origin xyz = "0 0 0.048 " rpy = " 1.5706  0 3.14159"/>
     </visual>
      <collision>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-W.dae"/>
       </geometry>
-    <origin xyz = "0 0  0 " rpy = " 0  0 -1.5706"/>
+    <origin xyz = "0 0 0.048 " rpy = " 1.5706  0 3.14159"/>
     </collision>
   </link>
 
@@ -111,26 +111,27 @@
     <visual>
       <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-tool-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J7-W.dae"/>
       </geometry>
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-    <origin xyz = "0.02 0 0" rpy = " 0 -1.5707  0"/>
+    <origin xyz = "0.06 0 0" rpy = " 3.14159 3.14159  0"/>
     </visual>
      <collision>
-     <geometry>
+      <geometry>
        <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-tool-mm.dae"/>
+       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J7-W.dae"/>
       </geometry>
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-    <origin xyz = "0.02 0 0" rpy = " 0 -1.5707  0"/>
+    <origin xyz = "0.06 0 0" rpy = " 3.14159 3.14159  0"/>
     </collision>
   </link>
 
-  <link name="tool1">
+
+  <!-- <link name="tool1">
     <visual>
         <geometry>
             <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/tool1-mm.dae" />
@@ -143,7 +144,7 @@
         </geometry>
         <origin xyz="0.0 0 0" rpy=" -1.5706 0  0" />
     </collision>   
-  </link>
+  </link> -->
 
   <link name="tool2">
     <visual>
@@ -291,8 +292,8 @@
     <limit effort = "1000.0" lower = "-3.14" upper = "3.14" velocity = "0"/>
     <parent link="link1"/>
     <child link="link2"/>
-    <!-- <origin xyz= "0 0  0" rpy = "1.5708 0 0"/>   -->
-    <origin xyz= "0 0.04  0.085" rpy = "1.5706 1.5706 0"/>
+    <!-- <origin xyz= "0 0  0" rpy = "1.5708 -1.5708 0"/>   -->
+    <origin xyz= "0 0.042  0.072" rpy = "1.5708 1.5706 0"/>
   </joint>
 
 
@@ -301,7 +302,7 @@
     <limit effort = "1000.0" lower = "-2.61" upper = "2.618" velocity = "0"/>
     <parent link="link2"/>
     <child link="link3"/>
-    <origin xyz= "0.0 0.25 0   " rpy = "0 0 0"/>  
+    <origin xyz= "0.0 0.25 0.005   " rpy = "0 0 0"/>  
   </joint>
 
   <joint name="joint5_to_joint4" type="revolute">
@@ -310,7 +311,7 @@
     <limit effort = "1000.0" lower = "-2.97" upper = "2.97" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <!-- <origin xyz= "0.25 0  -0.1091" rpy = "0 0 0"/>   -->
+    <!-- <origin xyz= "0.25 0  -0.1091" rpy = "0 0 1.5708"/>   -->
     <origin xyz= "0 0.25  0.025" rpy = "0 0 -1.5706"/>  
   </joint>
 
@@ -319,7 +320,7 @@
     <limit effort = "1000.0" lower = "-2.93" upper = "2.9321" velocity = "0"/>
     <parent link="link4"/>
     <child link="link5"/>
-    <origin xyz= "0 0.058 -0.05" rpy = "1.57080 -1.57080 3.14159"/>  
+    <origin xyz= "0 0.058 -0.052" rpy = "1.57080 -1.57080 3.14159"/>  
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
@@ -327,31 +328,31 @@
     <limit effort = "1000.0" lower = "-3.03" upper = "3.0368" velocity = "0"/>
     <parent link="link5"/>
     <child link="link6"/>
-    <origin xyz= "-0.076 0 0.05" rpy = "-1.57080 0 0 "/>  
+    <origin xyz= "-0.06 0 0.048" rpy = "-1.57080 0 0 "/>  
   </joint>
 
-  <joint name="joint6output_to_tool1" type="fixed">
+  <joint name="joint6output_to_tool2" type="fixed">
     <axis xyz="0 1 0"/>
     <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/>
     <parent link="link6" />
-    <child link="tool1" />
-    <origin xyz="0.0079 0.0 0.0" rpy="1.5708 -1.5706 0" />
+    <child link="tool2" />
+    <origin xyz="-0.016 0.0 0.0" rpy="-1.5706 0 1.5706" />
   </joint>
 
-  <joint name="tool1_to_tool2" type="fixed">
+  <!-- <joint name="tool1_to_tool2" type="fixed">
     <axis xyz="0 0 1"/>
     <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/>
     <parent link="tool1" />
     <child link="tool2" />
     <origin xyz="0.0 0.008 0.00" rpy="1.5708 -1.5706 3.14159" />
-  </joint>
+  </joint> -->
 
   <joint name="tool2_to_gripper_base" type="fixed">
     <axis xyz="0 0 -1"/>
     <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/>
     <parent link="tool2" />
     <child link="gripper_base" />
-    <origin xyz="0.0 0.0 0.04" rpy="1.5706 0 1.5706" />
+    <origin xyz="0.005 0.0 0.047" rpy="1.5706 0 1.5706" />
   </joint>
 
   <joint name="gripper_controller" type="revolute">
