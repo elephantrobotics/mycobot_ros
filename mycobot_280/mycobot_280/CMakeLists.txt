@@ -30,6 +30,7 @@ catkin_install_python(PROGRAMS
   scripts/follow_display_gripper.py
   scripts/slider_control_gripper.py
   scripts/listen_real_gripper.py
+  scripts/detect_stag.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
