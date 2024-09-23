@@ -4,11 +4,23 @@ import stag
 import numpy as np
 import json
 import time
+import os
 from scipy.linalg import svd
 from pymycobot import *
+from marker_utils import *
+import shutil
+import glob
 
 
-mc = MyCobot("/dev/ttyUSB0")  # 设置端口
+ports = glob.glob('/dev/ttyUSB*') + glob.glob('/dev/ttyACM*')
+print(ports)
+if ports:
+    arm_port = ports[0]
+else:
+    raise Exception("No MyCobot device found")
+
+
+mc = MyCobot(port=arm_port)  # 设置端口
             
 np.set_printoptions(suppress=True, formatter={'float_kind': '{:.2f}'.format})
 
@@ -29,6 +41,9 @@ class camera_detect:
    
         # Initialize EyesInHand_matrix to None or load from a document if available
         self.EyesInHand_matrix = None
+        file_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.matrix_file_path = os.path.join(file_dir, "config","EyesInHand_matrix.json")
+    
         self.load_matrix()
 
     def save_matrix(self, filename="EyesInHand_matrix.json"):
@@ -36,6 +51,13 @@ class camera_detect:
         if self.EyesInHand_matrix is not None:
             with open(filename, 'w') as f:
                 json.dump(self.EyesInHand_matrix.tolist(), f)
+                
+            try:
+                # 复制文件到目标路径
+                shutil.copy(filename, self.matrix_file_path)
+                print(f"File copied to {self.matrix_file_path}")
+            except IOError as e:
+                print(f"Failed to copy file: {e}")
     
     def load_matrix(self, filename="EyesInHand_matrix.json"):
         # Load the EyesInHand_matrix from a JSON file, if it exists
