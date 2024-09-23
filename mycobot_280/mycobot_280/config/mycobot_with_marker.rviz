@@ -154,10 +154,10 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /cube
+      Marker Topic: cube
       Name: Marker
       Namespaces:
-        cube: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true

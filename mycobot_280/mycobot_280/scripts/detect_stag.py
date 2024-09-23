@@ -332,21 +332,25 @@ class STAGRecognizer:
         Returns:
             _type_: _description_
         """
-        if self.current_frame is None:
-            rospy.logwarn("No image received yet")
-            return []
-        # 获取当前帧
-        frame = self.current_frame
-        # 获取画面中二维码的角度和id
-        corners, ids, rejected_corners = stag.detectMarkers(frame, 11)
-        # 获取物的坐标(相机系)
-        marker_pos_pack = self.calc_markers_base_position(corners, ids)
-        if len(marker_pos_pack) == 0 and not rospy.is_shutdown():
-            # rospy.logwarn("No markers detected")
-            marker_pos_pack = self.stag_identify()
+        try:
+            if self.current_frame is None:
+                rospy.logwarn("No image received yet")
+                return []
+            # 获取当前帧
+            frame = self.current_frame
+            # 获取画面中二维码的角度和id
+            corners, ids, rejected_corners = stag.detectMarkers(frame, 11)
+            # 获取物的坐标(相机系)
+            marker_pos_pack = self.calc_markers_base_position(corners, ids)
+            if len(marker_pos_pack) == 0 and not rospy.is_shutdown():
+                # rospy.logwarn("No markers detected")
+                marker_pos_pack = self.stag_identify()  # 递归调用
 
-        # print("Camera coords = ", marker_pos_pack)
-        return marker_pos_pack
+            # print("Camera coords = ", marker_pos_pack)
+            return marker_pos_pack
+        except RecursionError:
+            # rospy.logerr("Recursion depth exceeded in marker detection")
+            return [0, 0, 0, 0]  # 返回默认值
     
     def vision_trace(self, mode, ml):
         sp = 40
@@ -369,6 +373,10 @@ class STAGRecognizer:
             
     def stag_robot_identify(self):
         marker_pos_pack = self.stag_identify()
+        # 如果返回的是默认值，直接退出函数，不返回任何数据
+        if marker_pos_pack == [0, 0, 0, 0]:
+            rospy.logwarn("No markers detected, skipping processing")
+            return None  # 直接返回 None
         target_coords = self.get_coords()
         while len(target_coords)==0:
             target_coords = self.get_coords()
@@ -401,6 +409,9 @@ class STAGRecognizer:
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             target_coords = self.stag_robot_identify()
+             # 如果没有返回目标坐标，跳过本次循环
+            if target_coords is None:
+                continue  # 跳过这次循环，等下次识别
             target_coords[0] -= 300
             rospy.loginfo('Target Coords: %s', target_coords)
             self.coord_limit(target_coords)
