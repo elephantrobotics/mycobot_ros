@@ -247,9 +247,7 @@ class MycobotTopics(object):
         """Subscribe to end type Status"""
         """订阅末端类型状态"""
         def callback(data):
-            print('data:', data)
             if data.Status==1:
-                print('444444444444444444444444444444444444444444444444444')
                 self.mc.set_end_type(1)
             else:
                 self.mc.set_end_type(0)
