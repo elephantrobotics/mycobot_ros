@@ -15,8 +15,11 @@ from mycobot_communication.msg import (
     MycobotSetCoords,
     MycobotGripperStatus,
     MycobotPumpStatus,
+    MycobotSetEndType,
+    MycobotSetFreshMode,
+    MycobotSetToolReference,
 )
-
+from std_msgs.msg import UInt8
 from pymycobot.mycobot import MyCobot
 
 
@@ -85,6 +88,10 @@ class MycobotTopics(object):
         sb = threading.Thread(target=self.sub_set_coords)
         sg = threading.Thread(target=self.sub_gripper_status)
         sp = threading.Thread(target=self.sub_pump_status)
+        
+        sfm = threading.Thread(target=self.sub_fresh_mode_status)
+        set = threading.Thread(target=self.sub_end_type_status)
+        str = threading.Thread(target=self.sub_set_tool_reference)
 
         pa.setDaemon(True)
         pa.start()
@@ -98,6 +105,13 @@ class MycobotTopics(object):
         sg.start()
         sp.setDaemon(True)
         sp.start()
+        
+        sfm.setDaemon(True)
+        sfm.start
+        set.setDaemon(True)
+        set.start()
+        str.setDaemon(True)
+        str.start()
 
         pa.join()
         pb.join()
@@ -105,6 +119,10 @@ class MycobotTopics(object):
         sb.join()
         sg.join()
         sp.join()
+        
+        sfm.join()
+        set.join()
+        str.join()
 
     def pub_real_angles(self):
         """Publish real angle"""
@@ -113,17 +131,19 @@ class MycobotTopics(object):
                               MycobotAngles, queue_size=5)
         ma = MycobotAngles()
         while not rospy.is_shutdown():
-            self.lock.acquire()
-            angles = self.mc.get_angles()
-            self.lock.release()
-            if angles:
-                ma.joint_1 = angles[0]
-                ma.joint_2 = angles[1]
-                ma.joint_3 = angles[2]
-                ma.joint_4 = angles[3]
-                ma.joint_5 = angles[4]
-                ma.joint_6 = angles[5]
-                pub.publish(ma)
+            with self.lock:
+                try:
+                    angles = self.mc.get_angles()
+                    if angles:
+                        ma.joint_1 = angles[0]
+                        ma.joint_2 = angles[1]
+                        ma.joint_3 = angles[2]
+                        ma.joint_4 = angles[3]
+                        ma.joint_5 = angles[4]
+                        ma.joint_6 = angles[5]
+                        pub.publish(ma)
+                except Exception as e:
+                    rospy.logerr(f"SerialException: {e}")
             time.sleep(0.25)
 
     def pub_real_coords(self):
@@ -134,17 +154,19 @@ class MycobotTopics(object):
         ma = MycobotCoords()
 
         while not rospy.is_shutdown():
-            self.lock.acquire()
-            coords = self.mc.get_coords()
-            self.lock.release()
-            if coords:
-                ma.x = coords[0]
-                ma.y = coords[1]
-                ma.z = coords[2]
-                ma.rx = coords[3]
-                ma.ry = coords[4]
-                ma.rz = coords[5]
-                pub.publish(ma)
+            with self.lock:
+                try:
+                    coords = self.mc.get_coords()
+                    if coords:
+                        ma.x = coords[0]
+                        ma.y = coords[1]
+                        ma.z = coords[2]
+                        ma.rx = coords[3]
+                        ma.ry = coords[4]
+                        ma.rz = coords[5]
+                        pub.publish(ma)
+                except Exception as e:
+                    rospy.logerr(f"SerialException: {e}")
             time.sleep(0.25)
 
     def sub_set_angles(self):
@@ -204,6 +226,44 @@ class MycobotTopics(object):
 
         sub = rospy.Subscriber(
             "mycobot/pump_status", MycobotPumpStatus, callback=callback
+        )
+        rospy.spin()
+        
+    def sub_fresh_mode_status(self):
+        """Subscribe to fresh mode Status"""
+        """订阅运动模式状态"""
+        def callback(data):
+            if data.Status==1:
+                self.mc.set_fresh_mode(1)
+            else:
+                self.mc.set_fresh_mode(0)
+
+        sub = rospy.Subscriber(
+            "mycobot/fresh_mode_status", MycobotSetFreshMode, callback=callback
+        )
+        rospy.spin()
+        
+    def sub_end_type_status(self):
+        """Subscribe to end type Status"""
+        """订阅末端类型状态"""
+        def callback(data):
+            if data.Status==1:
+                self.mc.set_end_type(1)
+            else:
+                self.mc.set_end_type(0)
+
+        sub = rospy.Subscriber(
+            "mycobot/end_type_status", MycobotSetEndType, callback=callback
+        )
+        rospy.spin()
+        
+    def sub_set_tool_reference(self):
+        def callback(data):
+            coords = [data.x, data.y, data.z, data.rx, data.ry, data.rz]
+            self.mc.set_tool_reference(coords)
+
+        sub = rospy.Subscriber(
+            "mycobot/tool_reference_goal", MycobotSetToolReference, callback=callback
         )
         rospy.spin()
 
