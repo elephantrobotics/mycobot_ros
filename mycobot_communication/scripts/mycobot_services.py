@@ -97,6 +97,9 @@ def get_angles(req):
         lock = acquire("/tmp/mycobot_lock")
         angles = mc.get_angles()
         release(lock)
+        if angles is None:
+            rospy.logwarn('angles is None, no angle data')
+            return GetAnglesResponse()
         return GetAnglesResponse(*angles)
 
 
@@ -125,6 +128,9 @@ def get_coords(req):
         lock = acquire("/tmp/mycobot_lock")
         coords = mc.get_coords()
         release(lock)
+        if coords is None:
+            rospy.logwarn('coords is None, no coord data')
+            return GetCoordsResponse()
         return GetCoordsResponse(*coords)
 
 

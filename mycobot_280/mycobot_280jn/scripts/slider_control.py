@@ -34,8 +34,7 @@ def callback(data):
 def listener():
     global mc
     rospy.init_node("control_slider", anonymous=True)
-
-    rospy.Subscriber("joint_states", JointState, callback)
+    
     port = rospy.get_param("~port", "/dev/ttyTHS1")
     baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
@@ -44,6 +43,8 @@ def listener():
     mc.set_fresh_mode(1)
     time.sleep(0.05)
 
+    rospy.Subscriber("joint_states", JointState, callback) 
+    
     # spin() simply keeps python from exiting until this node is stopped
     # spin()只是阻止python退出，直到该节点停止
     print("spin ...")
