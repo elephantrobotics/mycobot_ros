@@ -1,0 +1,11 @@
+<launch>
+    <arg name="model" default="$(find mycobot_description)/urdf/force_control_gripper/mycobot_pro_force_gripper.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_description)/urdf/force_control_gripper/force_gripper.rviz" />
+    
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="0 0 0 0 0 0 world gripper_base"/> -->
+    <!-- 使用 RViz 显示 -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
+</launch>
