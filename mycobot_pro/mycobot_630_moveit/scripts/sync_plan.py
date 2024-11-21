@@ -37,7 +37,8 @@ def listener():
     mc = ElephantRobot(ip, int(port))
     # START CLIENT,启动客户端
     res = mc.start_client()
-    if res != "":
+    if not res:
+        print('res:', res)
         sys.exit(1)
 
     mc.set_speed(90)
