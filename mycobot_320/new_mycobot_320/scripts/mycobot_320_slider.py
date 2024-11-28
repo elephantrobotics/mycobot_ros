@@ -13,7 +13,7 @@ import time
 import rospy
 from sensor_msgs.msg import JointState
 
-from pymycobot.mycobot import MyCobot
+from pymycobot.mycobot320 import MyCobot320
 
 
 mc = None
@@ -34,14 +34,14 @@ def listener():
    
     rospy.init_node("control_slider", anonymous=True)
 
-    rospy.Subscriber("joint_states", JointState, callback)
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    port = rospy.get_param("~port", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
-    mc = MyCobot(port, baud)
+    mc = MyCobot320(port, baud)
     time.sleep(0.05)
     mc.set_fresh_mode(1)
     time.sleep(0.05)
+    rospy.Subscriber("joint_states", JointState, callback)
     # spin() simply keeps python from exiting until this node is stopped
     print("spin ...")
     rospy.spin()
