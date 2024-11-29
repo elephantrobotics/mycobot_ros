@@ -287,7 +287,7 @@
     <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/> -->
     <parent link="link6"/>
     <child link="gripper_base"/>
-     <origin xyz= "0 0.0 0.034" rpy = "1.5708 0 0"/>
+     <origin xyz= "0 0.0 0.042" rpy = "1.5708 0 0"/>
   </joint>
 
     <joint name="gripper_controller" type="revolute">
