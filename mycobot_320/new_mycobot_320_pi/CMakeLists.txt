@@ -72,6 +72,8 @@ catkin_install_python(PROGRAMS
   scripts/mycobot_320_listen_real.py
   scripts/mycobot_320_listen_real_of_topic.py
   scripts/mycobot_320_simple_gui.py
+  scripts/mycobot_320_force_gripper_slider.py
+  scripts/mycobot_320_gripper_slider.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 
 )

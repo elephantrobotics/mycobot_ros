@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
+	
+<xacro:property name="width" value=".2" />
+
+  <link name="gripper_base">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/three_gripper/myhand.dae"/>
+      </geometry>
+    <origin xyz = "-0.01 0 0.1 " rpy = " 1.5708 0 -1.5708"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/three_gripper/myhand.dae"/>
+      </geometry>
+    <origin xyz = "-0.01 0 0.05 " rpy = " 0 0 0"/>
+    </collision>
+  </link>
+
+
+</robot>
+

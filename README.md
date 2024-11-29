@@ -224,9 +224,21 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 
 ![320 m5 2022 gripper](./demo_img/320m5_2022/320m5_gripper_2022.png)
 
+[mycobot 320 m5 2022 force control gripper](./mycobot_description/urdf/mycobot_320_m5_2022/pro_320_m5_2022_force_gripper.urdf)
+
+![320 m5 2022 force control gripper](./demo_img/320m5_2022/320m5_force_gripper_2022.png)
+
 [mycobot 320 pi 2022](./mycobot_description/urdf/mycobot_320_pi_2022/new_mycobot_pro_320_pi_2022.urdf)
 
 ![320 pi 2022](./demo_img/320pi_2022/320pi_2022.png)
+
+[mycobot 320 pi 2022 gripper](./mycobot_description/urdf/mycobot_320_pi_2022/new_mycobot_pro_320_pi_2022_gripper.urdf)
+
+![320 m5 2022 gripper](./demo_img/320m5_2022/320m5_gripper_2022.png)
+
+[mycobot 320 pi 2022 force control gripper](./mycobot_description/urdf/mycobot_320_pi_2022/pro_320_pi_2022_force_gripper.urdf)
+
+![320 m5 2022 force control gripper](./demo_img/320m5_2022/320m5_force_gripper_2022.png)
 
 [ultraArm P340](./mycobot_description/urdf/ultraArm_p340/ultraArm_p340.urdf)
 
