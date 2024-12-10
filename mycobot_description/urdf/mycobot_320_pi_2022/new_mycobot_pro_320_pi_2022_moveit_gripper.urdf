@@ -196,7 +196,7 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mycobot_320_pi_2022/gripper_right1.dae"/>
       </geometry>
-        <origin xyz = "-0.036 -0.052 0.0 " rpy = " 0 0 1.5708"/>
+        <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 1.5708"/>
     </collision>
   </link>
 
@@ -211,7 +211,7 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mycobot_320_pi_2022/gripper_right2.dae"/>
       </geometry>
-        <origin xyz = "-0.03 0.024 -0.018 " rpy = " 0 0 1.5708"/>
+        <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 1.5708"/>
     </collision>
   </link>
 
@@ -227,7 +227,7 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/mycobot_320_pi_2022/gripper_right3.dae"/>
       </geometry>
-    <origin xyz = "-0.034 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+    <origin xyz = "0.0 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
     </collision>
   </link>
 
