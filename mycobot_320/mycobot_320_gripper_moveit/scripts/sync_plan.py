@@ -17,7 +17,7 @@ import pymycobot
 from packaging import version
 
 # min low version require
-MAX_REQUIRE_VERSION = '3.6.0'
+MAX_REQUIRE_VERSION = '3.5.3'
 
 current_verison = pymycobot.__version__
 print('current pymycobot library version: {}'.format(current_verison))
