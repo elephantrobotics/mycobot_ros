@@ -82,7 +82,7 @@ def teleop_keyboard():
         exit(1)
 
     init_pose = [0, 0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 0, 0, -90, 0, -90, 0, speed]
+    home_pose = [-10, 9, 30, 2, 50, -4, 100, speed]
 
     # rsp = set_angles(*init_pose)
 

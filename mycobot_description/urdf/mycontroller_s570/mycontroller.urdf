@@ -1,0 +1,388 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
+	
+<xacro:property name="width" value=".2" />
+
+
+  <link name="base">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/base.dae"/>
+      </geometry>
+      <origin xyz = "0.0 0.405 0 " rpy = " 1.5706 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/base.dae"/>
+        </geometry>
+        <origin xyz = "0.0 0.405 0 " rpy = " 1.5706 0 0"/>
+    </collision>
+  </link>
+
+  <!--左臂七个关节 -->
+  <link name="link1">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link1.dae"/>
+      </geometry>
+      <origin xyz = "0.032 -0.051 -0.015 " rpy = " -1.5706 0 0"/>
+    </visual>
+    <collision>
+     <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link1.dae"/>
+      </geometry>
+      <origin xyz = "0.032 -0.051 -0.015 " rpy = " -1.5706 0 0"/>
+    </collision>
+  </link>
+
+  <link name="link2">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link2.dae"/>
+      </geometry>
+    <origin xyz = "0.031 -0.015 0.095 " rpy = " 3.14159 0 0 "/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link2.dae"/>
+      </geometry>
+      <origin xyz = "0.031 -0.015 0.095 " rpy = " 3.14159 0 0"/>
+    </collision>
+  </link>
+
+  <link name="link3">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link3.dae"/>
+      </geometry>
+      <origin xyz = "-0.031 -0.0123 -0.265 " rpy = " 0 0 3.14159"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link3.dae"/>
+      </geometry>
+      <origin xyz = "-0.031 -0.0123 -0.265" rpy = " 0 0 3.14159"/>
+    </collision>
+  </link>
+
+
+  <link name="link4">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link4.dae"/>
+      </geometry>
+    <origin xyz = "-0.308 -0.015 0.01 " rpy = " 3.14159 -1.5706 0"/>
+    </visual>
+    <collision>
+       <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link4.dae"/>
+      </geometry>
+      <origin xyz = "-0.308 -0.015 0.01 " rpy = "3.14159 -1.5706 0"/>
+    </collision>
+  </link>
+
+
+  <link name="link5">
+    <visual>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link5.dae"/>
+      </geometry>
+    <origin xyz = "-0.393 -0.015 0.271 " rpy = " 3.14159 -0.7854 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link5.dae"/>
+      </geometry>
+    <origin xyz = "-0.393 -0.015 0.271 " rpy = "3.14159 -0.7854 0"/>
+    </collision>
+  </link>
+
+
+  <link name="link6">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link6.dae"/>
+      </geometry>
+    <origin xyz = "-0.493 -0.016 -0.109 " rpy = " 3.14159 -1.5706 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link6.dae"/>
+      </geometry>
+    <origin xyz = "-0.493 -0.016 -0.109" rpy = " 3.14159 -1.5706 0"/>
+    </collision>
+  </link>
+
+  <link name="link7">
+    <visual>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link7.dae"/>
+      </geometry>
+    <origin xyz = "-0.112 -0.0005 0.068 " rpy = " 1.5706 2.0944 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link7.dae"/>
+      </geometry>
+    <origin xyz = "-0.112 -0.0005 0.068 " rpy = " 1.5706 2.0944 0"/>
+    </collision>
+  </link>
+
+
+
+  <!--右臂七个关节 -->
+  <link name="link8">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link1.dae"/>
+      </geometry>
+      <origin xyz = "0.0315 -0.05 -0.0136 " rpy = " -1.5706 0 0"/>
+    </visual>
+    <collision>
+     <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link1.dae"/>
+      </geometry>
+
+      <origin xyz = "0.0315 -0.05 -0.0136 " rpy = " -1.5706 0 0"/>
+    </collision>
+  </link>
+
+  <link name="link9">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link2.dae"/>
+      </geometry>
+    <origin xyz = "-0.095 0.0315 0.014 " rpy = "1.5706 0 1.5706"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link2.dae"/>
+      </geometry>
+      <origin xyz = "-0.095 0.0315 0.014 " rpy = "1.5706 0 1.5706"/>
+    </collision>
+  </link>
+
+  <link name="link10">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link3.dae"/>
+      </geometry>
+      <origin xyz = "-0.2658 0.03 0.0145 " rpy = "1.5706 0 1.5706"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link3.dae"/>
+      </geometry>
+      <origin xyz = "-0.2658 0.03 0.0145" rpy = "1.5706 0 1.5706"/>
+    </collision>
+  </link>
+
+
+  <link name="link11">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link4.dae"/>
+      </geometry>
+    <origin xyz = "-0.3065 0.01 0.013 " rpy = "1.5706 0 1.5706"/>
+    </visual>
+    <collision>
+       <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link4.dae"/>
+      </geometry>
+      <origin xyz = "-0.3065 0.01 0.013 " rpy = "1.5706 0 1.5706"/>
+    </collision>
+  </link>
+
+
+  <link name="link12">
+    <visual>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link5.dae"/>
+      </geometry>
+    <origin xyz = "-0.385 0.273 0.015" rpy = "1.5706 0 0.7854"/>
+    </visual>
+    <collision>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link5.dae"/>
+      </geometry>
+    <origin xyz = "-0.385 0.273 0.015" rpy = " 1.5706 0 0.7854"/>
+    </collision>
+  </link>
+
+
+  <link name="link13">
+    <visual>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link6.dae"/>
+      </geometry>
+    <origin xyz = "-0.495 -0.11 0.017" rpy = " 1.5706 0 1.5706"/>
+    </visual>
+    <collision>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link6.dae"/>
+      </geometry>
+    <origin xyz = "-0.495 -0.11 0.017" rpy = " 1.5706 0 1.5706"/>
+    </collision>
+  </link>
+
+  <link name="link14">
+    <visual>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link7.dae"/>
+      </geometry>
+    <origin xyz = "-0.11 0.071 0.002 " rpy = " 3.14159 3.14159 1.0472"/>
+    </visual>
+    <collision>
+      <geometry>
+       
+       <mesh filename="package://mycobot_description/urdf/mycontroller_s570/link7.dae"/>
+      </geometry>
+    <origin xyz = "-0.11 0.071 0.002" rpy = " 3.14159 3.14159 1.0472"/>
+    </collision>
+  </link>
+  
+
+
+
+
+
+  <!--左臂七个关节 -->
+  <joint name="joint1" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort = "1000.0" lower = "-2.7925" upper = "2.7925" velocity = "0"/>
+    <parent link="base"/>
+    <child link="link1"/>
+    <origin xyz= "0.0249 0.25 0.0015" rpy = "0 0 -0.541"/>  
+  </joint>
+
+
+  <joint name="joint2" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.3962" velocity = "0"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz= "0 0.041 0" rpy = "1.5708 0 0"/>  
+  </joint>
+
+
+  <joint name="joint3" type="revolute">
+    <axis xyz=" 0 0 1"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.32" velocity = "0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz= "0.0 -0.0023 -0.17   " rpy = "0 3.14159 0"/>  
+  </joint>
+
+
+ 
+  <joint name="joint4" type="revolute">
+    <axis xyz=" 0 -1 0"/>
+    <limit effort = "1000.0" lower = "-2.4453" upper = "1.3453" velocity = "0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin xyz= "-0.0209 0.003 0.042" rpy = "0 -1.5708 0"/>  
+  </joint>
+
+
+  <joint name="joint5" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.3962" velocity = "0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin xyz= "0.16 0.0 0.095" rpy = "0 -0.7853 0"/>  
+  </joint>
+
+ 
+  <joint name="joint6" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort = "1000.0" lower = "-1.9198" upper = "1.9198" velocity = "0"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <origin xyz= "0.033 0 0" rpy = "0 0.7854 0"/>  
+  </joint>
+
+  <joint name="joint7" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "1000.0" lower = "-2.7925" upper = "2.7925" velocity = "0"/>
+    <parent link="link6"/>
+    <child link="link7"/>
+    <origin xyz= "0.084 0 0.075" rpy = "0 0 0"/>  
+  </joint>
+
+
+  <!--右臂七个关节-->
+  <joint name="joint8" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort = "1000.0" lower = "-2.7925" upper = "2.7925" velocity = "0"/>
+    <parent link="base"/>
+    <child link="link8"/>
+    <origin xyz= "0.026 -0.241 0.003" rpy = "3.14159 0 0.541"/>  
+  </joint>
+
+
+  <joint name="joint9" type="revolute">
+    <axis xyz="0 0 -1"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.3962" velocity = "0"/>
+    <parent link="link8"/>
+    <child link="link9"/>
+    <origin xyz= "0 0.044 0" rpy = "0 3.14159 -1.5706"/>  
+  </joint>
+
+
+  <joint name="joint10" type="revolute">
+    <axis xyz=" 1 0 0"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.32" velocity = "0"/>
+    <parent link="link9"/>
+    <child link="link10"/>
+    <origin xyz= "0.17 0 0   " rpy = "0 0 0"/>  
+  </joint>
+
+
+ 
+  <joint name="joint11" type="revolute">
+    <axis xyz=" 0 0 1"/>
+    <limit effort = "1000.0" lower = "-1.7453" upper = "1.7453" velocity = "0"/>
+    <parent link="link10"/>
+    <child link="link11"/>
+    <origin xyz= "0.041 0.019 0.002" rpy = "0 0 0"/>  
+  </joint>
+
+
+  <joint name="joint12" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort = "1000.0" lower = "-1.3962" upper = "1.3962" velocity = "0"/>
+    <parent link="link11"/>
+    <child link="link12"/>
+    <origin xyz= "0.16 0.09 -0.002" rpy = "0 0 0.7854"/>  
+  </joint>
+
+ 
+  <joint name="joint13" type="revolute">
+    <axis xyz="0 0 -1"/>
+    <limit effort = "1000.0" lower = "-1.9198" upper = "1.9198" velocity = "0"/>
+    <parent link="link12"/>
+    <child link="link13"/>
+    <origin xyz= "0.0415 0 0" rpy = "0 0 -0.7854"/>  
+  </joint>
+
+  <joint name="joint14" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort = "1000.0" lower = "-1.9198" upper = "1.9198" velocity = "0"/>
+    <parent link="link13"/>
+    <child link="link14"/>
+    <origin xyz= "0.08 0.07 0" rpy = "0 0 0"/>  
+  </joint>
+
+
+
+</robot>
+

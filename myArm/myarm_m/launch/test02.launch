@@ -1,22 +1,14 @@
 <launch>
-    <arg
-    name="model" />
-  <param
-    name="robot_description"
-    textfile="$(find mycobot_description)/urdf/myarmM/myarmM.urdf" />
-  <node
-    name="joint_state_publisher_gui"
-    pkg="joint_state_publisher_gui"
-    type="joint_state_publisher_gui" />
-  <node
-    name="robot_state_publisher"
-    pkg="robot_state_publisher"
-    type="robot_state_publisher" />
-  <!-- <node
-    name="rviz"
-    pkg="rviz"
-    type="rviz"
-    args="-d $(find tw_robot)/urdf.rviz" /> -->
-  <node name="rviz" pkg="rviz" type="rviz" />
+    <arg name="rvizconfig" default="$(find myarm_m)/config/mycontroller.rviz" />
+    <!-- <arg name="rvizconfig" default="$(find myarm_m)/config/new_mc_embodied.rviz" /> -->
+    <arg name="ns5" default="mycontroller_s570" />
 
+
+    <group ns="$(arg ns5)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycontroller_s570/mycontroller.urdf ns:=$(arg ns5)" />
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="0 0 0 0 0 0 /map /$(arg ns5)/base" />        
+    </group>
+	<!-- Show in Rviz ，显示在Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" />
 </launch>

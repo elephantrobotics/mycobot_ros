@@ -1,0 +1,84 @@
+<launch>
+    <arg name="rvizconfig" default="$(find myarm_m)/config/mc_embodied.rviz" />
+    <!-- <arg name="rvizconfig" default="$(find myarm_m)/config/new_mc_embodied.rviz" /> -->
+    <arg name="gui" default="false" />
+    <arg name="ns1" default="myarm_m" />
+    <arg name="ns2" default="myarm_c650" />
+    <arg name="ns3" default="myarm_m_2" />
+    <arg name="ns4" default="myarm_c650_2" />
+    <arg name="ns5" default="car_frame" />
+
+
+    <group ns="$(arg ns5)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_m/mc_frame.urdf.xacro ns:=$(arg ns5)" />
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="0 0 0 0 0 0 /map /$(arg ns5)/base" />        
+    </group>
+
+    <!-- myarm_m -->
+    <group ns="$(arg ns1)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_m/myarm_m.urdf.xacro ns:=$(arg ns1)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns1)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="0.4 0.265 0.95 0 0 0 /map /$(arg ns1)/base" />        
+    </group>
+
+    <!-- myarm_c650 -->
+    <group ns="$(arg ns2)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_c650/myarm_c650.urdf.xacro ns:=$(arg ns2)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns2)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher1" args="-0.695 0.315 0.89 0 0 0 /map /$(arg ns2)/base" />        
+    </group>
+
+    <!-- myarm_m_2 -->
+    <group ns="$(arg ns3)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_m/myarm_m_2.urdf.xacro ns:=$(arg ns3)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns3)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher2" args="0.4 -0.265 0.95 0 0 0 /map /$(arg ns3)/base" />        
+    </group>
+
+    <!-- myarm_c650_4 -->
+    <group ns="$(arg ns4)">
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/myarm_c650/myarm_c650_2.urdf.xacro ns:=$(arg ns4)" />
+        <!-- 关节控制gui -->
+        <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+            <param name="use_gui" value="$(arg gui)" />
+        </node>
+        <!-- 发布tf -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        	<param name="publish_frequency" type="double" value="50.0" />
+	    	<param name="tf_prefix" value="$(arg ns4)" />
+		</node>
+        <!-- 设置map和机器人基座的坐标关系 -->
+        <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher2" args="-0.695 -0.315 0.89 0 0 0 /map /$(arg ns4)/base" />        
+    </group>
+
+	<!-- Show in Rviz ，显示在Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

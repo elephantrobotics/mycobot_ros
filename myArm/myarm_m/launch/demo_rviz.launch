@@ -1,5 +1,6 @@
 <launch>
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm_m/myarm_m.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/myarm_m/myarm_m.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_m/car_frame.urdf.xacro"/>
 	<arg name="rvizconfig" default="$(find myarm_m)/config/myarm_m.rviz" />
 	<arg name="gui" default="true" />
 

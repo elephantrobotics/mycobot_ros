@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="car_frame" >
+	
+<xacro:property name="ns" value="$(arg ns)/" />
+
+
+  <link name="base">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/myarm_m/car_frame.dae"/>
+      </geometry>
+      <origin xyz = "-0.65 -0.135 -0.2 " rpy = " 1.5706 0 1.5706"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/myarm_m/car_frame.dae"/>
+        </geometry>
+        <origin xyz = "-0.65 -0.135 -0.2 " rpy = " 1.5706 0 1.5706"/>
+    </collision>
+  </link>
+
+</robot>
+

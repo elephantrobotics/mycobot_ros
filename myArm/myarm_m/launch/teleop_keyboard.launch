@@ -1,10 +1,10 @@
 <launch>
 	<!-- Select connecting device and serial port ，选择连接设备及串口-->
-	<arg name="port" default="/dev/ttyAMA0" />
-	<arg name="baud" default="115200" />
+	<arg name="port" default="/dev/ttyACM0" />
+	<arg name="baud" default="1000000" />
 
-	<arg name="model" default="$(find mycobot_description)/urdf/myarm_300_pi/myarm_300_pi.urdf"/>
-	<arg name="rvizconfig" default="$(find myarm)/config/myarm.rviz" />
+	<arg name="model" default="$(find mycobot_description)/urdf/myarm_m/myarm_m.urdf"/>
+	<arg name="rvizconfig" default="$(find myarm_m)/config/myarm_m.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
@@ -14,10 +14,10 @@
 	<!-- Show in Rviz ，显示在Rviz-->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find myarm_communication)/launch/communication_service.launch">
+    <!-- <include file="$(find myarm_communication)/launch/communication_service.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
-    </include>
+    </include> -->
 	<!-- listen and pub the real angles ，监听并发布真实角度-->
-	<node name="real_listener" pkg="myarm" type="listen_real.py" />
+	<node name="real_listener" pkg="myarm_m" type="listen_real.py" />
 </launch>

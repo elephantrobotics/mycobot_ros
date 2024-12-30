@@ -20,12 +20,14 @@ def talker():
     joint_state_send.header = Header()
 
     joint_state_send.name = [
-        "joint1_to_base",
-        "joint2_to_joint1",
-        "joint3_to_joint2",
-        "joint4_to_joint3",
-        "joint5_to_joint4",
-        "endeffector_to_joint5",
+        "joint1",
+        "joint2",
+        "joint3",
+        "joint4",
+        "joint5",
+        "joint6",
+        "gripper",
+        "gripper_r",
     ]
     joint_state_send.velocity = [0]
     joint_state_send.effort = []

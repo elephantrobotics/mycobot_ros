@@ -2,13 +2,21 @@
 # encoding:utf-8
 # 读取机器人关节角数据，发送给RVIZ
 
-from pymycobot import MyArmM
+# from pymycobot import MyArmM
 import rospy
 from math import pi
 import time
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 import subprocess
+
+import rospy
+from math import pi
+import time
+from sensor_msgs.msg import JointState
+from std_msgs.msg import Header
+from pymycobot.myarmm import MyArmM
+import rosnode
 # 1：[-174, 167]
 # 2:[-92, 93]
 # 3:[-91,103]
@@ -23,7 +31,7 @@ def shutdown_ros_node(node_name):
         print(f"Error: {e}")
 
 global mam
-mam = MyArmM('/dev/ttyACM1', debug=False)
+mam = MyArmM('/dev/ttyACM0', 1000000, debug=False)
 # 1 3 4 6
 # 放松关节
 for i in range(8):
@@ -47,6 +55,10 @@ while not rospy.is_shutdown():
     joint_state.header.stamp = rospy.Time.now()
     joint_state.name = ['joint1', 'joint2', 'joint3','joint4', 'joint5', 'joint6', 'gripper']
     angles = mam.get_joints_angle()
+    if not angles:
+        rospy.logerr("mam.get_joints_angle() returned None. Skipping this iteration.")
+        continue
+    rospy.loginfo(f"Retrieved angles: {angles}")
     gripper_angle = angles.pop(6)
     gripper_angle /= -3500
     # angle:弧度 angles:角度
@@ -64,3 +76,6 @@ while not rospy.is_shutdown():
 
 
 # print(mam.get_servos_encoder())
+
+
+

@@ -61,8 +61,8 @@ def main():
     # 消息实例
     joint_state = JointState()
     # 初始化api对象
-    myarm_m = MyArmM('/dev/ttyACM1', debug=False)
-    myarm_c = MyArmC('/dev/ttyACM0', debug=False)
+    myarm_m = MyArmM('/dev/ttyACM0', 1000000, debug=False)
+    myarm_c = MyArmC('/dev/ttyACM1', 1000000, debug=False)
     # 使能
     for i in range(8):
         myarm_m.set_servo_enabled(i, 1)
