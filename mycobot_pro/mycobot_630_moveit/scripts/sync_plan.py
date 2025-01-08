@@ -23,6 +23,9 @@ def callback(data):
         radians_to_angles = round(math.degrees(value), 2)
         data_list.append(radians_to_angles)
         
+    data_list[1] = data_list[1] - 90
+    data_list[3] = data_list[3] - 90
+        
     rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
     mc.write_angles(data_list, 800)
 
