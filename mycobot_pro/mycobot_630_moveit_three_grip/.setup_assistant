@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/mycobot_pro_630/mycobot_pro_630_moveit_three_grip.urdf
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: wangweijian
+    author_email: weijian.wang@elephantrobotics.com
+    generated_timestamp: 1736848638
