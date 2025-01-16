@@ -121,7 +121,7 @@
       <geometry>
        <mesh filename="package://mycobot_description/urdf/three_gripper/three_myhand.dae"/>
       </geometry>
-    <origin xyz = "0.054 0 0.026" rpy = " 0 1.5707  3.14159"/>
+    <origin xyz = "0.054 -0.03 0.04" rpy = " 0 1.5707  3.14159"/>
     </visual>
      <collision>
       <origin xyz = "0.006 0.0 -0.0 " rpy = " 0 1.5708 3.14159"/>

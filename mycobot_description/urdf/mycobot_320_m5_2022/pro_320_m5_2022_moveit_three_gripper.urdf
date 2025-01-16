@@ -122,7 +122,7 @@
       <material name = "grey">
         <color rgba = "0.5 0.5 0.5 1"/>
       </material>
-      <origin xyz = "0.026 -0.026 0.0 " rpy = " 1.5708 0 3.14159"/>
+      <origin xyz = "0.04 -0.026 0.03 " rpy = " 1.5708 0 3.14159"/>
     </visual>
     <collision>
       <origin xyz = "0.0 0.0 -0.0115 " rpy = " 1.5708 0 3.14159"/>
