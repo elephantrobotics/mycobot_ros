@@ -280,9 +280,13 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 
 ![280 jn](./demo_img/single_gripper/mycobot_parallel_gripper.png)
 
-[mycobot Pro Adaptive gripper](./mycobot_description/urdf/pro_adaptive_gripper/mycobot_pro_adaptive_gripper.urdf)
+[mycobot Pro Adaptive gripper](./mycobot_description/urdf/pro_adaptive_gripper/mycobot_pro_adaptive_gripper.urdf) - old version
 
 ![280 jn](./demo_img/single_gripper/mycobot_pro_adaptive_gripper.png)
+
+[mycobot Pro Adaptive gripper](./mycobot_description/urdf/pro_adaptive_gripper/new_gripper/mycobot_pro_adaptive_gripper_new.urdf) (new version - Added more details)
+
+![320 gripper](./demo_img/single_gripper/new_mycobot_pro_adaptive_gripper.png)
 
 ## Contributors
 
