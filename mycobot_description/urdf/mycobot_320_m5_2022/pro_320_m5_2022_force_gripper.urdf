@@ -110,17 +110,30 @@
     </collision>
   </link>
 
+  <link name="gripper_connection">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/mygripper_f100_connection.dae"/>
+      </geometry>
+    <origin xyz = "-0.03 0.014 0 " rpy = " 0  0 -1.5708"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/mygripper_f100_connection.dae"/>
+      </geometry>
+    <origin xyz = "-0.03 0.014 0 " rpy = " 0  0 -1.5708"/>
+    </collision>
+  </link>
+
   <link name="gripper_base">
     <visual>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_base.dae"/>
       </geometry>
     <origin xyz = "-0.107 0.012 0.0 " rpy = " 1.5708  0 1.5708"/>
     </visual>
     <collision>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_base.dae"/>
       </geometry>
     <origin xyz = "-0.107 0.012 0.0 " rpy = " 1.5708  0 1.5708"/>
@@ -271,12 +284,16 @@
      <origin xyz= "0 0.055 0.0" rpy = "-1.5708 0 0"/>
   </joint>
 
-  <joint name="joint6output_to_gripper_base" type="fixed">
-    <!-- <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-3.05" upper = "3.05" velocity = "0"/> -->
+  <joint name="joint6output_to_gripper_connect" type="fixed">
     <parent link="link6"/>
+    <child link="gripper_connection"/>
+     <origin xyz= "0 0.0 0.01" rpy = "0 0 0"/>
+  </joint> 
+
+  <joint name="joint6output_to_gripper_base" type="fixed">
+    <parent link="gripper_connection"/>
     <child link="gripper_base"/>
-     <origin xyz= "0 0.0 0.034" rpy = "1.5708 0 0"/>
+     <origin xyz= "0 -0.02 0.036" rpy = "1.5708 0 0"/>
   </joint>
 
   <joint name="gripper_controller" type="revolute">
