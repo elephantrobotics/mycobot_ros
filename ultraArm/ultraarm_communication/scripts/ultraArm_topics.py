@@ -7,7 +7,6 @@ import signal
 import threading
 
 import rospy
-from pymycobot.ultraArm import ultraArm
 
 from ultraarm_communication.msg import(
     ultraArmAngles,
@@ -17,6 +16,19 @@ from ultraarm_communication.msg import(
     ultraArmGripperStatus,
     ultraArmPumpStatus,
 )
+import pymycobot
+from packaging import version
+# min low version require
+MAX_REQUIRE_VERSION = '3.5.3'
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
+    from pymycobot.ultraArmP340 import ultraArmP340
+    class_name = 'new'
+else:
+    from pymycobot.ultraArm import ultraArm
+    class_name = 'old'
+    print("Note: This class is no longer maintained since v3.6.0, please refer to the project documentation: https://github.com/elephantrobotics/pymycobot/blob/main/README.md")
 
 
 class Watcher:
@@ -72,7 +84,10 @@ class ultraArmTopics(object):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.ua = ultraArm(port, baud)
+        if class_name == 'old':
+            self.ua = ultraArm(port, baud)
+        else:
+            self.ua = ultraArmP340(port, baud)
         self.ua.go_zero()
         self.lock = threading.Lock()
 

@@ -3,7 +3,20 @@
 import time
 import rospy
 from ultraarm_communication.srv import *
-from pymycobot.ultraArm import ultraArm
+import pymycobot
+from packaging import version
+# min low version require
+MAX_REQUIRE_VERSION = '3.5.3'
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
+    from pymycobot.ultraArmP340 import ultraArmP340
+    class_name = 'new'
+else:
+    from pymycobot.ultraArm import ultraArm
+    class_name = 'old'
+    print("Note: This class is no longer maintained since v3.6.0, please refer to the project documentation: https://github.com/elephantrobotics/pymycobot/blob/main/README.md")
+
 
 ua = None
 
@@ -15,7 +28,10 @@ def create_handle():
     port = rospy.get_param("~port")
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
-    ua = ultraArm(port, baud)
+    if class_name == 'old':
+        ua = ultraArm(port, baud)
+    else:
+        ua = ultraArmP340(port, baud)
     
     # Power on the robotic arm
     ua.power_on()
