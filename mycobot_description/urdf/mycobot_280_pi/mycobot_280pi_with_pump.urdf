@@ -110,14 +110,14 @@
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot_280_pi/joint5.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
+    <origin xyz = "0.0 -0.001 -0.0345 " rpy = " 0 -1.5708 1.5708"/>
     </visual>
       <collision>
       <geometry>
        <!--- 0.0 0 -0.04 -->
        <mesh filename="package://mycobot_description/urdf/mycobot_280_pi/joint5.dae"/>
       </geometry>
-    <origin xyz = "0.0 0 -0.03356 " rpy = " 0 -1.5708 1.5708"/>
+    <origin xyz = "0.0 -0.001 -0.0345 " rpy = " 0 -1.5708 1.5708"/>
     </collision>
   </link>
 
@@ -233,7 +233,7 @@
     <limit effort = "1000.0" lower = "-2.8797" upper = "2.8797" velocity = "0"/>
     <parent link="joint5"/>
     <child link="joint6"/>
-    <origin xyz= "0 -0.07318 0" rpy = "1.5708 -1.5708 0"/>  
+    <origin xyz= "0 -0.07318 -0.001" rpy = "1.5708 -1.5708 0"/>  
   </joint>
 
   <joint name="joint6output_to_joint6" type="revolute">
