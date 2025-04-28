@@ -19,14 +19,14 @@ from mypalletizer_communication import (
 import pymycobot
 from packaging import version
 # min low version require
-MAX_REQUIRE_VERSION = '3.5.3'
+MAX_REQUIRE_VERSION = '3.6.1'
 current_verison = pymycobot.__version__
 print('current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
     raise RuntimeError('The version of pymycobot library must be less than {} . The current version is {}. Please downgrade the library version.'.format(MAX_REQUIRE_VERSION, current_verison))
 else:
     print('pymycobot library version meets the requirements!')
-    from pymycobot.mypalletizer import MyPalletizer
+    from pymycobot.mypalletizer260 import MyPalletizer260
 
 
 class Watcher:
@@ -83,7 +83,7 @@ class MypalTopics(object):
         port = rospy.get_param("~port", "/dev/ttyUSB0")
         baud = rospy.get_param("~baud", 115200)
         rospy.loginfo("%s,%s" % (port, baud))
-        self.mc = MyPalletizer(port,baud)
+        self.mc = MyPalletizer260(port,baud)
         self.lock = threading.Lock()
 
     def start(self):

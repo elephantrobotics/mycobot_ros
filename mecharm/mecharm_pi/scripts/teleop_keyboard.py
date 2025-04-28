@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 from __future__ import print_function
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
+from mecharm_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 import rospy
 import sys
 import select

@@ -9,14 +9,14 @@ from mycobot_communication.srv import *
 import pymycobot
 from packaging import version
 # min low version require
-MAX_REQUIRE_VERSION = '3.5.3'
+MAX_REQUIRE_VERSION = '3.6.1'
 current_verison = pymycobot.__version__
 print('current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
     raise RuntimeError('The version of pymycobot library must be less than {} . The current version is {}. Please downgrade the library version.'.format(MAX_REQUIRE_VERSION, current_verison))
 else:
     print('pymycobot library version meets the requirements!')
-    from pymycobot.mycobot import MyCobot
+    from pymycobot import MyCobot280
 
 mc = None
 
@@ -66,7 +66,7 @@ def create_handle():
     port = rospy.get_param("~port")
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
-    mc = MyCobot(port, baud)
+    mc = MyCobot280(port, baud)
     time.sleep(2) # open serial need wait
 
 

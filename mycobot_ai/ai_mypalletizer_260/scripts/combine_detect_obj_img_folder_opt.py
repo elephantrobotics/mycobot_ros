@@ -20,7 +20,17 @@ from threading import Thread
 import tkFileDialog as filedialog
 import Tkinter as tk
 from moving_utils import Movement
-from pymycobot.mypalletizer import MyPalletizer
+import pymycobot
+from packaging import version
+# min low version require
+MAX_REQUIRE_VERSION = '3.6.1'
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be less than {} . The current version is {}. Please downgrade the library version.'.format(MAX_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyPalletizer260
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
@@ -210,9 +220,9 @@ class Object_detect(Movement):
     # init mypal260
     def run(self):
         if "dev" in self.robot_m5:
-            self.mc = MyPalletizer(self.robot_m5, 115200) 
+            self.mc = MyPalletizer260(self.robot_m5, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyPalletizer(self.robot_raspi, 1000000) 
+            self.mc = MyPalletizer260(self.robot_raspi, 1000000) 
         if not self.raspi:
             self.pub_pump(False, self.Pin)
         self.mc.send_angles([-29.0, 5.88, -4.92, -76.28], 20)

@@ -1,8 +1,8 @@
-from pymycobot.mycobot import MyCobot
+from pymycobot.mycobot280 import MyCobot280
 import time
 from pymycobot import PI_BAUD, PI_PORT
 
-mc = MyCobot(PI_PORT, PI_BAUD)
+mc = MyCobot280(PI_PORT, PI_BAUD)
 
 coords = [ 
         [135.0, -65.5, 280.1, 178.99, 5.38, -179.9],

@@ -15,14 +15,14 @@ from rospy import ServiceException
 import pymycobot
 from packaging import version
 # min low version require
-MAX_REQUIRE_VERSION = '3.5.3'
+MAX_REQUIRE_VERSION = '3.6.1'
 current_verison = pymycobot.__version__
 print('current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
     raise RuntimeError('The version of pymycobot library must be less than {} . The current version is {}. Please downgrade the library version.'.format(MAX_REQUIRE_VERSION, current_verison))
 else:
     print('pymycobot library version meets the requirements!')
-    from pymycobot.mycobot import MyCobot
+    from pymycobot import MyCobot280
 
 mc = None
 
@@ -72,7 +72,7 @@ def talker():
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
     port = rospy.get_param("~port", "/dev/ttyUSB0")
     baud = rospy.get_param("~baud", 115200)
-    mc = MyCobot(port, baud)
+    mc = MyCobot280(port, baud)
     rate = rospy.Rate(30)  # 30hz
 
     # pub joint state，发布关节状态

@@ -9,14 +9,14 @@ from moving_utils import Movement
 import pymycobot
 from packaging import version
 # min low version require
-MAX_REQUIRE_VERSION = '3.5.3'
+MAX_REQUIRE_VERSION = '3.6.1'
 current_verison = pymycobot.__version__
 print('current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) > version.parse(MAX_REQUIRE_VERSION):
     raise RuntimeError('The version of pymycobot library must be less than {} . The current version is {}. Please downgrade the library version.'.format(MAX_REQUIRE_VERSION, current_verison))
 else:
     print('pymycobot library version meets the requirements!')
-    from pymycobot.mycobot import MyCobot
+    from pymycobot import MyCobot280
 
 
 IS_CV_4 = cv2.__version__[0] == '4'
@@ -233,11 +233,11 @@ class Object_detect(Movement):
     def run(self):
      
         if "dev" in self.robot_wio :
-            self.mc = MyCobot(self.robot_wio, 115200) 
+            self.mc = MyCobot280(self.robot_wio, 115200) 
         elif "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200) 
+            self.mc = MyCobot280(self.robot_m5, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
+            self.mc = MyCobot280(self.robot_raspi, 1000000)
         if not self.raspi:
             self.pub_pump(False, self.Pin)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
