@@ -37,10 +37,6 @@ def linear_transform(x):
 
 def set_angle(mam, angle, speed=40):
     # 弧度转角度
-    # angle = [int(a*180/pi) for a in angles]
-    # angle.append(0)
-    # joint_id = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6}
-    # joint_id = [0,1,2,3,4,5,6]
     mam.set_joints_angle(angle, speed)
     
     # for i in range(6):
@@ -57,12 +53,12 @@ def main():
     pub_m = rospy.Publisher('myarm_m/joint_states', JointState, queue_size=10)
     pub_c = rospy.Publisher('myarm_c650/joint_states', JointState, queue_size=10)
     # 设置发布频率
-    rate = rospy.Rate(50)
+    rate = rospy.Rate(100)
     # 消息实例
     joint_state = JointState()
     # 初始化api对象
-    myarm_m = MyArmM('/dev/ttyACM0', 1000000, debug=False)
-    myarm_c = MyArmC('/dev/ttyACM1', 1000000, debug=False)
+    myarm_m = MyArmM('/dev/ttyACM1', 1000000, debug=False)
+    myarm_c = MyArmC('/dev/ttyACM0', 1000000, debug=False)
     # 使能
     for i in range(8):
         myarm_m.set_servo_enabled(i, 1)
@@ -88,7 +84,7 @@ def main():
         # gripper_angle_m /= -3500
         # angle:弧度 angles:角度
         
-        angle_m[2]*=-1
+        angle_m[1]*=-1
         joint_state.position = angle_m
         joint_state.effort = []
         joint_state.velocity = []
@@ -102,11 +98,15 @@ def main():
         gripper_angle_m_real = gripper_angle_m_sim*(-3500)
         angle_m = [a*180/pi for a in angle_m]
         angle_m.append(gripper_angle_m_real)
+        if angle_m[6] > 0:
+            angle_m[6] = -0.1
+        elif angle_m[6] < -118:
+            angle_m[6] = -117.5
         myarm_m.set_joints_angle(angle_m, 30)
         current_time = current_time2-current_time1
-        print(angle_m)
-        rospy.loginfo('消息成功发布')
-        rospy.loginfo(current_time)
+        # print(angle_m)
+        # rospy.loginfo('消息成功发布')
+        # rospy.loginfo(current_time)
         # 等待，允许其他节点处理
         rate.sleep()
         

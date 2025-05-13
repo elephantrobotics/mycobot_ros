@@ -18,7 +18,7 @@ import subprocess
 
 os.system("sudo chmod 777 /dev/ttyACM*")
 
-obj = Exoskeleton(port="/dev/ttyACM1")
+obj = Exoskeleton(port="/dev/ttyACM0")
 
 def shutdown_ros_node(node_name):
     try:
