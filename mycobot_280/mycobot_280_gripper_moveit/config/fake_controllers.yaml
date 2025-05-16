@@ -14,4 +14,6 @@ controller_list:
       - gripper_controller
 initial:  # Define initial robot poses per group
   - group: arm_group
-    pose: init_pose
+    pose: arm_pose
+  - group: gripper
+    pose: gripper_pose

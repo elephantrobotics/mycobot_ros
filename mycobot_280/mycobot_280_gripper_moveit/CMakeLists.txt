@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.1.3)
 project(mycobot_280_gripper_moveit)
 
-find_package(catkin REQUIRED
-  rospy
-  std_msgs
-  moveit_msgs
-)
+find_package(catkin REQUIRED)
 
 catkin_package()
 
