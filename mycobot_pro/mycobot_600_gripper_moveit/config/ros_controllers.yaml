@@ -1,5 +1,4 @@
 arm_group_controller:
-# arm_controller:
   type: effort_controllers/JointTrajectoryController
   joints:
     - joint2_to_joint1
@@ -40,7 +39,6 @@ arm_group_controller:
       i: 1
       i_clamp: 1
 gripper_group_controller:
-# gripper_controller:
   type: effort_controllers/JointTrajectoryController
   joints:
     - gripper_controller

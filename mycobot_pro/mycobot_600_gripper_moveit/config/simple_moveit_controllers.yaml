@@ -1,6 +1,5 @@
 controller_list:
   - name: arm_group_controller
-  # - name: arm_controller
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     default: True
@@ -12,7 +11,6 @@ controller_list:
       - joint6_to_joint5
       - joint6output_to_joint6
   - name: gripper_group_controller
-  # - name: gripper_controller
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     default: True

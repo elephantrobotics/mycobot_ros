@@ -13,11 +13,10 @@
     <origin xyz = "0 0 0 " rpy = " 1.5706 0 0"/>
     </visual>
     <collision>
+      <origin xyz = "0 0 0.04 " rpy = " 0 0 1.5708"/>
       <geometry>
-	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J1-W.dae"/>
+        <cylinder length="0.06" radius="0.038"/>
       </geometry>
-    <origin xyz = "0 0 0 " rpy = " 1.5706 0 0"/>
     </collision>
   </link>
 
@@ -29,10 +28,10 @@
     <origin xyz = "0 0.05 -0.08 " rpy = "0 0 3.14159"/>
     </visual>
      <collision>
+      <origin xyz = "0.0 0.0 0.04 " rpy = " 0 0 1.5708"/>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J2-W.dae"/>
+        <cylinder length="0.05" radius="0.03"/>
       </geometry>
-    <origin xyz = "0 0.05 -0.08 " rpy = " 0 0 3.14159"/>
     </collision>
   </link>
 
@@ -45,10 +44,10 @@
     <origin xyz = "0 -0.092 0.044 " rpy = " 0 -1.5706 0"/>
     </visual>
      <collision>
-     <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J3-W.dae"/>
+     <origin xyz = "0 0.128 -0.04 " rpy = " 1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.28" radius="0.024"/>
       </geometry>
-    <origin xyz = "0 -0.092 0.044 " rpy = " 0 -1.5706 0"/>
     </collision>
   </link>
 
@@ -62,11 +61,10 @@
     <origin xyz = "0 -0.09 -0.01 " rpy = " 0 1.5706 0"/>
     </visual>
      <collision>
+      <origin xyz = "0.0 0.128 0.076 " rpy = "1.5708 0 0"/>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J4-W.dae"/>
+        <cylinder length="0.24" radius="0.024"/>
       </geometry>
-    <origin xyz = "0 -0.09 -0.01 " rpy = "0 1.5706 0"/>
     </collision>
   </link>
 
@@ -81,11 +79,10 @@
     <origin xyz = "0 -0.6987 0 " rpy = " 0 0 0"/>
     </visual>
      <collision>
+      <origin xyz = "0.0 0.02 -0.05" rpy = " 1.5708 1.5708 0"/>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J5-W.dae"/>
+        <cylinder length="0.05" radius="0.024"/>
       </geometry>
-    <origin xyz = "0 -0.6987 0 " rpy = " 0 0 0"/>
     </collision>
   </link>
 
@@ -99,11 +96,10 @@
     <origin xyz = "0 0 0.048 " rpy = " 1.5706  0 3.14159"/>
     </visual>
      <collision>
+      <origin xyz = "0.0 0.0 0.038 " rpy = " 0  0 -1.5708"/>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J6-W.dae"/>
+        <cylinder length="0.05" radius="0.028"/>
       </geometry>
-    <origin xyz = "0 0 0.048 " rpy = " 1.5706  0 3.14159"/>
     </collision>
   </link>
 
@@ -119,14 +115,10 @@
     <origin xyz = "0.06 0 0" rpy = " 3.14159 3.14159  0"/>
     </visual>
      <collision>
+      <origin xyz = "0.003 0.0 -0.0 " rpy = " 0 1.5708 0"/>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/J7-W.dae"/>
+        <cylinder length="0.006" radius="0.026"/>
       </geometry>
-      <material name = "grey">
-        <color rgba = "0.5 0.5 0.5 1"/>
-      </material>
-    <origin xyz = "0.06 0 0" rpy = " 3.14159 3.14159  0"/>
     </collision>
   </link>
 
@@ -154,10 +146,10 @@
         <origin xyz="0.0 0 0" rpy=" 0 0  -1.5706" />
     </visual>
     <collision>
-        <geometry>
-            <mesh filename="package://mycobot_description/urdf/mycobot_pro_600/tool2-mm.dae" />
-        </geometry>
-        <origin xyz="0.0 0 0" rpy=" 0 0  -1.5706" />
+        <origin xyz = "0.003 0.0 0.005 " rpy = " 0 0 -1.5708"/>
+      <geometry>
+        <cylinder length="0.006" radius="0.026"/>
+      </geometry>
     </collision>   
   </link>
 
@@ -171,10 +163,9 @@
     </visual>
     <collision>
       <geometry>
-       <!--- 0.0 0 -0.04 -->
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_base.dae"/>
+        <cylinder radius="0.026" length="0.03" />
       </geometry>
-    <origin xyz = "-0.02 0.012 -0.018 " rpy = " 0 0 1.5708"/>
+      <origin xyz="0.0 0 0.01 " rpy=" 0 0 1.5708" />
     </collision>
   </link>
 
@@ -188,9 +179,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_left1.dae"/>
+        <cylinder radius="0.004" length="0.005" />
       </geometry>
-        <origin xyz = "0.036 -0.052 0.0 " rpy = " 0 0 1.5708"/>
+      <origin xyz="0.0 0.0 0.002 " rpy=" 0 0 1.5708" />
     </collision>
   </link>
 
@@ -203,9 +194,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_left2.dae"/>
+        <cylinder radius="0.003" length="0.003" />
       </geometry>
-        <origin xyz = "0.03 0.024 -0.018 " rpy = " 0 0 1.5708"/>
+      <origin xyz="0.00 -0.0 -0.003 " rpy=" 0 0 1.5708" />
     </collision>
   </link>
 
@@ -220,9 +211,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_left3.dae"/>
+       <cylinder radius="0.018" length="0.003" />
       </geometry>
-    <origin xyz = "0.034 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+      <origin xyz="-0.002  0 -0.016 " rpy=" 0 3.14159 -1.5708" />
     </collision>
   </link>
 
@@ -236,9 +227,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_right1.dae"/>
+       <cylinder radius="0.004" length="0.005" />
       </geometry>
-        <origin xyz = "-0.072 -0.05 0.0 " rpy = " 0 0 1.5708"/>
+      <origin xyz="0.0 0.0 0.002 " rpy=" 0 0 1.5708" />
     </collision>
   </link>
 
@@ -251,9 +242,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_right2.dae"/>
+       <cylinder radius="0.003" length="0.003" />
       </geometry>
-        <origin xyz = "-0.066 0.023 -0.018 " rpy = " 0 0 1.5708"/>
+      <origin xyz="0.00 -0.0 -0.003 " rpy=" 0 0 1.5708" />
     </collision>
   </link>
 
@@ -267,9 +258,9 @@
     </visual>
     <collision>
       <geometry>
-       <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/gripper_right3.dae"/>
+       <cylinder radius="0.018" length="0.003" />
       </geometry>
-    <origin xyz = "0.0 0.0 -0.012 " rpy = " 0 3.14159 -1.5708"/>
+      <origin xyz="-0.002  0 -0.016 " rpy=" 0 3.14159 -1.5708" />
     </collision>
   </link>
 
