@@ -6,7 +6,7 @@ and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
     port: serial prot string. Defaults is '/dev/ttyUSB0'
-    baud: serial prot baudrate. Defaults is 115200.
+    baud: serial prot baudrate. Defaults is 1000000.
 """
 import time
 import math
@@ -45,7 +45,7 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     port = rospy.get_param("~port", "/dev/ttyACM0")
-    baud = rospy.get_param("~baud", 115200)
+    baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
     mc = MyCobot280(port, baud)
     time.sleep(1) # open port,need wait

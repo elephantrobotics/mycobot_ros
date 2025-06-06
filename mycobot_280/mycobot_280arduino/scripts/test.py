@@ -16,7 +16,7 @@ else:
 from pymycobot import *
 import time
 import datetime
-m = MyCobot280('/dev/ttyUSB0', 115200)
+m = MyCobot280('/dev/ttyUSB0', 1000000)
 time.sleep(2)
 delay_time = 0.1
 run_delay_time = 1
@@ -27,7 +27,7 @@ coord_loss_count = 0
 total_count = 0
 send_angles = [[0,0,0,0,0,0], [0,0,0,0,20,20]]
 sp = 50
-# m = MyCobot("com64", 115200)
+# m = MyCobot("com64", 1000000)
 
 # time.sleep(2) #open port,need wait
 # print(m.get_radians())
