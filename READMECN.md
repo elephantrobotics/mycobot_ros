@@ -9,9 +9,7 @@ pip install pymycobot --user
 
 #### 1.2 包的下载与安装
 
-下载包到你的ros工作空间中
-把mycobot_ros中的mycot_moveit和mycobot_description移动到src目录中
-删除mycobot_ros包
+下载包到你的ros工作空间中，把mycobot_ros中的mycot_moveit和mycobot_description移动到src目录中后，删除mycobot_ros包
 
 ```bash
 $ cd ~/catkin_ws/src
