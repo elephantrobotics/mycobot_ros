@@ -1,0 +1,39 @@
+<launch>
+    <arg name="paused" default="false"/>
+    <arg name="gazebo_gui" default="true"/>
+
+    <!-- Load URDF file -->
+    <arg name="model" default="$(find mycot_moveit)/config/mycobot_280m5_with_gripper_lll.urdf"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" default="worlds/empty.world"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="gui" value="$(arg gazebo_gui)"/>
+    </include>
+
+    <param name="robot_description" textfile="$(arg model)" />
+
+    <!-- Combine joint values to TF -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    
+    <!-- Joint State Publisher GUI -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+
+    <!-- Show in RViz -->
+    <!-- Uncomment the following line if you want to use RViz -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /> -->
+
+    <!-- Push robot_description to factory and spawn robot in Gazebo at the origin -->
+    <include file="$(find mycot_moveit)/launch/move_group.launch">
+        <arg name="allow_trajectory_execution" value="true"/>
+        <arg name="fake_execution" value="false"/>
+        <arg name="info" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="load_robot_description" value="false"/>
+    </include>
+
+    <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
+          respawn="false" output="screen" />
+
+    <include file="$(find mycot_moveit)/launch/ros_controllers.launch"/>
+</launch>

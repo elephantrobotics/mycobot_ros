@@ -1,0 +1,62 @@
+# Gazebo control settings for simulation
+# Publish joint_states
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# Settings for controlling joints in Gazebo
+hardware_interface:
+  joints:
+    - joint2_to_joint1
+    - joint3_to_joint2
+    - joint4_to_joint3
+    - joint5_to_joint4
+    - joint6_to_joint5
+    - joint6output_to_joint6
+    - gripper_controller  # Add the gripper controller to the list
+  sim_control_mode: 0  # 0: position control, 1: velocity control
+
+# PID gains for each joint, tuned for simulation in Gazebo
+gazebo_ros_control/pid_gains:
+  joint2_to_joint1: {p: 100.0, i: 0.01, d: 10.0}
+  joint3_to_joint2: {p: 100.0, i: 0.01, d: 10.0}
+  joint4_to_joint3: {p: 100.0, i: 0.01, d: 10.0}
+  joint5_to_joint4: {p: 100.0, i: 0.01, d: 10.0}
+  joint6_to_joint5: {p: 100.0, i: 0.01, d: 10.0}
+  joint6output_to_joint6: {p: 100.0, i: 0.01, d: 10.0}
+  gripper_controller: {p: 100.0, i: 0.01, d: 10.0}
+
+# Controller settings for arm and gripper
+controller_list:
+  - name: arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - joint2_to_joint1
+      - joint3_to_joint2
+      - joint4_to_joint3
+      - joint5_to_joint4
+      - joint6_to_joint5
+      - joint6output_to_joint6
+
+  - name: gripper_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - gripper_controller  # Add only the gripper controller to the list, since others are mimic joints
+
+# Simulation settings
+moveit_sim_hw_interface:
+  arm:
+    joint_model_group: arm
+    joint_model_group_pose: HOME
+  gripper:
+    joint_model_group: gripper
+    joint_model_group_pose: close
+
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+
