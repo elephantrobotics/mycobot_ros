@@ -59,6 +59,7 @@ add_message_files(FILES
   MycobotSetEndType.msg
   MycobotSetFreshMode.msg
   MycobotSetToolReference.msg
+  MycobotSetVisionMode.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -72,6 +73,7 @@ add_service_files(FILES
   SetEndType.srv
   SetFreshMode.srv
   SetToolReference.srv
+  SetVisionMode.srv
 )
 
 ## Generate added messages and services

@@ -27,6 +27,7 @@ catkin_install_python(PROGRAMS
   scripts/listen_real.py
   scripts/listen_real_of_topic.py
   scripts/simple_gui.py
+  scripts/detect_stag.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
