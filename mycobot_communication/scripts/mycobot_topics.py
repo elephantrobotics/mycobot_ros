@@ -19,7 +19,8 @@ from mycobot_communication.msg import (
     MycobotSetEndType,
     MycobotSetFreshMode,
     MycobotSetToolReference,
-    MycobotSetVisionMode
+    MycobotSetVisionMode,
+    MycobotGetGripperValue,
 )
 from std_msgs.msg import UInt8
 import pymycobot
@@ -78,14 +79,31 @@ class Watcher:
             os.kill(self.child, signal.SIGKILL)
         except OSError:
             pass
+robot_msg = """
+MyCobot Status
+--------------------------------
+Joint Limit:
+    joint 1: -168 ~ +168
+    joint 2: -135 ~ +135
+    joint 3: -150 ~ +150
+    joint 4: -145 ~ +145
+    joint 5: -165 ~ +165
+    joint 6: -180 ~ +180
 
+Connect Status: %s
+
+Servo Infomation: %s
+
+Servo Temperature: %s
+
+Atom Version: %s
+"""
 
 class MycobotTopics(object):
     def __init__(self):
         super(MycobotTopics, self).__init__()
-
-        rospy.init_node("mycobot_topics")
         rospy.loginfo("start ...")
+        rospy.init_node("mycobot_topics")
         port = rospy.get_param("~port", os.popen("ls /dev/ttyUSB*").readline()[:-1])
         if not port:
             port = rospy.get_param("~port", os.popen("ls /dev/ttyACM*").readline()[:-1])
@@ -94,6 +112,7 @@ class MycobotTopics(object):
         self.mc = MyCobot280(port, baud)
         self.lock = threading.Lock()
         self.mc.set_vision_mode(1)
+        self.output_robot_message()
 
     def start(self):
         pa = threading.Thread(target=self.pub_real_angles)
@@ -107,6 +126,8 @@ class MycobotTopics(object):
         set = threading.Thread(target=self.sub_end_type_status)
         str = threading.Thread(target=self.sub_set_tool_reference)
         svm = threading.Thread(target=self.sub_vision_mode_status)
+        
+        sgv = threading.Thread(target=self.sub_real_gripper_value)
 
         pa.setDaemon(True)
         pa.start()
@@ -129,6 +150,9 @@ class MycobotTopics(object):
         str.start()
         svm.setDaemon(True)
         svm.start
+        
+        sgv.setDaemon(True)
+        sgv.start()
 
         pa.join()
         pb.join()
@@ -141,6 +165,7 @@ class MycobotTopics(object):
         set.join()
         str.join()
         svm.join()
+        sgv.join()
 
     def pub_real_angles(self):
         """Publish real angle"""
@@ -226,6 +251,22 @@ class MycobotTopics(object):
         )
         rospy.spin()
 
+    def sub_real_gripper_value(self):
+        """Get Gripper Value"""
+        pub = rospy.Publisher("mycobot/gripper_angle_real",
+                              MycobotGetGripperValue, queue_size=5)
+        ma = MycobotGetGripperValue()
+        while not rospy.is_shutdown():
+            with self.lock:
+                try:
+                    gripper_value = self.mc.get_gripper_value()
+                    if gripper_value:
+                        ma.gripper_angle = gripper_value
+                        pub.publish(ma)
+                except Exception as e:
+                    rospy.logerr(f"SerialException: {e}")
+            time.sleep(0.25)
+            
     def sub_gripper_status(self):
         """Subscribe to Gripper Status"""
         """订阅夹爪状态"""
@@ -243,11 +284,15 @@ class MycobotTopics(object):
     def sub_pump_status(self):
         def callback(data):
             if data.Status:
-                self.mc.set_basic_output(data.Pin1, 0)
                 self.mc.set_basic_output(data.Pin2, 0)
+                time.sleep(0.05)
             else:
-                self.mc.set_basic_output(data.Pin1, 1)
                 self.mc.set_basic_output(data.Pin2, 1)
+                time.sleep(0.05)
+                self.mc.set_basic_output(data.Pin1, 0)
+                time.sleep(0.05)
+                self.mc.set_basic_output(data.PIn1, 1)
+                time.sleep(0.05)
 
         sub = rospy.Subscriber(
             "mycobot/pump_status", MycobotPumpStatus, callback=callback
@@ -307,6 +352,30 @@ class MycobotTopics(object):
             "mycobot/tool_reference_goal", MycobotSetToolReference, callback=callback
         )
         rospy.spin()
+        
+
+    def output_robot_message(self):
+        connect_status = False
+        servo_infomation = "unknown"
+        servo_temperature = "unknown"
+        atom_version = "unknown"
+
+        if self.mc:
+            cn = self.mc.is_controller_connected()
+            if cn == 1:
+                connect_status = True
+            time.sleep(0.1)
+            si = self.mc.is_all_servo_enable()
+            if si == 1:
+                servo_infomation = "all connected"
+            version = self.mc.get_system_version()
+            if version:
+                atom_version = version
+
+        print(
+            robot_msg % (connect_status, servo_infomation,
+                        servo_temperature, atom_version)
+        )
 
 
 if __name__ == "__main__":

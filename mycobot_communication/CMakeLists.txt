@@ -60,6 +60,9 @@ add_message_files(FILES
   MycobotSetFreshMode.msg
   MycobotSetToolReference.msg
   MycobotSetVisionMode.msg
+  
+  MycobotGetGripperValue.msg
+
 )
 
 ## Generate services in the 'srv' folder

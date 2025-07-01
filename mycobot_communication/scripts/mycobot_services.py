@@ -163,11 +163,15 @@ def toggle_pump(req):
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         if req.Status:
-            mc.set_basic_output(2, 0)
             mc.set_basic_output(5, 0)
+            time.sleep(0.05)
         else:
-            mc.set_basic_output(2, 1)
             mc.set_basic_output(5, 1)
+            time.sleep(0.05)
+            mc.set_basic_output(2, 0)
+            time.sleep(0.05)
+            mc.set_basic_output(2, 1)
+            time.sleep(0.05)
         release(lock)
 
 
@@ -178,11 +182,11 @@ robot_msg = """
 MyCobot Status
 --------------------------------
 Joint Limit:
-    joint 1: -170 ~ +170
-    joint 2: -170 ~ +170
-    joint 3: -170 ~ +170
-    joint 4: -170 ~ +170
-    joint 5: -170 ~ +170
+    joint 1: -168 ~ +168
+    joint 2: -135 ~ +135
+    joint 3: -150 ~ +150
+    joint 4: -145 ~ +145
+    joint 5: -165 ~ +165
     joint 6: -180 ~ +180
 
 Connect Status: %s

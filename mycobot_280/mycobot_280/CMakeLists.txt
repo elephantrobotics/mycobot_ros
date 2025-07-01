@@ -26,6 +26,7 @@ catkin_install_python(PROGRAMS
   scripts/teleop_keyboard.py
   scripts/listen_real.py
   scripts/listen_real_of_topic.py
+  scripts/listen_real_of_topic_gripper.py
   scripts/simple_gui.py
   scripts/follow_display_gripper.py
   scripts/slider_control_gripper.py
