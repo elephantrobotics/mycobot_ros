@@ -16,7 +16,7 @@ else:
 from pymycobot import *
 import time
 import datetime
-m = MyCobot280('/dev/ttyUSB0', 1000000)
+m = MyCobot280('/dev/ttyUSB0', 115200)
 time.sleep(2)
 delay_time = 0.1
 run_delay_time = 1
