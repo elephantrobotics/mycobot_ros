@@ -1,21 +1,23 @@
 <launch>
-	<arg name="port" default="/dev/ttyACM0" />
-	<arg name="baud" default="1000000" />
+	<!-- Select connecting device and serial port ，选择连接设备及串口-->
+	<arg name="port" default="/dev/ttACM0" />
+	<arg name="baud" default="115200" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_280_arduino/mycobot_280_arduino.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_280arduino)/config/mycobot_arduino.rviz" />
+	<arg name="rvizconfig" default="$(find mycobot_280arduino)/config/mycobot.rviz" />
 	<arg name="gui" default="false" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
-	<!-- Combinejoin values to TF -->
+	<!-- Combinejoin values to TF ，将值合并到TF-->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<!-- Show in Rviz -->
+	<!-- Show in Rviz ，显示在Rviz-->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find mycobot_communication)/launch/communication_service.launch">
+    <include file="$(find mycobot_communication)/launch/communication_topic.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
-	<node name="real_listener" pkg="mycobot_280arduino" type="listen_real.py" />
+	<!-- listen and pub the real angles ，监听并发布真实角度-->
+	<node name="real_listener" pkg="mycobot_280arduino" type="listen_real_of_topic.py" />
 </launch>

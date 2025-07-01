@@ -45,7 +45,7 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     port = rospy.get_param("~port", "/dev/ttyACM0")
-    baud = rospy.get_param("~baud", 1000000)
+    baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     mc = MyCobot280(port, baud)
     time.sleep(1) # open port,need wait

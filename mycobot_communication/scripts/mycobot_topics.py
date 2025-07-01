@@ -177,7 +177,6 @@ class MycobotTopics(object):
             with self.lock:
                 try:
                     angles = self.mc.get_angles()
-                    # rospy.loginfo("angles:{}".format(angles))
                     if isinstance(angles, list) and len(angles) == 6 and all(c != -1 for c in angles):
                         ma.joint_1 = angles[0]
                         ma.joint_2 = angles[1]
