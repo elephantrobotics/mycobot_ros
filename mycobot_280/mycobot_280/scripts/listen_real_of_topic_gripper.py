@@ -1,11 +1,11 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # encoding:utf-8
 
 import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from mycobot_communication.msg import MycobotAngles
+from mycobot_communication.msg import MycobotAngles, MycobotGetGripperValue
 
 
 class Listener(object):
@@ -13,13 +13,19 @@ class Listener(object):
         super(Listener, self).__init__()
 
         rospy.loginfo("start ...")
-        rospy.init_node("real_listener_1", anonymous=True)
+        rospy.init_node("real_listener_gripper", anonymous=True)
+        self.gripper_angle = 0.0
         # init publisher.初始化发布者
         self.pub = rospy.Publisher("joint_states", JointState, queue_size=10)
         # init subscriber.初始化订阅者
         self.sub = rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.callback)
+        self.sub2 = rospy.Subscriber("mycobot/gripper_angle_real", MycobotGetGripperValue, self.gripper_callback)
         rospy.spin()
 
+    def gripper_callback(self, data):
+        """夹爪角度更新"""
+        self.gripper_angle = data.gripper_angle
+    
     def callback(self, data):
         """`mycobot/angles_real` subscriber callback method.
 
@@ -37,6 +43,7 @@ class Listener(object):
             "joint5_to_joint4",
             "joint6_to_joint5",
             "joint6output_to_joint6",
+            "gripper_controller",
         ]
         joint_state_send.velocity = [0]
         joint_state_send.effort = []
@@ -50,6 +57,7 @@ class Listener(object):
             data.joint_4 * (math.pi / 180),
             data.joint_5 * (math.pi / 180),
             data.joint_6 * (math.pi / 180),
+            self.gripper_angle * math.pi / 180.0,
         ]
         # rospy.loginfo("res: {}".format(radians_list))
 

@@ -1,48 +1,62 @@
 #!/usr/bin/env python3
+# -*- coding:utf-8 -*-
 from __future__ import print_function
-from mycobot_communication.srv import GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus, PumpStatus
-import rospy
 import sys
-import select
+import time
 import termios
 import tty
-import time
+import math
+import rospy
 
-import roslib
+from mycobot_communication.msg import (
+    MycobotAngles,
+    MycobotCoords,
+    MycobotSetAngles,
+    MycobotSetCoords,
+    MycobotGripperStatus,
+    MycobotPumpStatus,
+)
 
-# Terminal output prompt information. 终端输出提示信息
 msg = """\
-Mycobot Teleop Keyboard Controller
----------------------------
-Movimg options(control coordinations [x,y,z,rx,ry,rz]):
-              w(x+)
+Mycobot Teleop Keyboard Controller (ROS1 - Topic Version)
+---------------------------------------------------------
+Movement (Cartesian):
+              w (x+)
+    a (y+)    s (x-)    d (y-)
+              z (z-)    x (z+)
 
-    a(y-)     s(x-)     d(y+)
+Rotation (Euler angles):
+    u (rx+)  i (ry+)  o (rz+)
+    j (rx-)  k (ry-)  l (rz-)
 
-    z(z-) x(z+)
+Movement Step:
+    + : Increase movement step size
+    - : Decrease movement step size
 
-u(rx+)   i(ry+)   o(rz+)
-j(rx-)   k(ry-)   l(rz-)
+Gripper:
+    g - open    h - close
 
-Gripper control:
-    g - open
-    h - close
-
-Pump control:
-    b - open
-    m - close
+Pump:
+    b - open    m - close
 
 Other:
     1 - Go to init pose
     2 - Go to home pose
-    3 - Resave home pose
+    3 - Save current pose as home
     q - Quit
 """
 
+COORD_LIMITS = {
+    'x': (-281.45, 281.45),
+    'y': (-281.45, 281.45),
+    'z': (-70, 412.67),
+    'rx': (-180, 180),
+    'ry': (-180, 180),
+    'rz': (-180, 180)
+}
 
 def vels(speed, turn):
     return "currently:\tspeed: %s\tchange percent: %s  " % (speed, turn)
-
 
 class Raw(object):
     def __init__(self, stream):
@@ -57,129 +71,139 @@ class Raw(object):
         termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
 
 
-def teleop_keyboard():
-    rospy.init_node("teleop_keyboard")
+class MycobotTeleopTopic:
+    def __init__(self):
+        rospy.init_node("teleop_keyboard_topic")
 
-    model = 0
-    speed = rospy.get_param("~speed", 50)
-    change_percent = rospy.get_param("~change_percent", 5)
+        self.speed = rospy.get_param("~speed", 50)
+        self.model = 1
+        self.change_percent = rospy.get_param("~change_percent", 5)
+        self.change_len = 250 * self.change_percent / 100.0
+        self.change_angle = 180 * self.change_percent / 100.0
 
-    change_angle = 180 * change_percent / 100
-    change_len = 250 * change_percent / 100
+        # 当前坐标和角度
+        self.curr_coords = [0] * 6
+        self.curr_angles = [0] * 6
 
-    rospy.wait_for_service("get_joint_angles")
-    rospy.wait_for_service("set_joint_angles")
-    rospy.wait_for_service("get_joint_coords")
-    rospy.wait_for_service("set_joint_coords")
-    rospy.wait_for_service("switch_gripper_status")
-    rospy.wait_for_service("switch_pump_status")
-    print("service ready.")
-    try:
-        get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
-        set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
-        get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
-        set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
-        switch_gripper = rospy.ServiceProxy(
-            "switch_gripper_status", GripperStatus)
-        switch_pump = rospy.ServiceProxy(
-            "switch_pump_status", PumpStatus)
-    except:
-        print("start error ...")
-        exit(1)
+        # 保存坐标作为目标值
+        self.record_coords = None
+        self.home_pose = [0, 8, -127, 40, 0, 0]
 
-    init_pose = [0, 0, 0, 0, 0, 0, speed]
-    home_pose = [0, 8, -127, 40, 0, 0, speed]
+        # 订阅器
+        rospy.Subscriber("mycobot/coords_real", MycobotCoords, self.coords_callback)
+        rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.angles_callback)
 
-    # rsp = set_angles(*init_pose)
+        # 发布器
+        self.coords_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=1)
+        self.angles_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=1)
+        self.gripper_pub = rospy.Publisher("mycobot/gripper_status", MycobotGripperStatus, queue_size=1)
+        self.pump_pub = rospy.Publisher("mycobot/pump_status", MycobotPumpStatus, queue_size=1)
 
-    while True:
-        res = get_coords()
-        if res.x > 1:
-            break
-        time.sleep(0.1)
+        rospy.loginfo("Waiting to receive current coordinates...")
+        while self.curr_coords == [0] * 6 and not rospy.is_shutdown():
+            time.sleep(0.1)
 
-    record_coords = [res.x, res.y, res.z, res.rx, res.ry, res.rz, speed, model]
-    print(record_coords)
-
-    try:
+        self.record_coords = list(self.curr_coords)
         print(msg)
-        print(vels(speed, change_percent))
-        # Keyboard keys call different motion functions. 键盘按键调用不同的运动功能
-        while 1:
+        print(vels(self.speed, self.change_percent))
+        rospy.loginfo("Current moving step: position %.1f mm, angle attitude %.1f°", self.change_len, self.change_angle)
+
+    def coords_callback(self, msg):
+        self.curr_coords = [msg.x, msg.y, msg.z, msg.rx, msg.ry, msg.rz]
+
+    def angles_callback(self, msg):
+        self.curr_angles = [
+            msg.joint_1, msg.joint_2, msg.joint_3,
+            msg.joint_4, msg.joint_5, msg.joint_6
+        ]
+
+    def send_coords(self):
+        goal = MycobotSetCoords()
+        goal.x, goal.y, goal.z, goal.rx, goal.ry, goal.rz = self.record_coords
+        goal.speed = self.speed
+        goal.model = self.model
+        self.coords_pub.publish(goal)
+
+    def send_angles(self, angles):
+        goal = MycobotSetAngles()
+        goal.joint_1, goal.joint_2, goal.joint_3, goal.joint_4, goal.joint_5, goal.joint_6 = angles
+        goal.speed = self.speed
+        self.angles_pub.publish(goal)
+
+    def run(self):
+        while not rospy.is_shutdown():
             try:
-                # print("\r current coords: %s" % record_coords, end="")
                 with Raw(sys.stdin):
                     key = sys.stdin.read(1)
-                if key == "q":
+            except Exception:
+                continue
+
+            try:
+                if key == 'q':
                     break
-                elif key in ["w", "W"]:
-                    record_coords[0] += change_len
-                    set_coords(*record_coords)
-                elif key in ["s", "S"]:
-                    record_coords[0] -= change_len
-                    set_coords(*record_coords)
-                elif key in ["a", "A"]:
-                    record_coords[1] -= change_len
-                    set_coords(*record_coords)
-                elif key in ["d", "D"]:
-                    record_coords[1] += change_len
-                    set_coords(*record_coords)
-                elif key in ["z", "Z"]:
-                    record_coords[2] -= change_len
-                    set_coords(*record_coords)
-                elif key in ["x", "X"]:
-                    record_coords[2] += change_len
-                    set_coords(*record_coords)
-                elif key in ["u", "U"]:
-                    record_coords[3] += change_angle
-                    set_coords(*record_coords)
-                elif key in ["j", "J"]:
-                    record_coords[3] -= change_angle
-                    set_coords(*record_coords)
-                elif key in ["i", "I"]:
-                    record_coords[4] += change_angle
-                    set_coords(*record_coords)
-                elif key in ["k", "K"]:
-                    record_coords[4] -= change_angle
-                    set_coords(*record_coords)
-                elif key in ["o", "O"]:
-                    record_coords[5] += change_angle
-                    set_coords(*record_coords)
-                elif key in ["l", "L"]:
-                    record_coords[5] -= change_angle
-                    set_coords(*record_coords)
-                elif key in ["g", "G"]:
-                    switch_gripper(True)
-                elif key in ["h", "H"]:
-                    switch_gripper(False)
-                elif key in ["b", "B"]:
-                    switch_pump(True, 2, 5)
-                elif key in ["m", "M"]:
-                    switch_pump(False, 2, 5)
-                elif key == "1":
-                    rsp = set_angles(*init_pose)
-                elif key in "2":
-                    rsp = set_angles(*home_pose)
-                elif key in "3":
-                    rep = get_angles()
-                    home_pose[0] = rep.joint_1
-                    home_pose[1] = rep.joint_2
-                    home_pose[2] = rep.joint_3
-                    home_pose[3] = rep.joint_4
-                    home_pose[5] = rep.joint_5
+                elif key == '+':
+                    self.change_percent = min(self.change_percent + 1, 20)  # 最大20%
+                    self.change_angle = 180 * self.change_percent / 100.0
+                    self.change_len = 250 * self.change_percent / 100.0
+                    rospy.loginfo("Increase change_percent to %d%%, move step: %.1f mm, angle step: %.1f°" %
+                        (self.change_percent, self.change_len, self.change_angle))
+                elif key == '-':
+                    self.change_percent = max(self.change_percent - 1, 1)  # 最小1%
+                    self.change_angle = 180 * self.change_percent / 100.0
+                    self.change_len = 250 * self.change_percent / 100.0
+                    rospy.loginfo("Decrease change_percent to %d%%, move step: %.1f mm, angle step: %.1f°" %
+                        (self.change_percent, self.change_len, self.change_angle))
+                    continue
+                elif key in 'wW': self.record_coords[0] += self.change_len
+                elif key in 'sS': self.record_coords[0] -= self.change_len
+                elif key in 'aA': self.record_coords[1] += self.change_len
+                elif key in 'dD': self.record_coords[1] -= self.change_len
+                elif key in 'zZ': self.record_coords[2] -= self.change_len
+                elif key in 'xX': self.record_coords[2] += self.change_len
+                elif key in 'uU': self.record_coords[3] += self.change_angle
+                elif key in 'jJ': self.record_coords[3] -= self.change_angle
+                elif key in 'iI': self.record_coords[4] += self.change_angle
+                elif key in 'kK': self.record_coords[4] -= self.change_angle
+                elif key in 'oO': self.record_coords[5] += self.change_angle
+                elif key in 'lL': self.record_coords[5] -= self.change_angle
+                elif key in 'gG':
+                    self.gripper_pub.publish(MycobotGripperStatus(Status=True))
+                elif key in 'hH':
+                    self.gripper_pub.publish(MycobotGripperStatus(Status=False))
+                elif key in 'bB':
+                    self.pump_pub.publish(MycobotPumpStatus(Status=True, Pin1=2, Pin2=5))
+                elif key in 'mM':
+                    self.pump_pub.publish(MycobotPumpStatus(Status=False, Pin1=2, Pin2=5))
+                elif key == '1':
+                    self.send_angles([0, 0, 0, 0, 0, 0])
+                    time.sleep(2)
+                    self.record_coords = list(self.curr_coords)
+                elif key == '2':
+                    self.send_angles(self.home_pose)
+                    time.sleep(2)
+                    self.record_coords = list(self.curr_coords)
+                elif key == '3':
+                    self.home_pose = list(self.curr_angles)
                 else:
                     continue
 
+                # 范围检查
+                for val, axis in zip(self.record_coords, ['x', 'y', 'z', 'rx', 'ry', 'rz']):
+                    min_v, max_v = COORD_LIMITS[axis]
+                    if not (min_v <= val <= max_v):
+                        rospy.logwarn(f"{axis} Out of range: {val} not in [{min_v}, {max_v}]")
+                        raise ValueError("Out of range of motion")
+
+                self.send_coords()
+
             except Exception as e:
-                # print(e)
+                rospy.logwarn("Execution failed: {}".format(e))
                 continue
 
-    except Exception as e:
-        print(e)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
-        teleop_keyboard()
+        teleop = MycobotTeleopTopic()
+        teleop.run()
     except rospy.ROSInterruptException:
         pass
