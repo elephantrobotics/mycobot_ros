@@ -168,7 +168,7 @@ class MycobotTopics(object):
             with self.lock:
                 try:
                     angles = self.mc.get_angles()
-                    if angles:
+                    if isinstance(angles, list) and len(angles) == 6 and all(c != -1 for c in angles):
                         ma.joint_1 = angles[0]
                         ma.joint_2 = angles[1]
                         ma.joint_3 = angles[2]
@@ -191,7 +191,7 @@ class MycobotTopics(object):
             with self.lock:
                 try:
                     coords = self.mc.get_coords()
-                    if coords:
+                    if isinstance(coords, list) and len(coords) == 6 and all(c != -1 for c in coords):
                         ma.x = coords[0]
                         ma.y = coords[1]
                         ma.z = coords[2]

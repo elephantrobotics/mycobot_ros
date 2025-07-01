@@ -14,10 +14,10 @@
 	<!-- Show in Rviz ，显示在Rviz-->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-    <include file="$(find mycobot_communication)/launch/communication_jsnn.launch">
+    <include file="$(find mycobot_communication)/launch/communication_topic_jsnn.launch">
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
 	<!-- listen and pub the real angles ，监听并发布真实的角度-->
-	<node name="real_listener" pkg="mycobot_280jn" type="listen_real.py" />
+	<node name="real_listener" pkg="mycobot_280jn" type="listen_real_of_topic_gripper.py" />
 </launch>
