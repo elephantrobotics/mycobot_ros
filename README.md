@@ -14,7 +14,7 @@ Download the package into your ROS workspace.
 
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/jiaweilong66/mycobot_ros.git
+$ git clone https://github.com/jiaweilong66/280m5_gripper_moveit.git
 $ cd ~/catkin_ws
 $ catkin_make
 $ source devel/setup.bash
@@ -60,9 +60,9 @@ Open communication and Chmod
 
 ```bash
 sudo chmod -R 777 /dev/ttyACM0  or sudo chmod -r 777 /dev/ttyUSB0
-sudo chmod -R 777 mycobot_ros/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
-sudo chmod -R 777 mycobot_ros/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
-sudo chmod -R 777 mycobot_ros/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
+sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
+sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
+sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
 roscore
 ```
 
