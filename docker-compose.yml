@@ -1,0 +1,53 @@
+version: '3.4'
+
+x-app: &common
+  command: [ "roslaunch ${LAUNCH_TARGET:-mycobot_280 slider_control.launch}" ]
+  privileged: true
+  environment:
+    PYTHONUNBUFFERED: 1
+    QT_X11_NO_MITSHM: 1
+    DISPLAY: $DISPLAY
+  volumes:
+    - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    - ".:/home/er/catkin_ws/src/mycobot_ros"
+  build:
+    context: .
+    args: &common-args
+      ROS_DISTRO: "melodic"
+      PYMYCOBOT_VERSION: ">=2<3"
+      BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
+
+
+services:
+  # This configuration builds the project for computers with NVIDIA hardware
+  nvidia-ros: 
+    <<: *common
+    runtime: nvidia
+
+  # This is the default for computers that don't have nvidia hardware accelerators
+  ros:
+    <<: *common
+    build:
+      context: .
+      args:
+        <<: *common-args
+        BASE_IMAGE: ubuntu:18.04
+
+  nvidia-ros-noetic:
+    <<: *common
+    runtime: nvidia
+    build:
+      context: .
+      args:
+        <<: *common-args
+        ROS_DISTRO: "noetic"
+        BASE_IMAGE: nvidia/opengl:1.1-glvnd-runtime-ubuntu18.04
+
+  ros-noetic:
+    <<: *common
+    build:
+      context: .
+      args:
+        <<: *common-args
+        ROS_DISTRO: "noetic"
+        BASE_IMAGE: ubuntu:20.04
