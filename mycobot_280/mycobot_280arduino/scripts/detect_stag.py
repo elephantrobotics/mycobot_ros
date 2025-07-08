@@ -23,7 +23,7 @@ class STAGRecognizer:
         self.tool_len = 20
 
         self.marker_size = 32
-        self.origin_mycbot_horizontal = [0,60,-60,0,0,-40]
+        self.origin_mycbot_horizontal = [-90, -35.85, -52.91, 88.59, 0, 0.0]
 
         self.EyesInHand_matrix = None
         # 订阅摄像头话题
@@ -60,8 +60,7 @@ class STAGRecognizer:
         self.current_coords = None
         self.current_angles = None
         self.lock = threading.Lock()
-        self.set_tool_reference([0, 0, self.tool_len, 0, 0, 0])
-        self.set_end_type(1)
+        self.set_end_type(0)
         
         # init a node and a publisher
         # rospy.init_node("marker", anonymous=True)
@@ -95,7 +94,7 @@ class STAGRecognizer:
                 self.EyesInHand_matrix = np.array(json.load(f))
         except FileNotFoundError:
             print("Matrix file not found. EyesInHand_matrix will be initialized later.")
-
+    
     # publish marker
     def pub_marker(self, x, y, z=0.03):
         self.marker.header.stamp = rospy.Time.now()
@@ -347,18 +346,18 @@ class STAGRecognizer:
             # 获取当前帧
             frame = self.current_frame
             # 获取画面中二维码的角度和id
-            corners, ids, rejected_corners = stag.detectMarkers(frame, 11)
+            (corners, ids, rejected_corners) = stag.detectMarkers(frame, 11)
             # 获取物的坐标(相机系)
             marker_pos_pack = self.calc_markers_base_position(corners, ids)
             if len(marker_pos_pack) == 0 and not rospy.is_shutdown():
                 # rospy.logwarn("No markers detected")
-                marker_pos_pack = self.stag_identify()  # 递归调用
+                marker_pos_pack, ids = self.stag_identify()  # 递归调用
 
             # print("Camera coords = ", marker_pos_pack)
-            return marker_pos_pack
+            return marker_pos_pack, ids
         except RecursionError:
             # rospy.logerr("Recursion depth exceeded in marker detection")
-            return [0, 0, 0, 0]  # 返回默认值
+            return [0, 0, 0, 0], 0  # 返回默认值
     
     def vision_trace(self, mode, ml):
         sp = 40
@@ -380,26 +379,27 @@ class STAGRecognizer:
             self.waitl(ml)
             
     def stag_robot_identify(self):
-        marker_pos_pack = self.stag_identify()
+        marker_pos_pack, ids = self.stag_identify()
         # 如果返回的是默认值，直接退出函数，不返回任何数据
         # if marker_pos_pack == [0, 0, 0, 0]:
         if np.array_equal(marker_pos_pack, [0, 0, 0, 0]):
             rospy.logwarn("No markers detected, skipping processing")
             return None  # 直接返回 None
         target_coords = self.get_coords()
-        while len(target_coords)==0:
+        while target_coords is None or len(target_coords) != 6:
             target_coords = self.get_coords()
         # print("Current coords:", target_coords)
         cur_coords = np.array(target_coords.copy())
         cur_coords[-3:] *= (np.pi / 180)
         fact_bcl = self.Eyes_in_hand(cur_coords, marker_pos_pack, self.EyesInHand_matrix)
+        
         for i in range(3):
             target_coords[i] = fact_bcl[i]
-        return target_coords
+        return target_coords, ids
     
     def coord_limit(self, coords):
-        min_coord = [100, -150, 0]
-        max_coord = [400, 150, 400]
+        min_coord = [-350, -350, 300]
+        max_coord = [350, 350, 500]
         for i in range(3):
             if(coords[i] < min_coord[i]):
                 coords[i] = min_coord[i]
@@ -415,21 +415,23 @@ class STAGRecognizer:
         self.send_angles(self.origin_mycbot_horizontal, 50)  
         time.sleep(3)
         origin = self.get_coords()
-
+        while origin is None:
+            origin = self.get_coords()
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
-            target_coords = self.stag_robot_identify()
-             # 如果没有返回目标坐标，跳过本次循环
-            if target_coords is None:
-                continue  # 跳过这次循环，等下次识别
-            target_coords[0] -= 300
-            rospy.loginfo('Target Coords: %s', target_coords)
-            self.coord_limit(target_coords)
-            for i in range(3):
-                target_coords[i+3] = origin[i+3]
-            self.pub_marker(target_coords[0]/1000.0, target_coords[1]/1000.0, target_coords[2]/1000.0)
-            self.send_coords(target_coords, 30, 0)  # 机械臂移动到二维码前方
-            rate.sleep()
+            _ ,ids = self.stag_identify()
+            if ids[0] == 0:
+                target_coords,_ = self.stag_robot_identify()
+                # 如果没有返回目标坐标，跳过本次循环
+                self.coord_limit(target_coords)
+                rospy.loginfo('Target Coords: %s', target_coords)
+                for i in range(3):
+                    target_coords[i+3] = origin[i+3]
+                self.pub_marker(target_coords[0]/1000.0, target_coords[1]/1000.0, target_coords[2]/1000.0)
+                self.send_coords(target_coords, 30, 0)  # 机械臂移动到二维码前方
+                rate.sleep()
+            elif ids[0] == 1:
+                self.send_angles(self.origin_mycbot_horizontal, 50) 
     
     
 if __name__ == '__main__': 

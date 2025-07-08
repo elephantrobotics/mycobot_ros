@@ -36,8 +36,10 @@ class camera_detect:
         self.camera = UVCCamera(self.camera_id, self.mtx, self.dist)
         self.camera_open()
 
-        self.origin_mycbot_horizontal = [0,60,-60,0,0,-40]
-        self.origin_mycbot_level = [0, 5, -104, 14, 0, -40]
+        self.origin_mycbot_horizontal = [-90, -35.85, -52.91, 88.59, 0, 0.0]
+        self.origin_mycbot_level = [-90, 5, -104, 14, 0, 0]
+        
+        self.IDENTIFY_LEN = 300
    
         # Initialize EyesInHand_matrix to None or load from a document if available
         self.EyesInHand_matrix = None
@@ -117,33 +119,36 @@ class camera_detect:
         return target_coords
 
     
-    def eyes_in_hand_calculate(self, pose, tbe1, Mc1, tbe2, Mc2, tbe3, Mc3, Mr):
+    def eyes_in_hand_calculate(self, pose, tbe, Mc, Mr):
 
-        tbe1, Mc1, tbe2, Mc2, tbe3, Mc3, Mr = map(np.array, [tbe1, Mc1, tbe2, Mc2, tbe3, Mc3, Mr])
-        # Convert pose from degrees to radians
-        euler = np.array(pose) * np.pi / 180
+        pose,Mr =  map(np.array, [pose,Mr])
+        # 将角度从度数转换为弧度
+        euler = pose * np.pi / 180
         Rbe = self.CvtEulerAngleToRotationMatrix(euler)
-        print("Rbe", Rbe)
         Reb = Rbe.T
+
+        A = np.empty((3, 0))
+        b_comb = np.empty((3, 0))
         
-        A = np.hstack([(Mc2 - Mc1).reshape(-1, 1), 
-                    (Mc3 - Mc1).reshape(-1, 1), 
-                    (Mc3 - Mc2).reshape(-1, 1)])
+        r = tbe.shape[0]
         
-        b = Reb @ np.hstack([(tbe1 - tbe2).reshape(-1, 1), 
-                            (tbe1 - tbe3).reshape(-1, 1), 
-                            (tbe2 - tbe3).reshape(-1, 1)])
+        for i in range(1, r):
+            A = np.hstack((A, (Mc[i, :].reshape(3, 1) - Mc[0, :].reshape(3, 1))))
+            b_comb = np.hstack((b_comb, (tbe[0, :].reshape(3, 1) - tbe[i, :].reshape(3, 1))))
         
-        print("A = ", A)
-        print("B = ", b)
-        U, S, Vt = svd(A @ b.T)
+        b = Reb @ b_comb
+        U, _, Vt = svd(A @ b.T)
         Rce = Vt.T @ U.T
         
-        tce = Reb @ (Mr - (1/3)*(tbe1 + tbe2 + tbe3) - (1/3)*(Rbe @ Rce @ (Mc1 + Mc2 + Mc3)))
+        tbe_sum = np.sum(tbe, axis=0)
+        Mc_sum = np.sum(Mc, axis=0)
         
-        eyes_in_hand_matrix = np.vstack([np.hstack([Rce, tce.reshape(-1, 1)]), np.array([0, 0, 0, 1])])
-        
-        return eyes_in_hand_matrix
+        tce = Reb @ (Mr.reshape(3, 1) - (1/r) * tbe_sum.reshape(3, 1) - (1/r) * (Rbe @ Rce @ Mc_sum.reshape(3, 1)))
+        tce[2] -= self.IDENTIFY_LEN #用于保持识别距离
+
+        EyesInHand_matrix = np.vstack((np.hstack((Rce, tce)), np.array([0, 0, 0, 1])))
+        print("EyesInHand_matrix = ", EyesInHand_matrix)
+        return EyesInHand_matrix
 
     # 读取Camera坐标（单次）
     def stag_identify(self):
@@ -156,13 +161,13 @@ class camera_detect:
         stag.drawDetectedMarkers(frame, rejected_corners, border_color=(255, 0, 0))
         marker_pos_pack = self.calc_markers_base_position(corners, ids)  # 获取物的坐标(相机系)
         if(len(marker_pos_pack) == 0):
-            marker_pos_pack = self.stag_identify()
+             marker_pos_pack, ids = self.stag_identify()
         # print("Camera coords = ", marker_pos_pack)
         # cv2.imshow("rrrr", frame)
         # cv2.waitKey(1)
-        return marker_pos_pack
-
-    def Eyes_in_hand_calibration(self, ml):
+        return marker_pos_pack, ids
+    
+    def Matrix_identify(self, ml):
         ml.send_angles(self.origin_mycbot_level, 50)  # 移动到观测点
         self.wait()
         input("make sure camera can observe the stag, enter any key quit")
@@ -170,16 +175,41 @@ class camera_detect:
         pose = coords[3:6]
         print(pose)
         # self.camera_open_loop()
-        Mc1,tbe1 = self.reg_get(ml)
-        ml.send_coord(1, coords[0] + 30, 30)
+        Mc1,tbe1,pos1 = self.reg_get(ml)
+        ml.send_coord(1, coords[0] + 50, 30)
         self.wait()
-        Mc2,tbe2 = self.reg_get(ml)
-        ml.send_coord(1, coords[0] - 10, 30)
-        self.wait()
+        Mc2,tbe2,pos2 = self.reg_get(ml)
         ml.send_coord(3, coords[2] + 20, 30)
         self.wait()
-        Mc3,tbe3 = self.reg_get(ml)
+        Mc3,tbe3,pos3 = self.reg_get(ml)
+        ml.send_coord(2, coords[1] + 20, 30)
+        self.wait()
+        Mc4,tbe4,pos4 = self.reg_get(ml)
+        ml.send_coord(1, coords[0] + 20, 30)
+        self.wait()
+        Mc5,tbe5,pos5 = self.reg_get(ml)
+        tbe = np.vstack([tbe1, tbe2, tbe3, tbe4, tbe5])
+        Mc = np.vstack([Mc1, Mc2, Mc3, Mc4, Mc5])
+        state = None
+        if self.EyesInHand_matrix is not None:
+            state = True
+            pos = np.vstack([pos1, pos2, pos3, pos4, pos5])
+            r = pos.shape[0]
+            for i in range(1, r):
+                for j in range(3):
+                    err = abs(pos[i][j] - pos[0][j])
+                    if(err > 10):
+                        state = False
+                        # print("matrix error")
+        return pose, tbe, Mc, state
 
+    def Eyes_in_hand_calibration(self, ml):
+        ml.set_end_type(0)
+        pose, tbe, Mc, state = self.Matrix_identify(ml)
+        if(state == True):
+            print("Calibration Complete EyesInHand_matrix = ", self.EyesInHand_matrix)
+            return
+        
         input("Move the end of the robot arm to the calibration point, press any key to release servo")
         ml.release_all_servos()
         input("focus servo and get current coords")
@@ -191,23 +221,54 @@ class camera_detect:
         Mr = coords[0:3]
         print(Mr)
 
-        self.EyesInHand_matrix = self.eyes_in_hand_calculate(pose, tbe1, Mc1, tbe2, Mc2, tbe3, Mc3, Mr)
+        self.EyesInHand_matrix = self.eyes_in_hand_calculate(pose, tbe, Mc, Mr)
         print("EyesInHand_matrix = ", self.EyesInHand_matrix)
         self.save_matrix()  # Save the matrix to a file after calculating it
-        print("save successe")
+        print("save successe, wait to verify")
+        
+        pose, tbe, Mc, state = self.Matrix_identify(ml)
+        if state != True:
+            self.EyesInHand_matrix = self.eyes_in_hand_calculate(pose, tbe, Mc, Mr)
+    
+    def Eyes_in_hand(self, coord, camera, Matrix_TC):
+        Position_Camera = np.transpose(camera[:3])  # 相机坐标
+        Matrix_BT = self.Transformation_matrix(coord)  # 机械臂坐标矩阵
+
+        Position_Camera = np.append(Position_Camera, 1)  # 物体坐标（相机系）
+        Position_B = Matrix_BT @ Matrix_TC @ Position_Camera  # 物体坐标（基坐标系）
+        return Position_B
+    
+    def stag_robot_identify(self, ml):
+        marker_pos_pack,ids = self.stag_identify()
+        target_coords = ml.get_coords() # 获取机械臂当前坐标
+        while (target_coords is None):
+            target_coords = ml.get_coords()
+        # print("current_coords", target_coords)
+        cur_coords = np.array(target_coords.copy())
+        cur_coords[-3:] *= (np.pi / 180)  # 将角度值转为弧度值
+        fact_bcl = self.Eyes_in_hand(cur_coords, marker_pos_pack, self.EyesInHand_matrix)  # 通过矩阵变化将物体坐标(相机系)转成(基坐标系)
+        
+        for i in range(3):
+            target_coords[i] = fact_bcl[i]
+        
+        return target_coords,ids
     
     def reg_get(self, ml):
-        for i in range(50):
-            Mc_all = self.stag_identify()
+        target_coords = None
+        for i in range(30):
+            Mc_all,_ = self.stag_identify()
+        if self.EyesInHand_matrix is not None:
+            target_coords,_ = self.stag_robot_identify(ml)
+
         tbe_all = ml.get_coords() # 获取机械臂当前坐标
         while (tbe_all is None):
             tbe_all = ml.get_coords()
 
-        tbe = tbe_all[0:3]
-        Mc = Mc_all[0:3]
+        tbe = np.array(tbe_all[0:3])
+        Mc = np.array(Mc_all[0:3])
         print("tbe = ", tbe)
         print("Mc = ", Mc)
-        return Mc,tbe
+        return Mc,tbe,target_coords
 
 
 if __name__ == "__main__":
@@ -216,9 +277,9 @@ if __name__ == "__main__":
     camera_params = np.load("camera_params.npz")  # 相机配置文件
     mtx, dist = camera_params["mtx"], camera_params["dist"]
     m = camera_detect(0, 32, mtx, dist)
-    tool_len = 20
-    mc.set_tool_reference([0, 0, tool_len, 0, 0, 0])
-    mc.set_end_type(1)
+    # tool_len = 20
+    # mc.set_tool_reference([0, 0, tool_len, 0, 0, 0])
+    # mc.set_end_type(0)
 
     m.Eyes_in_hand_calibration(mc)  #手眼标定
     

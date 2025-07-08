@@ -20,7 +20,8 @@ class UVCCamera:
         self.capture_size = capture_size
 
     def capture(self):
-        self.cap = cv2.VideoCapture(self.cam_index) #windows
+        # self.cap = cv2.VideoCapture(self.cam_index, cv2.CAP_DSHOW) #windows
+        self.cap = cv2.VideoCapture(self.cam_index) #linux
         width, height = self.capture_size
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
