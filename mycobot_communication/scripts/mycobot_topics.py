@@ -5,6 +5,7 @@ import os
 import sys
 import signal
 import threading
+import traceback
 
 import rospy
 
@@ -18,6 +19,7 @@ from mycobot_communication.msg import (
     MycobotSetEndType,
     MycobotSetFreshMode,
     MycobotSetToolReference,
+    MycobotSetVisionMode,
     MycobotGetGripperValue,
 )
 from std_msgs.msg import UInt8
@@ -109,6 +111,7 @@ class MycobotTopics(object):
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = MyCobot280(port, baud)
         self.lock = threading.Lock()
+        self.mc.set_vision_mode(1)
         self.output_robot_message()
 
     def start(self):
@@ -122,6 +125,8 @@ class MycobotTopics(object):
         sfm = threading.Thread(target=self.sub_fresh_mode_status)
         set = threading.Thread(target=self.sub_end_type_status)
         str = threading.Thread(target=self.sub_set_tool_reference)
+        svm = threading.Thread(target=self.sub_vision_mode_status)
+        
         sgv = threading.Thread(target=self.sub_real_gripper_value)
 
         pa.setDaemon(True)
@@ -143,6 +148,9 @@ class MycobotTopics(object):
         set.start()
         str.setDaemon(True)
         str.start()
+        svm.setDaemon(True)
+        svm.start
+        
         sgv.setDaemon(True)
         sgv.start()
 
@@ -156,6 +164,7 @@ class MycobotTopics(object):
         sfm.join()
         set.join()
         str.join()
+        svm.join()
         sgv.join()
 
     def pub_real_angles(self):
@@ -176,7 +185,10 @@ class MycobotTopics(object):
                         ma.joint_5 = angles[4]
                         ma.joint_6 = angles[5]
                         pub.publish(ma)
+                    else:
+                        rospy.logwarn("None or -1")
                 except Exception as e:
+                    e = traceback.format_exc()
                     rospy.logerr(f"SerialException: {e}")
             time.sleep(0.25)
 
@@ -199,7 +211,10 @@ class MycobotTopics(object):
                         ma.ry = coords[4]
                         ma.rz = coords[5]
                         pub.publish(ma)
+                    else:
+                        rospy.logwarn("None or -1")
                 except Exception as e:
+                    e = traceback.format_exc()
                     rospy.logerr(f"SerialException: {e}")
             time.sleep(0.25)
 
@@ -294,6 +309,22 @@ class MycobotTopics(object):
 
         sub = rospy.Subscriber(
             "mycobot/fresh_mode_status", MycobotSetFreshMode, callback=callback
+        )
+        rospy.spin()
+    
+    def sub_vision_mode_status(self):
+        """Subscribe to vision mode Status"""
+        """订阅运动模式状态"""
+        def callback(data):
+            if data.Status==1:
+                self.mc.set_vision_mode(1)
+            elif data.Status==2:
+                self.mc.stop()
+            else:
+                self.mc.set_vision_mode(0)
+
+        sub = rospy.Subscriber(
+            "mycobot/vision_mode_status", MycobotSetVisionMode, callback=callback
         )
         rospy.spin()
         

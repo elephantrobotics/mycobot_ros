@@ -126,6 +126,7 @@ Visualization Manager:
           Value: true
         joint6_flange:
           Value: true
+      Marker Alpha: 1
       Marker Scale: 0.300000012
       Name: TF
       Show Arrows: true
@@ -145,7 +146,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /visualization_marker
+      Marker Topic: cube
       Name: Marker
       Namespaces:
         basic_cube: true
