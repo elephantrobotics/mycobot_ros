@@ -12,7 +12,7 @@ import shutil
 import glob
 
 
-ports = glob.glob('/dev/ttyUSB*') + glob.glob('/dev/ttyACM*')
+ports = glob.glob('/dev/ttyUSB*') + glob.glob('/dev/ttyACM*') + glob.glob('/dev/ttyAMA*')
 print(ports)
 if ports:
     arm_port = ports[0]
@@ -229,6 +229,28 @@ class camera_detect:
         pose, tbe, Mc, state = self.Matrix_identify(ml)
         if state != True:
             self.EyesInHand_matrix = self.eyes_in_hand_calculate(pose, tbe, Mc, Mr)
+
+    def Transformation_matrix(self,coord):
+        """坐标转换为齐次变换矩阵
+
+        Args:
+            coord (_type_): (x,y,z,rx,ry,rz)
+
+        Returns:
+            _type_: _description_
+        """
+        position_robot = coord[:3]
+        pose_robot = coord[3:]
+        # 将欧拉角转为旋转矩阵
+        RBT = self.CvtEulerAngleToRotationMatrix(pose_robot)  
+        PBT = np.array([[position_robot[0]],
+                        [position_robot[1]],
+                        [position_robot[2]]])
+        temp = np.concatenate((RBT, PBT), axis=1)
+        array_1x4 = np.array([[0, 0, 0, 1]])
+        # 将两个数组按行拼接起来
+        matrix = np.concatenate((temp, array_1x4), axis=0)  
+        return matrix
     
     def Eyes_in_hand(self, coord, camera, Matrix_TC):
         Position_Camera = np.transpose(camera[:3])  # 相机坐标
