@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
+	
+<xacro:property name="width" value=".2" />
+
+
+  <link name="base">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/MercuryB3/B3-WFP.dae"/>
+      </geometry>
+      <origin xyz = "-2.9 0.64 0 " rpy = " 0 3.14159 3.14159"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/MercuryB3/B3-WFP.dae"/>
+        </geometry>
+        <origin xyz = "-2.9 0.64 0 " rpy = " 0 3.14159 3.14159"/>
+    </collision>
+  </link>
+
+</robot>
+
