@@ -5,6 +5,8 @@
 
 ```bash
 pip install pymycobot --user
+ros1 noetic
+pymycobot 3.9.7
 ```
 
 #### 1.2 包的下载与安装
@@ -57,9 +59,9 @@ ls /dev/tty*
 
 ```bash
 sudo chmod -R 777 /dev/ttyACM0  or sudo chmod -r 777 /dev/ttyUSB0
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
 roscor
 ```
 
@@ -84,7 +86,7 @@ rosrun 280m5_gazebo_gripper slider_control_gazebo.py _port:=/dev/ttyACM0 _baud:=
 spin ...
 ```
 
-此时便可通过操控joint_state_publisher_gui的滑块来同时操控Gazebo中机械臂模型的位姿了。
+此时便可通过操控joint_state_publisher_gui的滑块来操控Gazebo或者机械臂模型的位姿了。
 
 2. Gazebo模型跟随
 通过如下的命令可以实现Gazebo中的模型跟随实际机械臂的运动而发生位姿的改变，首先运行launch文件：
