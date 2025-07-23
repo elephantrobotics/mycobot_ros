@@ -5,6 +5,7 @@ To use this package, you need to install the [Python API](https://github.com/ele
 
 ```bash
 pip install pymycobot --user
+ros1 noetic
 ```
 
 
@@ -60,9 +61,9 @@ Open communication and Chmod
 
 ```bash
 sudo chmod -R 777 /dev/ttyACM0  or sudo chmod -r 777 /dev/ttyUSB0
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
-sudo chmod -R 777 280m5_gripper_moveit/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
 roscore
 ```
 
