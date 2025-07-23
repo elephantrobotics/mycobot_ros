@@ -6,6 +6,7 @@ To use this package, you need to install the [Python API](https://github.com/ele
 ```bash
 pip install pymycobot --user
 ros1 noetic
+pymycobot 3.9.7
 ```
 
 
