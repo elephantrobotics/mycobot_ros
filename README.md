@@ -16,7 +16,7 @@ Download the package into your ROS workspace.
 
 ```bash
 $ cd ~/catkin_ws/src
-$ git clone https://github.com/jiaweilong66/280m5_gripper_moveit.git
+$ git clone https://github.com/jiaweilong66/280m5_gripper_gazebo.git
 $ cd ~/catkin_ws
 $ catkin_make
 $ source devel/setup.bash
