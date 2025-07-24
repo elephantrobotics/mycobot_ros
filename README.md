@@ -92,7 +92,7 @@ spin ...
 ```
 
 
-At this point, you can control the poses of both the mechanical arm model in Gazebo and the real mechanical arm simultaneously by manipulating the sliders in the joint_state_publisher_gui. 
+At this point, you can control the poses of both the mechanical arm model in Gazebo or the real mechanical arm simultaneously by manipulating the sliders in the joint_state_publisher_gui. 
 
 2. Gazebo Model Following
 The following command can be used to make the model in Gazebo change its pose in accordance with the movement of the actual robotic arm. First, run the launch file: 
