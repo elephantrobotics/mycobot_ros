@@ -9,6 +9,8 @@ import math
 import time
 import threading
 import queue
+import serial
+import serial.tools.list_ports
 from pymycobot.mycobot import MyCobot
 from pymycobot import MyCobot280, PI_PORT, PI_BAUD
 from std_msgs.msg import Float64MultiArray
@@ -50,6 +52,176 @@ p: close gripper
 1: init pose
 q: quit
 """
+
+# --------------------------- 串口自动检测函数 ---------------------------
+def find_mycobot_port(baudrate=115200, timeout=3):
+    """
+    自动检测MyCobot机械臂的串口
+    
+    Args:
+        baudrate: 波特率，默认115200
+        timeout: 超时时间，默认3秒
+    
+    Returns:
+        str: 找到的串口路径，如果未找到返回None
+    """
+    print("正在自动检测MyCobot机械臂串口...")
+    
+    # 获取所有可用串口
+    available_ports = serial.tools.list_ports.comports()
+    
+    if not available_ports:
+        print("未找到任何串口设备")
+        return None
+    
+    print(f"找到 {len(available_ports)} 个串口设备：")
+    for port in available_ports:
+        print(f"  - {port.device}: {port.description}")
+    
+    # 优先检查常见的MyCobot串口设备
+    priority_ports = []
+    other_ports = []
+    
+    for port in available_ports:
+        port_name = port.device.lower()
+        description = port.description.lower() if port.description else ""
+        
+        # 检查是否是常见的MyCobot相关设备
+        if any(keyword in description for keyword in ['ch340', 'ch341', 'cp210', 'ftdi', 'usb-serial']):
+            priority_ports.append(port)
+        elif 'ttyusb' in port_name or 'ttyacm' in port_name:
+            priority_ports.append(port)
+        else:
+            other_ports.append(port)
+    
+    # 合并列表，优先检查可能的设备
+    test_ports = priority_ports + other_ports
+    
+    # 测试每个串口
+    for port in test_ports:
+        print(f"正在测试串口: {port.device}")
+        
+        try:
+            # 尝试创建MyCobot连接
+            test_mc = MyCobot(port.device, baudrate)
+            
+            # 等待连接稳定
+            time.sleep(1)
+            
+            # 尝试获取机械臂信息来验证连接
+            try:
+                # 尝试获取角度信息
+                angles = test_mc.get_angles()
+                if angles is not None and len(angles) == 6:
+                    print(f"✓ 成功连接到MyCobot机械臂，串口: {port.device}")
+                    print(f"  当前角度: {angles}")
+                    return port.device
+                else:
+                    # 尝试其他验证方法
+                    firmware_version = test_mc.get_system_version()
+                    if firmware_version:
+                        print(f"✓ 成功连接到MyCobot机械臂，串口: {port.device}")
+                        print(f"  固件版本: {firmware_version}")
+                        return port.device
+            except Exception as e:
+                print(f"  连接测试失败: {e}")
+                
+            # 清理测试连接
+            try:
+                test_mc.close()
+            except:
+                pass
+                
+        except Exception as e:
+            print(f"  无法打开串口 {port.device}: {e}")
+            continue
+    
+    print("❌ 未找到MyCobot机械臂设备")
+    return None
+
+def get_optimal_baudrate(port):
+    """
+    为指定串口找到最佳波特率
+    
+    Args:
+        port: 串口路径
+    
+    Returns:
+        int: 最佳波特率，如果未找到返回默认值115200
+    """
+    common_baudrates = [115200, 1000000, 500000, 256000, 230400, 57600, 38400, 19200, 9600]
+    
+    print(f"正在为串口 {port} 寻找最佳波特率...")
+    
+    for baud in common_baudrates:
+        try:
+            print(f"  测试波特率: {baud}")
+            test_mc = MyCobot(port, baud)
+            time.sleep(0.5)
+            
+            # 尝试通信测试
+            try:
+                angles = test_mc.get_angles()
+                if angles is not None and len(angles) == 6:
+                    print(f"✓ 最佳波特率: {baud}")
+                    test_mc.close()
+                    return baud
+            except:
+                pass
+            
+            test_mc.close()
+            
+        except Exception:
+            continue
+    
+    print(f"使用默认波特率: 115200")
+    return 115200
+
+def smart_connect_mycobot():
+    """
+    智能连接MyCobot机械臂
+    
+    Returns:
+        MyCobot: 连接成功的MyCobot对象，失败返回None
+    """
+    # 首先尝试ROS参数指定的串口
+    port = rospy.get_param("~port", None)
+    baud = rospy.get_param("~baud", 115200)
+    
+    if port:
+        print(f"尝试使用ROS参数指定的串口: {port}")
+        try:
+            test_mc = MyCobot(port, baud)
+            time.sleep(1)
+            angles = test_mc.get_angles()
+            if angles is not None and len(angles) == 6:
+                print(f"✓ 成功连接到指定串口: {port}")
+                return test_mc
+            else:
+                test_mc.close()
+                print(f"指定串口 {port} 连接失败，开始自动检测")
+        except Exception as e:
+            print(f"指定串口 {port} 连接失败: {e}，开始自动检测")
+    
+    # 自动检测串口
+    detected_port = find_mycobot_port()
+    if not detected_port:
+        return None
+    
+    # 找到最佳波特率
+    optimal_baud = get_optimal_baudrate(detected_port)
+    
+    # 创建最终连接
+    try:
+        final_mc = MyCobot(detected_port, optimal_baud)
+        time.sleep(1)
+        print(f"✓ MyCobot机械臂连接成功!")
+        print(f"  串口: {detected_port}")
+        print(f"  波特率: {optimal_baud}")
+        return final_mc
+    except Exception as e:
+        print(f"❌ 创建最终连接失败: {e}")
+        return None
 
 # --------------------------- 工具函数 ---------------------------
 def deg_to_rad_list(deg_list):
@@ -246,15 +418,28 @@ if __name__ == "__main__":
     try:
         rospy.init_node("mycobot_keyboard_controller", anonymous=True)
 
-        port = rospy.get_param("~port", "/dev/ttyUSB0")
-        baud = rospy.get_param("~baud", 115200)
+        print("=" * 60)
+        print("MyCobot机械臂键盘控制器 - 智能串口检测版")
+        print("=" * 60)
 
-        mc = MyCobot(port, baud)
+        # 智能连接MyCobot机械臂
+        mc = smart_connect_mycobot()
+        
+        if mc is None:
+            print("❌ 无法连接到MyCobot机械臂，请检查：")
+            print("  1. 机械臂是否正确连接到电脑")
+            print("  2. 设备驱动是否正确安装")
+            print("  3. 串口是否被其他程序占用")
+            print("  4. 机械臂是否正常上电")
+            sys.exit(1)
+
+        # 释放所有舵机并稍作等待
         mc.release_all_servos()
         time.sleep(0.1)
 
-        print("机械臂键盘控制器已启动")
+        print("\n机械臂键盘控制器已启动")
         print("使用异步命令执行，减少延迟和卡顿")
+        print("按 'q' 退出程序")
         
         teleop_keyboard()
 
@@ -265,4 +450,9 @@ if __name__ == "__main__":
     finally:
         print("清理资源...")
         if mc:
-            mc.release_all_servos()
+            try:
+                mc.release_all_servos()
+                mc.close()
+            except:
+                pass
+        print("程序已退出")
