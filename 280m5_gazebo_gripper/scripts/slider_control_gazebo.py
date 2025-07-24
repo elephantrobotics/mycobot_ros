@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-slider_control.py - 优化版本
+slider_control.py 
 双模式滑块控制脚本：
   1: 滑块 -> Gazebo 控制器  
   2: 滑块 -> 真实 MyCobot 机械臂
 使用异步执行和频率控制优化性能，减少卡顿
+支持自动串口检测和智能端口选择
 """
 import time
 import math
@@ -15,6 +16,7 @@ from collections import deque
 import rospy
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+import serial.tools.list_ports
 from pymycobot.mycobot import MyCobot
 
 # 全局变量
@@ -71,6 +73,98 @@ ARM_JOINTS = [
     "joint6output_to_joint6",
 ]
 GRIPPER_JOINT = "gripper_controller"
+
+def find_available_port():
+    """自动检测可用串口，优先选择USB转串口设备"""
+    ports = serial.tools.list_ports.comports()
+    
+    # 优先级关键词列表（从高到低）
+    priority_keywords = ['ACM', 'USB', 'Arduino', 'CH340', 'CP210', 'FTDI']
+    
+    # 按优先级查找串口
+    for keyword in priority_keywords:
+        for port in ports:
+            if (keyword in port.device.upper() or 
+                keyword in port.description.upper() or 
+                keyword in str(port.hwid).upper()):
+                rospy.loginfo(f"[串口检测] 找到优先串口: {port.device} ({port.description})")
+                return port.device
+    
+    # 如果没找到优先设备，返回第一个可用串口
+    if ports:
+        selected_port = ports[0].device
+        rospy.loginfo(f"[串口检测] 使用第一个可用串口: {selected_port} ({ports[0].description})")
+        return selected_port
+    
+    # 没有找到任何串口
+    rospy.logwarn("[串口检测] 未找到任何可用串口，使用默认值")
+    return "/dev/ttyUSB0"
+
+def list_available_ports():
+    """列出所有可用串口信息"""
+    ports = serial.tools.list_ports.comports()
+    if not ports:
+        rospy.loginfo("[串口检测] 没有找到可用串口")
+        return
+    
+    rospy.loginfo("[串口检测] === 可用串口列表 ===")
+    for i, port in enumerate(ports):
+        rospy.loginfo(f"[串口检测] {i+1}. 设备: {port.device}")
+        rospy.loginfo(f"[串口检测]    描述: {port.description}")
+        rospy.loginfo(f"[串口检测]    硬件ID: {port.hwid}")
+        rospy.loginfo("[串口检测]    ---")
+
+def test_port_connectivity(port, baud):
+    """测试串口连接性"""
+    try:
+        test_mc = MyCobot(port, baud)
+        time.sleep(1.0)  # 给设备时间初始化
+        
+        # 尝试获取角度来测试连接
+        angles = test_mc.get_angles()
+        test_mc.release_all_servos()
+        
+        rospy.loginfo(f"[串口测试] ✅ 端口 {port} 连接成功，当前角度: {angles}")
+        return True
+        
+    except Exception as e:
+        rospy.logwarn(f"[串口测试] ❌ 端口 {port} 连接失败: {e}")
+        return False
+
+def smart_port_selection():
+    """智能串口选择：检测所有可用端口并测试连接性"""
+    ports = serial.tools.list_ports.comports()
+    
+    if not ports:
+        rospy.logwarn("[智能选择] 未找到任何串口设备")
+        return "/dev/ttyUSB0"
+    
+    rospy.loginfo("[智能选择] 开始智能串口选择...")
+    
+    # 定义优先级关键词
+    priority_keywords = ['ACM', 'USB', 'Arduino', 'CH340', 'CP210', 'FTDI']
+    
+    # 首先尝试高优先级端口
+    for keyword in priority_keywords:
+        for port in ports:
+            if (keyword in port.device.upper() or 
+                keyword in port.description.upper() or 
+                keyword in str(port.hwid).upper()):
+                
+                rospy.loginfo(f"[智能选择] 正在测试高优先级端口: {port.device}")
+                if test_port_connectivity(port.device, 115200):
+                    return port.device
+    
+    # 如果高优先级端口都失败，尝试所有端口
+    rospy.loginfo("[智能选择] 高优先级端口测试失败，尝试所有可用端口...")
+    for port in ports:
+        rospy.loginfo(f"[智能选择] 正在测试端口: {port.device}")
+        if test_port_connectivity(port.device, 115200):
+            return port.device
+    
+    # 所有端口都失败
+    rospy.logerr("[智能选择] 所有端口测试失败，使用默认端口")
+    return "/dev/ttyUSB0"
 
 class RobotCommand:
     """机器人命令类"""
@@ -316,10 +410,25 @@ def initialize_mycobot():
     """初始化MyCobot连接"""
     global mc
     
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    # 显示所有可用串口
+    list_available_ports()
+    
+    # 获取串口参数，优先使用ROS参数，其次自动检测
+    port = rospy.get_param("~port", None)
     baud = rospy.get_param("~baud", 115200)
     
-    rospy.loginfo(f"[slider_control] 连接MyCobot: {port} @ {baud}")
+    if port is None:
+        # 没有指定端口，使用智能选择
+        rospy.loginfo("[slider_control] 未指定串口，启动智能串口选择...")
+        port = smart_port_selection()
+    else:
+        # 指定了端口，但仍然测试连接性
+        rospy.loginfo(f"[slider_control] 使用指定串口: {port}")
+        if not test_port_connectivity(port, baud):
+            rospy.logwarn(f"[slider_control] 指定串口 {port} 连接失败，尝试自动检测...")
+            port = smart_port_selection()
+    
+    rospy.loginfo(f"[slider_control] 最终选择串口: {port} @ {baud}")
     
     try:
         mc = MyCobot(port, baud)
@@ -327,7 +436,8 @@ def initialize_mycobot():
         
         # 测试连接
         current_angles = mc.get_angles()
-        rospy.loginfo(f"[slider_control] MyCobot连接成功: {current_angles}")
+        rospy.loginfo(f"[slider_control] ✅ MyCobot连接成功!")
+        rospy.loginfo(f"[slider_control] 当前角度: {current_angles}")
         
         mc.release_all_servos()
         time.sleep(0.5)
@@ -335,7 +445,12 @@ def initialize_mycobot():
         return True
         
     except Exception as e:
-        rospy.logerr(f"[slider_control] MyCobot初始化失败: {e}")
+        rospy.logerr(f"[slider_control] ❌ MyCobot初始化失败: {e}")
+        rospy.logerr("[slider_control] 请检查:")
+        rospy.logerr("[slider_control] 1. 机械臂是否正确连接到电脑")
+        rospy.logerr("[slider_control] 2. 串口权限是否正确 (sudo chmod 666 /dev/ttyACM* 或 /dev/ttyUSB*)")
+        rospy.logerr("[slider_control] 3. 是否有其他程序占用串口")
+        rospy.logerr("[slider_control] 4. 机械臂是否已开机并正常工作")
         return False
 
 def print_stats():
@@ -355,12 +470,12 @@ def main():
     # 模式选择
     print("\nSelect control mode:")
     print("  1: Slider → Gazebo")
-    print("  2: Slider → Real MyCobot (Optimized)")
+    print("  2: Slider → Real MyCobot (Optimized with Auto Port Detection)")
     inp = input("Enter 1 or 2 (default 2): ").strip()
     
     mode = 1 if inp == "1" else 2
     
-    rospy.loginfo(f"[slider_control] 模式: {'Gazebo' if mode==1 else 'Real Robot (优化版)'}")
+    rospy.loginfo(f"[slider_control] 模式: {'Gazebo' if mode==1 else 'Real Robot (优化版+自动串口检测)'}")
     rospy.loginfo(f"[slider_control] 配置: 角度阈值={ANGLE_THRESHOLD}°, "
                   f"最大频率={MAX_COMMAND_RATE}Hz, 队列大小={COMMAND_QUEUE_SIZE}")
     rospy.loginfo(f"[slider_control] 安全限制: 关节±180°, 夹爪{GRIPPER_LIMITS[0]}°~{GRIPPER_LIMITS[1]}°")
@@ -383,8 +498,9 @@ def main():
     # 订阅关节状态
     rospy.Subscriber("/joint_states", JointState, callback, queue_size=1)
     
-    rospy.loginfo("[slider_control] 节点启动成功，等待滑块输入...")
+    rospy.loginfo("[slider_control] 🚀 节点启动成功，等待滑块输入...")
     rospy.loginfo("[slider_control] 💡 超限时会自动限制角度并显示警告")
+    rospy.loginfo("[slider_control] 🔌 支持自动串口检测和智能端口选择")
     
     # 定期打印统计信息
     def stats_timer():
