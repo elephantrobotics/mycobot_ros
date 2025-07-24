@@ -6,7 +6,7 @@ This file obtains the joint angle of the manipulator in ROS,
 and then sends it directly to the real manipulator using `pymycobot` API.
 This file is [slider_control.launch] related script.
 Passable parameters:
-    port: serial port string. Defaults is '/dev/ttyUSB0'
+    port: serial port string. Defaults is auto-detected or '/dev/ttyUSB0'
     baud: serial port baudrate. Defaults is 115200.
 """
 
@@ -15,17 +15,18 @@ import rospy
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import time
+import serial.tools.list_ports
 from pymycobot import PI_PORT, PI_BAUD               # Raspberry Pi 版初始化
 from pymycobot.mycobot import MyCobot
 from pymycobot import MyCobot280                     # Raspberry Pi 版 MyCobot
 
 # 保留原 mcs 实例用于获取 gripper 角度
-mcs = MyCobot280(PI_PORT, 115200)
+mcs = None
 mc = None
 pub_arm_command = None
 pub_gripper_command = None
 
-# 上一次有效映射值（用于丢弃无效 254/255 读数时“冻结”夹爪位置）
+# 上一次有效映射值（用于丢弃无效 254/255 读数时"冻结"夹爪位置）
 last_mapped_gripper = None
 
 # 映射常量
@@ -33,6 +34,46 @@ MYCOBOT_MIN_ANGLE = 3
 MYCOBOT_MAX_ANGLE = 91
 GAZEBO_MIN_POSITION = -0.68
 GAZEBO_MAX_POSITION = 0.15
+
+def find_available_port():
+    """自动检测可用串口，优先选择USB转串口设备"""
+    ports = serial.tools.list_ports.comports()
+    
+    # 优先级关键词列表（从高到低）
+    priority_keywords = ['ACM', 'USB', 'Arduino', 'CH340', 'CP210', 'FTDI']
+    
+    # 按优先级查找串口
+    for keyword in priority_keywords:
+        for port in ports:
+            if (keyword in port.device.upper() or 
+                keyword in port.description.upper() or 
+                keyword in str(port.hwid).upper()):
+                rospy.loginfo(f"找到优先串口: {port.device} ({port.description})")
+                return port.device
+    
+    # 如果没找到优先设备，返回第一个可用串口
+    if ports:
+        selected_port = ports[0].device
+        rospy.loginfo(f"使用第一个可用串口: {selected_port} ({ports[0].description})")
+        return selected_port
+    
+    # 没有找到任何串口
+    rospy.logwarn("未找到任何可用串口，使用默认值")
+    return "/dev/ttyUSB0"
+
+def list_available_ports():
+    """列出所有可用串口信息"""
+    ports = serial.tools.list_ports.comports()
+    if not ports:
+        rospy.loginfo("没有找到可用串口")
+        return
+    
+    rospy.loginfo("=== 可用串口列表 ===")
+    for i, port in enumerate(ports):
+        rospy.loginfo(f"{i+1}. 设备: {port.device}")
+        rospy.loginfo(f"   描述: {port.description}")
+        rospy.loginfo(f"   硬件ID: {port.hwid}")
+        rospy.loginfo("   ---")
 
 def callback(data):
     global last_mapped_gripper
@@ -49,8 +90,12 @@ def callback(data):
     expected_gripper_joint_names = ["gripper_controller"]
 
     # 获取真实机械臂关节与夹爪原始数据
-    angles = mc.get_angles()
-    gripper_ang = mcs.get_gripper_value()
+    try:
+        angles = mc.get_angles()
+        gripper_ang = mcs.get_gripper_value()
+    except Exception as e:
+        rospy.logerr(f"获取机械臂数据失败: {e}")
+        return
 
     # 如果读数为 254 或 255，则打印 0；否则打印真实角度
     if gripper_ang in (254, 255):
@@ -89,7 +134,7 @@ def callback(data):
     arm_traj.points.append(pt)
     pub_arm_command.publish(arm_traj)
 
-    # --- GRIPPER 控制：丢弃 254/255 读数并“冻结”位置 ---
+    # --- GRIPPER 控制：丢弃 254/255 读数并"冻结"位置 ---
     if gripper_ang in (254, 255):
         # 无效读数，保持上一次有效值或初始化到 fully closed
         if last_mapped_gripper is None:
@@ -120,16 +165,37 @@ def callback(data):
 
 
 def listener():
-    global mc, pub_arm_command, pub_gripper_command
+    global mc, mcs, pub_arm_command, pub_gripper_command
 
     rospy.init_node("control_slider", anonymous=True)
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    
+    # 显示所有可用串口
+    list_available_ports()
+    
+    # 获取串口参数，优先使用ROS参数，其次自动检测
+    port = rospy.get_param("~port", find_available_port())
     baud = rospy.get_param("~baud", 115200)
+    
+    rospy.loginfo(f"使用串口: {port}, 波特率: {baud}")
 
-    # 初始化真实机械臂连接
-    mc = MyCobot(port, baud)
-    mc.release_all_servos()
-    time.sleep(0.1)
+    try:
+        # 初始化真实机械臂连接
+        mc = MyCobot(port, baud)
+        mc.release_all_servos()
+        
+        # 初始化夹爪连接（使用相同端口）
+        mcs = MyCobot280(port, baud)
+        
+        time.sleep(0.1)
+        rospy.loginfo("机械臂连接成功")
+        
+    except Exception as e:
+        rospy.logerr(f"机械臂连接失败: {e}")
+        rospy.logerr("请检查:")
+        rospy.logerr("1. 机械臂是否正确连接到电脑")
+        rospy.logerr("2. 串口权限是否正确 (sudo chmod 666 /dev/ttyACM0)")
+        rospy.logerr("3. 是否有其他程序占用串口")
+        return
 
     # 初始化 publishers & subscriber
     pub_arm_command = rospy.Publisher("/arm_controller/command",
@@ -144,4 +210,3 @@ def listener():
 
 if __name__ == "__main__":
     listener()
-
