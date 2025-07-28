@@ -1,0 +1,23 @@
+<launch>
+    <arg name="paused" default="false"/>
+    <arg name="gazebo_gui" default="true"/>
+	<arg name="model" default="$(find 280m5_gazebo_gripper)/config/mycobot_280m5_with_gripper_lll.urdf"/>
+
+    <!-- Launch Gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" default="worlds/empty.world"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="gui" value="$(arg gazebo_gui)"/>
+    </include>
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF ，将值合并到TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
+        respawn="false" output="screen" />
+
+    <include file="$(find mycobot_280_gazebo_moveit)/launch/ros_controllers.launch"/>
+
+</launch>

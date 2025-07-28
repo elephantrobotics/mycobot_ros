@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # license removed for brevity
 import time
@@ -7,7 +7,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from mycobot_communication.srv import GetAngles
+from mecharm_communication.srv import GetAngles
 
 
 def talker():

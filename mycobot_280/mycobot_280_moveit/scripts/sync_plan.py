@@ -4,7 +4,18 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyCobot280
 
 
 mc = None
@@ -27,7 +38,7 @@ def listener():
     port = rospy.get_param("~port", "/dev/ttyUSB0")
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
-    mc = MyCobot(port, baud)
+    mc = MyCobot280(port, baud)
     time.sleep(0.05)
     mc.set_fresh_mode(1)
     time.sleep(0.05)

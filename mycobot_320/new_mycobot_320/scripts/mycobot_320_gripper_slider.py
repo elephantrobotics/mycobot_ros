@@ -11,9 +11,22 @@ Passable parameters:
 
 import rospy
 import time
+import math
 from sensor_msgs.msg import JointState
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.0'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot.mycobot320 import MyCobot320
 
 
 mc = None
@@ -27,13 +40,13 @@ def callback(data):
         data_list.append(round(value, 3))
 
     data_list = data_list[:7]
-    print("radians:%s"%data_list[:6])
-    mc.send_radians(data_list[:6], 80)
+    angles_list = [round(math.degrees(radian), 2) for radian in data_list[:6]]
+    print("angles:%s"%angles_list)
+    mc.send_angles(angles_list, 25)
     gripper_value = int(abs(-0.7-data_list[6])* 117)
     print("gripper_value:%s"%gripper_value)
-    # mc.set_gripper_mode(0)
-    # time.sleep(1)
-    mc.set_gripper_value(gripper_value, 100)
+
+    mc.set_gripper_value(gripper_value, 80)
     
 def listener():
     global mc
@@ -41,11 +54,14 @@ def listener():
    
     rospy.init_node("control_slider", anonymous=True)
 
-    rospy.Subscriber("joint_states", JointState, callback)
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    port = rospy.get_param("~port", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
-    mc = MyCobot(port, baud)
+    mc = MyCobot320(port, baud)
+    time.sleep(0.05)
+    mc.set_fresh_mode(1)
+    time.sleep(0.05)
+    rospy.Subscriber("joint_states", JointState, callback)
  
     # spin() simply keeps python from exiting until this node is stopped
     print("spin ...")

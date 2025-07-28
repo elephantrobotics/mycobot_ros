@@ -385,6 +385,7 @@ class Window:
         # print(c_value)
         try:
             self.set_coords(*c_value)
+            time.sleep(2)
         except ServiceException:
             pass
         self.show_j_date(c_value[:-2], "coord")
@@ -402,6 +403,7 @@ class Window:
 
         try:
             self.set_angles(*j_value)
+            time.sleep(2)
         except ServiceException:
             pass
         self.show_j_date(j_value[:-1])

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import time
 import os
@@ -8,7 +8,7 @@ import threading
 
 import rospy
 
-from mycobot_communication.msg import (
+from mecharm_communication.msg import (
     MycobotAngles,
     MycobotCoords,
     MycobotSetAngles,
@@ -17,7 +17,18 @@ from mycobot_communication.msg import (
     MycobotPumpStatus,
 )
 
-from pymycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MechArm270
 
 # from pymycobot import MyCobotSocket
 
@@ -79,7 +90,7 @@ class MycobotTopics(object):
         rospy.loginfo("%s,%s" % (port, baud))
         # self.mc = MyCobotSocket(port, baud) # port
         # self.mc.connect()   #pi
-        self.mc = MyCobot(port, baud)
+        self.mc = MechArm270(port, baud)
         self.lock = threading.Lock()
 
     def start(self):

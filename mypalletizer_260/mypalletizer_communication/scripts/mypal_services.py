@@ -5,8 +5,18 @@ import rospy
 # from mycobot_communication.srv import *
 from mypalletizer_communication.srv import *
 
-# from pymycobot.mycobot import MyCobot
-from pymycobot.mypalletizer import MyPalletizer
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyPalletizer260
 
 mc = None
 
@@ -18,7 +28,7 @@ def create_handle():
     port = rospy.get_param("~port")
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
-    mc = MyPalletizer(port, baud)
+    mc = MyPalletizer260(port, baud)
 
 
 def create_services():

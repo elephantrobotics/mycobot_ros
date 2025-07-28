@@ -1,13 +1,24 @@
 #encoding: UTF-8
 import cv2
 import numpy as np
-from pymycobot.mycobot import MyCobot
 import time
 import os
 import rospy
 from visualization_msgs.msg import Marker
 from moving_utils import Movement
 import RPi.GPIO as GPIO
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyCobot280
 
 # y轴偏移量
 pump_y = -55
@@ -197,7 +208,7 @@ class Detect_marker(Movement):
     # init mycobot
     def init_mycobot(self):
         if "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
+            self.mc = MyCobot280(self.robot_raspi, 1000000)
         self.pub_pump(False)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 2.02, 9.58], 20)
         # self.mc.send_coords([135.0, -65.5, 280.1, 178.99, 5.38, -179.9], 20, 1)

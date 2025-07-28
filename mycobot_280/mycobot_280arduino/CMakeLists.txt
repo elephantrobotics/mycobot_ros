@@ -26,10 +26,8 @@ catkin_install_python(PROGRAMS
   scripts/teleop_keyboard.py
   scripts/listen_real.py
   scripts/listen_real_of_topic.py
-  scripts/detect_marker.py
-  scripts/following_marker.py
-  scripts/follow_and_pump.py
   scripts/simple_gui.py
+  scripts/detect_stag.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

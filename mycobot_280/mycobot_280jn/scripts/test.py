@@ -1,7 +1,18 @@
 # encoding=utf-8
 import time
-from pymycobot.mycobotsocket import MyCobotSocket
-# from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot.mycobot280socket import MyCobot280Socket
+    # from pymycobot.mycobot280 import MyCobot280
 
 
 # ms.send_angles([50,0,0,0,0,0],50)
@@ -9,7 +20,7 @@ i=100
 
 # while i>=0:
 for i in range(1,256):
-    ms=MyCobotSocket('192.168.125.226',9000)
+    ms=MyCobot280Socket('192.168.125.226',9000)
 
     ms.connect()
     time.sleep(1)

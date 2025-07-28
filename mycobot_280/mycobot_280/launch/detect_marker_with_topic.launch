@@ -23,8 +23,6 @@
     </include>
 	<!-- listen and pub the real angles ，监听并发布真实的角度-->
 	<node name="real_listener" pkg="mycobot_280" type="listen_real_of_topic.py" />
-	<!-- vision node -->
-	<node name="opencv_camera" pkg="mycobot_280" type="opencv_camera" args="$(arg num)"/>
-	<node name="detect_marker" pkg="mycobot_280" type="detect_marker.py" />
-	<node name="following_marker" pkg="mycobot_280" type="following_marker.py" />
+	<include file="$(find mycobot_280)/launch/open_camera.launch" />
+
 </launch>

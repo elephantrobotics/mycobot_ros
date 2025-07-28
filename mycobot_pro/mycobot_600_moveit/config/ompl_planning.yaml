@@ -1,4 +1,11 @@
 planner_configs:
+  AnytimePathShortening:
+    type: geometric::AnytimePathShortening
+    shortcut: true  # Attempt to shortcut all new solution paths
+    hybridize: true  # Compute hybrid solution trajectories
+    max_hybrid_paths: 24  # Number of hybrid paths generated per iteration
+    num_planners: 4  # The number of default planners to use for planning
+    planners: ""  # A comma-separated list of planner types (e.g., "PRM,EST,RRTConnect"Optionally, planner parameters can be passed to change the default:"PRM[max_nearest_neighbors=5],EST[goal_bias=.5],RRT[range=10. goal_bias=.1]"
   SBL:
     type: geometric::SBL
     range: 0.0  # Max motion added to tree. ==> maxDistance_ default: 0.0, if 0.0, set on setup()
@@ -44,8 +51,8 @@ planner_configs:
     temp_change_factor: 2.0  # how much to increase or decrease temp. default: 2.0
     min_temperature: 10e-10  # lower limit of temp change. default: 10e-10
     init_temperature: 10e-6  # initial temperature. default: 10e-6
-    frountier_threshold: 0.0  # dist new state to nearest neighbor to disqualify as frontier. default: 0.0 set in setup()
-    frountierNodeRatio: 0.1  # 1/10, or 1 nonfrontier for every 10 frontier. default: 0.1
+    frontier_threshold: 0.0  # dist new state to nearest neighbor to disqualify as frontier. default: 0.0 set in setup()
+    frontier_node_ratio: 0.1  # 1/10, or 1 nonfrontier for every 10 frontier. default: 0.1
     k_constant: 0.0  # value used to normalize expresssion. default: 0.0 set in setup()
   PRM:
     type: geometric::PRM
@@ -88,8 +95,8 @@ planner_configs:
     range: 0.0  # Max motion added to tree. ==> maxDistance_ default: 0.0, if 0.0, set on setup()
     temp_change_factor: 0.1  # how much to increase or decrease temp. default: 0.1
     init_temperature: 100  # initial temperature. default: 100
-    frountier_threshold: 0.0  # dist new state to nearest neighbor to disqualify as frontier. default: 0.0 set in setup()
-    frountier_node_ratio: 0.1  # 1/10, or 1 nonfrontier for every 10 frontier. default: 0.1
+    frontier_threshold: 0.0  # dist new state to nearest neighbor to disqualify as frontier. default: 0.0 set in setup()
+    frontier_node_ratio: 0.1  # 1/10, or 1 nonfrontier for every 10 frontier. default: 0.1
     cost_threshold: 1e300  # the cost threshold. Any motion cost that is not better will not be expanded. default: inf
   LBTRRT:
     type: geometric::LBTRRT
@@ -120,9 +127,47 @@ planner_configs:
     sparse_delta_fraction: 0.25  # delta fraction for connection distance. This value represents the visibility range of sparse samples. default: 0.25
     dense_delta_fraction: 0.001  # delta fraction for interface detection. default: 0.001
     max_failures: 5000  # maximum consecutive failure limit. default: 5000
+  AITstar:
+    type: geometric::AITstar
+    use_k_nearest: 1  # whether to use a k-nearest RGG connection model (1) or an r-disc model (0). Default: 1
+    rewire_factor: 1.001  # rewire factor of the RGG. Valid values: [1.0:0.01:3.0]. Default: 1.001
+    samples_per_batch: 100  # batch size. Valid values: [1:1:1000]. Default: 100
+    use_graph_pruning: 1  # enable graph pruning (1) or not (0). Default: 1
+    find_approximate_solutions: 0  # track approximate solutions (1) or not (0). Default: 0
+    set_max_num_goals: 1  # maximum number of goals sampled from sampleable goal regions. Valid values: [1:1:1000]. Default: 1
+  ABITstar:
+    type: geometric::ABITstar
+    use_k_nearest: 1  # whether to use a k-nearest RGG connection model (1) or an r-disc model (0). Default: 1
+    rewire_factor: 1.001  # rewire factor of the RGG. Valid values: [1.0:0.01:3.0]. Default: 1.001
+    samples_per_batch: 100  # batch size. Valid values: [1:1:1000]. Default: 100
+    use_graph_pruning: 1  # enable graph pruning (1) or not (0). Default: 1
+    prune_threshold_as_fractional_cost_change: 0.1  # fractional change in the solution cost AND problem measure necessary for pruning to occur. Default: 0.1
+    delay_rewiring_to_first_solution: 0  # delay (1) or not (0) rewiring until a solution is found. Default: 0
+    use_just_in_time_sampling: 0  # delay the generation of samples until they are * necessary. Only works with r-disc connection and path length minimization. Default: 0
+    drop_unconnected_samples_on_prune: 0  # drop unconnected samples when pruning, regardless of their heuristic value. Default: 0
+    stop_on_each_solution_improvement: 0  # stop the planner each time a solution improvement is found. Useful for debugging. Default: 0
+    use_strict_queue_ordering: 0  # sort edges in the queue at the end of the batch (0) or after each rewiring (1). Default: 0
+    find_approximate_solutions: 0  # track approximate solutions (1) or not (0). Default: 0
+    initial_inflation_factor: 1000000  # inflation factor for the initial search. Valid values: [1.0:0.01:1000000.0]. Default: 1000000
+    inflation_scaling_parameter: 10  # scaling parameter for the inflation factor update policy. Valid values: [1.0:0.01:1000000.0]. Default: 0
+    truncation_scaling_parameter: 5.0  # scaling parameter for the truncation factor update policy. Valid values: [1.0:0.01:1000000.0]. Default: 0
+  BITstar:
+    type: geometric::BITstar
+    use_k_nearest: 1  # whether to use a k-nearest RGG connection model (1) or an r-disc model (0). Default: 1
+    rewire_factor: 1.001  # rewire factor of the RGG. Valid values: [1.0:0.01:3.0]. Default: 1.001
+    samples_per_batch: 100  # batch size. Valid values: [1:1:1000]. Default: 100
+    use_graph_pruning: 1  # enable graph pruning (1) or not (0). Default: 1
+    prune_threshold_as_fractional_cost_change: 0.1  # fractional change in the solution cost AND problem measure necessary for pruning to occur. Default: 0.1
+    delay_rewiring_to_first_solution: 0  # delay (1) or not (0) rewiring until a solution is found. Default: 0
+    use_just_in_time_sampling: 0  # delay the generation of samples until they are * necessary. Only works with r-disc connection and path length minimization. Default: 0
+    drop_unconnected_samples_on_prune: 0  # drop unconnected samples when pruning, regardless of their heuristic value. Default: 0
+    stop_on_each_solution_improvement: 0  # stop the planner each time a solution improvement is found. Useful for debugging. Default: 0
+    use_strict_queue_ordering: 0  # sort edges in the queue at the end of the batch (0) or after each rewiring (1). Default: 0
+    find_approximate_solutions: 0  # track approximate solutions (1) or not (0). Default: 0
 arm_group:
   default_planner_config: RRTConnect
   planner_configs:
+    - AnytimePathShortening
     - SBL
     - EST
     - LBKPIECE
@@ -146,5 +191,8 @@ arm_group:
     - LazyPRMstar
     - SPARS
     - SPARStwo
+    - AITstar
+    - ABITstar
+    - BITstar
   projection_evaluator: joints(joint2_to_joint1,joint3_to_joint2)
   longest_valid_segment_fraction: 0.005

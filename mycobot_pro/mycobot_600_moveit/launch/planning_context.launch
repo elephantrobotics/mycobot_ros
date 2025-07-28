@@ -6,9 +6,13 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
+<<<<<<< HEAD
   <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600.urdf"/> -->
   <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/> -->
   <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/new_mycobot_pro_600_moveit.urdf"/>
+=======
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/>
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_600_moveit)/config/firefighter.srdf" />
@@ -16,11 +20,13 @@
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mycobot_600_moveit)/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find mycobot_600_moveit)/config/cartesian_limits.yaml"/>
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
   <group ns="$(arg robot_description)_kinematics">
     <rosparam command="load" file="$(find mycobot_600_moveit)/config/kinematics.yaml"/>
+
   </group>
 
 </launch>

@@ -9,8 +9,19 @@ import json
 import os,sys
 import rospy
 from visualization_msgs.msg import Marker   
-from pymycobot.mycobot import MyCobot
 from moving_utils import Movement
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MechArm270
 
 
 IS_CV_4 = cv2.__version__[0] == '4'
@@ -231,11 +242,11 @@ class Object_detect(Movement):
     # init 270
     def run(self):
         if "dev" in self.robot_m5:
-            self.mc = MyCobot(self.robot_m5, 115200)
+            self.mc = MechArm270(self.robot_m5, 115200)
         elif "dev" in self.robot_wio:
-            self.mc = MyCobot(self.robot_wio, 115200) 
+            self.mc = MechArm270(self.robot_wio, 115200) 
         elif "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 1000000)
+            self.mc = MechArm270(self.robot_raspi, 1000000)
         if not self.raspi:
             self.pub_pump(False, self.Pin)
         self.mc.send_angles([-33.31, 2.02, -10.72, -0.08, 95, -54.84], 30)

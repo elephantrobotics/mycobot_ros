@@ -13,7 +13,7 @@ import rosnode
 mc = ElephantRobot('192.168.1.159', 5001, debug=True)
 
 res = mc.start_client()
-if res != "":
+if not res :
     print('quit')
     sys.exit(1)
 

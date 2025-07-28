@@ -6,7 +6,18 @@ import os
 import fcntl
 from mycobot_communication.srv import *
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyCobot280
 
 mc = None
 
@@ -56,7 +67,8 @@ def create_handle():
     port = rospy.get_param("~port")
     baud = rospy.get_param("~baud")
     rospy.loginfo("%s,%s" % (port, baud))
-    mc = MyCobot(port, baud)
+    mc = MyCobot280(port, baud)
+    time.sleep(2) # open serial need wait
 
 
 def create_services():
@@ -96,6 +108,9 @@ def get_angles(req):
         lock = acquire("/tmp/mycobot_lock")
         angles = mc.get_angles()
         release(lock)
+        if angles is None:
+            rospy.logwarn('angles is None, no angle data')
+            return GetAnglesResponse()
         return GetAnglesResponse(*angles)
 
 
@@ -124,6 +139,9 @@ def get_coords(req):
         lock = acquire("/tmp/mycobot_lock")
         coords = mc.get_coords()
         release(lock)
+        if coords is None:
+            rospy.logwarn('coords is None, no coord data')
+            return GetCoordsResponse()
         return GetCoordsResponse(*coords)
 
 
@@ -145,11 +163,15 @@ def toggle_pump(req):
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         if req.Status:
-            mc.set_basic_output(2, 0)
             mc.set_basic_output(5, 0)
+            time.sleep(0.05)
         else:
-            mc.set_basic_output(2, 1)
             mc.set_basic_output(5, 1)
+            time.sleep(0.05)
+            mc.set_basic_output(2, 0)
+            time.sleep(0.05)
+            mc.set_basic_output(2, 1)
+            time.sleep(0.05)
         release(lock)
 
 
@@ -160,11 +182,11 @@ robot_msg = """
 MyCobot Status
 --------------------------------
 Joint Limit:
-    joint 1: -170 ~ +170
-    joint 2: -170 ~ +170
-    joint 3: -170 ~ +170
-    joint 4: -170 ~ +170
-    joint 5: -170 ~ +170
+    joint 1: -168 ~ +168
+    joint 2: -135 ~ +135
+    joint 3: -150 ~ +150
+    joint 4: -145 ~ +145
+    joint 5: -165 ~ +165
     joint 6: -180 ~ +180
 
 Connect Status: %s

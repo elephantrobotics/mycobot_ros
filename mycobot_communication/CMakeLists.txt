@@ -56,6 +56,13 @@ add_message_files(FILES
   MycobotSetCoords.msg
   MycobotGripperStatus.msg
   MycobotPumpStatus.msg
+  MycobotSetEndType.msg
+  MycobotSetFreshMode.msg
+  MycobotSetToolReference.msg
+  MycobotSetVisionMode.msg
+  
+  MycobotGetGripperValue.msg
+
 )
 
 ## Generate services in the 'srv' folder
@@ -66,6 +73,10 @@ add_service_files(FILES
   SetCoords.srv
   GripperStatus.srv
   PumpStatus.srv
+  SetEndType.srv
+  SetFreshMode.srv
+  SetToolReference.srv
+  SetVisionMode.srv
 )
 
 ## Generate added messages and services

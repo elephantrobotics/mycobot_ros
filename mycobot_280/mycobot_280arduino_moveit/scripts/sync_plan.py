@@ -4,38 +4,48 @@ import time
 import rospy
 from sensor_msgs.msg import JointState
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyCobot280
 
 
 mc = None
 
 
 def callback(data):
-    # rospy.loginfo(rospy.get_caller_id() + "%s", data)
-    data_list = []
-    for index, value in enumerate(data.position):
-        radians_to_angles = round(math.degrees(value), 2)
-        data_list.append(radians_to_angles)
-        
-    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
-    mc.send_angles(data_list, 25)
+    global latest_data
+    latest_data = [round(math.degrees(value), 2) for value in data.position]
+    rospy.loginfo(f"Joint angles: {latest_data}")
 
+def control_loop(event):
+    if latest_data:
+        rospy.loginfo(f"Sending angles: {latest_data}")
+        mc.send_angles(latest_data, 25)
 
 def listener():
     global mc
-    rospy.init_node("mycobot_reciver", anonymous=True)
+    rospy.init_node("control_slider", anonymous=True)
 
-    port = rospy.get_param("~port", "/dev/ttyACM0")
-    baud = rospy.get_param("~baud", 115200)
+    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
-    mc = MyCobot(port, baud)
-    time.sleep(0.05)
-    # mc.set_fresh_mode(1)
-    time.sleep(0.05)
+    mc = MyCobot280(port, baud)
+    time.sleep(1) # open port,need wait
     
     rospy.Subscriber("joint_states", JointState, callback)
 
-    # spin() simply keeps python from exiting until this node is stopped
+    # 启动定时器，每0.5秒执行一次控制循环
+    rospy.Timer(rospy.Duration(0.5), control_loop)
+
     rospy.spin()
 
 

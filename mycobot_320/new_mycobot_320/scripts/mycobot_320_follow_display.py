@@ -8,7 +8,19 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.0'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot.mycobot320 import MyCobot320
 
 
 def talker():
@@ -19,7 +31,7 @@ def talker():
     baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
-        mycobot = MyCobot(port, baud)
+        mycobot = MyCobot320(port, baud)
     except Exception as e:
         print(e)
         print(

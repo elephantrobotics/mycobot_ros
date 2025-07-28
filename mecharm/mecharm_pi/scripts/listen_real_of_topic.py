@@ -5,7 +5,7 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
-from mycobot_communication.msg import MycobotAngles
+from mecharm_communication.msg import MycobotAngles
 
  
 

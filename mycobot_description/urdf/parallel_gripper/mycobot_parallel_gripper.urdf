@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="paraller_gripper" >
+	
+<xacro:property name="width" value=".2" />
+
+  <link name="gripper_base">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_base.dae"/>
+      </geometry>
+    <origin xyz = "0.0 0 0 " rpy = " -1.5708 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_base.dae"/>
+      </geometry>
+    <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
+    </collision>
+  </link>
+
+  <link name="gripper_left">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_left.dae"/>
+      </geometry>
+    <origin xyz = "0.0 0 0 " rpy = " -1.5708 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_left.dae"/>
+      </geometry>
+        <origin xyz = "0.0 0 0 " rpy = " 0 0 0"/>
+    </collision>
+  </link>
+
+  <link name="gripper_right">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_right.dae"/>
+      </geometry>
+    <origin xyz = "0 0 0 " rpy = " -1.5708 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/parallel_gripper/gripper_right.dae"/>
+      </geometry>
+        <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    </collision>
+  </link>
+
+
+  <joint name="gripper_controller" type="prismatic">
+    <axis xyz="1 0 0"/>
+    <limit effort = "1000.0" lower = "-0.007" upper = "0.0" velocity = "0"/>
+    <parent link="gripper_base"/>
+    <child link="gripper_left"/>
+    <origin xyz= "0.0 0 0" rpy = "0 0 0"/> 
+  </joint>
+
+  <joint name="gripper_base_to_gripper_left" type="prismatic">
+    <axis xyz="1 0 0"/>
+    <limit effort = "1000.0" lower = "-0.007" upper = "0.0" velocity = "0"/>
+    <parent link="gripper_base"/>
+    <child link="gripper_right"/>
+    <origin xyz= "0 0.0 0" rpy = "0 0 0"/> 
+    <mimic joint="gripper_controller" multiplier="-1.0" offset="0" />
+  </joint>
+  
+</robot>
+

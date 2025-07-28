@@ -51,7 +51,7 @@ class Listener(object):
             data.joint_5 * (math.pi / 180),
             data.joint_6 * (math.pi / 180),
         ]
-        rospy.loginfo("res: {}".format(radians_list))
+        # rospy.loginfo("res: {}".format(radians_list))
 
         joint_state_send.position = radians_list
         self.pub.publish(joint_state_send)

@@ -7,7 +7,18 @@ import rospy
 from visualization_msgs.msg import Marker
 from moving_utils import Movement
 
-from pymycobot.mycobot import MyCobot
+import pymycobot
+from packaging import version
+# min low version require
+MIN_REQUIRE_VERSION = '3.6.1'
+
+current_verison = pymycobot.__version__
+print('current pymycobot library version: {}'.format(current_verison))
+if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
+    raise RuntimeError('The version of pymycobot library must be greater than {} or higher. The current version is {}. Please upgrade the library version.'.format(MIN_REQUIRE_VERSION, current_verison))
+else:
+    print('pymycobot library version meets the requirements!')
+    from pymycobot import MyCobot320
 
 IS_CV_4 = cv2.__version__[0] == '4'
 __version__ = "1.0"  # Adaptive seeed
@@ -185,7 +196,7 @@ class Object_detect(Movement):
     def run(self):
      
         if "dev" in self.robot_raspi:
-            self.mc = MyCobot(self.robot_raspi, 115200)
+            self.mc = MyCobot320(self.robot_raspi, 115200)
         self.gpio_status(False)
         self.mc.send_angles([0.61, 45.87, -92.37, -41.3, 89.56, 9.58], 20)
         time.sleep(2.5)
