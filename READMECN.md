@@ -6,7 +6,6 @@
 ```bash
 pip install pymycobot --user
 ros1 noetic
-pymycobot 3.9.7
 ```
 
 #### 1.2 包的下载与安装
