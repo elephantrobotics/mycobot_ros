@@ -46,13 +46,13 @@
   <!-- Trajectory Execution Functionality -->
   <include ns="move_group" file="$(find mycobot_320_moveit)/launch/trajectory_execution.launch.xml" if="$(arg allow_trajectory_execution)">
     <arg name="moveit_manage_controllers" value="true" />
-    <arg name="moveit_controller_manager" value="firefighter" unless="$(arg fake_execution)"/>
+    <arg name="moveit_controller_manager" value="mycobot" unless="$(arg fake_execution)"/>
     <arg name="moveit_controller_manager" value="fake" if="$(arg fake_execution)"/>
   </include>
 
   <!-- Sensors Functionality -->
   <include ns="move_group" file="$(find mycobot_320_moveit)/launch/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
-    <arg name="moveit_sensor_manager" value="firefighter" />
+    <arg name="moveit_sensor_manager" value="mycobot" />
   </include>
 
   <!-- Start the actual move_group node/action server -->

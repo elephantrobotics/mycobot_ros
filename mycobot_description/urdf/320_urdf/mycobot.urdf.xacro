@@ -1,0 +1,323 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot320">
+
+  <xacro:include filename="$(find mycobot_description)/urdf/common.xacro" />
+  <xacro:property name="width" value=".2" />
+
+  <link name="base">
+    <inertial>
+       <!-- temporary inertia parameter copied from mycobot 280-->
+      <origin xyz="0 0 0.035" rpy="0 0 0" />
+      <mass value="10.0" />
+      <xacro:cylinder_inertia m="10.0" r="0.05" h="0.07" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/base.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    </visual>
+    <collision>
+      <origin xyz = "0 0 0.05 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.102" radius="0.0725"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link1">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="0 0 0.060" rpy="0 0 0" />
+      <mass value="0.2" />
+      <xacro:cylinder_inertia m="0.2" r="0.05" h="0.08" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/link1.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0 " rpy = " 0 0 0"/>
+    </visual>
+    <collision>
+      <origin xyz = "0 0 -0.02 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.106" radius="0.043"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="link2">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="0.01 0 0.06" rpy="0 0 0" />
+      <mass value="0.4" />
+      <xacro:cylinder_inertia m="0.4" r="0.05" h="0.155" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/link2.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0.0587 " rpy = " 0 0 3.1415926"/>
+    </visual>
+    <collision>
+      <origin xyz = "0.07 0 0.095 " rpy = " 0 -1.5708 0"/>
+      <geometry>
+        <cylinder length="0.18" radius="0.036"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="link3">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="-0.01 0 0.05" rpy="0 0 0" />
+      <mass value="0.4" />
+      <xacro:cylinder_inertia m="0.4" r="0.05" h="0.155" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/link3.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0.038 " rpy = " 0 0 3.1415926"/>
+    </visual>
+    <collision>
+      <origin xyz = "0.044 0 0 " rpy = " 0 -1.5708 0"/>
+      <geometry>
+        <cylinder length="0.14" radius="0.0305"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="link4">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+      <mass value="0.2" />
+      <xacro:cylinder_inertia m="0.2" r="0.05" h="0.05" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/link4.dae"/>
+      </geometry>
+      <origin xyz = "0 -0.001 0 " rpy = " 0 0 0"/>
+    </visual>
+    <collision>
+      <origin xyz = "0.0 -0.014 0 " rpy = " 0 -1.5708 1.5708"/>
+      <geometry>
+        <cylinder length="0.083" radius="0.029"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="link5">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="0 0 0.037" rpy="0 0 0" />
+      <mass value="0.5" />
+      <xacro:cylinder_inertia m="0.5" r="0.05" h="0.06" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/link5.dae"/>
+      </geometry>
+      <origin xyz = "0 0.002  0 " rpy = " 0  0 3.1415926"/>
+    </visual>
+    <collision>
+      <origin xyz = "0 -0.01 0 " rpy = " 1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.0849" radius="0.029"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="link6">
+    <!-- temporary inertia parameter copied from mycobot 280-->
+    <inertial>
+      <origin xyz="0 0.0025 0" rpy="${M_PI/2} 0 0" />
+      <mass value="0.1" />
+      <xacro:cylinder_inertia m="0.1" r="0.02" h="0.005" />
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.02" radius="0.026"/>
+      </geometry>
+      <material name = "grey">
+        <color rgba = "0.5 0.5 0.5 1"/>
+      </material>
+      <origin xyz = "0 0 -0.01 " rpy = " 0 0 0"/>
+    </visual>
+    <collision>
+      <origin xyz = "0.0 0 -0.01 " rpy = " 0 0 0"/>
+      <geometry>
+        <cylinder length="0.0225" radius="0.026"/>
+      </geometry>
+    </collision>
+  </link>
+
+   <link name="gripper">
+    <!-- temporary inertia parameter -->
+    <inertial>
+      <origin xyz="0 0 0.03" rpy="0 0 0" />
+      <mass value="0.1" />
+      <xacro:cylinder_inertia m="0.1" r="0.02" h="0.005" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/320_urdf/mesh/gripper.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
+    </visual>
+    <collision>
+      <origin xyz = "0 0.04 0.03" rpy = "0 0 ${pi/2}"/>
+      <geometry>
+        <box size="0.16 0.1 0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="base"/>
+    <child link="link1"/>
+    <origin xyz= "0 0 0.17846" rpy = "0 0 0"/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+  <joint name="joint2" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz= "0 0 0" rpy = "0 -1.57080  1.57080"/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+
+  <joint name="joint3" type="revolute">
+    <axis xyz=" 0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz= "0.13635 0 0" rpy = "0 0 0"/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+  <joint name="joint4" type="revolute">
+    <axis xyz=" 0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin xyz= "0.1 0  0.090" rpy = "0 0 1.57080"/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+  <joint name="joint5" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin xyz= "0 -0.08515 0" rpy = "1.57080 -1.57080 0"/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+  <joint name="joint6" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "100.0" lower = "${-pi}" upper = "${pi}" velocity = "1.0"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <origin xyz= "0 0.06 0" rpy = "-1.57080 0 0 "/>
+    <dynamics damping="1.0e-6" friction="2.0e-1" />
+  </joint>
+
+  <joint name="gripper_to_link6" type="fixed">
+    <axis xyz="0 0 0"/>
+    <parent link="link6"/>
+    <child link="gripper"/>
+    <origin xyz= "0 0 0" rpy = "0 0 0 "/>
+  </joint>
+
+  <transmission name="joint1_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint1_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="joint2_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint2_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="joint3_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint3_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="joint4_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint4_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="joint5_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint5">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint5_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="joint6_trans">
+    <provideFeedback>true</provideFeedback>
+    <implicitSpringDamper>0</implicitSpringDamper>
+    <motorTorqueConstant>0.418</motorTorqueConstant>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint6">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint6_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>
