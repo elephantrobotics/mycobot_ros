@@ -7,8 +7,13 @@
   <arg name="db" default="false" />
   <!-- Allow user to specify database location -->
   <arg name="db_path" default="$(find mycobot_630_moveit)/default_warehouse_mongo_db" />
+<<<<<<< HEAD
+  
+  <!-- By default, we are not in debug mode -->  <!-- 默认情况下，我们不处于调试模式 -->
+=======
 
   <!-- By default, we are not in debug mode -->
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
   <arg name="debug" default="false" />
 
   <!-- By default, we will load or override the robot_description -->

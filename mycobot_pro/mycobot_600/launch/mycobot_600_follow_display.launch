@@ -1,0 +1,11 @@
+<launch>
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_600)/config/mycobot_600.rviz" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
+	</node>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

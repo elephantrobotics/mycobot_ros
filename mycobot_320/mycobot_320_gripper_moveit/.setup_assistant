@@ -6,6 +6,6 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/firefighter.srdf
   CONFIG:
-    author_name: wwj
-    author_email: wwj@elephantrobot.com
+    author_name: Jz
+    author_email: Jz@elephantrobot.com
     generated_timestamp: 1683628879

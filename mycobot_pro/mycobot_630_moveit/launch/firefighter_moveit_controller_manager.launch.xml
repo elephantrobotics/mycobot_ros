@@ -7,4 +7,5 @@
 
   <!-- loads ros_controllers to the param server -->
   <rosparam file="$(find mycobot_630_moveit)/config/ros_controllers.yaml"/>
+
 </launch>

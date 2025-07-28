@@ -28,6 +28,7 @@
     </group_state>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="vitual_joint" type="fixed" parent_frame="basic" child_link="joint1" />
+
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="joint1" link2="joint2" reason="Adjacent" />
     <disable_collisions link1="joint1" link2="joint5" reason="Never" />
@@ -39,4 +40,6 @@
     <disable_collisions link1="joint5" link2="joint6" reason="Adjacent" />
     <disable_collisions link1="joint5" link2="joint6_flange" reason="Never" />
     <disable_collisions link1="joint6" link2="joint6_flange" reason="Adjacent" />
+
+    
 </robot>

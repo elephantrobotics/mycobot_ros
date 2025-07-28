@@ -29,6 +29,42 @@
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="vitual_joint" type="fixed" parent_frame="basic" child_link="base"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+<<<<<<< HEAD
+    <!-- <disable_collisions link1="base" link2="link1" reason="Adjacent" />
+    <disable_collisions link1="base" link2="link2" reason="Never" />
+    <disable_collisions link1="link1" link2="link2" reason="Adjacent" />
+    <disable_collisions link1="link1" link2="link6" reason="Never" />
+    <disable_collisions link1="link2" link2="link3" reason="Adjacent" />
+    <disable_collisions link1="link2" link2="link6" reason="Never" />
+    <disable_collisions link1="link3" link2="link4" reason="Adjacent" />
+    <disable_collisions link1="link3" link2="link6" reason="Never" />
+    <disable_collisions link1="link4" link2="link5" reason="Adjacent" />
+    <disable_collisions link1="link4" link2="link6" reason="Never" />
+    <disable_collisions link1="link5" link2="link6" reason="Adjacent" /> -->
+
+    <disable_collisions link1="base" link2="link1" reason="Adjacent" />
+    <disable_collisions link1="base" link2="link2" reason="Never" />
+    <disable_collisions link1="base" link2="link3" reason="Never" />
+    <disable_collisions link1="base" link2="link4" reason="Never" />
+    <disable_collisions link1="base" link2="link5" reason="Never" />
+    <disable_collisions link1="base" link2="link6" reason="Never" />
+
+    <disable_collisions link1="link1" link2="link2" reason="Adjacent" />
+    <disable_collisions link1="link1" link2="link3" reason="Never" />
+    <!-- <disable_collisions link1="joint1" link2="joint4" reason="Never" /> -->
+    <!-- <disable_collisions link1="joint1" link2="joint5" reason="Never" />
+    <disable_collisions link1="joint1" link2="joint6" reason="Never" /> -->
+    <disable_collisions link1="link2" link2="link3" reason="Adjacent" />
+    <disable_collisions link1="link2" link2="link4" reason="Never" />
+    <!-- <disable_collisions link1="joint2" link2="joint5" reason="Never" /> -->
+    <!-- <disable_collisions link1="joint2" link2="joint6" reason="Never" /> -->
+    <disable_collisions link1="link3" link2="link4" reason="Adjacent" />
+    <disable_collisions link1="link3" link2="link5" reason="Never" />
+    <!-- <disable_collisions link1="joint3" link2="joint6" reason="Never" /> -->
+    <disable_collisions link1="link4" link2="link5" reason="Adjacent" />
+    <disable_collisions link1="link4" link2="link6" reason="Never" />
+    <disable_collisions link1="link5" link2="link6" reason="Adjacent" />
+=======
     <disable_collisions link1="base" link2="link1" reason="Adjacent"/>
     <disable_collisions link1="base" link2="link2" reason="Never"/>
     <disable_collisions link1="base" link2="link4" reason="Never"/>
@@ -46,4 +82,5 @@
     <disable_collisions link1="link4" link2="link5" reason="Adjacent"/>
     <disable_collisions link1="link4" link2="link6" reason="Never"/>
     <disable_collisions link1="link5" link2="link6" reason="Adjacent"/>
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
 </robot>

@@ -7,6 +7,7 @@ default_acceleration_scaling_factor: 0.1
 
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+
 joint_limits:
   joint1_to_base:
     has_velocity_limits: false
@@ -37,4 +38,8 @@ joint_limits:
     has_velocity_limits: false
     max_velocity: 0
     has_acceleration_limits: false
+<<<<<<< HEAD
+    max_acceleration: 30
+=======
     max_acceleration: 0
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a

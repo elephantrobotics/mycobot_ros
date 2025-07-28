@@ -24,7 +24,7 @@ def talker():
     rospy.init_node("display", anonymous=True)
 
     print("Try connect real mycobot...")
-    port = rospy.get_param("~port", "/dev/ttyUSB0")
+    port = rospy.get_param("~port", "/dev/ttyACM0")
     baud = rospy.get_param("~baud", 115200)
     print("port: {}, baud: {}\n".format(port, baud))
     try:
@@ -52,6 +52,7 @@ def talker():
     joint_state_send.header = Header()
 
     joint_state_send.name = [
+        
         "joint2_to_joint1",
         "joint3_to_joint2",
         "joint4_to_joint3",

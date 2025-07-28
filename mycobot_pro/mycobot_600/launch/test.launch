@@ -1,6 +1,8 @@
 <launch>
 	<!-- Load URDF, rviz, etc. on the parameter server,加载参数服务器上的URDF、rviz等 -->
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_600/mycobot_pro_600_moveit.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_600/new_mycobot_pro_600_moveit.urdf"/> -->
 	<arg name="rvizconfig" default="$(find mycobot_600)/config/mycobot_600.rviz" />
 	<arg name="gui" default="true" />
 	

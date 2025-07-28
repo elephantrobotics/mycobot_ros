@@ -32,6 +32,30 @@ def callback(data):
 
 def listener():
     global mc
+<<<<<<< HEAD
+    try:
+        rospy.init_node("control_slider", anonymous=True)
+
+        ip = rospy.get_param("~ip", "192.168.1.17")
+        port = rospy.get_param("~port", 5001)
+        print (ip, port)
+        mc = ElephantRobot(ip, int(port))
+        # START CLIENT,启动客户端
+        res = mc.start_client()
+        if res != "":
+            sys.exit(1)
+
+        mc.set_speed(90)
+
+        rospy.Subscriber("joint_states", JointState, callback)
+
+        # spin() simply keeps python from exiting until this node is stopped
+        # spin()只是阻止python退出，直到该节点停止
+        print ("sping ...")
+        rospy.spin()
+    except Exception as e:
+        print(e)
+=======
     rospy.init_node("control_slider", anonymous=True)
 
     ip = rospy.get_param("~ip", "192.168.1.159")
@@ -53,6 +77,7 @@ def listener():
     print ("sping ...")
     rospy.spin()
 
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
 
 if __name__ == "__main__":
     listener()

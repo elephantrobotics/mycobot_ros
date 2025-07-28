@@ -6,20 +6,39 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
+<<<<<<< HEAD
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_630.urdf"/> -->
+  <!-- <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_630_gripper.urdf"/> -->
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/my630.urdf"/>
+
+
+=======
   <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_description)/urdf/mycobot_pro_630/mycobot_pro_630_moveit.urdf"/>
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_630_moveit)/config/firefighter.srdf" />
+  <!-- <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_630_gripper_moveit)/config/firefighter.srdf" /> -->
+
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mycobot_630_moveit)/config/joint_limits.yaml"/>
+<<<<<<< HEAD
+    <!-- <rosparam command="load" file="$(find mycobot_630_gripper_moveit)/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find mycobot_630_gripper_moveit)/config/cartesian_limits.yaml"/> -->
+=======
     <rosparam command="load" file="$(find mycobot_630_moveit)/config/cartesian_limits.yaml"/>
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
   <group ns="$(arg robot_description)_kinematics">
     <rosparam command="load" file="$(find mycobot_630_moveit)/config/kinematics.yaml"/>
+<<<<<<< HEAD
+    <!-- <rosparam command="load" file="$(find mycobot_630_gripper_moveit)/config/kinematics.yaml"/> -->
+=======
+>>>>>>> 24a25596ca0e4bedd317e5ade3bb39d908910b0a
 
   </group>
 

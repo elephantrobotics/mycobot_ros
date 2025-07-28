@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/mycobot_pro_600/mycobot_pro_600_gripper.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: aa
+    author_email: aa@123.com
+    generated_timestamp: 1748499850

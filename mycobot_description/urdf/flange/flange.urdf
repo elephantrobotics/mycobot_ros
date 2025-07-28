@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+    <xacro:property name="width" value=".2" />
+    <link name="base">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/flange/v1.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 1.5706 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobot_description/urdf/flange/v1.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 1.5706 0 0" />
+        </collision>
+    </link>
+  
+</robot>
