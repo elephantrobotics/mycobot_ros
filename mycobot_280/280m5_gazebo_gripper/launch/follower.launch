@@ -1,0 +1,44 @@
+<launch>
+  <arg name="paused"       default="false"/>
+  <arg name="gazebo_gui"   default="true"/>
+  <arg name="model"        
+       default="$(find 280m5_gazebo_gripper)/config/mycobot_280m5_with_gripper_lll.urdf"/>
+  <!-- Optional RViz config -->
+  <!-- <arg name="rvizconfig" default="$(find 280m5_gazebo_gripper)/config/robot.rviz"/> -->
+
+  <!-- 1) 启动 Gazebo empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/empty.world"/>
+    <arg name="paused"     value="$(arg paused)"/>
+    <arg name="gui"        value="$(arg gazebo_gui)"/>
+  </include>
+
+  <!-- 2) 加载机器人 URDF -->
+  <param name="robot_description" textfile="$(arg model)" />
+
+  <!-- 3) TF & Joint State 发布 -->
+  <node name="robot_state_publisher"
+        pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <node name="joint_state_publisher"
+        pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <!-- 4) 把 URDF spawn 到 Gazebo -->
+  <node name="spawn_gazebo_model"
+        pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param robot_description -model firefighter -x 0 -y 0 -z 0"
+        respawn="false" output="screen"/>
+
+  <!-- 5) 加载 ros_controllers（会启动 controller_spawner）-->
+  <include file="$(find 280m5_gazebo_gripper)/launch/ros_controllers.launch"/>
+
+  <!-- 6) 启动 MoveIt! 核心节点 -->
+  <include file="$(find 280m5_gazebo_gripper)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution"            value="false"/>
+    <arg name="info"                      value="true"/>
+    <arg name="debug"                     value="false"/>
+    <!-- load_robot_description 已经在上面做过 -->
+    <arg name="load_robot_description"    value="false"/>
+  </include>
+</launch>
+

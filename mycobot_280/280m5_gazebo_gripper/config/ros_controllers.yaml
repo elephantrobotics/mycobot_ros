@@ -1,0 +1,84 @@
+# Simulation settings for using moveit_sim_controllers
+moveit_sim_hw_interface:
+  joint_model_group: mycobot_ros
+  joint_model_group_pose: HOME
+
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - joint2_to_joint1
+    - joint3_to_joint2
+    - joint4_to_joint3
+    - joint5_to_joint4
+    - joint6_to_joint5
+    - joint6output_to_joint6
+  sim_control_mode: 0  # 0: position, 1: velocity
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# PID controller settings for each joint
+gazebo_ros_control/pid_gains:
+  joint2_to_joint1: {p: 100.0, i: 0.01, d: 10.0}
+  joint3_to_joint2: {p: 100.0, i: 0.01, d: 10.0}
+  joint4_to_joint3: {p: 100.0, i: 0.01, d: 10.0}
+  joint5_to_joint4: {p: 100.0, i: 0.01, d: 10.0}
+  joint6_to_joint5: {p: 100.0, i: 0.01, d: 10.0}
+  joint6output_to_joint6: {p: 100.0, i: 0.01, d: 10.0}
+  gripper_controller: {p: 100.0, i: 0.01, d: 10.0}
+arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - joint2_to_joint1
+    - joint3_to_joint2
+    - joint4_to_joint3
+    - joint5_to_joint4
+    - joint6_to_joint5
+    - joint6output_to_joint6
+
+controller_list:
+  - name: arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - joint2_to_joint1
+      - joint3_to_joint2
+      - joint4_to_joint3
+      - joint5_to_joint4
+      - joint6_to_joint5
+      - joint6output_to_joint6
+  
+gripper_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - gripper_controller
+
+  # 调软 PID：P 不要太大，D 提高一些
+  gains:
+    gripper_controller:
+      p: 20.0       # 降低刚度
+      d: 10.0       # 增加阻尼
+      i: 0.01
+      i_clamp: 0.1
+
+  # 限制抓爪最大速度 & 末点速度
+  constraints:
+    goal_time: 0.5                   # 最多等 0.5s 到达
+    stopped_velocity_tolerance: 0.01 # 视为停止的速度阈值
+    gripper_controller:
+      trajectory: 0.02  # 最大轨迹速度 0.05 rad/s
+      goal:       0.01 # 末点速度低于 0.02 rad/s
+
+controller_list:
+  - name: gripper_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - gripper_controller
