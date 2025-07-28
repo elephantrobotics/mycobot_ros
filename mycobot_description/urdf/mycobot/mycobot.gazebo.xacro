@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="mycobot" >
 
   <xacro:arg name="robot_namespace" default="" />
 

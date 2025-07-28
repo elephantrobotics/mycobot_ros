@@ -1,0 +1,12 @@
+<launch>
+  <arg name="port" default="/dev/ttyUSB0" doc ="the serial port for connection" />
+  <arg name="baud" default="115200" doc ="the serial baudrate" />
+
+  <!-- Driver -->
+  <include file="$(find mycobot_communication)/launch/mycobot_interface.launch" >
+    <arg name="port" value="$(arg port)" />
+    <arg name="baud" value="$(arg baud)" />
+    <arg name="robot_type" value="mycobot" />
+  </include>
+
+</launch>

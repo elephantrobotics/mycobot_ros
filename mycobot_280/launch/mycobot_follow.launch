@@ -1,4 +1,7 @@
 <launch>
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
 	<arg name="model" default="$(find mycobot_description)/urdf/mycobot/mycobot_urdf.urdf"/>
 	<arg name="rvizconfig" default="$(find mycobot_280)/config/mycobot.rviz" />
 
@@ -8,4 +11,10 @@
 		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
 	</node>
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+        <node name="mycobot_read_interface"  pkg="mycobot_280" type="follow_display.py" >
+          <param name="port" type="string" value="$(arg port)" />
+	  <param name="baud" type="int" value="$(arg baud)" />
+        </node>
+
 </launch>

@@ -85,8 +85,10 @@ def talker():
             coords = [0, 0, 0, 0, 0, 0]
             rospy.loginfo("error [101]: can not get coord values")
 
-        marker_.pose.position.x = coords[1] / 1000 * -1
-        marker_.pose.position.y = coords[0] / 1000
+        # marker_.pose.position.x = coords[1] / 1000 * -1
+        # marker_.pose.position.y = coords[0] / 1000
+        marker_.pose.position.x = coords[0] / 1000
+        marker_.pose.position.y = coords[1] / 1000
         marker_.pose.position.z = coords[2] / 1000
 
         marker_.color.a = 1.0
