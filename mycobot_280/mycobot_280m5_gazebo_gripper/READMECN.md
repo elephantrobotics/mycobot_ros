@@ -58,9 +58,9 @@ ls /dev/tty*
 
 ```bash
 sudo chmod -R 777 /dev/ttyACM0  or sudo chmod -r 777 /dev/ttyUSB0
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
+sudo chmod -R 777 mycobot_280/mycobot_280m5_gazebo_gripper/scripts/follow_display_gazebo.py
+sudo chmod -R 777 mycobot_280/mycobot_280m5_gazebo_gripper/scripts/slider_control_gazebo.py
+sudo chmod -R 777 mycobot_280/mycobot_280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
 roscor
 ```
 
@@ -68,14 +68,14 @@ roscor
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper slider.launch _port:=/dev/ttyACM0 _baud:=115200
+roslaunch mycobot_280m5_gazebo_gripper slider.launch _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 接着打开另外一个终端，输入如下命令：
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper slider_control_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper slider_control_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 同样记得把端口号修改成上一步查询到的端口号。如果运行成功将会看到如下的终端提示：
@@ -92,14 +92,14 @@ spin ...
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper follower.launch _port:=/dev/ttyACM0
+roslaunch mycobot_280m5_gazebo_gripper follower.launch _port:=/dev/ttyACM0
 ```
 
 如果程序运行成功，Gazebo界面将成功加载机械臂模型，机械臂模型的所有关节都处于原始位姿，即[0,0,0,0,0,0]. 此后我们打开第二个终端并运行：
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper follow_display_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper follow_display_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 现在当我们操控实际机械臂的位姿，我们可以看到Gazebo中的机械臂也会跟着一起运动到相同的位姿。
@@ -109,14 +109,14 @@ rosrun 280m5_gazebo_gripper follow_display_gazebo.py _port:=/dev/ttyACM0 _baud:=
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper teleop_keyboard.launch _port:=/dev/ttyACM0 _baud:=115200
+roslaunch mycobot_280m5_gazebo_gripper teleop_keyboard.launch _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 同上一部分相同，我们会看到机械臂模型被加载到Gazebo中，并且所有关节都在初始的位姿上，紧接着我们打开另外一个终端并输入：
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper teleop_keyboard_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper teleop_keyboard_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 如果运行成功，我们将在终端看到如下的输出信息：

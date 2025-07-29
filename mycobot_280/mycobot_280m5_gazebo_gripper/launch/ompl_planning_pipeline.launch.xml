@@ -1,7 +1,6 @@
 <launch>
-  <arg name="start_state_max_bounds_error" default="0.1" />
-  <arg name="jiggle_fraction" default="0.05" />
-  <!-- The request adapters (plugins) used when planning. ORDER MATTERS! -->
+
+  <!-- The request adapters (plugins) used when planning with OMPL. ORDER MATTERS! -->
   <arg name="planning_adapters"
        default="default_planner_request_adapters/LimitMaxCartesianLinkSpeed
                 default_planner_request_adapters/AddTimeParameterization
@@ -12,10 +11,14 @@
                 default_planner_request_adapters/FixStartStatePathConstraints"
                 />
 
-  <param name="planning_plugin" value="chomp_interface/CHOMPPlanner" />
+  <arg name="start_state_max_bounds_error" default="0.1" />
+  <arg name="jiggle_fraction" default="0.05" />
+
+  <param name="planning_plugin" value="ompl_interface/OMPLPlanner" />
   <param name="request_adapters" value="$(arg planning_adapters)" />
   <param name="start_state_max_bounds_error" value="$(arg start_state_max_bounds_error)" />
   <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
 
-  <rosparam command="load" file="$(find 280m5_gazebo_gripper)/config/chomp_planning.yaml" />
+  <rosparam command="load" file="$(find mycobot_280m5_gazebo_gripper)/config/ompl_planning.yaml"/>
+
 </launch>

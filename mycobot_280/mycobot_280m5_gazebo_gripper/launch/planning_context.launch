@@ -6,20 +6,20 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find 280m5_gazebo_gripper)/config/mycobot_280m5_with_gripper_lll.urdf"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find mycobot_280m5_gazebo_gripper)/config/mycobot_280m5_with_gripper_lll.urdf"/>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" textfile="$(find 280m5_gazebo_gripper)/config/firefighter.srdf" />
+  <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_280m5_gazebo_gripper)/config/firefighter.srdf" />
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
-    <rosparam command="load" file="$(find 280m5_gazebo_gripper)/config/joint_limits.yaml"/>
-    <rosparam command="load" file="$(find 280m5_gazebo_gripper)/config/cartesian_limits.yaml"/>
+    <rosparam command="load" file="$(find mycobot_280m5_gazebo_gripper)/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find mycobot_280m5_gazebo_gripper)/config/cartesian_limits.yaml"/>
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
   <group ns="$(arg robot_description)_kinematics">
-    <rosparam command="load" file="$(find 280m5_gazebo_gripper)/config/kinematics.yaml"/>
+    <rosparam command="load" file="$(find mycobot_280m5_gazebo_gripper)/config/kinematics.yaml"/>
 
   </group>
 

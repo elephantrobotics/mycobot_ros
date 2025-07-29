@@ -3,6 +3,6 @@
   <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
 
   <!-- Load controller list to the parameter server -->
-  <rosparam file="$(find 280m5_gazebo_gripper)/config/simple_moveit_controllers.yaml" />
-  <rosparam file="$(find 280m5_gazebo_gripper)/config/ros_controllers.yaml" />
+  <rosparam file="$(find mycobot_280m5_gazebo_gripper)/config/simple_moveit_controllers.yaml" />
+  <rosparam file="$(find mycobot_280m5_gazebo_gripper)/config/ros_controllers.yaml" />
 </launch>

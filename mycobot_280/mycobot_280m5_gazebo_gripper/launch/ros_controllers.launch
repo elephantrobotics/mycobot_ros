@@ -2,7 +2,7 @@
 <launch>
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find 280m5_gazebo_gripper)/config/ros_controllers.yaml" command="load"/>
+  <rosparam file="$(find mycobot_280m5_gazebo_gripper)/config/ros_controllers.yaml" command="load"/>
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" args="arm_controller gripper_controller"/>
 

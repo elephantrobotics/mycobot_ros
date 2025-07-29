@@ -327,9 +327,9 @@ Open communication and Chmod
 
 ```bash
 sudo chmod -R 777 /dev/ttyACM0  or sudo chmod -r 777 /dev/ttyUSB0
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/follow_display_gazebo.py
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/slider_control_gazebo.py
-sudo chmod -R 777 280m5_gripper_gazebo/280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/mycobot_280m5_gazebo_gripper/scripts/follow_display_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/mycobot_280m5_gazebo_gripper/scripts/slider_control_gazebo.py
+sudo chmod -R 777 280m5_gripper_gazebo/mycobot_280m5_gazebo_gripper/scripts/teleop_keyboard_gazebo.py
 roscore
 ```
 
@@ -337,7 +337,7 @@ After confirming the port, open a terminal and enter the following command. Note
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper slider.launch _port:=/dev/ttyACM0 _baud:=115200
+roslaunch mycobot_280m5_gazebo_gripper slider.launch _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 
@@ -345,7 +345,7 @@ Then open another terminal and enter the following command:
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper slider_control_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper slider_control_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 
@@ -364,7 +364,7 @@ The following command can be used to make the model in Gazebo change its pose in
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper follower.launch _port:=/dev/ttyACM0
+roslaunch mycobot_280m5_gazebo_gripper follower.launch _port:=/dev/ttyACM0
 ```
 
 
@@ -372,7 +372,7 @@ If the program runs successfully, the Gazebo interface will successfully load th
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper follow_display_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper follow_display_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 
@@ -383,7 +383,7 @@ We can also use keyboard input to simultaneously control the pose of the robotic
 
 ```bash
 source devel/setup.bash
-roslaunch 280m5_gazebo_gripper teleop_keyboard.launch _port:=/dev/ttyACM0 _baud:=115200
+roslaunch mycobot_280m5_gazebo_gripper teleop_keyboard.launch _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 
@@ -391,7 +391,7 @@ As in the previous part, we will see the robotic arm model loaded into Gazebo, a
 
 ```bash
 source devel/setup.bash
-rosrun 280m5_gazebo_gripper teleop_keyboard_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
+rosrun mycobot_280m5_gazebo_gripper teleop_keyboard_gazebo.py _port:=/dev/ttyACM0 _baud:=115200
 ```
 
 
@@ -421,7 +421,7 @@ You can find out which interfaces pymycobot provides in `README.md`.
 
 ![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/chinese.svg)   ![jaywcjlove/sb](https://jaywcjlove.github.io/sb/lang/english.svg)
 
-[MyCobot 280 m5 gazebo中文操作](./mycobot_280/280m5_gazebo_gripper/READMECN.md)
+[MyCobot 280 m5 gazebo中文操作](./mycobot_280/mycobot_280m5_gazebo_gripper/READMECN.md)
 
 ## Contributors
 

@@ -1,6 +1,6 @@
 <package>
 
-  <name>280m5_gazebo_gripper</name>
+  <name>mycobot_280m5_gazebo_gripper</name>
   <version>0.3.0</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the firefighter with the MoveIt Motion Planning Framework

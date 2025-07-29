@@ -7,6 +7,6 @@
   <param name="moveit_controller_manager" value="moveit_fake_controller_manager/MoveItFakeControllerManager"/>
 
   <!-- The rest of the params are specific to this plugin -->
-  <rosparam subst_value="true" file="$(find 280m5_gazebo_gripper)/config/fake_controllers.yaml"/>
+  <rosparam subst_value="true" file="$(find mycobot_280m5_gazebo_gripper)/config/fake_controllers.yaml"/>
 
 </launch>

@@ -41,7 +41,7 @@ JOINT_LIMITS = [
     (-180, 180),  # joint6
 ]
 
-GRIPPER_LIMITS = (-63.6, 63.6)  # 夹爪角度限制
+GRIPPER_LIMITS = (-62, 62)  # 夹爪角度限制
 
 # 状态记录
 last_angles = None

@@ -8,7 +8,7 @@
 
   <!-- Run -->
   <node pkg="moveit_setup_assistant" type="moveit_setup_assistant" name="moveit_setup_assistant"
-        args="--config_pkg=280m5_gazebo_gripper"
+        args="--config_pkg=mycobot_280m5_gazebo_gripper"
         launch-prefix="$(arg launch_prefix)"
         required="true"
         output="screen" />
