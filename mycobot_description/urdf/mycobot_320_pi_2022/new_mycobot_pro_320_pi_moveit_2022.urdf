@@ -148,7 +148,7 @@
     <limit effort = "1000.0" lower = "-2.58" upper = "2.58" velocity = "0"/>
     <parent link="link3"/>
     <child link="link4"/>
-    <origin xyz= "0.120  0.08878" rpy = "0 0 1.57080"/>
+    <origin xyz= "0.120 0 0.08878" rpy = "0 0 1.57080"/>
   </joint>
 
   <joint name="joint6_to_joint5" type="revolute">
