@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
+	
+<xacro:property name="width" value=".2" />
+
+
+  <link name="base">
+    <visual>
+      <geometry>
+	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-base.dae"/>
+      </geometry>
+      <origin xyz = " 0 0 0.0 " rpy = " 0 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+	     <!--- 0.0 0 -0.04  1.5708 3.14159-->
+        <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-base.dae"/>
+      </geometry>
+      <origin xyz = " 0 0 0.0 " rpy = " 0 0 0"/>
+    </collision>
+
+  </link>
+
+  <link name="link1">
+    <visual>
+      <geometry>
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-1.dae"/>
+      </geometry>
+      <origin xyz = "0 0 0.122 " rpy = " 3.1415926 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-1.dae"/>
+      </geometry>
+      <origin xyz = "0 0  0.122 " rpy = " 3.1415926 0 0"/>
+    </collision>
+  </link>
+
+  <link name="link2">
+    <visual>
+      <geometry>    
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-2.dae"/>
+      </geometry>
+      <origin xyz = "-0.03  0.112 0.0  " rpy = " 1.5708 0 0"/>
+    </visual>
+    <collision>
+      <geometry>    
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-2.dae"/>
+      </geometry>
+      <origin xyz = "-0.03  0.112 0.0  " rpy = " 1.5708 0 0"/>
+    </collision>     
+
+  </link>
+
+  <link name="link3">
+    <visual>
+      <geometry>
+       <!--- 0.0 0 -0.04 -->
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-3.dae"/>
+      </geometry>
+      <origin xyz = "-0.03 0.23  0.0 " rpy = "1.5708 0 0"/>
+    </visual>
+    <collision>
+      <geometry>
+       <!--- 0.0 0 -0.04 -->
+       <mesh filename="package://mycobot_description/urdf/ultraArm_p340/ultraArm-3.dae"/>
+      </geometry>
+      <origin xyz = "-0.03 0.23  0.0 " rpy = "1.5708 0 0"/>
+    </collision>
+  </link>
+
+
+  <joint name="joint1_to_base" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "1000.0" lower = "-2.6179" upper = "2.967" velocity = "0"/>
+    <parent link="base"/>
+    <child link="link1"/>
+    <origin xyz= "0 0 0.12" rpy = "3.1415926 0 0"/>  
+  </joint>
+
+
+  <joint name="joint2_to_joint1" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort = "1000.0" lower = "-0.3490" upper = "1.5708" velocity = "0"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz= "0.03 0 0.01" rpy = " -1.5707963 3.1415926 3.1415926 "/>  
+  </joint>
+
+
+  <joint name="joint3_to_joint2" type="revolute">
+    <axis xyz=" 0 0 1"/>
+    <limit effort = "1000.0" lower = "-0.0872" upper = "1.9198" velocity = "0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz= "0.00 -0.12 0   " rpy = "0 0 0 "/>  
+  </joint>
+
+</robot>
