@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /RobotModel1
+        - /RobotModel1/Links1
         - /TF1
         - /TF1/Frames1
         - /Axes1
@@ -69,6 +71,26 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        link1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -81,15 +103,30 @@ Visualization Manager:
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
+        base:
+          Value: true
+        link1:
+          Value: true
+        link2:
+          Value: true
+        link3:
+          Value: true
+        link4:
+          Value: true
       Marker Alpha: 1
-      Marker Scale: 0.30000001192092896
+      Marker Scale: 0.10000000149011612
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        base:
+          link1:
+            link2:
+              link3:
+                link4:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -129,7 +166,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.9657002091407776
+      Distance: 0.9208714962005615
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -137,17 +174,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.033364877104759216
-        Y: -0.00019655062351375818
-        Z: 0.028610270470380783
+        X: 0.03724822402000427
+        Y: 0.03297097608447075
+        Z: 0.14495697617530823
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5297977328300476
+      Pitch: 0.270203560590744
       Target Frame: <Fixed Frame>
-      Yaw: 4.180380344390869
+      Yaw: 4.025384426116943
     Saved: ~
 Window Geometry:
   Displays:

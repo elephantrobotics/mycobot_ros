@@ -1,6 +1,7 @@
 <launch>
 	<!-- Load file model，加载文件模型 -->
-	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1_static.urdf"/>
+	<!-- <arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1_static.urdf"/> -->
+	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
 	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
 	<arg name="gui" default="false" />
 
@@ -8,7 +9,7 @@
 
 	<!-- Combinejoin values to TF ，将值合并到TF-->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
 		<param name="use_gui" value="$(arg gui)" />
 		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
 	</node>
