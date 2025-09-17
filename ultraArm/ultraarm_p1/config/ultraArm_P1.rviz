@@ -7,9 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
-        - /RobotModel1/Links1
         - /TF1
-        - /TF1/Frames1
         - /Axes1
       Splitter Ratio: 0.5
     Tree Height: 609
@@ -61,12 +59,17 @@ Visualization Manager:
       Collision Enabled: false
       Enabled: true
       Links:
-        All Links Enabled: true
+        All Links Enabled: false
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
         base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        joint1_link1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -87,6 +90,31 @@ Visualization Manager:
           Show Trail: false
           Value: true
         link4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        link6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link7:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link8:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link9:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -106,6 +134,8 @@ Visualization Manager:
         All Enabled: false
         base:
           Value: true
+        joint1_link1:
+          Value: true
         link1:
           Value: true
         link2:
@@ -114,30 +144,47 @@ Visualization Manager:
           Value: true
         link4:
           Value: true
+        link5:
+          Value: true
+        link6:
+          Value: true
+        link7:
+          Value: true
+        link8:
+          Value: true
+        link9:
+          Value: true
       Marker Alpha: 1
-      Marker Scale: 0.10000000149011612
+      Marker Scale: 0.20000000298023224
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
         base:
-          link1:
-            link2:
+          joint1_link1:
+            link1:
               link3:
                 link4:
-                  {}
+                  link5:
+                    link6:
+                      link7:
+                        link8:
+                          link9:
+                            {}
+            link2:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
       Class: rviz/Axes
-      Enabled: true
+      Enabled: false
       Length: 0.30000001192092896
       Name: Axes
       Radius: 0.009999999776482582
       Reference Frame: <Fixed Frame>
       Show Trail: false
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -166,7 +213,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.9208714962005615
+      Distance: 0.9001237154006958
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -174,17 +221,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.03724822402000427
-        Y: 0.03297097608447075
-        Z: 0.14495697617530823
+        X: 0.05682210251688957
+        Y: 0.0024240119382739067
+        Z: 0.16645555198192596
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.270203560590744
+      Pitch: 0.29479706287384033
       Target Frame: <Fixed Frame>
-      Yaw: 4.025384426116943
+      Yaw: 4.205384731292725
     Saved: ~
 Window Geometry:
   Displays:
