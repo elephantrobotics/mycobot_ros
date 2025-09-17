@@ -1,0 +1,23 @@
+<launch>
+	<!-- Select connecting device and IP port-->
+	<arg name="ip" default="192.168.0.232" />
+	<arg name="port" default="4500" />
+
+	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf"/>
+	<arg name="rvizconfig" default="$(find mycobot_pro_450)/config/mycobot_pro_450.rviz" />
+	<arg name="gui" default="false" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<!-- Show in Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <include file="$(find mycobot_pro450_communication)/launch/communication_topic.launch">
+		<arg name="ip" value="$(arg ip)" />	
+		<arg name="port" value="$(arg port)" />	
+    </include>
+	<!-- listen and pub the real angles-->
+	<node name="real_listener" pkg="mycobot_pro_450" type="listen_real_of_topic.py" />
+</launch>

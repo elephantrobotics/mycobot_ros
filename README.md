@@ -268,6 +268,14 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 
 ![pro630](./demo_img/pro630/pro630.png)
 
+[mycobot pro 450](./mycobot_description/urdf/mycobot_pro_450/mycobot_pro_450.urdf)
+
+![pro450](./demo_img/pro450/pro450.png)
+
+[mycobot pro 450 force gripper](./mycobot_description/urdf/mycobot_pro_450/mycobot_pro_450_force_gripper.urdf)
+
+![pro450 force gripper](./demo_img/pro450/pro450_force_gripper.png)
+
 ## Single Gripper URDF Model Graph
 
 >> **This urdf model is applicable to all machines that support this accessory**

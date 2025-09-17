@@ -1,0 +1,13 @@
+<launch>
+	<!-- Select connecting device and IP ip-->
+
+	<arg name="ip" default="192.168.0.232" />
+	<arg name="port" default="4500" />
+
+
+	<!-- Open communication service ，开启通讯服务-->
+	<node name="mycobot_services" pkg="mycobot_pro450_communication" type="mycobot_services.py" output="screen">
+		<param name="ip" type="string" value="$(arg ip)" />
+		<param name="port" type="int" value="$(arg port)" />
+    </node>
+</launch>
