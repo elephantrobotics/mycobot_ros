@@ -25,7 +25,7 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '3.9.9'
+MIN_REQUIRE_VERSION = '4.0.1'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -96,6 +96,14 @@ def create_handle():
     rospy.loginfo("%s,%s" % (ip, port))
     mc = Pro450Client(ip, port)
     time.sleep(0.05)  # wait for serial port initialization
+    if mc.is_power_on !=1:
+        mc.power_on()
+    time.sleep(0.05)
+    if mc.get_fresh_mode() !=0:
+        mc.set_fresh_mode(0)
+    time.sleep(0.05)
+    mc.set_limit_switch(2, 0)
+    time.sleep(0.05)
 
 
 def create_services():
@@ -105,6 +113,7 @@ def create_services():
     rospy.Service("set_joint_coords", SetCoords, set_coords)
     rospy.Service("get_joint_coords", GetCoords, get_coords)
     rospy.Service("switch_gripper_status", GripperStatus, switch_status)
+    rospy.Service("get_gripper_angle", GetGripperValue, get_gripper_angle)
     rospy.loginfo("Services are ready")
     rospy.spin()
 
@@ -153,6 +162,24 @@ def get_angles(req: GetAngles) -> GetAnglesResponse:
             rospy.logwarn('No angle data available')
             return GetAnglesResponse()
         return GetAnglesResponse(*angles)
+    
+def get_gripper_angle(req: GetGripperValue) -> GetGripperValueResponse:
+    """Get the current robot joint angles.
+
+    Args:
+        req (GetAngles): Empty ROS service request.
+
+    Returns:
+        GetAnglesResponse: Service response with current angles.
+    """
+    if mc:
+        lock = acquire("/tmp/mycobot_lock")
+        gripper_angle = mc.get_pro_gripper_angle()
+        release(lock)
+        if gripper_angle is None:
+            rospy.logwarn('No gripper angle data available')
+            return GetGripperValueResponse()
+        return GetGripperValueResponse(gripper_angle)
 
 
 def set_coords(req: SetCoords) -> SetCoordsResponse:

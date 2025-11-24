@@ -56,6 +56,7 @@ add_message_files(FILES
   MycobotSetCoords.msg
   MycobotGripperStatus.msg
   MycobotSetFreshMode.msg
+  MycobotGetGripperValue.msg
 
 )
 
@@ -67,6 +68,7 @@ add_service_files(FILES
   SetCoords.srv
   GripperStatus.srv
   SetFreshMode.srv
+  GetGripperValue.srv
 )
 ## Generate added messages and services
 generate_messages(DEPENDENCIES std_msgs)

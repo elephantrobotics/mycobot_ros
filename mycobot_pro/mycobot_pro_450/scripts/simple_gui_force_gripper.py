@@ -99,12 +99,12 @@ class Window:
         )
 
         # Gripper control buttons
-        # tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
-        #     row=1, column=0, sticky="w", padx=3, pady=20
-        # )
-        # tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
-        #     row=1, column=1, sticky="w", padx=3, pady=2
-        # )
+        tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
+            row=1, column=0, sticky="w", padx=3, pady=20
+        )
+        tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
+            row=1, column=1, sticky="w", padx=3, pady=2
+        )
 
         # Uncomment below for vacuum pump control
         # tk.Button(self.frmLB, text="Pump On", command=self.pump_open, width=5).grid(row=2, column=0, sticky="w", padx=3, pady=20)
@@ -148,20 +148,20 @@ class Window:
 
     def connect_ser(self):
         """Connect to ROS services required for MyCobot control."""
-        rospy.init_node("simple_gui", anonymous=True, disable_signals=True)
+        rospy.init_node("simple_gui_gripper", anonymous=True, disable_signals=True)
 
         rospy.wait_for_service("get_joint_angles")
         rospy.wait_for_service("set_joint_angles")
         rospy.wait_for_service("get_joint_coords")
         rospy.wait_for_service("set_joint_coords")
-        # rospy.wait_for_service("switch_gripper_status")
+        rospy.wait_for_service("switch_gripper_status")
 
         try:
             self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
             self.set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
             self.get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
             self.set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
-            # self.switch_gripper = rospy.ServiceProxy("switch_gripper_status", GripperStatus)
+            self.switch_gripper = rospy.ServiceProxy("switch_gripper_status", GripperStatus)
         except Exception:
             print("Error connecting to services.")
             exit(1)
@@ -230,19 +230,19 @@ class Window:
             )
             tk.Label(self.frmLC, text="mm", font=("Arial", 9)).grid(row=i, column=5)
     
-    # def gripper_open(self):
-    #     """Open the gripper."""
-    #     try:
-    #         self.switch_gripper(True)
-    #     except ServiceException:
-    #         pass
+    def gripper_open(self):
+        """Open the gripper."""
+        try:
+            self.switch_gripper(True)
+        except ServiceException:
+            pass
 
-    # def gripper_close(self):
-    #     """Close the gripper."""
-    #     try:
-    #         self.switch_gripper(False)
-    #     except ServiceException:
-    #         pass
+    def gripper_close(self):
+        """Close the gripper."""
+        try:
+            self.switch_gripper(False)
+        except ServiceException:
+            pass
 
     def validate_values(self, values, limits, label):
         """Validate values against limits."""

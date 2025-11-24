@@ -36,12 +36,13 @@ from mycobot_pro450_communication.msg import (
     MycobotSetCoords,
     MycobotGripperStatus,
     MycobotSetFreshMode,
+    MycobotGetGripperValue,
 )
 import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '3.9.9'
+MIN_REQUIRE_VERSION = '4.0.1'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -115,6 +116,13 @@ class MycobotTopics:
         self.mc = Pro450Client(ip, port)
         self.lock = threading.Lock()
         self.output_robot_message()
+        if self.mc.is_power_on !=1:
+            self.mc.power_on()
+        time.sleep(0.05)
+        if self.mc.get_fresh_mode()!=0:
+            self.mc.set_fresh_mode(0)
+        time.sleep(0.05)
+        self.mc.set_limit_switch(2, 0)
 
     def start(self):
         """Start all publisher and subscriber threads."""
@@ -125,6 +133,7 @@ class MycobotTopics:
             threading.Thread(target=self.sub_set_coords),
             threading.Thread(target=self.sub_gripper_status),
             threading.Thread(target=self.sub_fresh_mode_status),
+            threading.Thread(target=self.sub_real_gripper_value),
         ]
 
         for t in threads:
@@ -150,7 +159,7 @@ class MycobotTopics:
                 except Exception:
                     e = traceback.format_exc()
                     rospy.logerr(f"SerialException: {e}")
-            time.sleep(0.25)
+            time.sleep(0.05)
 
     def pub_real_coords(self):
         """Publish real coordinates to 'mycobot/coords_real' topic."""
@@ -169,7 +178,7 @@ class MycobotTopics:
                 except Exception:
                     e = traceback.format_exc()
                     rospy.logerr(f"SerialException: {e}")
-            time.sleep(0.25)
+            time.sleep(0.05)
 
     def sub_set_angles(self):
         """Subscribe to 'mycobot/angles_goal' to receive target angles."""
@@ -204,6 +213,22 @@ class MycobotTopics:
 
         rospy.Subscriber("mycobot/gripper_status", MycobotGripperStatus, callback)
         rospy.spin()
+        
+    def sub_real_gripper_value(self):
+        """Get Force Gripper Value"""
+        pub = rospy.Publisher("mycobot/gripper_angle_real",
+                              MycobotGetGripperValue, queue_size=5)
+        ma = MycobotGetGripperValue()
+        while not rospy.is_shutdown():
+            with self.lock:
+                try:
+                    gripper_value = self.mc.get_pro_gripper_angle()
+                    if gripper_value:
+                        ma.gripper_angle = gripper_value
+                        pub.publish(ma)
+                except Exception as e:
+                    rospy.logerr(f"SerialException: {e}")
+            time.sleep(0.05)
 
     def sub_fresh_mode_status(self):
         """Subscribe to 'mycobot/fresh_mode_status' to switch fresh mode."""

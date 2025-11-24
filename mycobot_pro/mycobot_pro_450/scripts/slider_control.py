@@ -21,7 +21,7 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '3.9.9'
+MIN_REQUIRE_VERSION = '4.0.1'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -77,8 +77,12 @@ def listener():
 
     mc = Pro450Client(ip, port)
     time.sleep(0.05)
+    if mc.is_power_on !=1:
+        mc.power_on()
+    time.sleep(0.05)
     mc.set_fresh_mode(1)
     time.sleep(0.05)
+    mc.set_limit_switch(2, 0)
 
     rospy.Subscriber("joint_states", JointState, callback)
 

@@ -13,6 +13,7 @@ Date: 2025-09-08
 """
 
 import math
+import threading
 import time
 import rospy
 from sensor_msgs.msg import JointState
@@ -21,7 +22,7 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '3.9.9'
+MIN_REQUIRE_VERSION = '4.0.1'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -38,7 +39,8 @@ else:
 
 
 mc = None
-
+angles_queue = None
+gripper_value = None
 
 def callback(data: JointState):
     """Callback function for ROS JointState subscription.
@@ -49,6 +51,7 @@ def callback(data: JointState):
     Args:
         data (JointState): Joint state message containing joint positions.
     """
+    global mc, gripper_value, angles_queue
     data_list = []
     gripper_value = 0
 
@@ -64,10 +67,23 @@ def callback(data: JointState):
 
     rospy.loginfo(f'joint_list: {data_list}, gripper_value: {gripper_value}')
     
-    mc.send_angles(data_list, 25)
-    mc.set_pro_gripper_angle(gripper_value)
+    # mc.send_angles(data_list, 25)
+    # mc.set_pro_gripper_angle(gripper_value)
+    angles_queue = data_list
+    gripper_value = gripper_value
 
-
+def _send_loop():
+    """Background loop to send angles and gripper commands to the robotic arm.
+    """
+    global mc, gripper_value, angles_queue
+    while True:
+        time.sleep(0.01)
+        if angles_queue:
+            mc.send_angles(angles_queue, 25)
+            angles_queue = None
+        if gripper_value is not None:
+            mc.set_pro_gripper_angle(gripper_value)
+            gripper_value = None
 def listener():
     """Initialize ROS node and Pro450Client, then subscribe to JointState topic.
 
@@ -77,7 +93,7 @@ def listener():
       - Sets fresh mode for the robotic arm.
       - Subscribes to the "joint_states" topic and listens for updates.
     """
-    global mc
+    global mc, gripper_value, angles_queue
 
     rospy.init_node("control_slider", anonymous=True)
 
@@ -87,8 +103,15 @@ def listener():
 
     mc = Pro450Client(ip, port)
     time.sleep(0.05)
+    if mc.is_power_on !=1:
+        mc.power_on()
+    time.sleep(0.05)
     mc.set_fresh_mode(1)
     time.sleep(0.05)
+    mc.set_limit_switch(2, 0)
+
+
+    threading.Thread(target=_send_loop, daemon=True).start()
 
     rospy.Subscriber("joint_states", JointState, callback)
 

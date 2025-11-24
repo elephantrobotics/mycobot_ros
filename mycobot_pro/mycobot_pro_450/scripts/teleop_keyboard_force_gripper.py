@@ -47,6 +47,9 @@ Movement Step:
     + : Increase movement step size
     - : Decrease movement step size
 
+Gripper:
+    g - open    h - close
+
 Other:
     1 - Go to init pose
     2 - Go to home pose
@@ -90,7 +93,7 @@ class MycobotTeleopTopic:
 
     def __init__(self):
         """Initialize ROS node, parameters, publishers, and subscribers."""
-        rospy.init_node("teleop_keyboard_topic")
+        rospy.init_node("teleop_keyboard_topic_gripper")
 
         # Speed and step size
         self.speed = rospy.get_param("~speed", 50)
@@ -113,7 +116,7 @@ class MycobotTeleopTopic:
         # Publishers
         self.coords_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=1)
         self.angles_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=1)
-        # self.gripper_pub = rospy.Publisher("mycobot/gripper_status", MycobotGripperStatus, queue_size=1)
+        self.gripper_pub = rospy.Publisher("mycobot/gripper_status", MycobotGripperStatus, queue_size=1)
 
         rospy.loginfo("Waiting to receive current coordinates...")
         while self.curr_coords == [0] * 6 and not rospy.is_shutdown():
@@ -223,10 +226,10 @@ class MycobotTeleopTopic:
                     elif key in 'lL': self.record_coords[5] -= self.change_angle
 
                 # Gripper control
-                # elif key in 'gG':
-                #     self.gripper_pub.publish(MycobotGripperStatus(Status=True))
-                # elif key in 'hH':
-                #     self.gripper_pub.publish(MycobotGripperStatus(Status=False))
+                elif key in 'gG':
+                    self.gripper_pub.publish(MycobotGripperStatus(Status=True))
+                elif key in 'hH':
+                    self.gripper_pub.publish(MycobotGripperStatus(Status=False))
                 else:
                     continue
                 

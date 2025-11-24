@@ -24,7 +24,7 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '3.9.9'
+MIN_REQUIRE_VERSION = '4.0.1'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -58,6 +58,7 @@ def talker():
 
     try:
         mycobot_450 = Pro450Client(ip, port)
+        time.sleep(0.05)
     except Exception as e:
         print(e)
         print(
@@ -69,10 +70,11 @@ def talker():
         )
         exit(1)
 
-    # Enable all motors
-    mycobot_450.set_motor_enabled(254, 0)
-    time.sleep(0.1)
-    print("All servos released.\n")
+    if mycobot_450.is_power_on !=1:
+        mycobot_450.power_on()
+    time.sleep(0.05)
+    # print("All servos released.\n")
+    print('Please press the button at the end of the machine to drag the joint.\n请按下机器末端按钮进行关节拖拽运动\n')
 
     # ROS publishers
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
