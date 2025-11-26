@@ -1,117 +1,821 @@
-<?xml version="1.0"?>
-<robot  xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter" >
-	
-<xacro:property name="width" value=".2" />
-
-
-  <link name="base">
-    <visual>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/base.dae"/>
-      </geometry>
-      <origin xyz = " 0.01 0.09 0.0 " rpy = " 1.5708 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://mycobot_description/urdf/ultraArm_p1/base.dae"/>
-      </geometry>
-      <origin xyz = " 0.01 0.09 0.0 " rpy = " 1.5708 0 0"/>
-    </collision>
-
-  </link>
-
-  <link name="link1">
-    <visual>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint1.dae"/>
-      </geometry>
-      <origin xyz = "-0.06 -0.09 0.122 " rpy = " -1.5708 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint1.dae"/>
-      </geometry>
-      <origin xyz = "-0.06 -0.09 0.122 " rpy = " -1.5708 0 0"/>
-    </collision>
-  </link>
-
-  <link name="link2">
-    <visual>
-      <geometry>    
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint2.dae"/>
-      </geometry>
-      <origin xyz = "-0.015  0.15 0.086  " rpy = " 3.14159 0 0"/>
-    </visual>
-    <collision>
-      <geometry>    
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint2.dae"/>
-      </geometry>
-      <origin xyz = "-0.015  0.15 0.086  " rpy = " 3.14159 0 0"/>
-    </collision>   
-
-  </link>
-
-  <link name="link3">
-    <visual>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint3.dae"/>
-      </geometry>
-      <origin xyz = "-0.033 0.314  0.086 " rpy = "3.14159 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint3.dae"/>
-      </geometry>
-      <origin xyz = "-0.033 0.314  0.086 " rpy = "3.14159 0 0"/>
-    </collision>
-  </link>
-
-  <link name="link4">
-    <visual>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint4.dae"/>
-      </geometry>
-      <origin xyz = "-0.211 0.088  -0.254 " rpy = "1.5708 0 0"/>
-    </visual>
-    <collision>
-      <geometry>
-       <mesh filename="package://mycobot_description/urdf/ultraArm_p1/Joint4.dae"/>
-      </geometry>
-      <origin xyz = "-0.211 0.088  -0.254 " rpy = "1.5708 0 0"/>
-    </collision>
-  </link>
-
-
-  <joint name="joint1" type="revolute">
-    <axis xyz="0 0 -1"/>
-    <limit effort = "1000.0" lower = "-2.7925" upper = "2.7925" velocity = "0"/>
-    <parent link="base"/>
-    <child link="link1"/>
-    <origin xyz= "0 0 0.12" rpy = "3.1415926 0 0"/>  
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="mycobot_description/urdf/ultraArm_p1">
+  <link name="world"/>
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <joint name="joint2" type="revolute">
-    <axis xyz="0 0 1"/>
-    <limit effort = "1000.0" lower = "-0.3490" upper = "0.8726" velocity = "0"/>
-    <parent link="link1"/>
-    <child link="link2"/>
-    <origin xyz= "0.026 -0.003 -0.028" rpy = " 1.5708 0 0 "/>  
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00534518578603975 0.000251345938015856 0.0457128091777448"
+        rpy="0 0 0" />
+      <mass
+        value="0.627583870747359" />
+      <inertia
+        ixx="0.00133275629478104"
+        ixy="1.01059160427449E-05"
+        ixz="1.83707038648099E-05"
+        iyy="0.00133991014824855"
+        iyz="-4.02077139298321E-06"
+        izz="0.00238978786537975" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="J1-LINK">
+    <inertial>
+      <origin
+        xyz="0.00210492593461096 -0.000275715822415964 0.0639697094673263"
+        rpy="0 0 0" />
+      <mass
+        value="0.36023578514819" />
+      <inertia
+        ixx="0.000431839004926618"
+        ixy="-4.78867389452568E-07"
+        ixz="-2.59632967946715E-05"
+        iyy="0.000900657330150721"
+        iyz="-8.2292782934366E-07"
+        izz="0.000613802346500022" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J1-LINK.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J1-LINK.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0860000000000012"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="J1-LINK" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.97"
+      upper="2.97"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="J2_Link1">
+    <inertial>
+      <origin
+        xyz="0.00147911090709026 0.014725712757873 0.0633522119951183"
+        rpy="0 0 0" />
+      <mass
+        value="0.0305283235625227" />
+      <inertia
+        ixx="4.56740140990068E-05"
+        ixy="-4.21684725238367E-09"
+        ixz="3.35670890309869E-08"
+        iyy="4.32233669287209E-05"
+        iyz="-1.76126123653013E-07"
+        izz="4.62055339913387E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J2"
+    type="revolute">
+    <origin
+      xyz="0.0225 -0.015 0.0799"
+      rpy="0 0 0" />
+    <parent
+      link="J1-LINK" />
+    <child
+      link="J2_Link1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.35"
+      upper="1.3962"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="J2_Link4">
+    <inertial>
+      <origin
+        xyz="0.00412183921413033 0.00915957870182423 0.0231989819730957"
+        rpy="0 0 0" />
+      <mass
+        value="0.0263910621420943" />
+      <inertia
+        ixx="4.4812603413992E-06"
+        ixy="2.68233601454016E-08"
+        ixz="-1.63573923004788E-07"
+        iyy="1.06422746045877E-05"
+        iyz="4.96390681419207E-08"
+        izz="7.06712848455867E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J2-4"
+    type="revolute">
+    <origin
+      xyz="-0.002409 0.0059 0.13998"
+      rpy="0 0 0" />
+    <parent
+      link="J2_Link1" />
+    <child
+      link="J2_Link4" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.3962"
+      upper="0.35"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J2-3"
+      multiplier="1"
+      offset="0" />
   </joint>
 
-  <joint name="joint3" type="revolute">
-    <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "0" upper = "1.9198" velocity = "0"/>
-    <parent link="link2"/>
-    <child link="link3"/>
-    <origin xyz= "0.02 -0.164 0   " rpy = "0 0 0 "/>  
+  <link
+    name="J2_Link2">
+    <inertial>
+      <origin
+        xyz="-0.00735367470008174 0.0240043988169273 0.0672796792489041"
+        rpy="0 0 0" />
+      <mass
+        value="0.0757843800054117" />
+      <inertia
+        ixx="0.000137316942424142"
+        ixy="1.04494931553532E-09"
+        ixz="-4.34329786100147E-06"
+        iyy="0.000125063160528284"
+        iyz="2.18437955882834E-08"
+        izz="4.28462707756388E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2_Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J2-2"
+    type="revolute">
+    <origin
+      xyz="-0.0025 -0.024 0.1049"
+      rpy="0 0 0" />
+    <parent
+      link="J1-LINK" />
+    <child
+      link="J2_Link2" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.35"
+      upper="1.3962"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J2"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="J2-Link3">
+    <inertial>
+      <origin
+        xyz="-5.85469173142172E-17 -0.00500000000000002 5.55111512312578E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.000785398163397449" />
+      <inertia
+        ixx="1.14537232162128E-08"
+        ixy="-1.41489261232003E-24"
+        ixz="-1.37863435425504E-25"
+        iyy="9.81747704246811E-09"
+        iyz="1.04756795824731E-24"
+        izz="1.14537232162128E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2-Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J2-Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J2-3"
+    type="revolute">
+    <origin
+      xyz="0 0 0.14"
+      rpy="0 0 0" />
+    <parent
+      link="J2_Link2" />
+    <child
+      link="J2-Link3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="1.3962"
+      upper="0.35"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J2"
+      multiplier="-1"
+      offset="0" />
   </joint>
 
-  <joint name="joint4" type="revolute">
-    <axis xyz=" 0 0 1"/>
-    <limit effort = "1000.0" lower = "-6.2831" upper = "6.2831" velocity = "0"/>
-    <parent link="link3"/>
-    <child link="link4"/>
-    <origin xyz= "0.178 0.06 -0.002   " rpy = "1.5708 0 0 "/>  
+  <link
+    name="J3_Link1">
+    <inertial>
+      <origin
+        xyz="0.0609058056580943 0.00910133410971771 -0.000610117419599043"
+        rpy="0 0 0" />
+      <mass
+        value="0.0260308258274982" />
+      <inertia
+        ixx="1.80397084180261E-06"
+        ixy="1.47678988288304E-09"
+        ixz="1.13433113073449E-06"
+        iyy="7.14838343987773E-05"
+        iyz="-1.10227989263149E-11"
+        izz="7.17830366554185E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J3"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="J2_Link4" />
+    <child
+      link="J3_Link1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.92"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="J3_Link3">
+    <inertial>
+      <origin
+        xyz="0.0390893639265768 0.0190000499784302 -0.000654657971335626"
+        rpy="0 0 0" />
+      <mass
+        value="0.0686504291131459" />
+      <inertia
+        ixx="3.27456438672515E-05"
+        ixy="2.58216059288392E-09"
+        ixz="3.81098982885678E-06"
+        iyy="5.02453095771268E-05"
+        iyz="1.83808831932179E-10"
+        izz="4.23055711868235E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J3-3"
+    type="revolute">
+    <origin
+      xyz="0.14232 -0.0099 -0.0049908"
+      rpy="0 0 0" />
+    <parent
+      link="J3_Link1" />
+    <child
+      link="J3_Link3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.92"
+      upper="0"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J3"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  
+  <link
+    name="FIX2">
+    <inertial>
+      <origin
+        xyz="8.98786066855783E-05 -0.0100000000000009 0.00501371867847578"
+        rpy="0 0 0" />
+      <mass
+        value="0.000785398163397448" />
+      <inertia
+        ixx="1.14537232162128E-08"
+        ixy="-2.94210292969091E-24"
+        ixz="-3.23853140521913E-39"
+        iyy="9.8174770424681E-09"
+        iyz="-2.13161315222974E-24"
+        izz="1.14537232162128E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="F2"
+    type="fixed">
+    <origin
+      xyz="0.0250007533101423 0 0.024999246667158"
+      rpy="0 0 0" />
+    <parent
+      link="J3_Link3" />
+    <child
+      link="FIX2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="FIX1">
+    <inertial>
+      <origin
+        xyz="-0.164910247320638 -0.009999999999998 0.0300115110362577"
+        rpy="0 0 0" />
+      <mass
+        value="0.000785398163397449" />
+      <inertia
+        ixx="1.14537232162128E-08"
+        ixy="-1.41489261232003E-24"
+        ixz="-1.37863435425504E-25"
+        iyy="9.81747704246811E-09"
+        iyz="1.04756795824731E-24"
+        izz="1.14537232162128E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="F1"
+    type="fixed">
+    <origin
+      xyz="0.14231924206961 -0.00990000000000155 -0.00499078358865856"
+      rpy="0 0 0" />
+    <parent
+      link="J2_Link4" />
+    <child
+      link="FIX1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="FIX3">
+    <inertial>
+      <origin
+        xyz="8.00711740869819E-08 -0.00499999999999998 1.84379565448811E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.000785398163397449" />
+      <inertia
+        ixx="1.14537232162128E-08"
+        ixy="-4.94437424271156E-24"
+        ixz="-2.49392002316902E-39"
+        iyy="9.81747704246811E-09"
+        iyz="-2.77811912017337E-24"
+        izz="1.14537232162128E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/FIX3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="F3"
+    type="fixed">
+    <origin
+      xyz="0.0274097939152648 -0.0149000000000027 0.0250219973774115"
+      rpy="0 0 0" />
+    <parent
+      link="J2_Link4" />
+    <child
+      link="FIX3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="J3-LIink2">
+    <inertial>
+      <origin
+        xyz="0.073501731692264 0.0240046446313847 -0.0015475696710967"
+        rpy="0 0 0" />
+      <mass
+        value="0.0559892080648003" />
+      <inertia
+        ixx="2.3744721961828E-05"
+        ixy="4.36854884593119E-08"
+        ixz="1.03806895640791E-06"
+        iyy="7.404904483514E-05"
+        iyz="5.38348181953618E-11"
+        izz="8.81581180669291E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3-LIink2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3-LIink2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J3-2"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="FIX3" />
+    <child
+      link="J3-LIink2" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.92"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J3"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="J3_Link4">
+    <inertial>
+      <origin
+        xyz="8.98786066855783E-05 -0.0100000000000009 0.00501371867847578"
+        rpy="0 0 0" />
+      <mass
+        value="0.000785398163397448" />
+      <inertia
+        ixx="1.14537232162128E-08"
+        ixy="-2.94210292969091E-24"
+        ixz="-3.23853140521913E-39"
+        iyy="9.8174770424681E-09"
+        iyz="-2.13161315222974E-24"
+        izz="1.14537232162128E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J3_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J3-4"
+    type="revolute">
+    <origin
+      xyz="0.13991 0.005 -0.0050135"
+      rpy="0 0 0" />
+    <parent
+      link="J3-LIink2" />
+    <child
+      link="J3_Link4" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.92"
+      upper="0"
+      effort="100"
+      velocity="1" />
+    <mimic
+      joint="J3-3"
+      multiplier="1"
+      offset="0" />
   </joint>
 
+  <link
+    name="J4_Link">
+    <inertial>
+      <origin
+        xyz="2.63655640542204E-07 1.0959618999224E-08 0.0079350262258901"
+        rpy="0 0 0" />
+      <mass
+        value="0.00784859322698103" />
+      <inertia
+        ixx="6.96480088657564E-07"
+        ixy="1.33723779005452E-08"
+        ixz="1.05967708125163E-11"
+        iyy="7.80474195030621E-07"
+        iyz="-1.05826568652703E-12"
+        izz="1.2699639780571E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J4_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/ultraArm_p1/meshes/J4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="J4"
+    type="revolute">
+    <origin
+      xyz="0.067813 0.019 -0.047739"
+      rpy="0 0 0" />
+    <parent
+      link="J3_Link3" />
+    <child
+      link="J4_Link" />
+    <axis
+      xyz="3.005E-05 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="100"
+      velocity="1" />
+  </joint>
 </robot>

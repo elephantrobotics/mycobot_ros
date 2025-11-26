@@ -7,8 +7,10 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /RobotModel1/Links1
+        - /RobotModel1/Links1/J2-Link31/Orientation1
         - /TF1
-        - /Axes1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 609
   - Class: rviz/Selection
@@ -63,58 +65,73 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        joint1_link1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        link1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        link2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        link3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        link4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        link5:
+        FIX1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: false
-        link6:
+        FIX2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        FIX3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        J1-LINK:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        link7:
+        J2-Link3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        J2_Link1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        link8:
+        J2_Link2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        link9:
+        J2_Link4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        J3-LIink2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        J3_Link1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        J3_Link3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        J3_Link4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
+        J4_Link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        Link Tree Style: Links in Alphabetic Order
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -132,64 +149,67 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        base:
+        FIX1:
+          Value: false
+        FIX2:
+          Value: false
+        FIX3:
+          Value: false
+        J1-LINK:
           Value: true
-        joint1_link1:
+        J2-Link3:
+          Value: false
+        J2_Link1:
           Value: true
-        link1:
+        J2_Link2:
           Value: true
-        link2:
+        J2_Link4:
           Value: true
-        link3:
+        J3-LIink2:
           Value: true
-        link4:
+        J3_Link1:
           Value: true
-        link5:
+        J3_Link3:
           Value: true
-        link6:
+        J3_Link4:
+          Value: false
+        J4_Link:
           Value: true
-        link7:
-          Value: true
-        link8:
-          Value: true
-        link9:
+        base_link:
           Value: true
       Marker Alpha: 1
-      Marker Scale: 0.20000000298023224
+      Marker Scale: 0.15000000596046448
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        base:
-          joint1_link1:
-            link1:
-              link3:
-                link4:
-                  link5:
-                    link6:
-                      link7:
-                        link8:
-                          link9:
-                            {}
-            link2:
-              {}
+        base_link:
+          J1-LINK:
+            J2_Link1:
+              J2_Link4:
+                FIX1:
+                  {}
+                FIX3:
+                  J3-LIink2:
+                    J3_Link4:
+                      {}
+                J3_Link1:
+                  J3_Link3:
+                    FIX2:
+                      {}
+                    J4_Link:
+                      {}
+            J2_Link2:
+              J2-Link3:
+                {}
       Update Interval: 0
       Value: true
-    - Alpha: 1
-      Class: rviz/Axes
-      Enabled: false
-      Length: 0.30000001192092896
-      Name: Axes
-      Radius: 0.009999999776482582
-      Reference Frame: <Fixed Frame>
-      Show Trail: false
-      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -213,7 +233,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.9001237154006958
+      Distance: 0.7805156707763672
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -221,17 +241,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.05682210251688957
-        Y: 0.0024240119382739067
-        Z: 0.16645555198192596
+        X: 0.04930993169546127
+        Y: -0.07769519090652466
+        Z: 0.16177795827388763
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.29479706287384033
+      Pitch: 0.38539746403694153
       Target Frame: <Fixed Frame>
-      Yaw: 4.205384731292725
+      Yaw: 4.19221305847168
     Saved: ~
 Window Geometry:
   Displays:
