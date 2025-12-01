@@ -1,0 +1,13 @@
+<launch>
+	<!-- Select connecting device and serial-->
+
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
+
+	<!-- Open communication topics ，开启通讯服务-->
+	<node name="mycobot_topics" pkg="ultraarm_communication" type="mycobot_topics.py" output="screen">
+		<param name="port" type="string" value="$(arg port)" />
+		<param name="baud" type="int" value="$(arg baud)" />
+    </node>
+</launch>

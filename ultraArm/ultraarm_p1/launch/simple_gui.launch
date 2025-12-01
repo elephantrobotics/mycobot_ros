@@ -1,0 +1,22 @@
+<launch>
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="115200" />
+
+	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
+	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
+	<arg name="gui" default="false" />
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- Combinejoin values to TF-->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<!-- Show in Rviz-->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+    <include file="$(find ultraarm_communication)/launch/communication_service.launch">
+		<arg name="port" value="$(arg port)" />	
+		<arg name="baud" value="$(arg baud)" />	
+    </include>
+	<node name="real_listener" pkg="ultraarm_p1" type="listen_real.py" />
+	<node name="simple_gui" pkg="ultraarm_p1" type="simple_gui.py" />
+</launch>
