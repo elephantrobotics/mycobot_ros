@@ -8,7 +8,6 @@ Panels:
         - /Status1
         - /RobotModel1
         - /RobotModel1/Links1
-        - /RobotModel1/Links1/J2-Link31/Orientation1
         - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
@@ -80,16 +79,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: false
-        J1-LINK:
+        J1_LINK:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        J2-Link3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: false
         J2_Link1:
           Alpha: 1
           Show Axes: false
@@ -100,12 +94,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        J2_Link3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: false
         J2_Link4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        J3-LIink2:
+        J3_LIink2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -136,6 +135,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -155,17 +158,17 @@ Visualization Manager:
           Value: false
         FIX3:
           Value: false
-        J1-LINK:
+        J1_LINK:
           Value: true
-        J2-Link3:
-          Value: false
         J2_Link1:
           Value: true
         J2_Link2:
           Value: true
+        J2_Link3:
+          Value: false
         J2_Link4:
           Value: true
-        J3-LIink2:
+        J3_LIink2:
           Value: true
         J3_Link1:
           Value: true
@@ -177,6 +180,8 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
+        world:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 0.15000000596046448
       Name: TF
@@ -184,25 +189,26 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          J1-LINK:
-            J2_Link1:
-              J2_Link4:
-                FIX1:
+        world:
+          base_link:
+            J1_LINK:
+              J2_Link1:
+                J2_Link4:
+                  FIX1:
+                    {}
+                  FIX3:
+                    J3_LIink2:
+                      J3_Link4:
+                        {}
+                  J3_Link1:
+                    J3_Link3:
+                      FIX2:
+                        {}
+                      J4_Link:
+                        {}
+              J2_Link2:
+                J2_Link3:
                   {}
-                FIX3:
-                  J3-LIink2:
-                    J3_Link4:
-                      {}
-                J3_Link1:
-                  J3_Link3:
-                    FIX2:
-                      {}
-                    J4_Link:
-                      {}
-            J2_Link2:
-              J2-Link3:
-                {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -249,9 +255,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.38539746403694153
+      Pitch: 0.4353974759578705
       Target Frame: <Fixed Frame>
-      Yaw: 4.19221305847168
+      Yaw: 4.157212734222412
     Saved: ~
 Window Geometry:
   Displays:
