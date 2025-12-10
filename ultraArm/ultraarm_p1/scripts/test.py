@@ -7,7 +7,9 @@ import rospy
 
 ua = UltraArmP1('/dev/ttyUSB0')
 
-ua.set_joint_disable()
+# ua.set_joint_enable()
+# exit()
+# ua.set_joint_release()
 
 # time.sleep(0.05)
 
@@ -19,23 +21,23 @@ while 1:
 
             # Get robot joint angles
             angles = ua.get_angles_info()
-            time.sleep(0.1)
+            time.sleep(0.05)
             if isinstance(angles, list) and len(angles) > 0:
                 # Convert angles to radians for ROS
-                data_list = [math.radians(value) for value in angles]
+                # data_list = [math.radians(value) for value in angles]
                 # joint_state_send.position = data_list
                 # pub.publish(joint_state_send)
-                print('data_list:', data_list)
+                print('data_list:', angles)
             else:
                 rospy.logwarn("Failed to get valid angles: {}".format(angles))
 
             # Get robot coordinates
-            coords = ua.get_coords_info()
-            time.sleep(0.1)
-            if not isinstance(coords, list) or len(coords) == 0 or coords == -1:
-                rospy.logwarn("Failed to get valid coordinates: {}".format(coords))
-                coords = [0, 0, 0, 0]  # fallback
-            print('coords:', coords)
+            # coords = ua.get_coords_info()
+            # time.sleep(0.1)
+            # if not isinstance(coords, list) or len(coords) == 0 or coords == -1:
+            #     rospy.logwarn("Failed to get valid coordinates: {}".format(coords))
+            #     coords = [0, 0, 0, 0]  # fallback
+            # print('coords:', coords)
         except Exception as e:
             import traceback
             e = traceback.format_exc()

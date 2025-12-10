@@ -3,4 +3,4 @@ float32 joint_2
 float32 joint_3
 float32 joint_4
 
-int8 speed
+int32 speed

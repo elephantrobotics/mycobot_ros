@@ -76,6 +76,7 @@ def listener():
     baud = rospy.get_param("~baud", 115200)
     print(port, baud)
     ua = UltraArmP1(port, baud)
+    ua.set_joint_enable()
     
     rospy.Subscriber("joint_states", JointState, callback)
     

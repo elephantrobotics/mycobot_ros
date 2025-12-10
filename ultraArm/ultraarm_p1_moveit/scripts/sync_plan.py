@@ -65,7 +65,7 @@ def callback(data):
     angles_list = [joint1, joint2, joint3, joint4]
         
     rospy.loginfo(rospy.get_caller_id() + "%s", angles_list)
-    ua.set_angles(angles_list, 2800, _async=False)
+    ua.set_angles(angles_list, 2000, _async=False)
 
 
 def listener():

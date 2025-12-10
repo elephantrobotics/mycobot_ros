@@ -70,7 +70,7 @@ def talker():
         )
         exit(1)
 
-    ua.set_joint_disable()
+    ua.set_joint_release()
     print("All servos released.\n")
     
     # ROS publishers
@@ -100,12 +100,14 @@ def talker():
 
             # Get robot joint angles
             angles = ua.get_angles_info()
-            time.sleep(0.1)
+            # time.sleep(0.1)
             if isinstance(angles, list) and angles != -1 and len(angles) > 0:
                 angles[2] -= 90
                 # Convert angles to radians for ROS
+                # rospy.loginfo('angles:{}'.format(angles))
                 data_list = [math.radians(value) for value in angles]
                 joint_state_send.position = data_list
+                # rospy.loginfo('data_list:{}'.format(data_list))
                 pub.publish(joint_state_send)
             else:
                 rospy.logwarn("Failed to get valid angles: {}".format(angles))
@@ -113,7 +115,7 @@ def talker():
 
             # Get robot coordinates
             coords = ua.get_coords_info()
-            time.sleep(0.1)
+            # time.sleep(0.1)
             if not isinstance(coords, list) or len(coords) == 0 or coords == -1:
                 rospy.logwarn("Failed to get valid coordinates: {}".format(coords))
                 coords = [0, 0, 0, 0]  # fallback

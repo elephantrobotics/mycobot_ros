@@ -15,6 +15,7 @@ Author: WangWeiJian
 Date: 2025-11-24
 """
 
+import threading
 import time
 import rospy
 import os
@@ -41,6 +42,8 @@ else:
     from pymycobot import UltraArmP1
 
 mc = None
+latest_angles = [-1, -1, -1, -1]
+latest_coords = [0.0, 0.0, 0.0, 0.0]
 
 
 def acquire(lock_file: str) -> int:
@@ -69,7 +72,7 @@ def acquire(lock_file: str) -> int:
         else:
             lock_file_fd = fd
             break
-        time.sleep(1.0)
+        time.sleep(0.05)
         current_time = time.time()
     if lock_file_fd is None:
         os.close(fd)
@@ -95,7 +98,10 @@ def create_handle():
     baud = rospy.get_param("~baud", 115200)
     rospy.loginfo("%s,%s" % (port, baud))
     mc = UltraArmP1(port, baud)
+    mc.set_joint_enable()
     time.sleep(0.05)  # wait for serial port initialization
+    # threading.Thread(target=read_angles_loop, daemon=True).start()
+    # threading.Thread(target=read_coords_loop, daemon=True).start()
 
 
 def create_services():
@@ -104,10 +110,37 @@ def create_services():
     rospy.Service("get_joint_angles", GetAngles, get_angles)
     rospy.Service("set_joint_coords", SetCoords, set_coords)
     rospy.Service("get_joint_coords", GetCoords, get_coords)
-    rospy.Service("switch_gripper_status", GripperStatus, switch_status)
+    # rospy.Service("switch_gripper_status", GripperStatus, switch_status)
     rospy.loginfo("Services are ready")
     rospy.spin()
 
+def read_angles_loop():
+    global latest_angles, mc
+    rate = rospy.Rate(30)   # 30 Hz
+    while not rospy.is_shutdown():
+        try:
+            angles = mc.get_angles_info()
+            # rospy.loginfo(f'get angle data: {angles}')
+            if isinstance(angles, (list, tuple)) and len(angles) == 4:
+                latest_angles = angles
+                # rospy.loginfo(f'get angle data--------------: {latest_angles}')
+        except:
+            pass
+        rate.sleep()
+        
+def read_coords_loop():
+    global latest_coords, mc
+    rate = rospy.Rate(30)   # 30 Hz
+    while not rospy.is_shutdown():
+        try:
+            coords = mc.get_coords_info()
+            # rospy.loginfo(f'get coords data: {coords}')
+            if isinstance(coords, (list, tuple)) and len(coords) == 4:
+                latest_coords = coords
+                # rospy.loginfo(f'get coords data--------------: {latest_coords}')
+        except:
+            pass
+        rate.sleep()
 
 def set_angles(req: SetAngles) -> SetAnglesResponse:
     """Set the robot joint angles.
@@ -125,13 +158,24 @@ def set_angles(req: SetAngles) -> SetAnglesResponse:
         req.joint_4,
     ]
     sp = req.speed
-
+    angles = [round(i, 2) for i in angles]
     if mc:
         lock = acquire("/tmp/mycobot_lock")
+        rospy.loginfo(f'send angle data: {angles}')
         mc.set_angles(angles, sp, _async=False)
         release(lock)
+        rospy.loginfo(f'done send angle data: {angles}')
 
     return SetAnglesResponse(True)
+
+def get_angles_backup(req):
+    global latest_angles
+    if not mc:
+        # rospy.loginfo(f'done send angle data0000000000000: {latest_angles}')
+        return GetAnglesResponse(0,0,0,0)
+    
+    # rospy.loginfo(f'done send angle data0000000000000: {latest_angles}')
+    return GetAnglesResponse(*latest_angles)
 
 
 def get_angles(req: GetAngles) -> GetAnglesResponse:
@@ -147,9 +191,15 @@ def get_angles(req: GetAngles) -> GetAnglesResponse:
         lock = acquire("/tmp/mycobot_lock")
         angles = mc.get_angles_info()
         release(lock)
-        if angles is None:
-            rospy.logwarn('No angle data available')
+        time.sleep(0.05)
+        if not isinstance(angles, (list, tuple)) or len(angles) != 4:
+            rospy.logwarn(f'Invalid angle data: {angles}')
+            # 返回安全默认值，避免异常
+            angles = [0.0, 0.0, 90.0, 0]
             return GetAnglesResponse()
+        # if angles is None:
+        #     rospy.logwarn('No angle data available')
+        #     return GetAnglesResponse()
         return GetAnglesResponse(*angles)
 
 
@@ -168,7 +218,7 @@ def set_coords(req: SetCoords) -> SetCoordsResponse:
         req.z,
     ]
     sp = req.speed
-
+    coords = [round(i, 2) for i in coords]
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         mc.set_coords(coords, sp, _async=False)
@@ -176,6 +226,11 @@ def set_coords(req: SetCoords) -> SetCoordsResponse:
 
     return SetCoordsResponse(True)
 
+def get_coords_backup(req):
+    if not mc:
+        return GetCoordsResponse(0,0,0,0)
+    global latest_coords
+    return GetCoordsResponse(*latest_coords)
 
 def get_coords(req: GetCoords) -> GetCoordsResponse:
     """Get the robot end-effector coordinates.
@@ -190,9 +245,15 @@ def get_coords(req: GetCoords) -> GetCoordsResponse:
         lock = acquire("/tmp/mycobot_lock")
         coords = mc.get_coords_info()
         release(lock)
-        if coords is None:
-            rospy.logwarn('No coordinate data available')
+        time.sleep(0.05)
+        if not isinstance(coords, (list, tuple)) or len(coords) != 4:
+            rospy.logwarn(f'Invalid coord data: {coords}')
+            # 返回安全默认值，避免异常
+            coords = [-1, -1, -1, -1]
             return GetCoordsResponse()
+        # if coords is None:
+        #     rospy.logwarn('No coordinate data available')
+        #     return GetCoordsResponse()
         return GetCoordsResponse(*coords)
 
 

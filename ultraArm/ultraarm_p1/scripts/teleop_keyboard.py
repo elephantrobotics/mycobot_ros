@@ -31,7 +31,7 @@ from ultraarm_communication.msg import (
 
 # Teleop help message
 MSG = """\
-Mycobot Pro450 Teleop Keyboard Controller (ROS1 - Topic Version)
+ultraArm P1 Teleop Keyboard Controller (ROS1 - Topic Version)
 ---------------------------------------------------------
 Movement (Cartesian):
               w (x+)

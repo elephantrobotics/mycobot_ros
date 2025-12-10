@@ -3,5 +3,5 @@ float32 y
 float32 z
 float32 rx
 
-int8 speed
+int32 speed
 # int8 model

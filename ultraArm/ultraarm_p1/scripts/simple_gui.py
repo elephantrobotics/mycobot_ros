@@ -26,7 +26,7 @@ import threading
 import rospy
 import time
 from rospy import ServiceException
-from mycobot_pro450_communication.srv import (
+from ultraarm_communication.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 )
 
@@ -276,7 +276,7 @@ class Window:
 
     def get_joint_input(self):
         """Get joint angles from input boxes and send them to the robot."""
-        j_value = [float(i.get()) for i in self.j_vars]
+        j_value = [round(float(i.get()), 2) for i in self.j_vars]
         if not self.validate_values(j_value, JOINT_LIMITS, "Joint"):
             return
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed

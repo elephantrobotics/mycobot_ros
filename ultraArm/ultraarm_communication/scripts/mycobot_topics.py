@@ -34,9 +34,6 @@ from ultraarm_communication.msg import (
     MycobotCoords,
     MycobotSetAngles,
     MycobotSetCoords,
-    MycobotGripperStatus,
-    MycobotSetFreshMode,
-    MycobotGetGripperValue,
 )
 import pymycobot
 from packaging import version
@@ -114,6 +111,7 @@ class MycobotTopics:
         self.mc = UltraArmP1(port, baud)
         self.lock = threading.Lock()
         self.output_robot_message()
+        self.mc.set_joint_enable()
         time.sleep(0.05)
 
     def start(self):
@@ -141,6 +139,7 @@ class MycobotTopics:
             with self.lock:
                 try:
                     angles = self.mc.get_angles_info()
+                    time.sleep(0.05)
                     if isinstance(angles, list) and len(angles) == 4 and all(c != -1 for c in angles):
                         ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4 = angles
                         pub.publish(ma)
@@ -158,7 +157,8 @@ class MycobotTopics:
         while not rospy.is_shutdown():
             with self.lock:
                 try:
-                    coords = self.mc.get_coords()
+                    coords = self.mc.get_coords_info()
+                    time.sleep(0.05)
                     if isinstance(coords, list) and len(coords) == 4 and all(c != -1 for c in coords):
                         mc_msg.x, mc_msg.y, mc_msg.z = coords[0], coords[1], coords[2]
                         mc_msg.rx = coords[3]
@@ -186,7 +186,7 @@ class MycobotTopics:
     def sub_set_coords(self):
         """Subscribe to 'mycobot/coords_goal' to receive target coordinates."""
         def callback(data: MycobotSetCoords):
-            coords = [data.x, data.y, data.z]
+            coords = [data.x, data.y, data.z, data.rx]
             sp = int(data.speed)
             self.mc.set_coords(coords, sp, _async=False)
 
