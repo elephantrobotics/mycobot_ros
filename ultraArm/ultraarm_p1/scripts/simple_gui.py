@@ -33,8 +33,8 @@ from ultraarm_communication.srv import (
 
 # Joint angle limits
 JOINT_LIMITS = [
-    (-160, 160),  # joint 1
-    (-20, 80),    # joint 2
+    (-158, 158),  # joint 1
+    (-18, 80),    # joint 2
     (90, 200),    # joint 3
     (-180, 180),  # joint 4
 ]

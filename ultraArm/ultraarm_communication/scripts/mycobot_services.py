@@ -189,7 +189,10 @@ def get_angles(req: GetAngles) -> GetAnglesResponse:
     """
     if mc:
         lock = acquire("/tmp/mycobot_lock")
-        angles = mc.get_angles_info()
+        for i in range(3):
+            angles = mc.get_angles_info()
+            if angles != -1:
+                break
         release(lock)
         time.sleep(0.05)
         if not isinstance(angles, (list, tuple)) or len(angles) != 4:
@@ -243,7 +246,10 @@ def get_coords(req: GetCoords) -> GetCoordsResponse:
     """
     if mc:
         lock = acquire("/tmp/mycobot_lock")
-        coords = mc.get_coords_info()
+        for i in range(3):
+            coords = mc.get_coords_info()
+            if coords != -1:
+                break
         release(lock)
         time.sleep(0.05)
         if not isinstance(coords, (list, tuple)) or len(coords) != 4:
@@ -261,8 +267,8 @@ robot_msg = """
 ultraArm P1 Status
 --------------------------------
 Joint Limit:
-    joint 1: -160 ~ +160
-    joint 2: -20 ~ +85
+    joint 1: -158 ~ +158
+    joint 2: -18 ~ +80
     joint 3: +90 ~ +200
     joint 4: -180 ~ +180
 """

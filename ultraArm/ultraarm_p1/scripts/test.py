@@ -5,14 +5,19 @@ import time
 import math
 import rospy
 
-ua = UltraArmP1('/dev/ttyUSB0')
+ua = UltraArmP1('/dev/ttyUSB0', baudrate=115200, debug=False)
 
 # ua.set_joint_enable()
 # exit()
 # ua.set_joint_release()
-
+# ua.go_home()
 # time.sleep(0.05)
-
+print(ua.set_angles([0, 0, 90], 2000, _async=False))
+while 1:
+    
+    print(ua.set_angles([0, 0, 90], 2000, _async=False))
+# print(ua.get_angles_info())
+exit()
 
 while 1:
         try:

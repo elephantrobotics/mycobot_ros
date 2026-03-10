@@ -1,20 +1,22 @@
 <launch>
-	<!-- <arg name="port" default="/dev/ttyUSB0" />
-	<arg name="baud" default="115200" /> -->
-	
-	<!-- Load file model ，加载文件模型-->
-	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
-	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
-	<arg name="gui" default="true" />
 
-	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+    <arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
+    <arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
 
-	<!-- Combinejoin values to TF， 将值合并到TF-->
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"> 
-		<!-- <param name="use_gui" value="$(arg gui)" />	 -->
-		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
-	</node>
-	<!-- Show in Rviz，显示在Rviz -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+    <!-- GUI slider -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+        <remap from="/joint_states" to="/joint_states_raw"/>
+    </node>
+
+    <!-- coupling node -->
+    <node pkg="ultraarm_p1" type="joint_coupling_node.py" name="joint_coupling_node"/>
+
+    <!-- TF -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- RViz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
 </launch>

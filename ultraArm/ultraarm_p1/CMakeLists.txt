@@ -27,6 +27,7 @@ catkin_install_python(PROGRAMS
   scripts/listen_real.py
   scripts/simple_gui.py
   scripts/teleop_keyboard.py
+  scripts/joint_coupling_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

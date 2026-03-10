@@ -58,8 +58,8 @@ robot_msg = """
 UltraArm P1 Status
 --------------------------------
 Joint Limit:
-    joint 1: -160 ~ +160
-    joint 2: -20 ~ +85
+    joint 1: -158 ~ +158
+    joint 2: -18 ~ +85
     joint 3: +90 ~ +200
     joint 4: -180 ~ +180
 """
@@ -138,8 +138,11 @@ class MycobotTopics:
         while not rospy.is_shutdown():
             with self.lock:
                 try:
-                    angles = self.mc.get_angles_info()
-                    time.sleep(0.05)
+                    for i in range(3):
+                        angles = self.mc.get_angles_info()
+                        time.sleep(0.05)
+                        if angles != -1:
+                            break
                     if isinstance(angles, list) and len(angles) == 4 and all(c != -1 for c in angles):
                         ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4 = angles
                         pub.publish(ma)
@@ -157,8 +160,11 @@ class MycobotTopics:
         while not rospy.is_shutdown():
             with self.lock:
                 try:
-                    coords = self.mc.get_coords_info()
-                    time.sleep(0.05)
+                    for i in range(3):
+                        coords = self.mc.get_coords_info()
+                        time.sleep(0.05)
+                        if coords != -1:
+                            break
                     if isinstance(coords, list) and len(coords) == 4 and all(c != -1 for c in coords):
                         mc_msg.x, mc_msg.y, mc_msg.z = coords[0], coords[1], coords[2]
                         mc_msg.rx = coords[3]

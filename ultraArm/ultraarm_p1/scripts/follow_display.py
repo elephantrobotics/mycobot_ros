@@ -110,14 +110,14 @@ def talker():
                 # rospy.loginfo('data_list:{}'.format(data_list))
                 pub.publish(joint_state_send)
             else:
-                rospy.logwarn("Failed to get valid angles: {}".format(angles))
+                # rospy.logwarn("Failed to get valid angles: {}".format(angles))
                 continue
 
             # Get robot coordinates
             coords = ua.get_coords_info()
             # time.sleep(0.1)
             if not isinstance(coords, list) or len(coords) == 0 or coords == -1:
-                rospy.logwarn("Failed to get valid coordinates: {}".format(coords))
+                # rospy.logwarn("Failed to get valid coordinates: {}".format(coords))
                 coords = [0, 0, 0, 0]  # fallback
                 continue
 

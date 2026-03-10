@@ -32,7 +32,7 @@ def talker():
     while not rospy.is_shutdown():
         # get real angles from server
         res = func()
-        if res.joint_1 == res.joint_2 == res.joint_3 == 0.0:
+        if res is None:
             continue
         radians_list = [
             res.joint_1 * (math.pi / 180),
