@@ -39,10 +39,10 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '4.0.3'
+MIN_REQUIRE_VERSION = '4.0.5'
 
 current_verison = pymycobot.__version__
-print('Current pymycobot library version: {}'.format(current_verison))
+rospy.loginfo('Current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
     raise RuntimeError(
         'The version of pymycobot library must be greater than {} or higher. '
@@ -51,17 +51,17 @@ if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
         )
     )
 else:
-    print('pymycobot library version meets the requirements!')
+    rospy.loginfo('pymycobot library version meets the requirements!')
     from pymycobot import UltraArmP1
 
 robot_msg = """
 UltraArm P1 Status
 --------------------------------
 Joint Limit:
-    joint 1: -158 ~ +158
+    joint 1: -165 ~ +165
     joint 2: -18 ~ +85
     joint 3: +90 ~ +200
-    joint 4: -180 ~ +180
+    joint 4: -179 ~ +179
 """
 
 
@@ -85,7 +85,7 @@ class Watcher:
         try:
             os.wait()
         except KeyboardInterrupt:
-            print("KeyboardInterrupt caught in Watcher")
+            rospy.loginfo("KeyboardInterrupt caught in Watcher")
             self.kill()
         sys.exit()
 
@@ -106,12 +106,12 @@ class MycobotTopics:
         rospy.loginfo("Starting MyCobotTopics node...")
         rospy.init_node("mycobot_topics")
         port = rospy.get_param("~port", '/dev/ttyUSB0')
-        baud = rospy.get_param("~baud", 115200)
+        baud = rospy.get_param("~baud", 1000000)
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = UltraArmP1(port, baud)
         self.lock = threading.Lock()
         self.output_robot_message()
-        self.mc.set_joint_enable()
+        self.mc.set_joint_enable(0)
         time.sleep(0.05)
 
     def start(self):

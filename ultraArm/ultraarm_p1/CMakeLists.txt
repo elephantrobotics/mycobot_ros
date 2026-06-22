@@ -35,8 +35,3 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN "setup_assistant.launch" EXCLUDE)
 install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
-# find_package(OpenCV REQUIRED)
-# add_executable(opencv_camera src/opencv_camera)
-# target_link_libraries(opencv_camera ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-# add_executable(camera_display src/camera_display)
-# target_link_libraries(camera_display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

@@ -104,8 +104,8 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2.97"
-      upper="2.97"
+      lower="-2.87"
+      upper="2.87"
       effort="100"
       velocity="1" />
   </joint>
@@ -162,8 +162,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-0.35"
-      upper="1.3962"
+      lower="-0.31"
+      upper="1.48"
       effort="100"
       velocity="1" />
   </joint>
@@ -220,8 +220,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1.3962"
-      upper="0.35"
+      lower="-1.48"
+      upper="0.31"
       effort="100"
       velocity="1" />
     <mimic
@@ -283,8 +283,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-0.35"
-      upper="1.3962"
+      lower="-0.31"
+      upper="1.48"
       effort="100"
       velocity="1" />
     <mimic
@@ -345,8 +345,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="1.3962"
-      upper="0.35"
+      lower="1.48"
+      upper="0.31"
       effort="100"
       velocity="1" />
     <mimic
@@ -409,7 +409,7 @@
       xyz="0 1 0" />
     <limit
       lower="0"
-      upper="1.92"
+      upper="3.49"
       effort="100"
       velocity="1" />
   </joint>
@@ -466,7 +466,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1.92"
+      lower="-3.49"
       upper="0"
       effort="100"
       velocity="1" />
@@ -689,7 +689,7 @@
       xyz="0 1 0" />
     <limit
       lower="0"
-      upper="1.92"
+      upper="3.49"
       effort="100"
       velocity="1" />
     <mimic
@@ -750,7 +750,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1.92"
+      lower="-3.49"
       upper="0"
       effort="100"
       velocity="1" />
@@ -813,8 +813,8 @@
     <axis
       xyz="3.005E-05 0 1" />
     <limit
-      lower="-3.14"
-      upper="3.14"
+      lower="-3.12"
+      upper="3.12"
       effort="100"
       velocity="1" />
   </joint>

@@ -33,17 +33,17 @@ from ultraarm_communication.srv import (
 
 # Joint angle limits
 JOINT_LIMITS = [
-    (-158, 158),  # joint 1
-    (-18, 80),    # joint 2
-    (90, 200),    # joint 3
-    (-180, 180),  # joint 4
+    (-165, 165),  # joint 1
+    (-18, 85),    # joint 2
+    (89, 200),    # joint 3
+    (-179, 179),  # joint 4
 ]
 
 # Coordinate limits
 COORD_LIMITS = [
-    (-301.7, 362.7),   # x
-    (-362.7, 362.7),   # y
-    (-157, 91),        # z
+    (-350, 362.43),   # x
+    (-362.43, 362.43),   # y
+    (-186.265,93.44),    # z
     (-180, 180),       # rx
 ]
 
@@ -62,7 +62,7 @@ class Window:
         self.win.resizable(0, 0)  # Fixed window size
 
         # Default speed
-        self.speed = rospy.get_param("~speed", 2850)
+        self.speed = rospy.get_param("~speed", 50)
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
 
@@ -253,12 +253,12 @@ class Window:
         return True
 
     def validate_speed(self, speed: int) -> bool:
-        """Check if speed is within 1 ~ 5700."""
-        if not (1 <= speed <= 5700):
+        """Check if speed is within 1 ~ 100."""
+        if not (1 <= speed <= 100):
             messagebox.showerror(
                 "Invalid Speed",
                 f"Speed out of range!\n"
-                f"Value: {speed}, Allowed: 1 ~ 5700"
+                f"Value: {speed}, Allowed: 1 ~ 100"
             )
             return False
         return True

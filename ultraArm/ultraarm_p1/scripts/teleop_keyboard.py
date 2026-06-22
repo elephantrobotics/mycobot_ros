@@ -55,9 +55,9 @@ Other:
 
 # Coordinate limits
 COORD_LIMITS = {
-    'x': (-301.7, 362.7),
-    'y': (-362.7, 362.7),
-    'z': (-157, 91),
+    'x': (-350, 362.43),
+    'y': (-362.43, 362.43),
+    'z': (-186.265,93.44),
     'rx': (-180, 180),
 }
 
@@ -90,7 +90,7 @@ class MycobotTeleopTopic:
         rospy.init_node("teleop_keyboard_topic")
 
         # Speed and step size
-        self.speed = rospy.get_param("~speed", 2850)
+        self.speed = rospy.get_param("~speed", 50)
         self.change_percent = rospy.get_param("~change_percent", 5)
         self.change_len = 250 * self.change_percent / 100.0
         self.change_angle = 180 * self.change_percent / 100.0

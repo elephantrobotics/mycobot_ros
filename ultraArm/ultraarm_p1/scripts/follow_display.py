@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 follow_display.py
-This ROS node connects to a Pro450 robotic arm and publishes its joint states
+This ROS node connects to a ultraArmP1 robotic arm and publishes its joint states
 and a visualization marker to ROS topics.
 
 It periodically retrieves the robot's joint angles and coordinates,
@@ -24,10 +24,10 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '4.0.3'
+MIN_REQUIRE_VERSION = '4.0.5'
 
 current_verison = pymycobot.__version__
-print('Current pymycobot library version: {}'.format(current_verison))
+rospy.loginfo('Current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
     raise RuntimeError(
         'The version of pymycobot library must be greater than {} or higher. '
@@ -36,7 +36,7 @@ if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
         )
     )
 else:
-    print('pymycobot library version meets the requirements!')
+    rospy.loginfo('pymycobot library version meets the requirements!')
     from pymycobot import UltraArmP1
 
 
@@ -51,17 +51,17 @@ def talker():
     """
     rospy.init_node("display", anonymous=True)
 
-    print("Trying to connect to real ultraArm P1...")
+    rospy.loginfo("Trying to connect to real ultraArm P1...")
     port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
-    baud = rospy.get_param("~baud", 115200)
-    print("port: {}, baud: {}\n".format(port, baud))
+    baud = rospy.get_param("~baud", 1000000)
+    rospy.loginfo("port: {}, baud: {}\n".format(port, baud))
 
     try:
         ua = UltraArmP1(port, baud)
         time.sleep(0.05)
     except Exception as e:
-        print(e)
-        print(
+        rospy.loginfo(e)
+        rospy.loginfo(
             """\
             \rFailed to connect to ultraArm P1!
             \rPlease check if ultraArm P1 is connected.
@@ -70,8 +70,9 @@ def talker():
         )
         exit(1)
 
-    ua.set_joint_release()
-    print("All servos released.\n")
+    ua.set_end_button_enable()
+    # rospy.loginfo("All servos released.\n")
+    rospy.loginfo('Please press the LED button at the end of the machine to drag the joint.\n请按下机器末端LED按钮进行关节拖拽运动\n')
     
     # ROS publishers
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
@@ -92,7 +93,7 @@ def talker():
     marker_.header.frame_id = "/base"
     marker_.ns = "my_namespace"
 
-    print("Publishing ...")
+    rospy.loginfo("Publishing ...")
     while not rospy.is_shutdown():
         try:
             # Update joint state header timestamp

@@ -26,7 +26,7 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '4.0.3'
+MIN_REQUIRE_VERSION = '4.0.5'
 
 current_verison = pymycobot.__version__
 print('Current pymycobot library version: {}'.format(current_verison))
@@ -65,7 +65,7 @@ def callback(data):
     angles_list = [joint1, joint2, joint3, joint4]
         
     rospy.loginfo(f"send angles: {angles_list}")
-    ua.set_angles(angles_list, 2800, _async=False)
+    ua.set_angles(angles_list, 25, _async=False)
 
 
 def listener():
@@ -73,10 +73,10 @@ def listener():
     rospy.init_node("control_slider", anonymous=True)
 
     port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
-    baud = rospy.get_param("~baud", 115200)
+    baud = rospy.get_param("~baud", 1000000)
     print(port, baud)
     ua = UltraArmP1(port, baud)
-    ua.set_joint_enable()
+    ua.set_joint_enable(0)
     
     rospy.Subscriber("joint_states", JointState, callback)
     

@@ -26,10 +26,10 @@ import pymycobot
 from packaging import version
 
 # Minimum required pymycobot version
-MIN_REQUIRE_VERSION = '4.0.3'
+MIN_REQUIRE_VERSION = '4.0.5'
 
 current_verison = pymycobot.__version__
-print('Current pymycobot library version: {}'.format(current_verison))
+rospy.loginfo('Current pymycobot library version: {}'.format(current_verison))
 if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
     raise RuntimeError(
         'The version of pymycobot library must be greater than {} or higher. '
@@ -38,7 +38,7 @@ if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
         )
     )
 else:
-    print('pymycobot library version meets the requirements!')
+    rospy.loginfo('pymycobot library version meets the requirements!')
     from pymycobot import UltraArmP1
 
 mc = None
@@ -95,10 +95,10 @@ def create_handle():
     rospy.init_node("mycobot_services")
     rospy.loginfo("Starting MyCobot service node...")
     port = rospy.get_param("~port", '/dev/ttyUSB0')
-    baud = rospy.get_param("~baud", 115200)
+    baud = rospy.get_param("~baud", 1000000)
     rospy.loginfo("%s,%s" % (port, baud))
     mc = UltraArmP1(port, baud)
-    mc.set_joint_enable()
+    mc.set_joint_enable(0)
     time.sleep(0.05)  # wait for serial port initialization
     # threading.Thread(target=read_angles_loop, daemon=True).start()
     # threading.Thread(target=read_coords_loop, daemon=True).start()
@@ -123,7 +123,6 @@ def read_angles_loop():
             # rospy.loginfo(f'get angle data: {angles}')
             if isinstance(angles, (list, tuple)) and len(angles) == 4:
                 latest_angles = angles
-                # rospy.loginfo(f'get angle data--------------: {latest_angles}')
         except:
             pass
         rate.sleep()
@@ -137,7 +136,6 @@ def read_coords_loop():
             # rospy.loginfo(f'get coords data: {coords}')
             if isinstance(coords, (list, tuple)) and len(coords) == 4:
                 latest_coords = coords
-                # rospy.loginfo(f'get coords data--------------: {latest_coords}')
         except:
             pass
         rate.sleep()
@@ -171,10 +169,8 @@ def set_angles(req: SetAngles) -> SetAnglesResponse:
 def get_angles_backup(req):
     global latest_angles
     if not mc:
-        # rospy.loginfo(f'done send angle data0000000000000: {latest_angles}')
         return GetAnglesResponse(0,0,0,0)
     
-    # rospy.loginfo(f'done send angle data0000000000000: {latest_angles}')
     return GetAnglesResponse(*latest_angles)
 
 
@@ -267,10 +263,10 @@ robot_msg = """
 ultraArm P1 Status
 --------------------------------
 Joint Limit:
-    joint 1: -158 ~ +158
-    joint 2: -18 ~ +80
+    joint 1: -165 ~ +165
+    joint 2: -18 ~ +85
     joint 3: +90 ~ +200
-    joint 4: -180 ~ +180
+    joint 4: -179 ~ +179
 """
 
 
