@@ -7,11 +7,11 @@
 
     <!-- GUI slider -->
     <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
-        <remap from="/joint_states" to="/joint_states_raw"/>
+        <!-- <remap from="/joint_states" to="/joint_states_raw"/> -->
     </node>
 
     <!-- coupling node -->
-    <node pkg="ultraarm_p1" type="joint_coupling_node.py" name="joint_coupling_node"/>
+    <!-- <node pkg="ultraarm_p1" type="joint_coupling_node.py" name="joint_coupling_node"/> -->
 
     <!-- TF -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />

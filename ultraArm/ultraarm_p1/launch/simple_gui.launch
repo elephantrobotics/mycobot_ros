@@ -1,6 +1,6 @@
 <launch>
 	<arg name="port" default="/dev/ttyUSB0" />
-	<arg name="baud" default="115200" />
+	<arg name="baud" default="1000000" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
 	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />

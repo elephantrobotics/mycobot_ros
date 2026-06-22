@@ -93,7 +93,7 @@ def create_handle():
     """Initialize ROS node and connect to the Pro450 robot."""
     global mc
     rospy.init_node("mycobot_services")
-    rospy.loginfo("Starting MyCobot service node...")
+    rospy.loginfo("Starting ultraArm service node...")
     port = rospy.get_param("~port", '/dev/ttyUSB0')
     baud = rospy.get_param("~baud", 1000000)
     rospy.loginfo("%s,%s" % (port, baud))
