@@ -5,13 +5,19 @@ import time
 import math
 import rospy
 
-ua = UltraArmP1('/dev/ttyUSB0', baudrate=115200, debug=False)
+ua = UltraArmP1('/dev/ttyUSB0', baudrate=1000000, debug=True)
 
+# print(ua.download_firmware_sd('./upstm32.bin'))
+# print(ua.upgrade_restart())
 # ua.set_joint_enable()
 # exit()
 # ua.set_joint_release()
-# ua.go_home()
+# time.sleep(2)
+# ua.clear_error_status()
+ua.collision_unlock()
+print(ua.go_home())
 # time.sleep(0.05)
+exit()
 print(ua.set_angles([0, 0, 90], 2000, _async=False))
 while 1:
     

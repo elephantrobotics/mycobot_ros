@@ -53,17 +53,28 @@ if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
 else:
     rospy.loginfo('pymycobot library version meets the requirements!')
     from pymycobot import UltraArmP1
+    from pymycobot.robot_info import RobotLimit
 
-robot_msg = """
-UltraArm P1 Status
---------------------------------
-Joint Limit:
-    joint 1: -165 ~ +165
-    joint 2: -18 ~ +85
-    joint 3: +90 ~ +200
-    joint 4: -179 ~ +179
-"""
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
 
+
+def format_limit_value(value):
+    """Format positive limits with a leading plus sign."""
+    return f"+{value}" if value >= 0 else str(value)
+
+def build_robot_message():
+    """Build robot limit information from pymycobot RobotLimit."""
+    angles_min = ROBOT_LIMIT.get("angles_min", [-165, -18, 89, -179])
+    angles_max = ROBOT_LIMIT.get("angles_max", [165, 85, 200, 179])
+    lines = [
+        "",
+        "UltraArm P1 Status",
+        "--------------------------------",
+        "Joint Limit:",
+    ]
+    for index, (min_angle, max_angle) in enumerate(zip(angles_min, angles_max), start=1):
+        lines.append(f"    joint {index}: {format_limit_value(min_angle)} ~ {format_limit_value(max_angle)}")
+    return "\n".join(lines)
 
 class Watcher:
     """Watcher class handles KeyboardInterrupts in multithreaded Python programs.
@@ -98,6 +109,7 @@ class Watcher:
 
 
 class MycobotTopics:
+
     """ROS node class to manage MyCobot real-time topics."""
 
     def __init__(self):
@@ -110,6 +122,7 @@ class MycobotTopics:
         rospy.loginfo("%s,%s" % (port, baud))
         self.mc = UltraArmP1(port, baud)
         self.lock = threading.Lock()
+        self.state_rate = float(rospy.get_param("~state_rate", 10.0))
         self.output_robot_message()
         self.mc.set_joint_enable(0)
         time.sleep(0.05)
@@ -117,8 +130,7 @@ class MycobotTopics:
     def start(self):
         """Start all publisher and subscriber threads."""
         threads = [
-            threading.Thread(target=self.pub_real_angles),
-            threading.Thread(target=self.pub_real_coords),
+            threading.Thread(target=self.pub_real_state),
             threading.Thread(target=self.sub_set_angles),
             threading.Thread(target=self.sub_set_coords),
             # threading.Thread(target=self.sub_gripper_status),
@@ -127,9 +139,53 @@ class MycobotTopics:
         for t in threads:
             t.setDaemon(True)
             t.start()
-
+            
+        rospy.loginfo("Topic are ready")
+        
         for t in threads:
             t.join()
+
+    def pub_real_state(self):
+        """Publish real joint angles and coordinates at a bounded rate."""
+        angles_pub = rospy.Publisher("mycobot/angles_real", MycobotAngles, queue_size=10)
+        coords_pub = rospy.Publisher("mycobot/coords_real", MycobotCoords, queue_size=10)
+        ma = MycobotAngles()
+        mc_msg = MycobotCoords()
+        rate = rospy.Rate(self.state_rate)
+
+        while not rospy.is_shutdown():
+            with self.lock:
+                try:
+                    angles = self.read_valid_state(self.mc.get_angles_info, 4)
+                    
+                    if angles is not None:
+                        ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4 = angles
+                        angles_pub.publish(ma)
+                    # else:
+                    #     rospy.logwarn_throttle(5.0, "Invalid angles received")
+
+                    coords = self.read_valid_state(self.mc.get_coords_info, 4)
+                    
+                    if coords is not None:
+                        mc_msg.x, mc_msg.y, mc_msg.z = coords[0], coords[1], coords[2]
+                        mc_msg.rx = coords[3]
+                        coords_pub.publish(mc_msg)
+                    # else:
+                    #     rospy.logwarn_throttle(5.0, "Invalid coordinates received")
+                except Exception:
+                    e = traceback.format_exc()
+                    rospy.logerr_throttle(2.0, f"SerialException: {e}")
+
+            rate.sleep()
+
+    def read_valid_state(self, reader, expected_len):
+        """Retry a robot state reader and return None if the response is invalid."""
+        for i in range(3):
+            data = reader()
+            if isinstance(data, list) and len(data) == expected_len and all(c != -1 for c in data):
+                return data
+            time.sleep(0.05)
+        return None
 
     def pub_real_angles(self):
         """Publish real joint angles to 'mycobot/angles_real' topic."""
@@ -143,10 +199,12 @@ class MycobotTopics:
                         time.sleep(0.05)
                         if angles != -1:
                             break
+                    
                     if isinstance(angles, list) and len(angles) == 4 and all(c != -1 for c in angles):
                         ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4 = angles
                         pub.publish(ma)
                     else:
+                        rospy.loginfo(f"angles: {angles}")
                         rospy.logwarn("Invalid angles received")
                 except Exception:
                     e = traceback.format_exc()
@@ -165,11 +223,13 @@ class MycobotTopics:
                         time.sleep(0.05)
                         if coords != -1:
                             break
+                    
                     if isinstance(coords, list) and len(coords) == 4 and all(c != -1 for c in coords):
                         mc_msg.x, mc_msg.y, mc_msg.z = coords[0], coords[1], coords[2]
                         mc_msg.rx = coords[3]
                         pub.publish(mc_msg)
                     else:
+                        rospy.loginfo(f"coords: {coords}")
                         rospy.logwarn("Invalid coordinates received")
                 except Exception:
                     e = traceback.format_exc()
@@ -200,13 +260,8 @@ class MycobotTopics:
         rospy.spin()
 
     def output_robot_message(self):
-        """Print robot joint limits and status information."""
-        connect_status = False
-        servo_infomation = "unknown"
-        servo_temperature = "unknown"
-        atom_version = "unknown"
-
-        print(robot_msg)
+        """Print robot status message to the console."""
+        print(build_robot_message())
 
 
 if __name__ == "__main__":

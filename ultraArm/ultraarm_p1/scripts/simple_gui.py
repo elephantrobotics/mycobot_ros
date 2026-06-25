@@ -30,22 +30,18 @@ from ultraarm_communication.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 )
 
+from pymycobot.robot_info import RobotLimit
 
-# Joint angle limits
-JOINT_LIMITS = [
-    (-165, 165),  # joint 1
-    (-18, 85),    # joint 2
-    (89, 200),    # joint 3
-    (-179, 179),  # joint 4
-]
 
-# Coordinate limits
-COORD_LIMITS = [
-    (-350, 362.43),   # x
-    (-362.43, 362.43),   # y
-    (-186.265,93.44),    # z
-    (-180, 180),       # rx
-]
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
+JOINT_LIMITS = list(zip(
+    ROBOT_LIMIT.get("angles_min", [-165, -18, 89, -179]),
+    ROBOT_LIMIT.get("angles_max", [165, 85, 200, 179]),
+))
+COORD_LIMITS = list(zip(
+    ROBOT_LIMIT.get("coords_min", [-350, -362.43, -186.265, -180]),
+    ROBOT_LIMIT.get("coords_max", [362.43, 362.43, 93.44, 180]),
+))
 
 
 class Window:
@@ -59,10 +55,12 @@ class Window:
             handle: Tkinter root window.
         """
         self.win = handle
+        self.running = True
         self.win.resizable(0, 0)  # Fixed window size
 
         # Default speed
         self.speed = rospy.get_param("~speed", 50)
+        self.refresh_rate = max(float(rospy.get_param("~refresh_rate", 2.0)), 0.1)
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
 
@@ -117,17 +115,21 @@ class Window:
 
     def _refresh_data_thread(self):
         """Background thread pulls ROS data"""
-        while True:
+        while self.running and not rospy.is_shutdown():
             try:
                 self.get_date()  # update self.record_coords and self.res_angles
                 # Put it in the queue and pass it to the main thread
                 self.data_queue.put((self.record_coords.copy(), self.res_angles.copy()))
             except ServiceException:
-                print("ROS service unavailable, skip update.")
-            time.sleep(0.1)  # 10Hz
+                if not rospy.is_shutdown():
+                    print("ROS service unavailable, skip update.")
+            time.sleep(1.0 / self.refresh_rate)
 
     def _refresh_gui(self):
         """The main thread takes data from the queue and refreshes the interface"""
+        if not self.running or rospy.is_shutdown():
+            self.on_close()
+            return
         try:
             while not self.data_queue.empty():
                 coords, angles = self.data_queue.get_nowait()
@@ -138,9 +140,23 @@ class Window:
 
         # Update display
         self.update_display()
+        self.sync_input_fields()
 
         # Call again after 50ms
         self.win.after(50, self._refresh_gui)
+
+    def sync_input_fields(self):
+        """Sync input boxes with current robot state unless the user is editing."""
+        try:
+            focused = self.win.focus_get()
+        except (KeyError, tk.TclError):
+            return
+        if focused not in self.j_entries:
+            for val, var in zip(self.res_angles[:4], self.j_vars):
+                var.set(str(val))
+        if focused not in self.c_entries:
+            for val, var in zip(self.record_coords[:4], self.c_vars):
+                var.set(str(val))
 
     def connect_ser(self):
         """Connect to ROS services required for ultraArm control."""
@@ -299,6 +315,8 @@ class Window:
             
     def get_date(self):
         """Fetch current robot state (non-blocking)."""
+        if rospy.is_shutdown():
+            return
         try:
             # get coordinates
             res = self.get_coords()
@@ -331,7 +349,18 @@ class Window:
 
     def run(self):
         """Main GUI loop."""
-        self.win.mainloop()
+        try:
+            self.win.mainloop()
+        except KeyboardInterrupt:
+            self.on_close()
+        
+    def on_close(self):
+        """Stop background refreshes and close the Tk window."""
+        self.running = False
+        try:
+            self.win.destroy()
+        except tk.TclError:
+            pass
 
 
 def main():

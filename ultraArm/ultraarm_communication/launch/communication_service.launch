@@ -2,7 +2,7 @@
 	<!-- Select connecting device and serial-->
 
 	<arg name="port" default="/dev/ttyUSB0" />
-	<arg name="baud" default="115200" />
+	<arg name="baud" default="1000000" />
 
 
 	<!-- Open communication service ，开启通讯服务-->

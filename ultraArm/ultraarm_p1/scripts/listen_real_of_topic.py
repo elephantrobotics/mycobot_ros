@@ -5,7 +5,19 @@ import math
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
+from pymycobot.robot_info import RobotLimit
 from ultraarm_communication.msg import MycobotAngles
+
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
+JOINT_LIMITS = list(zip(
+    ROBOT_LIMIT.get("angles_min", [-165, -18, 89, -179]),
+    ROBOT_LIMIT.get("angles_max", [165, 85, 200, 179]),
+))
+
+
+def valid_angles(angles):
+    """Return True if all joint angles are inside the expected P1 range."""
+    return all(low <= angle <= high for angle, (low, high) in zip(angles, JOINT_LIMITS))
 
 
 class Listener(object):
@@ -35,12 +47,17 @@ class Listener(object):
         joint_state_send.effort = []
         joint_state_send.header.stamp = rospy.Time.now()
 
+        angles = [data.joint_1, data.joint_2, data.joint_3, data.joint_4]
+        if not valid_angles(angles):
+            # rospy.logwarn_throttle(5.0, "Skip invalid joint angles for RViz: %s", angles)
+            return
+
         # process callback data
         radians_list = [
-            data.joint_1 * (math.pi / 180),
-            data.joint_2 * (math.pi / 180),
-            (data.joint_3 -90) * (math.pi / 180),
-            data.joint_4 * (math.pi / 180),
+            angles[0] * (math.pi / 180),
+            angles[1] * (math.pi / 180),
+            (angles[2] - 90) * (math.pi / 180),
+            angles[3] * (math.pi / 180),
         ]
         # rospy.loginfo("res: {}".format(radians_list))
 

@@ -22,6 +22,7 @@ import time
 import termios
 import tty
 import rospy
+from pymycobot.robot_info import RobotLimit
 from ultraarm_communication.msg import (
     MycobotAngles,
     MycobotCoords,
@@ -54,12 +55,14 @@ Other:
 """
 
 # Coordinate limits
-COORD_LIMITS = {
-    'x': (-350, 362.43),
-    'y': (-362.43, 362.43),
-    'z': (-186.265,93.44),
-    'rx': (-180, 180),
-}
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
+COORD_LIMITS = dict(zip(
+    ['x', 'y', 'z', 'rx'],
+    zip(
+        ROBOT_LIMIT.get("coords_min", [-350, -362.43, -186.265, -180]),
+        ROBOT_LIMIT.get("coords_max", [362.43, 362.43, 93.44, 180]),
+    ),
+))
 
 
 def vels(speed: float, turn: float) -> str:
@@ -99,7 +102,8 @@ class MycobotTeleopTopic:
         self.curr_coords = [0] * 4
         self.curr_angles = [0] * 4
         self.record_coords = None
-        self.home_pose = [0, 0, 90, 0]
+        self.init_pose = [0.0, 0.0, 90.0, 0.0]
+        self.home_pose = [0, 10.0, 135.0, 0]
         # Flag: whether coordinate control is allowed
         self.ready_for_coords = False
 
@@ -146,6 +150,18 @@ class MycobotTeleopTopic:
         goal.joint_1, goal.joint_2, goal.joint_3, goal.joint_4 = angles
         goal.speed = self.speed
         self.angles_pub.publish(goal)
+        
+    def validate_coords(self, coords):
+        """Return True if target coordinates are inside configured limits."""
+        for val, axis in zip(coords, ['x', 'y', 'z', 'rx']):
+            min_v, max_v = COORD_LIMITS[axis]
+            if not (min_v <= val <= max_v):
+                rospy.logwarn(
+                    "%s Out of range: %.3f not in [%.3f, %.3f]",
+                    axis, val, min_v, max_v
+                )
+                return False
+        return True
 
     def run(self):
         """Main loop to read keyboard input and control the robot."""
@@ -181,7 +197,7 @@ class MycobotTeleopTopic:
                     continue
                 # Preset poses
                 elif key == '1':
-                    self.send_angles([0, 0, 90, 0])
+                    self.send_angles(self.init_pose)
                     time.sleep(2)
                     self.record_coords = list(self.curr_coords)
                     self.ready_for_coords = False
@@ -194,24 +210,32 @@ class MycobotTeleopTopic:
                     rospy.loginfo("Home pose reached. Coordinate control enabled.")
                 elif key == '3':
                     self.home_pose = list(self.curr_angles)
-                    rospy.loginfo("Updated home pose.")
+                    rospy.loginfo(f"Updated home pose.{self.home_pose}")
                     
                 elif key in 'wWsSaAdDzZxXuUiIjJkKoOlL':
                     if not self.ready_for_coords:
                         rospy.logwarn("Coordinate control disabled. Please press '2' first.")
                         continue
+                    target_coords = list(self.record_coords)
                     # Cartesian movement
-                    if key in 'wW': self.record_coords[0] += self.change_len
-                    elif key in 'sS': self.record_coords[0] -= self.change_len
-                    elif key in 'aA': self.record_coords[1] += self.change_len
-                    elif key in 'dD': self.record_coords[1] -= self.change_len
-                    elif key in 'zZ': self.record_coords[2] -= self.change_len
-                    elif key in 'xX': self.record_coords[2] += self.change_len
+                    if key in 'wW': target_coords[0] += self.change_len
+                    elif key in 'sS': target_coords[0] -= self.change_len
+                    elif key in 'aA': target_coords[1] += self.change_len
+                    elif key in 'dD': target_coords[1] -= self.change_len
+                    elif key in 'zZ': target_coords[2] -= self.change_len
+                    elif key in 'xX': target_coords[2] += self.change_len
 
                     # Euler rotation
-                    elif key in 'uU': self.record_coords[3] += self.change_angle
-                    elif key in 'jJ': self.record_coords[3] -= self.change_angle
-
+                    elif key in 'uU': target_coords[3] += self.change_angle
+                    elif key in 'jJ': target_coords[3] -= self.change_angle
+                    else:
+                        continue
+                    
+                    if not self.validate_coords(target_coords):
+                        continue
+                    
+                    self.record_coords = target_coords
+                    self.send_coords()
                 # Gripper control
                 # elif key in 'gG':
                 #     self.gripper_pub.publish(MycobotGripperStatus(Status=True))
@@ -219,16 +243,6 @@ class MycobotTeleopTopic:
                 #     self.gripper_pub.publish(MycobotGripperStatus(Status=False))
                 else:
                     continue
-                
-                if self.ready_for_coords:
-                    # Coordinate limits check
-                    for val, axis in zip(self.record_coords, ['x', 'y', 'z', 'rx']):
-                        min_v, max_v = COORD_LIMITS[axis]
-                        if not (min_v <= val <= max_v):
-                            rospy.logwarn(f"{axis} Out of range: {val} not in [{min_v}, {max_v}]")
-                            raise ValueError("Out of range of motion")
-
-                    self.send_coords()
 
             except Exception as e:
                 rospy.logwarn("Execution failed: {}".format(e))

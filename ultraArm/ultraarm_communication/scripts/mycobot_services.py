@@ -40,11 +40,18 @@ if version.parse(current_verison) < version.parse(MIN_REQUIRE_VERSION):
 else:
     rospy.loginfo('pymycobot library version meets the requirements!')
     from pymycobot import UltraArmP1
+    from pymycobot.robot_info import RobotLimit
 
 mc = None
-latest_angles = [-1, -1, -1, -1]
+latest_angles = [0.0, 0.0, 90.0, 0.0]
 latest_coords = [0.0, 0.0, 0.0, 0.0]
 
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
+
+
+def format_limit_value(value):
+    """Format positive limits with a leading plus sign."""
+    return f"+{value}" if value >= 0 else str(value)
 
 def acquire(lock_file: str) -> int:
     """Acquire a file lock to prevent serial port conflicts.
@@ -183,6 +190,7 @@ def get_angles(req: GetAngles) -> GetAnglesResponse:
     Returns:
         GetAnglesResponse: Service response with current angles.
     """
+    global latest_angles
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         for i in range(3):
@@ -192,13 +200,10 @@ def get_angles(req: GetAngles) -> GetAnglesResponse:
         release(lock)
         time.sleep(0.05)
         if not isinstance(angles, (list, tuple)) or len(angles) != 4:
-            rospy.logwarn(f'Invalid angle data: {angles}')
+            # rospy.logwarn_throttle(5.0, f'Invalid angle data: {angles}; return latest valid angles: {latest_angles}')
             # 返回安全默认值，避免异常
-            angles = [0.0, 0.0, 90.0, 0]
-            return GetAnglesResponse()
-        # if angles is None:
-        #     rospy.logwarn('No angle data available')
-        #     return GetAnglesResponse()
+            return GetAnglesResponse(*latest_angles)
+        latest_angles = list(angles)
         return GetAnglesResponse(*angles)
 
 
@@ -240,6 +245,7 @@ def get_coords(req: GetCoords) -> GetCoordsResponse:
     Returns:
         GetCoordsResponse: Service response with current coordinates.
     """
+    global latest_coords
     if mc:
         lock = acquire("/tmp/mycobot_lock")
         for i in range(3):
@@ -249,35 +255,31 @@ def get_coords(req: GetCoords) -> GetCoordsResponse:
         release(lock)
         time.sleep(0.05)
         if not isinstance(coords, (list, tuple)) or len(coords) != 4:
-            rospy.logwarn(f'Invalid coord data: {coords}')
+            # rospy.logwarn_throttle(5.0, f'Invalid coord data: {coords}; return latest valid coords: {latest_coords}')
             # 返回安全默认值，避免异常
-            coords = [-1, -1, -1, -1]
-            return GetCoordsResponse()
-        # if coords is None:
-        #     rospy.logwarn('No coordinate data available')
-        #     return GetCoordsResponse()
+            return GetCoordsResponse(*latest_coords)
+        latest_coords = list(coords)
         return GetCoordsResponse(*coords)
 
 
-robot_msg = """
-ultraArm P1 Status
---------------------------------
-Joint Limit:
-    joint 1: -165 ~ +165
-    joint 2: -18 ~ +85
-    joint 3: +90 ~ +200
-    joint 4: -179 ~ +179
-"""
+def build_robot_message():
+    """Build robot limit information from pymycobot RobotLimit."""
+    angles_min = ROBOT_LIMIT.get("angles_min", [-165, -18, 89, -179])
+    angles_max = ROBOT_LIMIT.get("angles_max", [165, 85, 200, 179])
+    lines = [
+        "",
+        "ultraArm P1 Status",
+        "--------------------------------",
+        "Joint Limit:",
+    ]
+    for index, (min_angle, max_angle) in enumerate(zip(angles_min, angles_max), start=1):
+        lines.append(f"    joint {index}: {format_limit_value(min_angle)} ~ {format_limit_value(max_angle)}")
+    return "\n".join(lines)
 
 
 def output_robot_message():
     """Print robot status message to the console."""
-    connect_status = False
-    servo_infomation = "unknown"
-    servo_temperature = "unknown"
-    atom_version = "unknown"
-
-    print(robot_msg)
+    print(build_robot_message())
 
 
 if __name__ == "__main__":

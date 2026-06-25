@@ -1,6 +1,8 @@
 <launch>
 	<arg name="port" default="/dev/ttyUSB0" />
 	<arg name="baud" default="1000000" />
+	<arg name="joint_state_rate" default="10.0" />
+	<arg name="gui_refresh_rate" default="2.0" />
 
 	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
 	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
@@ -17,6 +19,11 @@
 		<arg name="port" value="$(arg port)" />	
 		<arg name="baud" value="$(arg baud)" />	
     </include>
-	<node name="real_listener" pkg="ultraarm_p1" type="listen_real.py" />
-	<node name="simple_gui" pkg="ultraarm_p1" type="simple_gui.py" />
+	<node name="real_listener" pkg="ultraarm_p1" type="listen_real.py">
+		<param name="publish_rate" value="$(arg joint_state_rate)" />
+	</node>
+		
+	<node name="simple_gui" pkg="ultraarm_p1" type="simple_gui.py">
+		<param name="refresh_rate" value="$(arg gui_refresh_rate)" />
+	</node>
 </launch>
