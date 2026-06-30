@@ -10,8 +10,10 @@
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
 		<param name="use_gui" value="$(arg gui)" />
+		<remap from="/joint_states" to="/joint_states_raw"/>
 		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
 	</node>
+	<node pkg="ultraarm_p1" type="joint_coupling_node.py" name="joint_coupling_node"/>
 	<!-- Show in Rviz.显示在Rviz -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 	<!-- <node name="rviz" pkg="rviz" type="rviz" /> -->
