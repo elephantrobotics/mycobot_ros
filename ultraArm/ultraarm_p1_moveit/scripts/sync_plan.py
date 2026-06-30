@@ -17,7 +17,6 @@ Author: WangWeiJian
 Date: 2025-11-24
 """
 
-import time
 import rospy
 from sensor_msgs.msg import JointState
 
@@ -42,9 +41,56 @@ else:
     from pymycobot import UltraArmP1
 
 ua = None
+last_invalid_pair = None
+last_sent_angles = None
+was_invalid = False
+
+J2_RANGE = (-18.0, 85.0)
+J3_RANGE = (-1.0, 110.0)
+ZERO_EPS_DEG = 0.1
+INVALID_WARN_DELTA_DEG = 0.5
+SEND_ANGLE_DELTA_DEG = 0.2
+
+
+def snap_zero(angle_deg):
+    return 0.0 if abs(angle_deg) < ZERO_EPS_DEG else angle_deg
+
+
+def valid_region(j2_deg, j3_deg):
+    """Return whether the J2/J3 combination is mechanically reachable."""
+
+    if not (J2_RANGE[0] <= j2_deg <= J2_RANGE[1] and J3_RANGE[0] <= j3_deg <= J3_RANGE[1]):
+        return False
+
+    if -18 <= j2_deg < 0:
+        cond1 = math.cos(math.radians(-j2_deg + j3_deg)) - math.sin(math.radians(45 + j2_deg)) <= 7 / 30
+        cond2 = abs(math.cos(math.radians(-j2_deg + j3_deg))) >= 15.4 / 30
+        return cond1 and cond2
+
+    if 0 <= j2_deg <= 50.87:
+        return math.cos(math.radians(j2_deg - j3_deg)) >= 15.4 / 30
+
+    if 50.87 < j2_deg < 76.72:
+        return True
+
+    if 76.72 <= j2_deg <= 85:
+        return abs(math.cos(math.radians(j2_deg - j3_deg))) >= 6.89 / 30
+
+    return False
+
+
+def joint_angle_deg(msg, joint_name):
+    try:
+        index = msg.name.index(joint_name)
+    except ValueError:
+        raise KeyError(joint_name)
+
+    return round(snap_zero(math.degrees(msg.position[index])), 2)
 
 
 def callback(data):
+    global last_invalid_pair, last_sent_angles, was_invalid
+
     """Callback function for ROS JointState subscription.
 
     This function converts incoming joint positions (radians) to angles
@@ -53,18 +99,45 @@ def callback(data):
     Args:
         data (JointState): Joint state message containing joint positions.
     """
-    data_list = []
-    for index, value in enumerate(data.position):
-        radians_to_angles = round(math.degrees(value), 2)
-        data_list.append(radians_to_angles)
-        
-    joint1 = data_list[0]
-    joint2 = data_list[1]
-    joint3 = data_list[5] + 90
-    joint4 = data_list[-1]
+    try:
+        joint1 = joint_angle_deg(data, "J1")
+        joint2 = joint_angle_deg(data, "J2")
+        joint3 = joint_angle_deg(data, "J3")
+        joint4 = joint_angle_deg(data, "J4")
+    except (KeyError, IndexError):
+        rospy.logwarn_throttle(2.0, "JointState missing one of J1/J2/J3/J4; message ignored")
+        return
+
+    if not valid_region(joint2, joint3):
+        should_warn = not was_invalid
+        if last_invalid_pair is not None:
+            should_warn = should_warn or abs(joint2 - last_invalid_pair[0]) >= INVALID_WARN_DELTA_DEG
+            should_warn = should_warn or abs(joint3 - last_invalid_pair[1]) >= INVALID_WARN_DELTA_DEG
+        else:
+            should_warn = True
+
+        if should_warn:
+            rospy.logwarn(
+                "Rejected unsafe J2/J3 combination from MoveIt: J2=%.2f deg, J3=%.2f deg",
+                joint2,
+                joint3,
+            )
+            last_invalid_pair = (joint2, joint3)
+        was_invalid = True
+        return
+
+    was_invalid = False
+    last_invalid_pair = None
+    joint3 = joint3 + 90
     angles_list = [joint1, joint2, joint3, joint4]
-        
-    rospy.loginfo(rospy.get_caller_id() + "%s", angles_list)
+
+    if last_sent_angles is not None:
+        max_delta = max(abs(current - previous) for current, previous in zip(angles_list, last_sent_angles))
+        if max_delta < SEND_ANGLE_DELTA_DEG:
+            return
+
+    last_sent_angles = list(angles_list)
+    rospy.loginfo("send angles: %s", angles_list)
     ua.set_angles(angles_list, 25, _async=False)
 
 
