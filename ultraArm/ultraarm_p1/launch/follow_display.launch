@@ -2,8 +2,16 @@
 	<!-- Load URDF file -->
 	<arg name="model" default="$(find mycobot_description)/urdf/ultraArm_p1/ultraArm_p1.urdf"/>
 	<arg name="rvizconfig" default="$(find ultraarm_p1)/config/ultraArm_P1.rviz" />
+	<arg name="port" default="/dev/ttyUSB0" />
+	<arg name="baud" default="1000000" />
+	<arg name="publish_rate" default="30.0" />
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+	<node name="follow_display" pkg="ultraarm_p1" type="follow_display.py" output="screen">
+		<param name="port" value="$(arg port)" />
+		<param name="baud" value="$(arg baud)" />
+		<param name="publish_rate" value="$(arg publish_rate)" />
+	</node>
 	<!-- Combinejoin values to TF-->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
 		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
