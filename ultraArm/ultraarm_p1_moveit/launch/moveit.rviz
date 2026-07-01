@@ -8,7 +8,7 @@ Panels:
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
       Splitter Ratio: 0.5
-    Tree Height: 168
+    Tree Height: 160
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -41,7 +41,7 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Acceleration_Scaling_Factor: 0.1
+    - Acceleration_Scaling_Factor: 0.5
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
@@ -68,65 +68,45 @@ Visualization Manager:
         Interrupt Display: false
         Links:
           All Links Enabled: true
+          CENTER_V_2_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           Expand Joint Details: false
           Expand Link Details: false
           Expand Tree: false
-          FIX1:
+          FIX2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          FIX2:
+          J1_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          FIX3:
+          J2_2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J1_LINK:
+          J2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link1:
+          J3_4_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link2:
+          J3_5_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J2_Link4:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_LIink2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link4:
+          J3_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -138,6 +118,21 @@ Visualization Manager:
             Value: true
           Link Tree Style: Links in Alphabetic Order
           base_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          center_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          center_v_1_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          fix1_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -188,65 +183,45 @@ Visualization Manager:
         Attached Body Color: 150; 50; 150
         Links:
           All Links Enabled: true
+          CENTER_V_2_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           Expand Joint Details: false
           Expand Link Details: false
           Expand Tree: false
-          FIX1:
+          FIX2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          FIX2:
+          J1_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          FIX3:
+          J2_2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J1_LINK:
+          J2_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link1:
+          J3_4_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link2:
+          J3_5_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          J2_Link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J2_Link4:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_LIink2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link3:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          J3_Link4:
+          J3_Link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -262,6 +237,21 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          center_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          center_v_1_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          fix1_Link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           world:
             Alpha: 1
             Show Axes: false
@@ -270,7 +260,7 @@ Visualization Manager:
         Show Robot Collision: false
         Show Robot Visual: true
       Value: true
-      Velocity_Scaling_Factor: 0.1
+      Velocity_Scaling_Factor: 0.5
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -303,14 +293,14 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.08499997109174728
+      Pitch: 0.1849999576807022
       Target Frame: world
-      Yaw: 5.319948196411133
+      Yaw: 5.729948043823242
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 906
+  Height: 888
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -319,9 +309,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001f300000330fc0200000007fb000000100044006900730070006c006100790073010000003d00000139000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c0069006400650072010000017c000000410000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001c3000001aa0000017d00ffffff0000053f0000033000000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000031efc0200000007fb000000100044006900730070006c006100790073010000003d00000131000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720100000174000000410000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001bb000001a00000017d00ffffff0000052d0000031e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1848
+  Width: 1830
   X: 72
   Y: 27

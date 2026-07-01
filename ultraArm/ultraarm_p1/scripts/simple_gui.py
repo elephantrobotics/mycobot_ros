@@ -25,6 +25,7 @@ import queue
 import threading
 import rospy
 import time
+import math
 from rospy import ServiceException
 from ultraarm_communication.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
@@ -42,7 +43,38 @@ COORD_LIMITS = list(zip(
     ROBOT_LIMIT.get("coords_min", [-350, -362.43, -186.265, -180]),
     ROBOT_LIMIT.get("coords_max", [362.43, 362.43, 93.44, 180]),
 ))
+MODEL_J2_RANGE = (-18.0, 85.0)
+MODEL_J3_RANGE = (-1.0, 110.0)
+ZERO_EPS_DEG = 0.1
 
+
+def snap_zero(angle_deg):
+    return 0.0 if abs(angle_deg) < ZERO_EPS_DEG else angle_deg
+
+
+def valid_j2_j3_region(j2_model, j3_model):
+    """Validate coupled J2/J3 model angles in degrees."""
+    a = snap_zero(j2_model)
+    b = snap_zero(j3_model)
+
+    if not (MODEL_J2_RANGE[0] <= a <= MODEL_J2_RANGE[1] and MODEL_J3_RANGE[0] <= b <= MODEL_J3_RANGE[1]):
+        return False
+
+    if -18 <= a < 0:
+        cond1 = math.cos(math.radians(-a + b)) - math.sin(math.radians(45 + a)) <= 7 / 30
+        cond2 = abs(math.cos(math.radians(-a + b))) >= 15.4 / 30
+        return cond1 and cond2
+
+    if 0 <= a <= 50.87:
+        return math.cos(math.radians(a - b)) >= 15.4 / 30
+
+    if 50.87 < a < 76.72:
+        return True
+
+    if 76.72 <= a <= 85:
+        return abs(math.cos(math.radians(a - b))) >= 6.89 / 30
+
+    return False
 
 class Window:
     """Tkinter GUI window for ultraArm P1 ROS1 services control."""
@@ -278,7 +310,24 @@ class Window:
             )
             return False
         return True
-        
+    
+    def validate_joint_coupling(self, joint_values):
+        """Check J2/J3 coupled motion before sending real robot angles."""
+        j2_model = joint_values[1]
+        j3_model = joint_values[2] - 90
+
+        if valid_j2_j3_region(j2_model, j3_model):
+            return True
+
+        messagebox.showerror(
+            "Invalid Joint Combination",
+            "J2-J3 combination is out of the allowed coupled range!\n"
+            f"J2 model angle: {j2_model:.2f}\n"
+            f"J3 real angle: {joint_values[2]:.2f}\n"
+            f"J3 model angle: {j3_model:.2f}"
+        )
+        return False
+    
     def get_coord_input(self):
         """Get coordinates from input boxes and send them to the robot."""
         c_value = [float(i.get()) for i in self.c_vars]
@@ -297,6 +346,8 @@ class Window:
             return
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         if not self.validate_speed(self.speed):
+            return
+        if not self.validate_joint_coupling(j_value):
             return
         # j_value.append(self.speed)
         # Asynchronous Send

@@ -50,6 +50,7 @@ J3_RANGE = (-1.0, 110.0)
 ZERO_EPS_DEG = 0.1
 INVALID_WARN_DELTA_DEG = 0.5
 SEND_ANGLE_DELTA_DEG = 0.2
+speed = 25
 
 
 def snap_zero(angle_deg):
@@ -130,6 +131,7 @@ def callback(data):
     last_invalid_pair = None
     joint3 = joint3 + 90
     angles_list = [joint1, joint2, joint3, joint4]
+    angles_list = [round(angle, 2) for angle in [joint1, joint2, joint3, joint4]]
 
     if last_sent_angles is not None:
         max_delta = max(abs(current - previous) for current, previous in zip(angles_list, last_sent_angles))
@@ -138,15 +140,16 @@ def callback(data):
 
     last_sent_angles = list(angles_list)
     rospy.loginfo("send angles: %s", angles_list)
-    ua.set_angles(angles_list, 25, _async=False)
+    ua.set_angles(angles_list, speed, _async=False)
 
 
 def listener():
-    global ua
+    global ua, speed
     rospy.init_node("control_slider", anonymous=True)
 
     port = rospy.get_param("~port", "/dev/ttyUSB0") # Select connected device. 选择连接设备
     baud = rospy.get_param("~baud", 1000000)
+    speed = int(rospy.get_param("~speed", 25))
     print(port, baud)
     ua = UltraArmP1(port, baud)
     ua.set_joint_enable(0)
