@@ -1,0 +1,539 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="Pro630_force_gripper">
+  <link name="dummy_link" />
+  <joint name="dummy_joint" type="fixed">
+    <parent link="dummy_link" />
+    <child link="base_link" />
+  </joint>
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.0161344402434911 -0.000162162688512334 0.0554241228233497" rpy="0 0 0" />
+      <mass value="1.65795468093661" />
+      <inertia ixx="0.00386227635537876" ixy="-1.53515099093584E-05" ixz="-0.000405423117517011" iyy="0.00526479178618686" iyz="-5.2281892120838E-06" izz="0.00413846172645392" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="J1_Link">
+    <inertial>
+      <origin xyz="-6.91118799377376E-07 0.0144598782404965 0.0381086508027903" rpy="0 0 0" />
+      <mass value="1.567" />
+      <inertia ixx="0.001180925" ixy="-0.000000017" ixz="0.000000006" iyy="0.000802296" iyz="0.000062424" izz="0.001150167" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J1_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint1" type="revolute">
+    <origin xyz="0 0 0.1605" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="J1_Link" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+  </joint>
+  <link name="J2_Link">
+    <inertial>
+      <origin xyz="-2.29173833957163E-06 0.0341436588560188 0.134627373673515" rpy="0 0 0" />
+      <mass value="0.772" />
+      <inertia ixx="0.007356742" ixy="-0.000000105" ixz="-0.000000274" iyy="0.000007461" iyz="-0.000017541" izz="0.000574556" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J2_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint2" type="revolute">
+    <origin xyz="0 0.0605 0.0445" rpy="0 0 0" />
+    <parent link="J1_Link" />
+    <child link="J2_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.7854" upper="3.927" effort="0" velocity="0" />
+  </joint>
+  <link name="J3_Link">
+    <inertial>
+      <origin xyz="1.03212652958277E-06 -0.0560093102940856 0.119151815348055" rpy="0 0 0" />
+      <mass value="2.385" />
+      <inertia ixx="0.031463813" ixy="0.000000397" ixz="-0.000002338" iyy="0.030919350" iyz="-0.001638362" izz="0.001683438" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J3_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint3" type="revolute">
+    <origin xyz="0 -0.00051 0.269" rpy="0 0 0" />
+    <parent link="J2_Link" />
+    <child link="J3_Link" />
+    <axis xyz="0 -1 0" />
+    <limit lower="-2.8798" upper="2.8798" effort="0" velocity="0" />
+  </joint>
+  <link name="J4_Link">
+    <inertial>
+      <origin xyz="4.20306334830404E-07 0.0325640723335469 0.0139416523721847" rpy="0 0 0" />
+      <mass value="0.562" />
+      <inertia ixx="0.000322651" ixy="0.000000001" ixz="0.000000001" iyy="0.000324290" iyz="0.000031124" izz="0.000204745" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J4_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint4" type="revolute">
+    <origin xyz="0 -0.0105 0.266" rpy="0 0 0" />
+    <parent link="J3_Link" />
+    <child link="J4_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.5708" upper="4.7124" effort="0" velocity="0" />
+  </joint>
+  <link name="J5_Link">
+    <inertial>
+      <origin xyz="1.43488388864559E-07 0.00130029157612582 0.0359037893443566" rpy="0 0 0" />
+      <mass value="0.228" />
+      <inertia ixx="0.000345241" ixy="-0.000000008" ixz="-0.000000021" iyy="0.000230269" iyz="0.000014452" izz="0.000303872" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J5_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J5_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint5" type="revolute">
+    <origin xyz="0 0.0385 0.054" rpy="0 0 0" />
+    <parent link="J4_Link" />
+    <child link="J5_Link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+  </joint>
+  <link name="J6_Link">
+    <inertial>
+      <origin xyz="-8.87276522571029E-11 -0.00452155127232517 -0.000193927466995647" rpy="0 0 0" />
+      <mass value="0.052" />
+      <inertia ixx="0.000015356" ixy="0.000000008" ixz="0.000000000" iyy="0.000029432" iyz="0.000000000" izz="0.000015070" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J6_Link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_pro_630/meshes/J6_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="joint6" type="revolute">
+    <origin xyz="0 -0.043 0.041" rpy="0 0 0" />
+    <parent link="J5_Link" />
+    <child link="J6_Link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+  </joint>
+  <link name="gripper_connection">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/mygripper_f100_connection.dae" />
+      </geometry>
+      <origin xyz="-0.03 0.014 0" rpy="0 0 -1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.05 0.05 0.03" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.1" />
+      <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_base">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_base.dae" />
+      </geometry>
+      <origin xyz="-0.107 0.012 0.0" rpy="1.5708 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.10 0.05 0.035" />
+      </geometry>
+      <origin xyz="0 0.02 -0.015" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_left1">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_left1.dae" />
+      </geometry>
+      <origin xyz="-0.047 -0.013 0.044" rpy="1.5708 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.055" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_left2">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_left2.dae" />
+      </geometry>
+      <origin xyz="-0.0 0.03 0.004" rpy="3.14159 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.055 0.02" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_left3">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_left3.dae" />
+      </geometry>
+      <origin xyz="0 -0.03 0.012" rpy="1.5708 3.14159 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.055 0.02" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_right1">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_right1.dae" />
+      </geometry>
+      <origin xyz="0.047 -0.013 -0.046" rpy="1.5708 3.14 -1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.02 0.055" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.033" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_right2">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_right2.dae" />
+      </geometry>
+      <origin xyz="0 0.03 -0.005" rpy="0 0 1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.055 0.02" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <link name="gripper_right3">
+    <visual>
+      <geometry>
+        <mesh filename="package://mycobot_description/urdf/mycobot_320_m5_2022/force_control_gripper/pro_gripper_right3.dae" />
+      </geometry>
+      <origin xyz="-0.014 -0.029 0.004" rpy="3.14 0 -1.5708" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.02 0.055 0.02" />
+      </geometry>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.005" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+  </link>
+  <joint name="J6Link_gripper_connect" type="fixed">
+    <parent link="J6_Link" />
+    <child link="gripper_connection" />
+    <origin xyz="0.0 -0.014 -0.01" rpy="-1.5708 0 -3.14159" />
+    <dynamics damping="0.1" friction="0.1" />
+  </joint>
+  <joint name="joint6_to_gripper_base" type="fixed">
+    <parent link="gripper_connection" />
+    <child link="gripper_base" />
+    <origin xyz="0 -0.02 0.0364" rpy="1.5708 0 0" />
+  </joint>
+  <joint name="force_gripper_controller" type="revolute">
+    <parent link="gripper_base" />
+    <child link="gripper_left3" />
+    <origin xyz="-0.018 0.016 -0.02" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="0" upper="1" velocity="1" />
+    <dynamics damping="10" friction="0.1" />
+  </joint>
+  <joint name="gripper_base_to_gripper_left2" type="revolute">
+    <parent link="gripper_base" />
+    <child link="gripper_left2" />
+    <mimic joint="force_gripper_controller" multiplier="1.0" offset="0" />
+    <origin xyz="-0.0445 -0.004 -0.02" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+  </joint>
+  <joint name="gripper_left3_to_gripper_left1" type="revolute">
+    <parent link="gripper_left3" />
+    <child link="gripper_left1" />
+    <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+    <origin xyz="0.01 0.06 0.0" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+  </joint>
+  <joint name="gripper_base_to_gripper_right3" type="revolute">
+    <parent link="gripper_base" />
+    <child link="gripper_right3" />
+    <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+    <origin xyz="0.018 0.015 -0.0212" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+  </joint>
+  <joint name="gripper_base_to_gripper_right2" type="revolute">
+    <parent link="gripper_base" />
+    <child link="gripper_right2" />
+    <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+    <origin xyz="0.0442 -0.004 -0.02" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+  </joint>
+  <joint name="gripper_right3_to_gripper_right1" type="revolute">
+    <parent link="gripper_right3" />
+    <child link="gripper_right1" />
+    <mimic joint="force_gripper_controller" multiplier="1.0" offset="0" />
+    <origin xyz="-0.01 0.061 0.001" rpy="0 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+  </joint>
+  <transmission name="trans_joint1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint1_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint2_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint3_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint4_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint5_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_joint6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint6">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint6_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_force_gripper_controller">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="force_gripper_controller">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="force_gripper_controller_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_gripper_base_to_gripper_left2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_base_to_gripper_left2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="gripper_base_to_gripper_left2_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_gripper_left3_to_gripper_left1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_left3_to_gripper_left1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="gripper_left3_to_gripper_left1_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_gripper_base_to_gripper_right3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_base_to_gripper_right3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="gripper_base_to_gripper_right3_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_gripper_base_to_gripper_right2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_base_to_gripper_right2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="gripper_base_to_gripper_right2_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans_gripper_right3_to_gripper_right1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="gripper_right3_to_gripper_right1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="gripper_right3_to_gripper_right1_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <gazebo>
+    <plugin name="gazebo_ros_control">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+</robot>
