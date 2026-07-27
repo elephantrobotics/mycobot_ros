@@ -12,8 +12,8 @@
   <!-- Launch Gazebo and spawn the robot -->
   <include file="$(dirname)/gazebo.launch" pass_all_args="true"/>
 
-  <!-- Launch MoveIt -->
-  <include file="$(dirname)/demo.launch" pass_all_args="true">
+  <!-- Launch MoveIt (vanilla; Gazebo should not use MimicPreview stack) -->
+  <include file="$(dirname)/demo_old.launch" pass_all_args="true">
     <!-- robot_description is loaded by gazebo.launch, to enable Gazebo features -->
     <arg name="load_robot_description" value="false" />
     <arg name="moveit_controller_manager" value="ros_control" />

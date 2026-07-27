@@ -16,6 +16,25 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_ros_planning</build_depend>
+  <build_depend>pluginlib</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>moveit_msgs</run_depend>
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_ros_planning</run_depend>
+  <run_depend>pluginlib</run_depend>
   <run_depend>moveit_ros_move_group</run_depend>
   <run_depend>moveit_fake_controller_manager</run_depend>
   <run_depend>moveit_kinematics</run_depend>
@@ -36,6 +55,10 @@
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   <run_depend>mycobot_description</run_depend>
+
+  <export>
+    <moveit_core plugin="${prefix}/coupling_adapter_plugin.xml"/>
+  </export>
 
 
 </package>
