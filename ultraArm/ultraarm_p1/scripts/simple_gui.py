@@ -61,6 +61,9 @@ def valid_j2_j3_region(j2_model, j3_model):
         return False
 
     if -18 <= a < 0:
+        # J2 < 0: reject J3 >= 42° (blocks abs(cos) second lobe / mesh penetration).
+        if b >= 42.0:
+            return False
         cond1 = math.cos(math.radians(-a + b)) - math.sin(math.radians(45 + a)) <= 7 / 30
         cond2 = abs(math.cos(math.radians(-a + b))) >= 15.4 / 30
         return cond1 and cond2
