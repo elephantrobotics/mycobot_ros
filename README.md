@@ -92,6 +92,19 @@ For using this package, the [Python api](https://github.com/elephantrobotics/pym
 pip install pymycobot --user
 ```
 
+Many ROS scripts also need `packaging` (for `pymycobot` version checks). After cloning, install common Python deps with:
+
+```bash
+cd ~/catkin_ws/src/mycobot_ros
+bash install_deps.sh
+```
+
+Or:
+
+```bash
+pip3 install --user -r ~/catkin_ws/src/mycobot_ros/requirements.txt
+```
+
 #### 2.2 Package Download and Install
 
 Install ros package in your src folder of your Catkin workspace.

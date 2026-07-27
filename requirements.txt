@@ -1,0 +1,4 @@
+# Common Python runtime deps for mycobot_ros
+# Used by scripts that talk to the arm via pymycobot and check its version.
+pymycobot>=4.0.5
+packaging
