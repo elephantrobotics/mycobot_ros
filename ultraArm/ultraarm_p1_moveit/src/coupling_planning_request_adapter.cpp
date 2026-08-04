@@ -107,7 +107,9 @@ bool validateRequest(const planning_interface::MotionPlanRequest& req)
 class CouplingPlanningRequestAdapter : public planning_request_adapter::PlanningRequestAdapter
 {
 public:
-  void initialize(const ros::NodeHandle& /*node_handle*/) override {}
+  // Melodic MoveIt has no initialize(); Noetic has it as pure virtual.
+  // Keep empty impl without override so both distros compile.
+  void initialize(const ros::NodeHandle& /*node_handle*/) {}
 
   bool adaptAndPlan(const planning_request_adapter::PlanningRequestAdapter::PlannerFn& planner,
                     const planning_scene::PlanningSceneConstPtr& planning_scene,
