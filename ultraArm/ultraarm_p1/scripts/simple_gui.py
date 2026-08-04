@@ -112,7 +112,7 @@ class Window:
         self.hs = self.win.winfo_screenheight()
         x = int((self.ws / 2) - 190)
         y = int((self.hs / 2) - 250)
-        self.win.geometry(f"440x440+{x}+{y}")
+        self.win.geometry(f"600x600+{x}+{y}")
 
         # Layout and input/display initialization
         self.set_layout()
