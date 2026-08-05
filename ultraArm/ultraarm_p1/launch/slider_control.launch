@@ -12,6 +12,8 @@
 
     <!-- coupling node -->
     <node pkg="ultraarm_p1" type="joint_coupling_node.py" name="joint_coupling_node"/>
+    <!-- Popup when J2-J3 coupling is violated (slider / Randomize) -->
+    <node pkg="ultraarm_p1" type="coupling_warn_gui.py" name="coupling_warn_gui" output="screen"/>
 
     <!-- TF -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />

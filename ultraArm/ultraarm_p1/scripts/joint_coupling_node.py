@@ -2,6 +2,7 @@
 import rospy
 import math
 from sensor_msgs.msg import JointState
+from std_msgs.msg import String
 """_summary_
 The J2–J3 joint coupling node has the following overall structure:
 
@@ -23,8 +24,12 @@ joint_coupling_node
 │
 └── slider_control.py
 (Controls the real robot)
+
+Also publishes /ultraarm_p1/j2_j3_coupling_warning for optional GUI popup
+(coupling_warn_gui.py).
 """
 pub = None
+warn_pub = None
 last_valid_msg = None
 last_invalid_pair = None
 was_invalid = False
@@ -93,8 +98,17 @@ def callback(msg):
             should_warn = True
 
         if should_warn:
-            rospy.logwarn("Invalid J2-J3 combination: %.2f %.2f", j2, j3)
+            j2_rad = math.radians(j2)
+            j3_rad = math.radians(j3)
+            warn_text = (
+                "Invalid J2-J3 combination: "
+                "J2=%.2f deg (%.3f rad), J3=%.2f deg (%.3f rad)"
+                % (j2, j2_rad, j3, j3_rad)
+            )
+            rospy.logwarn("%s", warn_text)
             last_invalid_pair = (j2, j3)
+            if warn_pub is not None:
+                warn_pub.publish(String(data=warn_text))
         was_invalid = True
         if last_valid_msg is not None:
             safe_msg = JointState()
@@ -106,7 +120,9 @@ def callback(msg):
             safe_msg.effort = list(last_valid_msg.effort)
             pub.publish(safe_msg)
         return
-    
+
+    if was_invalid and warn_pub is not None:
+        warn_pub.publish(String(data="ok"))
     was_invalid = False
     last_invalid_pair = None
     last_valid_msg = msg
@@ -114,11 +130,14 @@ def callback(msg):
 
 
 def main():
-    global pub
+    global pub, warn_pub
 
     rospy.init_node("joint_coupling_node")
 
     pub = rospy.Publisher("/joint_states", JointState, queue_size=10)
+    warn_pub = rospy.Publisher(
+        "/ultraarm_p1/j2_j3_coupling_warning", String, queue_size=1
+    )
 
     rospy.Subscriber("/joint_states_raw", JointState, callback)
 

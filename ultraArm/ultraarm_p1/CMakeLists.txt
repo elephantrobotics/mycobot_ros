@@ -28,6 +28,8 @@ catkin_install_python(PROGRAMS
   scripts/simple_gui.py
   scripts/teleop_keyboard.py
   scripts/joint_coupling_node.py
+  scripts/coupling_warn_gui.py
+  scripts/coupling_slider_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
