@@ -1,0 +1,43 @@
+<launch>
+  <!-- Default MoveIt demo + mimic-expanded Goal/Path preview (parallel-link shells).
+       Native MotionPlanning Goal/Path robot visuals are disabled in moveit_preview.rviz;
+       MimicPreview RobotModel (tf_prefix=mimic_preview) shows the correct linkage.
+       Vanilla MoveIt (no preview) is available as demo_old.launch. -->
+
+  <arg name="pipeline" default="ompl" />
+  <arg name="db" default="false" />
+  <arg name="db_path" default="$(find ultraarm_p1_moveit)/default_warehouse_mongo_db" />
+  <arg name="debug" default="false" />
+  <arg name="load_robot_description" default="true"/>
+  <arg name="moveit_controller_manager" default="fake" />
+  <arg name="fake_execution_type" default="interpolate" />
+  <arg name="use_gui" default="false" />
+
+  <include file="$(find ultraarm_p1_moveit)/launch/demo_old.launch">
+    <arg name="pipeline" value="$(arg pipeline)"/>
+    <arg name="db" value="$(arg db)"/>
+    <arg name="db_path" value="$(arg db_path)"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="load_robot_description" value="$(arg load_robot_description)"/>
+    <arg name="moveit_controller_manager" value="$(arg moveit_controller_manager)"/>
+    <arg name="fake_execution_type" value="$(arg fake_execution_type)"/>
+    <arg name="use_gui" value="$(arg use_gui)"/>
+    <arg name="use_rviz" value="false"/>
+  </include>
+
+  <node pkg="ultraarm_p1_moveit" type="mimic_preview_node.py" name="mimic_preview_node" output="screen"/>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="mimic_preview_rsp" output="screen">
+    <param name="tf_prefix" value="mimic_preview"/>
+    <remap from="/joint_states" to="/mimic_preview/joint_states"/>
+  </node>
+
+  <!-- Connect prefixed preview tree to Fixed Frame "world" -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="mimic_preview_world_tf"
+        args="0 0 0 0 0 0 world mimic_preview/world"/>
+
+  <include file="$(find ultraarm_p1_moveit)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find ultraarm_p1_moveit)/launch/moveit_preview.rviz"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+</launch>

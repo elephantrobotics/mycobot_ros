@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Semantic description for mycobot_description/urdf/ultraArm_p1/ultraArm_p1.urdf.
+  The URDF contains mimic joints for the parallel-link mechanism; MoveIt should plan
+  only with the four actively controlled joints below.
+-->
+<robot name="firefighter">
+    <group name="arm_group">
+        <chain base_link="base_link" tip_link="J4_Link"/>
+    </group>
+    <group_state name="init_pose" group="arm_group">
+        <joint name="J1" value="0"/>
+        <joint name="J2" value="0"/>
+        <joint name="J3" value="0"/>
+        <joint name="J4" value="0"/>
+    </group_state>
+    <!-- The CAD collision meshes are detailed and share many contacting surfaces, so
+         internal self-collision checks are disabled for this mechanism. Collision
+         checking against planning scene objects remains enabled. -->
+    <disable_collisions link1="base_link" link2="J1_Link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="J2_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="center_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="CENTER_V_2_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="J3_4_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="J3_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J2_Link" reason="Adjacent"/>
+    <disable_collisions link1="J1_Link" link2="center_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="CENTER_V_2_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J3_4_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J3_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J1_Link" link2="J2_2_Link" reason="Adjacent"/>
+    <disable_collisions link1="J1_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="center_Link" reason="Adjacent"/>
+    <disable_collisions link1="J2_Link" link2="CENTER_V_2_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="J3_4_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="J3_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="J2_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="CENTER_V_2_Link" reason="Adjacent"/>
+    <disable_collisions link1="center_Link" link2="J3_4_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="J3_Link" reason="Adjacent"/>
+    <disable_collisions link1="center_Link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="fix1_Link" reason="Adjacent"/>
+    <disable_collisions link1="center_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="center_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="J3_4_Link" reason="Adjacent"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="J3_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="CENTER_V_2_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="J3_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="J3_5_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="J3_4_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J3_Link" link2="J3_5_Link" reason="Adjacent"/>
+    <disable_collisions link1="J3_Link" link2="J4_Link" reason="Never"/>
+    <disable_collisions link1="J3_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="J3_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J3_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="J3_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J3_5_Link" link2="J4_Link" reason="Adjacent"/>
+    <disable_collisions link1="J3_5_Link" link2="FIX2_Link" reason="Adjacent"/>
+    <disable_collisions link1="J3_5_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J3_5_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="J3_5_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J4_Link" link2="FIX2_Link" reason="Never"/>
+    <disable_collisions link1="J4_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="J4_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="J4_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="FIX2_Link" link2="fix1_Link" reason="Never"/>
+    <disable_collisions link1="FIX2_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="FIX2_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="fix1_Link" link2="J2_2_Link" reason="Never"/>
+    <disable_collisions link1="fix1_Link" link2="center_v_1_Link" reason="Never"/>
+    <disable_collisions link1="J2_2_Link" link2="center_v_1_Link" reason="Adjacent"/>
+</robot>

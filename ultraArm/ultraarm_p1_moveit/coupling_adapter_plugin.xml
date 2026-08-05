@@ -1,0 +1,9 @@
+<library path="libultraarm_p1_moveit_coupling_adapter">
+  <class name="ultraarm_p1_moveit/CouplingPlanningRequestAdapter"
+         type="ultraarm_p1_moveit::CouplingPlanningRequestAdapter"
+         base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>
+      Reject motion plans when J2/J3 violate ultraArm P1 coupled joint limits.
+    </description>
+  </class>
+</library>

@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+"""
+teleop_keyboard.py
+This module provides keyboard teleoperation for the ultraArm P1 using ROS1 topics.
+
+Controls:
+- Cartesian movement: w/s/a/d/z/x
+- Euler rotation: u/j
+- Step size adjustment: +/-
+- Gripper control: g/h
+- Preset poses: 1 (init), 2 (home), 3 (save current as home)
+- Quit: q
+
+Author: WangWeiJian
+Date: 2025-11-24
+"""
+
+from __future__ import print_function
+import sys
+import time
+import termios
+import tty
+import rospy
+from pymycobot.robot_info import RobotLimit
+from ultraarm_communication.msg import (
+    MycobotAngles,
+    MycobotCoords,
+    MycobotSetAngles,
+    MycobotSetCoords,
+)
+
+# Teleop help message
+MSG = """\
+ultraArm P1 Teleop Keyboard Controller (ROS1 - Topic Version)
+---------------------------------------------------------
+Movement (Cartesian):
+              w (x+)
+    a (y+)    s (x-)    d (y-)
+              z (z-)    x (z+)
+
+Rotation (Euler angles):
+    u (rx+)
+    j (rx-)
+
+Movement Step:
+    + : Increase movement step size
+    - : Decrease movement step size
+
+Other:
+    1 - Go to init pose
+    2 - Go to home pose
+    3 - Save current pose as home
+    q - Quit
+"""
+
+# Coordinate limits
+ROBOT_LIMIT = RobotLimit.robot_limit.get("UltraArmP1", {})
+COORD_LIMITS = dict(zip(
+    ['x', 'y', 'z', 'rx'],
+    zip(
+        ROBOT_LIMIT.get("coords_min", [-350, -362.43, -186.265, -180]),
+        ROBOT_LIMIT.get("coords_max", [362.43, 362.43, 93.44, 180]),
+    ),
+))
+
+
+def vels(speed: float, turn: float) -> str:
+    """Return formatted speed and change percent info."""
+    return f"currently:\tspeed: {speed}\tchange percent: {turn}"
+
+
+class Raw:
+    """Context manager for reading raw input from terminal."""
+
+    def __init__(self, stream):
+        self.stream = stream
+        self.fd = self.stream.fileno()
+
+    def __enter__(self):
+        self.original_stty = termios.tcgetattr(self.stream)
+        tty.setcbreak(self.stream)
+
+    def __exit__(self, type, value, traceback):
+        termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
+
+
+class MycobotTeleopTopic:
+    """Keyboard teleoperation node for MyCobot Pro450 using ROS topics."""
+
+    def __init__(self):
+        """Initialize ROS node, parameters, publishers, and subscribers."""
+        rospy.init_node("teleop_keyboard_topic")
+
+        # Speed and step size
+        self.speed = rospy.get_param("~speed", 50)
+        self.change_percent = rospy.get_param("~change_percent", 5)
+        self.change_len = 250 * self.change_percent / 100.0
+        self.change_angle = 180 * self.change_percent / 100.0
+
+        # Current robot state
+        self.curr_coords = [0] * 4
+        self.curr_angles = [0] * 4
+        self.record_coords = None
+        self.init_pose = [0.0, 0.0, 90.0, 0.0]
+        self.home_pose = [0, 10.0, 135.0, 0]
+        # Flag: whether coordinate control is allowed
+        self.ready_for_coords = False
+
+        # Subscribers
+        rospy.Subscriber("mycobot/coords_real", MycobotCoords, self.coords_callback)
+        rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.angles_callback)
+
+        # Publishers
+        self.coords_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=1)
+        self.angles_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=1)
+        # self.gripper_pub = rospy.Publisher("mycobot/gripper_status", MycobotGripperStatus, queue_size=1)
+
+        rospy.loginfo("Waiting to receive current coordinates...")
+        while self.curr_coords == [0] * 4 and not rospy.is_shutdown():
+            time.sleep(0.1)
+
+        self.record_coords = list(self.curr_coords)
+        print(MSG)
+        print(vels(self.speed, self.change_percent))
+        rospy.loginfo(
+            "Current moving step: position %.1f mm, angle attitude %.1f°",
+            self.change_len,
+            self.change_angle
+        )
+
+    def coords_callback(self, msg: MycobotCoords):
+        """Update current coordinates from ROS topic."""
+        self.curr_coords = [msg.x, msg.y, msg.z, msg.rx]
+
+    def angles_callback(self, msg: MycobotAngles):
+        """Update current angles from ROS topic."""
+        self.curr_angles = [msg.joint_1, msg.joint_2, msg.joint_3, msg.joint_4]
+
+    def send_coords(self):
+        """Publish current target coordinates to robot."""
+        goal = MycobotSetCoords()
+        goal.x, goal.y, goal.z, goal.rx= self.record_coords
+        goal.speed = self.speed
+        self.coords_pub.publish(goal)
+
+    def send_angles(self, angles):
+        """Publish target joint angles to robot."""
+        goal = MycobotSetAngles()
+        goal.joint_1, goal.joint_2, goal.joint_3, goal.joint_4 = angles
+        goal.speed = self.speed
+        self.angles_pub.publish(goal)
+        
+    def validate_coords(self, coords):
+        """Return True if target coordinates are inside configured limits."""
+        for val, axis in zip(coords, ['x', 'y', 'z', 'rx']):
+            min_v, max_v = COORD_LIMITS[axis]
+            if not (min_v <= val <= max_v):
+                rospy.logwarn(
+                    "%s Out of range: %.3f not in [%.3f, %.3f]",
+                    axis, val, min_v, max_v
+                )
+                return False
+        return True
+
+    def run(self):
+        """Main loop to read keyboard input and control the robot."""
+        while not rospy.is_shutdown():
+            try:
+                with Raw(sys.stdin):
+                    key = sys.stdin.read(1)
+            except Exception:
+                continue
+
+            try:
+                # Quit
+                if key == 'q':
+                    break
+
+                # Adjust step size
+                elif key == '+':
+                    self.change_percent = min(self.change_percent + 1, 20)
+                    self.change_angle = 180 * self.change_percent / 100.0
+                    self.change_len = 250 * self.change_percent / 100.0
+                    rospy.loginfo(
+                        "Increase change_percent to %d%%, move step: %.1f mm, angle step: %.1f°",
+                        self.change_percent, self.change_len, self.change_angle
+                    )
+                elif key == '-':
+                    self.change_percent = max(self.change_percent - 1, 1)
+                    self.change_angle = 180 * self.change_percent / 100.0
+                    self.change_len = 250 * self.change_percent / 100.0
+                    rospy.loginfo(
+                        "Decrease change_percent to %d%%, move step: %.1f mm, angle step: %.1f°",
+                        self.change_percent, self.change_len, self.change_angle
+                    )
+                    continue
+                # Preset poses
+                elif key == '1':
+                    self.send_angles(self.init_pose)
+                    time.sleep(2)
+                    self.record_coords = list(self.curr_coords)
+                    self.ready_for_coords = False
+                    rospy.logwarn("Returned to zero. Press '2' to enable coordinate control.")
+                elif key == '2':
+                    self.send_angles(self.home_pose)
+                    time.sleep(3)
+                    self.record_coords = list(self.curr_coords)
+                    self.ready_for_coords = True
+                    rospy.loginfo("Home pose reached. Coordinate control enabled.")
+                elif key == '3':
+                    self.home_pose = list(self.curr_angles)
+                    rospy.loginfo(f"Updated home pose.{self.home_pose}")
+                    
+                elif key in 'wWsSaAdDzZxXuUiIjJkKoOlL':
+                    if not self.ready_for_coords:
+                        rospy.logwarn("Coordinate control disabled. Please press '2' first.")
+                        continue
+                    target_coords = list(self.record_coords)
+                    # Cartesian movement
+                    if key in 'wW': target_coords[0] += self.change_len
+                    elif key in 'sS': target_coords[0] -= self.change_len
+                    elif key in 'aA': target_coords[1] += self.change_len
+                    elif key in 'dD': target_coords[1] -= self.change_len
+                    elif key in 'zZ': target_coords[2] -= self.change_len
+                    elif key in 'xX': target_coords[2] += self.change_len
+
+                    # Euler rotation
+                    elif key in 'uU': target_coords[3] += self.change_angle
+                    elif key in 'jJ': target_coords[3] -= self.change_angle
+                    else:
+                        continue
+                    
+                    if not self.validate_coords(target_coords):
+                        continue
+                    
+                    self.record_coords = target_coords
+                    self.send_coords()
+                # Gripper control
+                # elif key in 'gG':
+                #     self.gripper_pub.publish(MycobotGripperStatus(Status=True))
+                # elif key in 'hH':
+                #     self.gripper_pub.publish(MycobotGripperStatus(Status=False))
+                else:
+                    continue
+
+            except Exception as e:
+                rospy.logwarn("Execution failed: {}".format(e))
+                continue
+
+
+if __name__ == '__main__':
+    try:
+        teleop = MycobotTeleopTopic()
+        teleop.run()
+    except rospy.ROSInterruptException:
+        pass

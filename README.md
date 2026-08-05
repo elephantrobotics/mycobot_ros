@@ -92,6 +92,19 @@ For using this package, the [Python api](https://github.com/elephantrobotics/pym
 pip install pymycobot --user
 ```
 
+Many ROS scripts also need `packaging` (for `pymycobot` version checks). After cloning, install common Python deps with:
+
+```bash
+cd ~/catkin_ws/src/mycobot_ros
+bash install_deps.sh
+```
+
+Or:
+
+```bash
+pip3 install --user -r ~/catkin_ws/src/mycobot_ros/requirements.txt
+```
+
 #### 2.2 Package Download and Install
 
 Install ros package in your src folder of your Catkin workspace.
@@ -275,6 +288,10 @@ Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md).
 [mycobot pro 450 force gripper](./mycobot_description/urdf/mycobot_pro_450/mycobot_pro_450_force_gripper.urdf)
 
 ![pro450 force gripper](./demo_img/pro450/pro450_force_gripper.png)
+
+[ultraArm P1](./mycobot_description/urdf/ultraArm_p1/ultraArm_p1.urdf)
+
+![ultraArm P1](./demo_img/ultraArm_p1/p1.png)
 
 ## Single Gripper URDF Model Graph
 
