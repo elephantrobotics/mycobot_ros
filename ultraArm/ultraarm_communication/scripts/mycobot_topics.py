@@ -240,11 +240,12 @@ class MycobotTopics:
         """Subscribe to 'mycobot/angles_goal' to receive target angles."""
         def callback(data: MycobotSetAngles):
             angles = [
-                data.joint_1, data.joint_2, data.joint_3,
-                data.joint_4
+                round(data.joint_1, 2), round(data.joint_2, 2),
+                round(data.joint_3, 2), round(data.joint_4, 2)
             ]
             sp = int(data.speed)
-            self.mc.set_angles(angles, sp, _async=False)
+            with self.lock:
+                self.mc.set_angles(angles, sp, _async=False)
 
         rospy.Subscriber("mycobot/angles_goal", MycobotSetAngles, callback)
         rospy.spin()
@@ -252,9 +253,13 @@ class MycobotTopics:
     def sub_set_coords(self):
         """Subscribe to 'mycobot/coords_goal' to receive target coordinates."""
         def callback(data: MycobotSetCoords):
-            coords = [data.x, data.y, data.z, data.rx]
+            coords = [
+                round(data.x, 2), round(data.y, 2),
+                round(data.z, 2), round(data.rx, 2),
+            ]
             sp = int(data.speed)
-            self.mc.set_coords(coords, sp, _async=False)
+            with self.lock:
+                self.mc.set_coords(coords, sp, _async=False)
 
         rospy.Subscriber("mycobot/coords_goal", MycobotSetCoords, callback)
         rospy.spin()
