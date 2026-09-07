@@ -523,7 +523,7 @@
     <child
       link="J4_Link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit
       lower="-3.12"
       upper="3.12"
