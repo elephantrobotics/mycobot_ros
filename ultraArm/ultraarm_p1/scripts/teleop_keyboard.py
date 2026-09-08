@@ -186,6 +186,7 @@ class MycobotTeleopTopic:
                         "Increase change_percent to %d%%, move step: %.1f mm, angle step: %.1f°",
                         self.change_percent, self.change_len, self.change_angle
                     )
+                    continue
                 elif key == '-':
                     self.change_percent = max(self.change_percent - 1, 1)
                     self.change_angle = 180 * self.change_percent / 100.0
