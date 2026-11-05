@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Pro450 V2.0 Force Gripper">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0121427980398158 -0.000139114941121948 0.0639906746725437"
+        rpy="0 0 0" />
+      <mass
+        value="1.99849235094068" />
+      <inertia
+        ixx="0.00307588233725824"
+        ixy="1.71384809402287E-06"
+        ixz="0.000231023965259326"
+        iyy="0.00282788073996958"
+        iyz="-3.64610818465636E-07"
+        izz="0.00322226268233202" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="0.00041549358711547 -0.0218911357582349 -0.00347990976722076"
+        rpy="0 0 0" />
+      <mass
+        value="0.53390251462261" />
+      <inertia
+        ixx="0.000329515563562123"
+        ixy="-2.22975000584298E-07"
+        ixz="7.49234969297025E-07"
+        iyy="0.000342890656657347"
+        iyz="1.474745752863E-05"
+        izz="0.000318289898375189" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.210000000061212"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.8274"
+      upper="2.8274"
+      effort="10"
+      velocity="3.7909" />
+  </joint>
+  <link
+    name="Link2">
+    <inertial>
+      <origin
+        xyz="-0.119196937867357 4.53708108136275E-05 0.077398171674505"
+        rpy="0 0 0" />
+      <mass
+        value="0.599817831409922" />
+      <inertia
+        ixx="0.000292361093939765"
+        ixy="-6.01962554926766E-07"
+        ixz="-6.36308387887681E-05"
+        iyy="0.00212671894321412"
+        iyz="-2.73387760027324E-08"
+        izz="0.00220058501248914" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="1.57079632679529 1.5707963267949 0" />
+    <parent
+      link="link1" />
+    <child
+      link="Link2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.1817"
+      upper="2.1817"
+      effort="10"
+      velocity="3.7909" />
+  </joint>
+  <link
+    name="Link3">
+    <inertial>
+      <origin
+        xyz="-0.126394054140004 -8.78085892881963E-05 0.0149922427268116"
+        rpy="0 0 0" />
+      <mass
+        value="0.677760403744797" />
+      <inertia
+        ixx="0.000253551769521492"
+        ixy="-1.6207463142078E-07"
+        ixz="-2.73853967252523E-05"
+        iyy="0.00171112893139742"
+        iyz="-1.48031061511053E-07"
+        izz="0.00175559532168159" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3"
+    type="revolute">
+    <origin
+      xyz="-0.18 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link2" />
+    <child
+      link="Link3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.6878"
+      upper="2.6878"
+      effort="8"
+      velocity="3.11" />
+  </joint>
+  <link
+    name="Link4">
+    <inertial>
+      <origin
+        xyz="-0.0243356327246771 1.85891157540585E-06 -0.00501248583263512"
+        rpy="0 0 0" />
+      <mass
+        value="0.554330588713247" />
+      <inertia
+        ixx="0.000190999544349174"
+        ixy="-3.48704859231241E-07"
+        ixz="1.58846886540113E-05"
+        iyy="0.00024787463445041"
+        iyz="5.86517184457514E-07"
+        izz="0.00024422730305577" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4"
+    type="revolute">
+    <origin
+      xyz="-0.173 0 0.085491"
+      rpy="0 0 0" />
+    <parent
+      link="Link3" />
+    <child
+      link="Link4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.8274"
+      upper="2.8274"
+      effort="2"
+      velocity="3.11" />
+  </joint>
+  <link
+    name="Link5">
+    <inertial>
+      <origin
+        xyz="5.95525924024787E-05 -0.00755726858537741 -0.00355598775670984"
+        rpy="0 0 0" />
+      <mass
+        value="0.549892772726069" />
+      <inertia
+        ixx="0.000227255118306309"
+        ixy="2.78668412227377E-07"
+        ixz="-1.6485530675208E-07"
+        iyy="0.000191630652243264"
+        iyz="2.40596542594008E-06"
+        izz="0.000230343122724731" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint5"
+    type="revolute">
+    <origin
+      xyz="-0.097501 0 0"
+      rpy="1.5708 0 -1.5708" />
+    <parent
+      link="Link4" />
+    <child
+      link="Link5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-4.3982"
+      upper="1.2566"
+      effort="2"
+      velocity="03.11" />
+  </joint>
+  <link
+    name="Link6">
+    <inertial>
+      <origin
+        xyz="0.000253028286251067 -1.94224821007533E-05 0.0129748624872951"
+        rpy="0 0 0" />
+      <mass
+        value="0.109050457753012" />
+      <inertia
+        ixx="2.78189999416068E-05"
+        ixy="3.40675028714369E-09"
+        ixz="-1.05637116609514E-07"
+        iyy="2.71885879202607E-05"
+        iyz="4.96584746478856E-09"
+        izz="4.45746192465352E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/Link6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint6"
+    type="revolute">
+    <origin
+      xyz="0 0.063173 0.00020984"
+      rpy="1.5708 -1.5708 0" />
+    <parent
+      link="Link5" />
+    <child
+      link="Link6" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-2.8798"
+      upper="2.8798"
+      effort="2"
+      velocity="3.11" />
+  </joint>
+  <link
+    name="FJR1-Link">
+    <inertial>
+      <origin
+        xyz="-0.0240531185394106 -0.000942432324710252 -0.00349999403540391"
+        rpy="0 0 0" />
+      <mass
+        value="0.0106787330900042" />
+      <inertia
+        ixx="9.13150196850704E-07"
+        ixy="1.22687976365028E-06"
+        ixz="1.23986212324685E-11"
+        iyy="4.33499572437368E-06"
+        iyz="-9.70313848749736E-12"
+        izz="5.16136839112507E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJR1-Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJR1-Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gripper"
+    type="revolute">
+    <origin
+      xyz="0.010249 -0.015409 -0.056357"
+      rpy="0.7854 -1.5708 0" />
+    <parent
+      link="Link6" />
+    <child
+      link="FJR1-Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0.97"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="FJR2_Link">
+    <inertial>
+      <origin
+        xyz="-0.00871756109585614 -0.0066856926188521 0.00570006307158955"
+        rpy="0 0 0" />
+      <mass
+        value="0.0122762763230831" />
+      <inertia
+        ixx="1.3428802470466E-06"
+        ixy="1.50287085718338E-06"
+        ixz="8.5192120946577E-12"
+        iyy="4.07059702904549E-06"
+        iyz="-4.08680695685277E-12"
+        izz="4.81614917771409E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJR2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJR2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="FJR2"
+    type="revolute">
+    <origin
+      xyz="-0.060004 0.0097343 -0.0092"
+      rpy="0 0 0" />
+    <parent
+      link="FJR1-Link" />
+    <child
+      link="FJR2_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.97"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="gripper"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="SLR_Link">
+    <inertial>
+      <origin
+        xyz="-0.0328198150746893 0.00307467906476672 4.37962444088669E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.0054171073183385" />
+      <inertia
+        ixx="2.11007152235007E-07"
+        ixy="4.3810735657286E-07"
+        ixz="5.32288250036152E-15"
+        iyy="1.86596385701505E-06"
+        iyz="1.17970023508524E-14"
+        izz="2.03590454852006E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/SLR_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/SLR_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="SLR"
+    type="revolute">
+    <origin
+      xyz="0.031154 -0.031364 -0.034033"
+      rpy="0.7854 -1.5708 0" />
+    <parent
+      link="Link6" />
+    <child
+      link="SLR_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0.97"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="gripper"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="FJL1_Link">
+    <inertial>
+      <origin
+        xyz="-0.0240537635019519 0.000925024900851057 -0.0034999969796613"
+        rpy="0 0 0" />
+      <mass
+        value="0.0106787407305297" />
+      <inertia
+        ixx="9.14926734859368E-07"
+        ixy="-1.2293790714532E-06"
+        ixz="1.28278465401321E-11"
+        iyy="4.33326210483321E-06"
+        iyz="9.08991632049598E-12"
+        izz="5.16141118405851E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJL1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJL1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="FJL1"
+    type="revolute">
+    <origin
+      xyz="-0.015645 0.010485 -0.056371"
+      rpy="0.7854 -1.5708 0" />
+    <parent
+      link="Link6" />
+    <child
+      link="FJL1_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.97"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="gripper"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="FJL2_Link">
+    <inertial>
+      <origin
+        xyz="-0.0087215879519324 0.00668066863025774 0.00570001823076938"
+        rpy="0 0 0" />
+      <mass
+        value="0.0122763514946347" />
+      <inertia
+        ixx="1.34459995554522E-06"
+        ixy="-1.50442221119031E-06"
+        ixz="-1.6047868501392E-11"
+        iyy="4.0689247791143E-06"
+        iyz="6.8243782759987E-12"
+        izz="4.81619149507379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJL2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/FJL2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="FJL2"
+    type="revolute">
+    <origin
+      xyz="-0.059996 -0.0097778 -0.0092"
+      rpy="0 0 0" />
+    <parent
+      link="FJL1_Link" />
+    <child
+      link="FJL2_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0.97"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="FJL1"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="SLL_Link">
+    <inertial>
+      <origin
+        xyz="-0.0328163724747199 -0.00311120029464318 -3.70706465524506E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00541710784994201" />
+      <inertia
+        ixx="2.11984529083573E-07"
+        ixy="-4.39947973461513E-07"
+        ixz="9.02824006899214E-14"
+        iyy="1.86498671731195E-06"
+        iyz="3.40649119109125E-14"
+        izz="2.03590478106184E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/SLL_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/SLL_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="SLL"
+    type="revolute">
+    <origin
+      xyz="-0.031626 0.031416 -0.034065"
+      rpy="0.7854 -1.5708 0" />
+    <parent
+      link="Link6" />
+    <child
+      link="SLL_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.97"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="FJL1"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="fix_Link">
+    <inertial>
+      <origin
+        xyz="0.0111990164782874 0.0114529221847095 -0.0375744404873279"
+        rpy="0 0 0" />
+      <mass
+        value="0.0647897638359681" />
+      <inertia
+        ixx="7.94056739004155E-05"
+        ixy="7.76152895753093E-06"
+        ixz="-2.70944708941378E-06"
+        iyy="7.94399795604632E-05"
+        iyz="-2.69636633952849E-06"
+        izz="7.24573675443116E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/fix_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mycobot_description/urdf/mycobot_pro_450/new_structure/meshes_gripper/fix_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fix"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link6" />
+    <child
+      link="fix_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
