@@ -1,17 +1,13 @@
 <launch>
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_pro_450)/config/mycobot_pro_450.rviz" />
-
+	<!-- Compatibility entry point for the new-structure arm-only test command. -->
+	<arg name="model" default="" />
+	<arg name="rvizconfig" default="" />
 	<arg name="gui" default="true" />
-
-	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-
-	<!-- Combinejoin values to TF -->
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
-		<param name="use_gui" value="$(arg gui)" />
-		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
-	</node>
-	<!-- Show in Rviz-->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+	<include file="$(find mycobot_pro_450)/launch/test.launch">
+		<arg name="urdf" value="v2" />
+		<arg name="gripper" value="none" />
+		<arg name="model" value="$(arg model)" />
+		<arg name="rvizconfig" value="$(arg rvizconfig)" />
+		<arg name="gui" value="$(arg gui)" />
+	</include>
 </launch>

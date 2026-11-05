@@ -329,7 +329,7 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-3.3982"
+      lower="-4.3982"
       upper="1.2566"
       effort="2"
       velocity="3.11" />

@@ -1,0 +1,35 @@
+<launch>
+  <!--
+    Load one of the supported Pro 450 descriptions.  "model" is intentionally
+    kept as an escape hatch for a locally-developed URDF; when it is supplied
+    it takes precedence over the urdf/gripper profile arguments.
+  -->
+  <arg name="urdf" default="legacy" />
+  <arg name="gripper" default="none" />
+  <arg name="model" default="" />
+
+  <!-- Fail early with an actionable message instead of starting without a model. -->
+  <param name="pro450_urdf_profile_valid"
+         command="sh -c 'case &quot;$(arg urdf)&quot; in legacy|v2) printf true ;; *) echo &quot;Unsupported urdf profile: $(arg urdf). Supported values: legacy, v2&quot; &gt;&amp;2; exit 1 ;; esac'" />
+  <param name="pro450_gripper_profile_valid"
+         command="sh -c 'case &quot;$(arg gripper)&quot; in none|f100) printf true ;; *) echo &quot;Unsupported gripper profile: $(arg gripper). Supported values: none, f100&quot; &gt;&amp;2; exit 1 ;; esac'" />
+
+  <group if="$(eval arg('model') == '')">
+    <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'none')">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf" />
+    </group>
+    <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'f100')">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450_force_gripper.urdf" />
+    </group>
+    <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'none')">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2.urdf" />
+    </group>
+    <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')">
+      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2_force_gripper.urdf" />
+    </group>
+  </group>
+
+  <group unless="$(eval arg('model') == '')">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+  </group>
+</launch>

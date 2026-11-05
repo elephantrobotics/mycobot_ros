@@ -1,13 +1,25 @@
 <launch>
-	<!-- Load URDF file -->
-	<arg name="model" default="$(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf"/>
-	<arg name="rvizconfig" default="$(find mycobot_pro_450)/config/mycobot_pro_450.rviz" />
+	<!-- Suppress RViz's ROS 1 end-of-life notification. -->
+	<env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
+	<!-- Model following supports the arm-only profiles. -->
+	<arg name="urdf" default="legacy" />
+	<arg name="model" default="" />
+	<arg name="rvizconfig" default="" />
 
-	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+	<include file="$(find mycobot_pro_450)/launch/pro450_description.launch">
+		<arg name="urdf" value="$(arg urdf)" />
+		<arg name="gripper" value="none" />
+		<arg name="model" value="$(arg model)" />
+	</include>
 	<!-- Combinejoin values to TF-->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
 		<rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
 	</node>
 	<!-- show in Rviza -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+	<group if="$(eval arg('rvizconfig') != '')">
+		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+	</group>
+	<group if="$(eval arg('rvizconfig') == '')">
+		<node name="rviz" pkg="rviz" type="rviz" args="-d $(find mycobot_pro_450)/config/mycobot_pro_450.rviz" required="true" />
+	</group>
 </launch>

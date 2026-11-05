@@ -433,7 +433,7 @@
     </collision>
   </link>
   <joint
-    name="gripper"
+    name="gripper_controller"
     type="revolute">
     <origin
       xyz="0.010249 -0.015409 -0.056357"
@@ -508,7 +508,7 @@
       effort="0"
       velocity="0" />
     <mimic
-      joint="gripper"
+      joint="gripper_controller"
       multiplier="-1"
       offset="0" />
   </joint>
@@ -570,7 +570,7 @@
       effort="0"
       velocity="0" />
     <mimic
-      joint="gripper"
+      joint="gripper_controller"
       multiplier="1"
       offset="0" />
   </joint>
@@ -632,7 +632,7 @@
       effort="0"
       velocity="0" />
     <mimic
-      joint="gripper"
+      joint="gripper_controller"
       multiplier="-1"
       offset="0" />
   </joint>
