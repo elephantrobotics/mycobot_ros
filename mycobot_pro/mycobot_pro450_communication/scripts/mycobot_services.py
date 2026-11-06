@@ -45,7 +45,9 @@ joint5_firmware_limits = None
 joint5_offset_deg = 0.0
 
 PROFILE_PARAM = "/mycobot_pro_450/joint5_offset_deg"
-
+# Keep requests serialized, but do not add a one-second visual delay when the
+# GUI and real-state listeners briefly contend for the same controller link.
+LOCK_RETRY_INTERVAL = 0.02
 
 def read_joint5_firmware_limits(client):
     """Read J5's software limits from the connected controller."""
@@ -135,7 +137,7 @@ def acquire(lock_file: str) -> int:
         else:
             lock_file_fd = fd
             break
-        time.sleep(1.0)
+        time.sleep(LOCK_RETRY_INTERVAL)
         current_time = time.time()
     if lock_file_fd is None:
         os.close(fd)

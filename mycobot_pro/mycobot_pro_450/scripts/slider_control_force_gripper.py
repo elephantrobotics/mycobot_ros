@@ -137,8 +137,9 @@ def callback(data: JointState):
     )
     if angles_unchanged and gripper_unchanged:
         return
-
-    last_sent_angles = list(data_list)
+    
+    if not angles_unchanged:
+        last_sent_angles = list(data_list)
     
     if gripper_command is not None:
         last_sent_gripper_value = gripper_command
@@ -147,7 +148,9 @@ def callback(data: JointState):
         data_list, gripper_command if gripper_command is not None else "unchanged",
     )
     with command_lock:
-        angles_queue = data_list
+        # Do not resend six unchanged arm joints for every gripper slider move.
+        if not angles_unchanged:
+            angles_queue = data_list
         if gripper_command is not None:
             pending_gripper_value = gripper_command
 
@@ -163,10 +166,13 @@ def _send_loop():
             gripper_to_send = pending_gripper_value
             angles_queue = None
             pending_gripper_value = None
-        if angles_to_send is not None:
-            mc.send_angles(angles_to_send, 25)
+        # The force gripper uses a synchronous Modbus request.  Prioritize it
+        # so an arm command stream cannot make the visible gripper lag behind.
         if gripper_to_send is not None:
             mc.set_pro_gripper_angle(gripper_to_send)
+        if angles_to_send is not None:
+            mc.send_angles(angles_to_send, 25)
+        
 def listener():
     """Initialize ROS node and Pro450Client, then subscribe to JointState topic.
 

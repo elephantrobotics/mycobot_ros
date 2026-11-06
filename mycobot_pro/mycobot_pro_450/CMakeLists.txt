@@ -172,6 +172,7 @@ catkin_install_python(PROGRAMS
   scripts/listen_real.py
   scripts/simple_gui_force_gripper.py
   scripts/teleop_keyboard_force_gripper.py
+  scripts/safe_joint_state_publisher_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

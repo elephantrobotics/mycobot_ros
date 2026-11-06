@@ -16,10 +16,18 @@
 
 	<!-- Combinejoin values to TF -->
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
-		<param name="use_gui" value="$(arg gui)" />
-		<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
-	</node>
+	<!-- Force-gripper control uses a project-owned GUI without Randomize. -->
+	<group if="$(eval arg('gripper') == 'f100')">
+		<node name="joint_state_publisher_gui" pkg="mycobot_pro_450" type="safe_joint_state_publisher_gui.py">
+			<param name="use_gui" value="$(arg gui)" />
+		</node>
+	</group>
+	<group unless="$(eval arg('gripper') == 'f100')">
+		<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+			<param name="use_gui" value="$(arg gui)" />
+			<!-- <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam> -->
+		</node>
+	</group>
 	<!-- Show in Rviz-->
 	<group if="$(eval arg('rvizconfig') != '')">
 		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
