@@ -1,5 +1,7 @@
 <launch>
-
+  <!-- Suppress RViz's ROS 1 end-of-life notification. -->
+	<env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
+  
   <!-- specify the planning pipeline -->
   <arg name="pipeline" default="ompl" />
 
