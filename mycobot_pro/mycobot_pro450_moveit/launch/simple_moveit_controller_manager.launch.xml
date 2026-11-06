@@ -1,8 +1,17 @@
 <launch>
+  <arg name="urdf" default="legacy" />
+  <arg name="gripper" default="none" />
+
   <!-- Define the MoveIt controller manager plugin to use for trajectory execution -->
   <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
 
   <!-- Load controller list to the parameter server -->
-  <rosparam file="$(find mycobot_pro450_moveit)/config/simple_moveit_controllers.yaml" />
-  <rosparam file="$(find mycobot_pro450_moveit)/config/ros_controllers.yaml" />
+  <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')">
+    <rosparam file="$(find mycobot_pro450_moveit)/config/simple_moveit_controllers_v2_f100.yaml" />
+    <rosparam file="$(find mycobot_pro450_moveit)/config/ros_controllers_v2_f100.yaml" />
+  </group>
+  <group unless="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')">
+    <rosparam file="$(find mycobot_pro450_moveit)/config/simple_moveit_controllers.yaml" />
+    <rosparam file="$(find mycobot_pro450_moveit)/config/ros_controllers.yaml" />
+  </group>
 </launch>

@@ -4,6 +4,8 @@
   <!-- Define moveit controller manager plugin: fake, simple, or ros_control -->
   <arg name="moveit_controller_manager" />
   <arg name="fake_execution_type" default="interpolate" />
+  <arg name="urdf" default="legacy" />
+  <arg name="gripper" default="none" />
 
   <!-- Flag indicating whether MoveIt is allowed to load/unload  or switch controllers -->
   <arg name="moveit_manage_controllers" default="true"/>

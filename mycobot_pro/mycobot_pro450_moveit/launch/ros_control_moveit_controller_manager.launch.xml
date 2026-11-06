@@ -1,4 +1,9 @@
 <launch>
+	<!-- Accepted so trajectory_execution can use pass_all_args safely. -->
+	<arg name="fake_execution_type" default="interpolate" />
+	<arg name="urdf" default="legacy" />
+	<arg name="gripper" default="none" />
+
 	<!-- Define MoveIt controller manager plugin -->
 	<param name="moveit_controller_manager" value="moveit_ros_control_interface::MoveItControllerManager" />
 </launch>

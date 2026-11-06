@@ -4,12 +4,14 @@
   <arg name="cfg" />
   <!-- Keep benchmark loading consistent with demo.launch. -->
   <arg name="urdf" default="legacy"/>
+  <arg name="gripper" default="none"/>
   <arg name="model" default=""/>
 
   <!-- Load URDF -->
   <include file="$(dirname)/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
     <arg name="urdf" value="$(arg urdf)"/>
+    <arg name="gripper" value="$(arg gripper)"/>
     <arg name="model" value="$(arg model)"/>
   </include>
 

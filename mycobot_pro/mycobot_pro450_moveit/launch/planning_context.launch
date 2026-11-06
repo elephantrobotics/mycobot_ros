@@ -4,37 +4,42 @@
 
   <!-- Select the matching semantic model and joint-limit overrides. -->
   <arg name="urdf" default="legacy"/>
+  <arg name="gripper" default="none"/>
   <arg name="model" default=""/>
 
-  <!-- Validate even when another launch file already supplied the URDF. -->
-  <param name="pro450_moveit_urdf_profile_valid"
-         command="sh -c 'case &quot;$(arg urdf)&quot; in legacy|v2) printf true ;; *) echo &quot;Unsupported urdf profile: $(arg urdf). Supported values: legacy, v2&quot; &gt;&amp;2; exit 1 ;; esac'" />
+  <!-- Validate even when another launch file already supplied the URDF.
+       F100 MoveIt is currently merged for v2 only; legacy+f100 remains unsupported. -->
+  <param name="pro450_moveit_profile_valid"
+         command="sh -c 'case &quot;$(arg urdf)/$(arg gripper)&quot; in legacy/none|v2/none|v2/f100) printf true ;; *) echo &quot;Unsupported MoveIt profile: urdf=$(arg urdf) gripper=$(arg gripper). Supported values: legacy/none, v2/none, v2/f100&quot; &gt;&amp;2; exit 1 ;; esac'" />
 
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Reuse the shared Pro450 loader so all ROS features select the same URDF
-       profile and receive the same early validation. MoveIt is currently
-       configured for the no-gripper arm model. -->
+       profile and receive the same early validation. -->
   <include if="$(arg load_robot_description)" file="$(find mycobot_pro_450)/launch/pro450_description.launch">
     <arg name="urdf" value="$(arg urdf)"/>
-    <arg name="gripper" value="none"/>
+    <arg name="gripper" value="$(arg gripper)"/>
     <arg name="model" value="$(arg model)"/>
     <arg name="robot_description" value="$(arg robot_description)"/>
   </include>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <group if="$(eval arg('urdf') == 'legacy')">
+  <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'none')">
     <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_pro450_moveit)/config/firefighter.srdf" />
   </group>
-  <group if="$(eval arg('urdf') == 'v2')">
+  <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'none')">
     <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_pro450_moveit)/config/pro450_v2.srdf" />
+  </group>
+  <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')">
+    <param name="$(arg robot_description)_semantic" textfile="$(find mycobot_pro450_moveit)/config/pro450_v2_force_gripper.srdf" />
   </group>
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
-    <rosparam if="$(eval arg('urdf') == 'legacy')" command="load" file="$(find mycobot_pro450_moveit)/config/joint_limits.yaml"/>
-    <rosparam if="$(eval arg('urdf') == 'v2')" command="load" file="$(find mycobot_pro450_moveit)/config/joint_limits_v2.yaml"/>
+    <rosparam if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'none')" command="load" file="$(find mycobot_pro450_moveit)/config/joint_limits.yaml"/>
+    <rosparam if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'none')" command="load" file="$(find mycobot_pro450_moveit)/config/joint_limits_v2.yaml"/>
+    <rosparam if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')" command="load" file="$(find mycobot_pro450_moveit)/config/joint_limits_v2_f100.yaml"/>
     <rosparam command="load" file="$(find mycobot_pro450_moveit)/config/cartesian_limits.yaml"/>
   </group>
 

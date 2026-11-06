@@ -1,7 +1,7 @@
 <launch>
   <!-- Suppress RViz's ROS 1 end-of-life notification. -->
-	<env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
-  
+  <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
+
   <!-- specify the planning pipeline -->
   <arg name="pipeline" default="ompl" />
 
@@ -15,9 +15,11 @@
 
   <!-- By default, we will load or override the robot_description -->
   <arg name="load_robot_description" default="true"/>
-  <!-- Default remains the existing legacy model. Use urdf:=v2 for the new
-       mechanical structure; model is an advanced custom-URDF override. -->
+  <!-- Default remains the existing legacy no-gripper model.
+       Use urdf:=v2 for the new structure; gripper:=f100 currently supports v2 only.
+       model is an advanced custom-URDF override. -->
   <arg name="urdf" default="legacy"/>
+  <arg name="gripper" default="none"/>
   <arg name="model" default=""/>
 
   <!-- Choose controller manager: fake, simple, or ros_control -->
@@ -29,8 +31,14 @@
   <arg name="use_gui" default="false" />
   <arg name="use_rviz" default="true" />
 
-  <!-- If needed, broadcast static tf for robot root -->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 world base" />
+  <!-- If needed, broadcast static tf for robot root.
+       V2 F100 URDF uses base_link; no-gripper models use base. -->
+  <node if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')"
+        pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0"
+        args="0 0 0 0 0 0 world base_link" />
+  <node unless="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')"
+        pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0"
+        args="0 0 0 0 0 0 world base" />
 
   <group if="$(eval arg('moveit_controller_manager') == 'fake')">
     <!-- We do not have a real robot connected, so publish fake joint states via a joint_state_publisher
@@ -58,6 +66,7 @@
     <arg name="pipeline" value="$(arg pipeline)"/>
     <arg name="load_robot_description" value="$(arg load_robot_description)"/>
     <arg name="urdf" value="$(arg urdf)"/>
+    <arg name="gripper" value="$(arg gripper)"/>
     <arg name="model" value="$(arg model)"/>
   </include>
 
