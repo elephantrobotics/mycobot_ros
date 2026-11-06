@@ -2,10 +2,15 @@
 
   <!-- This argument must specify the list of .cfg files to process for benchmarking -->
   <arg name="cfg" />
+  <!-- Keep benchmark loading consistent with demo.launch. -->
+  <arg name="urdf" default="legacy"/>
+  <arg name="model" default=""/>
 
   <!-- Load URDF -->
   <include file="$(dirname)/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
+    <arg name="urdf" value="$(arg urdf)"/>
+    <arg name="model" value="$(arg model)"/>
   </include>
 
   <!-- Start the database -->

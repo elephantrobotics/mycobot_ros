@@ -1,0 +1,34 @@
+# Overrides generated for the V2 mechanical structure.
+default_velocity_scaling_factor: 0.1
+default_acceleration_scaling_factor: 0.1
+joint_limits:
+  joint1:
+    has_velocity_limits: true
+    max_velocity: 3.7909
+    has_acceleration_limits: false
+    max_acceleration: 0
+  joint2:
+    has_velocity_limits: true
+    max_velocity: 3.7909
+    has_acceleration_limits: false
+    max_acceleration: 0
+  joint3:
+    has_velocity_limits: true
+    max_velocity: 3.11
+    has_acceleration_limits: false
+    max_acceleration: 0
+  joint4:
+    has_velocity_limits: true
+    max_velocity: 3.11
+    has_acceleration_limits: false
+    max_acceleration: 0
+  joint5:
+    has_velocity_limits: true
+    max_velocity: 3.11
+    has_acceleration_limits: false
+    max_acceleration: 0
+  joint6:
+    has_velocity_limits: true
+    max_velocity: 3.11
+    has_acceleration_limits: false
+    max_acceleration: 0

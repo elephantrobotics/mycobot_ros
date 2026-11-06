@@ -7,6 +7,9 @@
   <arg name="urdf" default="legacy" />
   <arg name="gripper" default="none" />
   <arg name="model" default="" />
+  <!-- Keep the default global parameter, but allow integrations such as
+       MoveIt to choose a different robot-description namespace. -->
+  <arg name="robot_description" default="robot_description" />
 
   <!-- Fail early with an actionable message instead of starting without a model. -->
   <param name="pro450_urdf_profile_valid"
@@ -25,20 +28,20 @@
 
   <group if="$(eval arg('model') == '')">
     <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'none')">
-      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf" />
+      <param name="$(arg robot_description)" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf" />
     </group>
     <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'f100')">
-      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450_force_gripper.urdf" />
+      <param name="$(arg robot_description)" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450_force_gripper.urdf" />
     </group>
     <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'none')">
-      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2.urdf" />
+      <param name="$(arg robot_description)" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2.urdf" />
     </group>
     <group if="$(eval arg('urdf') == 'v2' and arg('gripper') == 'f100')">
-      <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2_force_gripper.urdf" />
+      <param name="$(arg robot_description)" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2_force_gripper.urdf" />
     </group>
   </group>
 
   <group unless="$(eval arg('model') == '')">
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+    <param name="$(arg robot_description)" command="$(find xacro)/xacro --inorder $(arg model)" />
   </group>
 </launch>
