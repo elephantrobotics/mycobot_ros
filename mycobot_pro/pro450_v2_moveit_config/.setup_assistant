@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobot_description
+    relative_path: urdf/mycobot_pro_450/new_structure/mycobot_pro450_v2.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/Pro 450 V2.0.srdf
+  CONFIG:
+    author_name: wangweijian
+    author_email: weijiain.wang@elephantrobotics.com
+    generated_timestamp: 1793953594
