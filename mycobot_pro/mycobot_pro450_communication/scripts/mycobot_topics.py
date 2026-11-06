@@ -57,18 +57,39 @@ else:
     print('pymycobot library version meets the requirements!')
     from pymycobot import Pro450Client
 
-robot_msg = """
-MyCobot Status
---------------------------------
-Joint Limit:
-    joint 1: -162 ~ +162
-    joint 2: -125 ~ +125
-    joint 3: -154 ~ +154
-    joint 4: -162 ~ +162
-    joint 5: -162 ~ +162
-    joint 6: -165 ~ +165
-"""
 
+def read_joint5_firmware_limits(client):
+    """Read J5's software limits from the connected controller."""
+    try:
+        lower = client.get_joint_min_angle(5)
+        upper = client.get_joint_max_angle(5)
+    except Exception as exc:
+        rospy.logerr("Unable to read J5 firmware limits: %s", exc)
+        return None
+    if not isinstance(lower, (int, float)) or not isinstance(upper, (int, float)) or lower >= upper:
+        rospy.logerr("Invalid J5 firmware limits returned by controller: %r, %r", lower, upper)
+        return None
+    rospy.loginfo("J5 firmware limits: [%.2f, %.2f] degrees", lower, upper)
+    return lower, upper
+
+
+def resolve_joint5_offset(limits, configured_offset):
+    """Require the controller limits to match the selected URDF profile."""
+    lower, upper = limits
+    if abs(configured_offset) < 0.01:
+        expected_lower, expected_upper = -162.0, 162.0
+    elif abs(configured_offset - 90.0) < 0.01:
+        expected_lower, expected_upper = -252.0, 72.0
+    else:
+        rospy.logerr("Unsupported J5 offset configured: %.2f degrees", configured_offset)
+        return None
+    if abs(lower - expected_lower) < 0.01 and abs(upper - expected_upper) < 0.01:
+        return configured_offset
+    rospy.logerr(
+        "J5 firmware limits [%.2f, %.2f] do not match the selected URDF profile; expected [%.2f, %.2f]",
+        lower, upper, expected_lower, expected_upper,
+    )
+    return None
 
 class Watcher:
     """Watcher class handles KeyboardInterrupts in multithreaded Python programs.
@@ -115,7 +136,9 @@ class MycobotTopics:
         rospy.loginfo("%s,%s" % (ip, port))
         self.mc = Pro450Client(ip, port)
         self.lock = threading.Lock()
-        self.output_robot_message()
+        self.joint5_offset_deg = rospy.get_param(
+            "/mycobot_pro_450/joint5_offset_deg", 0.0
+        )
         if self.mc.is_power_on !=1:
             self.mc.power_on()
         time.sleep(0.05)
@@ -123,6 +146,12 @@ class MycobotTopics:
             self.mc.set_fresh_mode(0)
         time.sleep(0.05)
         self.mc.set_limit_switch(2, 0)
+        self.joint5_firmware_limits = read_joint5_firmware_limits(self.mc)
+        if self.joint5_firmware_limits is not None:
+            self.joint5_offset_deg = resolve_joint5_offset(
+                self.joint5_firmware_limits, self.joint5_offset_deg
+            )
+        self.output_robot_message()
 
     def start(self):
         """Start all publisher and subscriber threads."""
@@ -130,6 +159,7 @@ class MycobotTopics:
             threading.Thread(target=self.pub_real_angles),
             threading.Thread(target=self.pub_real_coords),
             threading.Thread(target=self.sub_set_angles),
+            threading.Thread(target=self.sub_set_firmware_angles),
             threading.Thread(target=self.sub_set_coords),
             threading.Thread(target=self.sub_gripper_status),
             threading.Thread(target=self.sub_fresh_mode_status),
@@ -152,7 +182,14 @@ class MycobotTopics:
                 try:
                     angles = self.mc.get_angles()
                     if isinstance(angles, list) and len(angles) == 6 and all(c != -1 for c in angles):
-                        ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4, ma.joint_5, ma.joint_6 = angles
+                        if self.joint5_offset_deg is None:
+                            rospy.logerr_once(
+                                "Not publishing joint states because the J5 profile validation failed"
+                            )
+                            continue
+                        logical_angles = list(angles)
+                        logical_angles[4] += self.joint5_offset_deg
+                        ma.joint_1, ma.joint_2, ma.joint_3, ma.joint_4, ma.joint_5, ma.joint_6 = logical_angles
                         pub.publish(ma)
                     else:
                         rospy.logwarn("Invalid angles received")
@@ -183,10 +220,24 @@ class MycobotTopics:
     def sub_set_angles(self):
         """Subscribe to 'mycobot/angles_goal' to receive target angles."""
         def callback(data: MycobotSetAngles):
+            if self.joint5_offset_deg is None:
+                rospy.logerr("Refusing J5 command because the selected URDF profile is incompatible with firmware limits")
+                return
             angles = [
                 data.joint_1, data.joint_2, data.joint_3,
                 data.joint_4, data.joint_5, data.joint_6
             ]
+            angles[4] -= self.joint5_offset_deg
+            if self.joint5_firmware_limits is None:
+                rospy.logerr("Refusing J5 command because firmware limits are unavailable")
+                return
+            lower, upper = self.joint5_firmware_limits
+            if not lower <= angles[4] <= upper:
+                rospy.logerr(
+                    "Refusing J5 command %.2f degrees outside firmware limits [%.2f, %.2f]",
+                    angles[4], lower, upper,
+                )
+                return
             sp = int(data.speed)
             self.mc.send_angles(angles, sp)
 
@@ -232,6 +283,29 @@ class MycobotTopics:
                     rospy.logerr(f"SerialException: {e}")
             time.sleep(0.05)
 
+    def sub_set_firmware_angles(self):
+        """Accept explicit firmware angles for the fixed keyboard home pose."""
+        def callback(data: MycobotSetAngles):
+            angles = [
+                data.joint_1, data.joint_2, data.joint_3,
+                data.joint_4, data.joint_5, data.joint_6
+            ]
+            if self.joint5_firmware_limits is None:
+                rospy.logerr("拒绝固件 J5 指令：无法读取固件限位 / Refusing firmware J5 command because firmware limits are unavailable")
+                return
+            lower, upper = self.joint5_firmware_limits
+            if not lower <= angles[4] <= upper:
+                rospy.logerr(
+                    "拒绝固件 J5 指令 %.2f 度：超出固件限位 [%.2f, %.2f] / Refusing firmware J5 command outside firmware limits",
+                    angles[4], lower, upper,
+                )
+                return
+            self.mc.send_angles(angles, int(data.speed))
+
+        rospy.Subscriber("mycobot/firmware_angles_goal", MycobotSetAngles, callback)
+        rospy.spin()
+
+
     def sub_fresh_mode_status(self):
         """Subscribe to 'mycobot/fresh_mode_status' to switch fresh mode."""
         def callback(data: MycobotSetFreshMode):
@@ -241,13 +315,20 @@ class MycobotTopics:
         rospy.spin()
 
     def output_robot_message(self):
-        """Print robot joint limits and status information."""
-        connect_status = False
-        servo_infomation = "unknown"
-        servo_temperature = "unknown"
-        atom_version = "unknown"
-
-        print(robot_msg)
+        """Print the six joint limits read from the connected controller."""
+        lines = ["", "MyCobot Status", "--------------------------------", "Joint Limit:"]
+        for joint_id in range(1, 7):
+            try:
+                lower = self.mc.get_joint_min_angle(joint_id)
+                upper = self.mc.get_joint_max_angle(joint_id)
+                if not isinstance(lower, (int, float)) or not isinstance(upper, (int, float)):
+                    raise ValueError("controller returned a non-numeric limit")
+                lines.append(
+                    "    joint {}: {:+g} ~ {:+g}".format(joint_id, lower, upper)
+                )
+            except Exception as exc:
+                lines.append("    joint {}: unavailable ({})".format(joint_id, exc))
+        print("\n".join(lines))
 
 
 if __name__ == "__main__":

@@ -56,6 +56,7 @@
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>mycobot_description</build_export_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>rosnode</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>mycobot_description</exec_depend>
 

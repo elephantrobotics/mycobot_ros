@@ -29,27 +29,22 @@ from rospy import ServiceException
 from mycobot_pro450_communication.srv import (
     GetCoords, SetCoords, GetAngles, SetAngles, GripperStatus
 )
+from pymycobot.robot_info import RobotLimit
 
 
-# Joint angle limits
-JOINT_LIMITS = [
-    (-162, 162),  # joint 1
-    (-125, 125),  # joint 2
-    (-154, 154),  # joint 3
-    (-162, 162),  # joint 4
-    (-162, 162),  # joint 5
-    (-165, 165),  # joint 6
-]
-
-# Coordinate limits
-COORD_LIMITS = [
-    (-474, 474),   # x
-    (-466, 474),   # y
-    (-180, 677),   # z
-    (-180, 180),   # rx
-    (-180, 180),   # ry
-    (-180, 180),   # rz
-]
+def get_firmware_limits(joint5_offset_deg):
+    """Load Pro450 limits from pymycobot's single source of truth."""
+    profile = "Pro450ClientNew" if abs(joint5_offset_deg - 90.0) < 0.01 else "Pro450Client"
+    try:
+        limits = RobotLimit.robot_limit[profile]
+        joint_limits = list(zip(limits["angles_min"], limits["angles_max"]))
+        coord_limits = list(zip(limits["coords_min"], limits["coords_max"]))
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise RuntimeError(
+            "无法从 pymycobot 读取 {} 的限位 / Unable to load limits for {} from pymycobot: {}"
+            .format(profile, profile, exc)
+        )
+    return joint_limits, coord_limits
 
 
 class Window:
@@ -67,6 +62,12 @@ class Window:
 
         # Default speed
         self.speed = rospy.get_param("~speed", 50)
+        # GUI fields use firmware joint coordinates; ROS services use URDF
+        # logical coordinates, so J5 is translated at this boundary.
+        self.joint5_offset_deg = rospy.get_param(
+            "/mycobot_pro_450/joint5_offset_deg", 0.0
+        )
+        self.joint_limits, self.coord_limits = get_firmware_limits(self.joint5_offset_deg)
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
 
@@ -83,7 +84,7 @@ class Window:
         self.hs = self.win.winfo_screenheight()
         x = int((self.ws / 2) - 190)
         y = int((self.hs / 2) - 250)
-        self.win.geometry(f"440x440+{x}+{y}")
+        self.win.geometry(f"600x460+{x}+{y}")
 
         # Layout and input/display initialization
         self.set_layout()
@@ -270,7 +271,7 @@ class Window:
     def get_coord_input(self):
         """Get coordinates from input boxes and send them to the robot."""
         c_value = [float(i.get()) for i in self.c_vars]
-        if not self.validate_values(c_value, COORD_LIMITS, "Coordinate"):
+        if not self.validate_values(c_value, self.coord_limits, "Coordinate"):
             return
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         if not self.validate_speed(self.speed):
@@ -281,12 +282,13 @@ class Window:
     def get_joint_input(self):
         """Get joint angles from input boxes and send them to the robot."""
         j_value = [float(i.get()) for i in self.j_vars]
-        if not self.validate_values(j_value, JOINT_LIMITS, "Joint"):
+        if not self.validate_values(j_value, self.joint_limits, "Joint"):
             return
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         if not self.validate_speed(self.speed):
             return
         # j_value.append(self.speed)
+        j_value[4] += self.joint5_offset_deg
         # Asynchronous Send
         self.async_call(self.set_angles, *j_value, self.speed)
 
@@ -319,7 +321,7 @@ class Window:
             if angles:
                 self.res_angles = [
                     round(angles.joint_1, 2), round(angles.joint_2, 2), round(angles.joint_3, 2),
-                    round(angles.joint_4, 2), round(angles.joint_5, 2), round(angles.joint_6, 2)
+                    round(angles.joint_4, 2), round(angles.joint_5 - self.joint5_offset_deg, 2), round(angles.joint_6, 2)
                 ]
             else:
                 self.res_angles = [-1] * 6

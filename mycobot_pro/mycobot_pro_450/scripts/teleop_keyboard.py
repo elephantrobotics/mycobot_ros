@@ -29,6 +29,7 @@ from mycobot_pro450_communication.msg import (
     MycobotSetCoords,
     MycobotGripperStatus,
 )
+from pymycobot.robot_info import RobotLimit
 
 # Teleop help message
 MSG = """\
@@ -54,16 +55,32 @@ Other:
     q - Quit
 """
 
-# Coordinate limits
-COORD_LIMITS = {
-    'x': (-474, 474),
-    'y': (-474, 474),
-    'z': (-180, 677),
-    'rx': (-180, 180),
-    'ry': (-180, 180),
-    'rz': (-180, 180)
-}
+COORD_AXES = ('x', 'y', 'z', 'rx', 'ry', 'rz')
 
+
+def get_coordinate_limits(joint5_offset_deg):
+    """Load Cartesian limits from pymycobot's Pro450 profile."""
+    profiles = RobotLimit.robot_limit
+
+    if abs(joint5_offset_deg - 90.0) < 0.01:
+        profile = "Pro450ClientNew"
+
+        if profile not in profiles:
+            raise RuntimeError(
+                "Current pymycobot version does not support "
+                "Pro450ClientNew. Please upgrade pymycobot to "
+                "version 4.0.8 or later."
+            )
+    else:
+        profile = "Pro450Client"
+    try:
+        limits = profiles[profile]
+        return dict(zip(COORD_AXES, zip(limits["coords_min"], limits["coords_max"])))
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise RuntimeError(
+            "Unable to load coordinate limits for {}: {}"
+            .format(profile, profile, exc)
+        )
 
 def vels(speed: float, turn: float) -> str:
     """Return formatted speed and change percent info."""
@@ -92,6 +109,11 @@ class MycobotTeleopTopic:
         """Initialize ROS node, parameters, publishers, and subscribers."""
         rospy.init_node("teleop_keyboard_topic")
 
+        self.joint5_offset_deg = rospy.get_param(
+            "/mycobot_pro_450/joint5_offset_deg", 0.0
+        )
+        self.coord_limits = get_coordinate_limits(self.joint5_offset_deg)
+        
         # Speed and step size
         self.speed = rospy.get_param("~speed", 50)
         self.change_percent = rospy.get_param("~change_percent", 5)
@@ -102,6 +124,7 @@ class MycobotTeleopTopic:
         self.curr_coords = [0] * 6
         self.curr_angles = [0] * 6
         self.record_coords = None
+        # This is an explicit firmware-coordinate pose.  J5 is always 0°.
         self.home_pose = [0, -10, -123, 45, 0, 0]
         # Flag: whether coordinate control is allowed
         self.ready_for_coords = False
@@ -113,6 +136,9 @@ class MycobotTeleopTopic:
         # Publishers
         self.coords_pub = rospy.Publisher("mycobot/coords_goal", MycobotSetCoords, queue_size=1)
         self.angles_pub = rospy.Publisher("mycobot/angles_goal", MycobotSetAngles, queue_size=1)
+        self.firmware_angles_pub = rospy.Publisher(
+            "mycobot/firmware_angles_goal", MycobotSetAngles, queue_size=1
+        )
         # self.gripper_pub = rospy.Publisher("mycobot/gripper_status", MycobotGripperStatus, queue_size=1)
 
         rospy.loginfo("Waiting to receive current coordinates...")
@@ -152,6 +178,13 @@ class MycobotTeleopTopic:
         goal.joint_1, goal.joint_2, goal.joint_3, goal.joint_4, goal.joint_5, goal.joint_6 = angles
         goal.speed = self.speed
         self.angles_pub.publish(goal)
+
+    def send_firmware_angles(self, angles):
+        """Publish a firmware-coordinate command for the fixed home pose."""
+        goal = MycobotSetAngles()
+        goal.joint_1, goal.joint_2, goal.joint_3, goal.joint_4, goal.joint_5, goal.joint_6 = angles
+        goal.speed = self.speed
+        self.firmware_angles_pub.publish(goal)
 
     def run(self):
         """Main loop to read keyboard input and control the robot."""
@@ -193,7 +226,11 @@ class MycobotTeleopTopic:
                     self.ready_for_coords = False
                     rospy.logwarn("Returned to zero. Press '2' to enable coordinate control.")
                 elif key == '2':
-                    self.send_angles(self.home_pose)
+                    rospy.loginfo(
+                        "Home pose: firmware J5 target %.2f° (no URDF offset)",
+                        self.home_pose[4],
+                    )
+                    self.send_firmware_angles(self.home_pose)
                     time.sleep(3)
                     self.record_coords = list(self.curr_coords)
                     self.ready_for_coords = True
@@ -232,8 +269,8 @@ class MycobotTeleopTopic:
                 
                 if self.ready_for_coords:
                     # Coordinate limits check
-                    for val, axis in zip(self.record_coords, ['x', 'y', 'z', 'rx', 'ry', 'rz']):
-                        min_v, max_v = COORD_LIMITS[axis]
+                    for val, axis in zip(self.record_coords, COORD_AXES):
+                        min_v, max_v = self.coord_limits[axis]
                         if not (min_v <= val <= max_v):
                             rospy.logwarn(f"{axis} Out of range: {val} not in [{min_v}, {max_v}]")
                             raise ValueError("Out of range of motion")

@@ -16,6 +16,7 @@ Date: 2025-09-08
 import math
 import time
 import rospy
+import rosnode
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from visualization_msgs.msg import Marker
@@ -39,6 +40,48 @@ else:
     print('pymycobot library version meets the requirements!')
     from pymycobot import Pro450Client
 
+
+def read_joint5_firmware_limits(client):
+    """Read J5's software limits from the connected controller."""
+    try:
+        lower = client.get_joint_min_angle(5)
+        upper = client.get_joint_max_angle(5)
+    except Exception as exc:
+        rospy.logwarn("Unable to read J5 firmware limits: %s", exc)
+        return None
+    rospy.loginfo("J5 firmware limits: [%.2f, %.2f] degrees", lower, upper)
+    return lower, upper
+
+
+def resolve_joint5_offset(limits, configured_offset):
+    """Require the controller limits to match the selected URDF profile."""
+    if limits is None or configured_offset is None:
+        return None
+    lower, upper = limits
+    if abs(configured_offset) < 0.01:
+        expected_lower, expected_upper = -162.0, 162.0
+    elif abs(configured_offset - 90.0) < 0.01:
+        expected_lower, expected_upper = -252.0, 72.0
+    else:
+        rospy.logerr("Unsupported J5 offset configured: %.2f degrees", configured_offset)
+        return None
+    if abs(lower - expected_lower) < 0.01 and abs(upper - expected_upper) < 0.01:
+        return configured_offset
+    rospy.logerr_once(
+        "J5 firmware limits [{:.2f}, {:.2f}] do not match the selected URDF "
+        "profile; expected [{:.2f}, {:.2f}]".format(
+            lower, upper, expected_lower, expected_upper
+        )
+    )
+    return None
+
+def profile_launch_is_running():
+    """Return whether the visualization launch has started its state publisher."""
+    try:
+        return "/robot_state_publisher" in rosnode.get_node_names()
+    except Exception as exc:
+        rospy.logwarn_throttle(5.0, "Unable to query ROS nodes: %s", exc)
+        return False
 
 def talker():
     """Initialize ROS node and publish joint states and visualization marker.
@@ -75,6 +118,7 @@ def talker():
     time.sleep(0.05)
     mycobot_450.set_free_move_mode(1)
     time.sleep(0.05)
+    joint5_firmware_limits = read_joint5_firmware_limits(mycobot_450)
     # print("All servos released.\n")
     print('Please press the button at the end of the machine to drag the joint.\n请按下机器末端按钮进行关节拖拽运动\n')
 
@@ -106,6 +150,31 @@ def talker():
             # Get robot joint angles
             angles = mycobot_450.get_angles()
             if isinstance(angles, list) and len(angles) > 0:
+                if not profile_launch_is_running():
+                    rospy.loginfo_throttle(
+                        5.0,
+                        "Waiting for follow_display.launch to start robot_state_publisher",
+                    )
+                    rate.sleep()
+                    continue
+                configured_offset = rospy.get_param(
+                    "/mycobot_pro_450/joint5_offset_deg", None
+                )
+                if configured_offset is None:
+                    rospy.loginfo_throttle(
+                        5.0,
+                        "Waiting for a Pro450 launch file to select the URDF profile",
+                    )
+                    rate.sleep()
+                    continue
+                joint5_offset_deg = resolve_joint5_offset(
+                    joint5_firmware_limits,
+                    configured_offset,
+                )
+                if joint5_offset_deg is None:
+                    rate.sleep()
+                    continue
+                angles[4] += joint5_offset_deg
                 # Convert angles to radians for ROS
                 data_list = [math.radians(value) for value in angles]
                 joint_state_send.position = data_list

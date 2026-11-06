@@ -14,6 +14,15 @@
   <param name="pro450_gripper_profile_valid"
          command="sh -c 'case &quot;$(arg gripper)&quot; in none|f100) printf true ;; *) echo &quot;Unsupported gripper profile: $(arg gripper). Supported values: none, f100&quot; &gt;&amp;2; exit 1 ;; esac'" />
 
+  <!-- ROS uses logical joint coordinates.  V2 J5 is offset from the firmware
+       coordinate by +90 degrees and has a firmware range of [-252, 72]. -->
+  <group if="$(eval arg('urdf') == 'legacy')">
+    <param name="/mycobot_pro_450/joint5_offset_deg" value="0.0" />
+  </group>
+  <group if="$(eval arg('urdf') == 'v2')">
+    <param name="/mycobot_pro_450/joint5_offset_deg" value="90.0" />
+  </group>
+
   <group if="$(eval arg('model') == '')">
     <group if="$(eval arg('urdf') == 'legacy' and arg('gripper') == 'none')">
       <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mycobot_description)/urdf/mycobot_pro_450/mycobot_pro_450.urdf" />

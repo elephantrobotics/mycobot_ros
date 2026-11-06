@@ -33,6 +33,7 @@
     <include file="$(find mycobot_pro450_communication)/launch/communication_service.launch">
 		<arg name="ip" value="$(arg ip)" />	
 		<arg name="port" value="$(arg port)" />	
+    </include>
 	<group if="$(eval arg('gripper') == 'none')">
 		<node name="real_listener" pkg="mycobot_pro_450" type="listen_real.py" />
 		<node name="simple_gui" pkg="mycobot_pro_450" type="simple_gui.py" />
