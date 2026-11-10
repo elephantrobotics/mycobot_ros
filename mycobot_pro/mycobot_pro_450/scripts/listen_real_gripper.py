@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 # encoding:utf-8
-import time
 import math
 
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from mycobot_pro450_communication.srv import GetAngles, GetGripperValue
+
+
+def firmware_gripper_to_joint(gripper_value):
+    """Map F100 firmware open amount 0..100 to URDF gripper_controller 0..1."""
+    return max(0.0, min(1.0, float(gripper_value) / 100.0))
 
 
 def talker():
@@ -31,19 +35,18 @@ def talker():
     gripper_service = rospy.ServiceProxy("get_gripper_angle", GetGripperValue)
 
     rospy.loginfo("start loop ...")
-    gripper_value = 0
+    gripper_value = 0.0
     while not rospy.is_shutdown():
         # get real angles from server
         res = func()
         gripper_res = gripper_service()
         if res is None:
             continue
-        # print('gripper_res.gripper_angle:', gripper_res.gripper_angle)
         if gripper_res.gripper_angle != -1:
             gripper_value = gripper_res.gripper_angle
         else:
-            gripper_value = 1
-            
+            rospy.logwarn_throttle(2.0, "Unable to read gripper angle, keep last: %s", gripper_value)
+
         radians_list = [
             res.joint_1 * (math.pi / 180),
             res.joint_2 * (math.pi / 180),
@@ -51,9 +54,8 @@ def talker():
             res.joint_4 * (math.pi / 180),
             res.joint_5 * (math.pi / 180),
             res.joint_6 * (math.pi / 180),
-            gripper_value * (math.pi / 180),
+            firmware_gripper_to_joint(gripper_value),
         ]
-        # rospy.loginfo("res: {}".format(radians_list))
 
         # publish angles
         joint_state_send.header.stamp = rospy.Time.now()

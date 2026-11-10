@@ -5,11 +5,8 @@ simple_gui.py
 This module provides a simple Tkinter GUI to control the MyCobot Pro450
 robot arm using ROS1 services.
 
-Features:
-- Get/set joint angles
-- Get/set Cartesian coordinates
-- Control gripper open/close
-- Set speed
+F100 gripper Open/Close buttons are shown automatically when
+robot_description contains gripper_controller.
 
 Author: WangWeiJian
 Date: 2025-09-08
@@ -32,29 +29,24 @@ from mycobot_pro450_communication.srv import (
 from pymycobot.robot_info import RobotLimit
 
 
+def detect_f100_gripper():
+    """Return True when the loaded URDF exposes gripper_controller."""
+    if rospy.has_param("robot_description"):
+        return "gripper_controller" in rospy.get_param("robot_description")
+    return False
+
+
 def get_firmware_limits(joint5_offset_deg):
     """Load Pro450 limits from pymycobot's single source of truth."""
-    profiles = RobotLimit.robot_limit
-
-    if abs(joint5_offset_deg - 90.0) < 0.01:
-        profile = "Pro450ClientNew"
-
-        if profile not in profiles:
-            raise RuntimeError(
-                "Current pymycobot version does not support "
-                "Pro450ClientNew. Please upgrade pymycobot to "
-                "version 4.0.8 or later."
-            )
-    else:
-        profile = "Pro450Client"
+    profile = "Pro450ClientNew" if abs(joint5_offset_deg - 90.0) < 0.01 else "Pro450Client"
     try:
-        limits = profiles[profile]
+        limits = RobotLimit.robot_limit[profile]
         joint_limits = list(zip(limits["angles_min"], limits["angles_max"]))
         coord_limits = list(zip(limits["coords_min"], limits["coords_max"]))
     except (AttributeError, KeyError, TypeError) as exc:
         raise RuntimeError(
             "Unable to load limits for {} from pymycobot: {}"
-            .format(profile, profile, exc)
+            .format(profile, exc)
         )
     return joint_limits, coord_limits
 
@@ -80,6 +72,7 @@ class Window:
             "/mycobot_pro_450/joint5_offset_deg", 0.0
         )
         self.joint_limits, self.coord_limits = get_firmware_limits(self.joint5_offset_deg)
+        self.gripper_enabled = detect_f100_gripper()
         self.speed_d = tk.StringVar()
         self.speed_d.set(str(self.speed))
 
@@ -96,7 +89,7 @@ class Window:
         self.hs = self.win.winfo_screenheight()
         x = int((self.ws / 2) - 190)
         y = int((self.hs / 2) - 250)
-        self.win.geometry(f"600x480+{x}+{y}")
+        self.win.geometry("600x460+{}+{}".format(x, y))
 
         # Layout and input/display initialization
         self.set_layout()
@@ -111,21 +104,17 @@ class Window:
             row=6, column=1, sticky="w", padx=3, pady=2
         )
 
-        # Gripper control buttons
-        # tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
-        #     row=1, column=0, sticky="w", padx=3, pady=20
-        # )
-        # tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
-        #     row=1, column=1, sticky="w", padx=3, pady=2
-        # )
+        if self.gripper_enabled:
+            tk.Button(self.frmLB, text="Gripper Open", command=self.gripper_open, width=10).grid(
+                row=1, column=0, sticky="w", padx=3, pady=20
+            )
+            tk.Button(self.frmLB, text="Gripper Close", command=self.gripper_close, width=10).grid(
+                row=1, column=1, sticky="w", padx=3, pady=2
+            )
 
-        # Uncomment below for vacuum pump control
-        # tk.Button(self.frmLB, text="Pump On", command=self.pump_open, width=5).grid(row=2, column=0, sticky="w", padx=3, pady=20)
-        # tk.Button(self.frmLB, text="Pump Off", command=self.pump_close, width=5).grid(row=2, column=1, sticky="w", padx=3, pady=2)
-        
         # Queues for thread-safe data transfer
         self.data_queue = queue.Queue()
-        
+
         # Start a background thread to capture ROS data
         threading.Thread(target=self._refresh_data_thread, daemon=True).start()
 
@@ -167,14 +156,22 @@ class Window:
         rospy.wait_for_service("set_joint_angles")
         rospy.wait_for_service("get_joint_coords")
         rospy.wait_for_service("set_joint_coords")
-        # rospy.wait_for_service("switch_gripper_status")
+        if self.gripper_enabled:
+            rospy.wait_for_service("switch_gripper_status")
 
         try:
             self.get_coords = rospy.ServiceProxy("get_joint_coords", GetCoords)
             self.set_coords = rospy.ServiceProxy("set_joint_coords", SetCoords)
             self.get_angles = rospy.ServiceProxy("get_joint_angles", GetAngles)
             self.set_angles = rospy.ServiceProxy("set_joint_angles", SetAngles)
-            # self.switch_gripper = rospy.ServiceProxy("switch_gripper_status", GripperStatus)
+            self.switch_gripper = None
+            if self.gripper_enabled:
+                self.switch_gripper = rospy.ServiceProxy(
+                    "switch_gripper_status", GripperStatus
+                )
+                print("F100 gripper controls enabled.")
+            else:
+                print("No gripper_controller in robot_description; gripper buttons hidden.")
         except Exception:
             print("Error connecting to services.")
             exit(1)
@@ -192,17 +189,17 @@ class Window:
         self.frmLC.grid(row=1, column=0, padx=1, pady=3)
         self.frmLB.grid(row=1, column=1, padx=2, pady=3)
         self.frmRT.grid(row=0, column=1, padx=2, pady=3)
-    
+
     def need_input(self):
         """Create input boxes for joints, coordinates, and speed."""
         # Joint labels
         for i in range(6):
-            tk.Label(self.frmLT, text=f"Joint {i+1}").grid(row=i)
+            tk.Label(self.frmLT, text="Joint {}".format(i + 1)).grid(row=i)
 
         # Coordinate labels
         coord_names = ["x", "y", "z", "rx", "ry", "rz"]
         for i, name in enumerate(coord_names):
-            tk.Label(self.frmRT, text=f" {name} ").grid(row=i)
+            tk.Label(self.frmRT, text=" {} ".format(name)).grid(row=i)
 
         # Initialize StringVars for joint and coordinate inputs
         self.j_vars = [tk.StringVar(value=str(val)) for val in self.res_angles[:6]]
@@ -226,9 +223,9 @@ class Window:
     def show_init(self):
         """Create display labels for current joint angles and coordinates."""
         # Joint labels and values
-        self.cont_vars = [tk.StringVar(value=f"{val}°") for val in self.res_angles[:6]]
+        self.cont_vars = [tk.StringVar(value="{}°".format(val)) for val in self.res_angles[:6]]
         for i, var in enumerate(self.cont_vars):
-            tk.Label(self.frmLC, text=f"Joint {i+1}").grid(row=i)
+            tk.Label(self.frmLC, text="Joint {}".format(i + 1)).grid(row=i)
             tk.Label(self.frmLC, textvariable=var, font=("Arial", 9), width=7, height=1, bg="white").grid(
                 row=i, column=1, padx=0, pady=5
             )
@@ -237,25 +234,29 @@ class Window:
         self.coord_vars = [tk.StringVar(value=str(val)) for val in self.record_coords[:6]]
         coord_names = ["x", "y", "z", "rx", "ry", "rz"]
         for i, (name, var) in enumerate(zip(coord_names, self.coord_vars)):
-            tk.Label(self.frmLC, text=f"  {name} ").grid(row=i, column=3)
+            tk.Label(self.frmLC, text="  {} ".format(name)).grid(row=i, column=3)
             tk.Label(self.frmLC, textvariable=var, font=("Arial", 9), width=7, height=1, bg="white").grid(
                 row=i, column=4, padx=5, pady=5
             )
             tk.Label(self.frmLC, text="mm", font=("Arial", 9)).grid(row=i, column=5)
-    
-    # def gripper_open(self):
-    #     """Open the gripper."""
-    #     try:
-    #         self.switch_gripper(True)
-    #     except ServiceException:
-    #         pass
 
-    # def gripper_close(self):
-    #     """Close the gripper."""
-    #     try:
-    #         self.switch_gripper(False)
-    #     except ServiceException:
-    #         pass
+    def gripper_open(self):
+        """Open the gripper."""
+        if not self.switch_gripper:
+            return
+        try:
+            self.switch_gripper(True)
+        except ServiceException:
+            pass
+
+    def gripper_close(self):
+        """Close the gripper."""
+        if not self.switch_gripper:
+            return
+        try:
+            self.switch_gripper(False)
+        except ServiceException:
+            pass
 
     def validate_values(self, values, limits, label):
         """Validate values against limits."""
@@ -263,8 +264,9 @@ class Window:
             if not (low <= val <= high):
                 messagebox.showerror(
                     "Invalid Input",
-                    f"{label} {i} out of range!\n"
-                    f"Value: {val}, Allowed: {low} ~ {high}"
+                    "{} {} out of range!\nValue: {}, Allowed: {} ~ {}".format(
+                        label, i, val, low, high
+                    ),
                 )
                 return False
         return True
@@ -274,12 +276,11 @@ class Window:
         if not (1 <= speed <= 100):
             messagebox.showerror(
                 "Invalid Speed",
-                f"Speed out of range!\n"
-                f"Value: {speed}, Allowed: 1 ~ 100"
+                "Speed out of range!\nValue: {}, Allowed: 1 ~ 100".format(speed),
             )
             return False
         return True
-        
+
     def get_coord_input(self):
         """Get coordinates from input boxes and send them to the robot."""
         c_value = [float(i.get()) for i in self.c_vars]
@@ -288,7 +289,6 @@ class Window:
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         if not self.validate_speed(self.speed):
             return
-        # c_value.append(self.speed)
         self.async_call(self.set_coords, *c_value, self.speed)
 
     def get_joint_input(self):
@@ -299,7 +299,6 @@ class Window:
         self.speed = int(float(self.get_speed.get())) if self.get_speed.get() else self.speed
         if not self.validate_speed(self.speed):
             return
-        # j_value.append(self.speed)
         j_value[4] += self.joint5_offset_deg
         # Asynchronous Send
         self.async_call(self.set_angles, *j_value, self.speed)
@@ -307,14 +306,14 @@ class Window:
     def async_call(self, func, *args, **kwargs):
         """Run service calls in a separate thread (non-blocking)."""
         threading.Thread(target=func, args=args, kwargs=kwargs, daemon=True).start()
-        
+
     def update_display(self):
         """Update both joint angles and coordinates display."""
         for val, var in zip(self.res_angles, self.cont_vars):
-            var.set(f"{val}°")
+            var.set("{}°".format(val))
         for val, var in zip(self.record_coords[:6], self.coord_vars):
             var.set(str(val))
-            
+
     def get_date(self):
         """Fetch current robot state (non-blocking)."""
         try:
@@ -349,7 +348,7 @@ class Window:
         """
         target_vars = self.coord_vars if way == "coord" else self.cont_vars
         for val, var in zip(data, target_vars):
-            var.set(f"{val}" if way == "coord" else f"{val}°")
+            var.set("{}".format(val) if way == "coord" else "{}°".format(val))
 
     def run(self):
         """Main GUI loop."""

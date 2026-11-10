@@ -34,12 +34,12 @@
 		<arg name="ip" value="$(arg ip)" />	
 		<arg name="port" value="$(arg port)" />	
     </include>
+	<!-- Feedback listeners differ; GUI is unified and auto-enables F100 buttons. -->
 	<group if="$(eval arg('gripper') == 'none')">
 		<node name="real_listener" pkg="mycobot_pro_450" type="listen_real.py" />
-		<node name="simple_gui" pkg="mycobot_pro_450" type="simple_gui.py" />
 	</group>
 	<group if="$(eval arg('gripper') == 'f100')">
 		<node name="real_listener_gripper" pkg="mycobot_pro_450" type="listen_real_gripper.py" />
-		<node name="simple_gui_gripper" pkg="mycobot_pro_450" type="simple_gui_force_gripper.py" />
 	</group>
+	<node name="simple_gui" pkg="mycobot_pro_450" type="simple_gui.py" />
 </launch>

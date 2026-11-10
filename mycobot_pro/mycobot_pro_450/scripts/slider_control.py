@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """
-control_slider.py
+slider_control.py
 This ROS node subscribes to JointState messages and sends the corresponding
-angles to a Pro450 robotic arm using pymycobot.
-
-It converts radians from JointState into degrees and publishes them
-to the robot through the Pro450Client.
+angles to a Pro450 robotic arm using pymycobot. If joint_states contains
+gripper_controller, F100 gripper commands are also sent automatically.
 
 Author: WangWeiJian
 Date: 2025-09-08
 """
 
 import math
+import threading
 import time
 import rospy
 from sensor_msgs.msg import JointState
@@ -37,11 +36,19 @@ else:
     from pymycobot import Pro450Client
 
 
+ARM_JOINT_NAMES = ["joint1", "joint2", "joint3", "joint4", "joint5", "joint6"]
+GRIPPER_JOINT_NAME = "gripper_controller"
+
 mc = None
+angles_queue = None
+pending_gripper_value = None
+command_lock = threading.Lock()
 joint5_offset_deg = 0.0
 joint5_firmware_limits = None
 last_sent_angles = None
+last_sent_gripper_value = None
 last_rejected_joint5_angle = None
+gripper_mode_logged = False
 
 
 def read_joint5_firmware_limits(client):
@@ -79,28 +86,56 @@ def resolve_joint5_offset(limits, configured_offset):
 
 
 def callback(data: JointState):
-    """Callback function for ROS JointState subscription.
+    """Convert JointState to arm (and optional F100) commands."""
+    global angles_queue, pending_gripper_value
+    global last_sent_angles, last_sent_gripper_value, last_rejected_joint5_angle
+    global gripper_mode_logged
 
-    This function converts incoming joint positions (radians) to angles
-    in degrees and sends them to the Pro450 robotic arm.
-
-    Args:
-        data (JointState): Joint state message containing joint positions.
-    """
-    global last_sent_angles, last_rejected_joint5_angle
     if joint5_offset_deg is None:
-        rospy.logerr_once("Refusing J5 command because the selected URDF profile is incompatible with firmware limits")
+        rospy.logerr_once(
+            "Refusing J5 command because the selected URDF profile is incompatible with firmware limits"
+        )
         return
-    data_list = []
-    for index, value in enumerate(data.position):
-        radians_to_angles = round(math.degrees(value), 2)
-        if index == 4:
-            radians_to_angles -= joint5_offset_deg
-        data_list.append(radians_to_angles)
 
     if joint5_firmware_limits is None:
         rospy.logerr_once("Refusing J5 command because firmware limits are unavailable")
         return
+
+    if len(data.name) != len(data.position):
+        rospy.logwarn_throttle(
+            5.0,
+            "Ignoring JointState with mismatched name/position lengths: %d names, %d positions",
+            len(data.name),
+            len(data.position),
+        )
+        return
+
+    name_to_position = dict(zip(data.name, data.position))
+    data_list = []
+    for name in ARM_JOINT_NAMES:
+        if name not in name_to_position:
+            rospy.logwarn_throttle(
+                5.0,
+                "Ignoring JointState missing required joint '%s'",
+                name,
+            )
+            return
+        angle_deg = round(math.degrees(name_to_position[name]), 2)
+        if name == "joint5":
+            angle_deg -= joint5_offset_deg
+        data_list.append(angle_deg)
+
+    gripper_command = None
+    if GRIPPER_JOINT_NAME in name_to_position:
+        if not gripper_mode_logged:
+            rospy.loginfo(
+                "Detected '%s' in joint_states; enabling F100 gripper sync",
+                GRIPPER_JOINT_NAME,
+            )
+            gripper_mode_logged = True
+        gripper_position = name_to_position[GRIPPER_JOINT_NAME]
+        gripper_command = int(round(max(0.0, min(1.0, gripper_position)) * 100))
+
     lower, upper = joint5_firmware_limits
     if not lower <= data_list[4] <= upper:
         if last_rejected_joint5_angle != data_list[4]:
@@ -110,28 +145,53 @@ def callback(data: JointState):
             )
             last_rejected_joint5_angle = data_list[4]
         return
-    
+
     last_rejected_joint5_angle = None
-    if last_sent_angles is not None and all(
+    angles_unchanged = last_sent_angles is not None and all(
         abs(current - previous) < 0.01
         for current, previous in zip(data_list, last_sent_angles)
-    ):
+    )
+    gripper_unchanged = (
+        gripper_command is None or gripper_command == last_sent_gripper_value
+    )
+    if angles_unchanged and gripper_unchanged:
         return
 
-    last_sent_angles = list(data_list)
-    rospy.loginfo(data_list)
-    mc.send_angles(data_list, 25)
+    if not angles_unchanged:
+        last_sent_angles = list(data_list)
+    if gripper_command is not None:
+        last_sent_gripper_value = gripper_command
+
+    if gripper_command is None:
+        rospy.loginfo(data_list)
+    else:
+        rospy.loginfo("joint_list: %s, gripper_value: %s", data_list, gripper_command)
+
+    with command_lock:
+        if not angles_unchanged:
+            angles_queue = data_list
+        if gripper_command is not None:
+            pending_gripper_value = gripper_command
+
+
+def _send_loop():
+    """Background loop to send arm and optional gripper commands."""
+    global mc, pending_gripper_value, angles_queue
+    while not rospy.is_shutdown():
+        time.sleep(0.01)
+        with command_lock:
+            angles_to_send = angles_queue
+            gripper_to_send = pending_gripper_value
+            angles_queue = None
+            pending_gripper_value = None
+        if gripper_to_send is not None:
+            mc.set_pro_gripper_angle(gripper_to_send)
+        if angles_to_send is not None:
+            mc.send_angles(angles_to_send, 25)
 
 
 def listener():
-    """Initialize ROS node and Pro450Client, then subscribe to JointState topic.
-
-    The function:
-      - Initializes the ROS node.
-      - Connects to the Pro450 robotic arm using IP and port.
-      - Sets fresh mode for the robotic arm.
-      - Subscribes to the "joint_states" topic and listens for updates.
-    """
+    """Initialize ROS node and Pro450Client, then subscribe to JointState."""
     global mc, joint5_offset_deg, joint5_firmware_limits
 
     rospy.init_node("control_slider", anonymous=True)
@@ -140,10 +200,14 @@ def listener():
     port = rospy.get_param("~port", 4500)
     joint5_offset_deg = rospy.get_param("/mycobot_pro_450/joint5_offset_deg", 0.0)
     print(ip, port)
+    rospy.loginfo(
+        "Gripper sync auto-detects '%s' in /joint_states",
+        GRIPPER_JOINT_NAME,
+    )
 
     mc = Pro450Client(ip, port)
     time.sleep(0.05)
-    if mc.is_power_on !=1:
+    if mc.is_power_on != 1:
         mc.power_on()
     time.sleep(0.05)
     mc.set_fresh_mode(1)
@@ -155,6 +219,7 @@ def listener():
             joint5_firmware_limits, joint5_offset_deg
         )
 
+    threading.Thread(target=_send_loop, daemon=True).start()
     rospy.Subscriber("joint_states", JointState, callback)
 
     print("spin ...")

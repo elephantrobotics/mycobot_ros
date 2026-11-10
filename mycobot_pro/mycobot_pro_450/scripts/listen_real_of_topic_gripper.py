@@ -8,6 +8,11 @@ from std_msgs.msg import Header
 from mycobot_pro450_communication.msg import MycobotAngles, MycobotGetGripperValue
 
 
+def firmware_gripper_to_joint(gripper_value):
+    """Map F100 firmware open amount 0..100 to URDF gripper_controller 0..1."""
+    return max(0.0, min(1.0, float(gripper_value) / 100.0))
+
+
 class Listener(object):
     def __init__(self):
         super(Listener, self).__init__()
@@ -18,19 +23,12 @@ class Listener(object):
         self.pub = rospy.Publisher("joint_states", JointState, queue_size=10)
         # init subscriber
         self.sub = rospy.Subscriber("mycobot/angles_real", MycobotAngles, self.callback)
-        self.sub_gripper = rospy.Subscriber("mycobot/gripper_angle_real", MycobotGetGripperValue, self.gripper_callback)
+        self.sub_gripper = rospy.Subscriber(
+            "mycobot/gripper_angle_real", MycobotGetGripperValue, self.gripper_callback
+        )
         self.gripper_angle = 0.0
         rospy.spin()
-        
 
-    # def gripper_callback(self, data):
-    #     """Force Gripper angle update"""
-    #     if data.gripper_angle >= 0:
-    #         self.gripper_angle = data.gripper_angle
-    #     else:
-    #         self.gripper_angle = 1
-    #         rospy.logwarn("Unable to read the gripper angle normally: {}".format(self.gripper_angle))
-    
     def gripper_callback(self, data):
         if data is None or not hasattr(data, "gripper_angle"):
             rospy.logwarn_throttle(2.0, "Invalid gripper message")
@@ -40,7 +38,7 @@ class Listener(object):
 
         if angle < 0:
             rospy.logwarn_throttle(
-                2.0, f"Unable to read gripper angle, keep last: {self.gripper_angle}"
+                2.0, "Unable to read gripper angle, keep last: {}".format(self.gripper_angle)
             )
             return
 
@@ -56,16 +54,18 @@ class Listener(object):
         joint_state_send = JointState()
         joint_state_send.header = Header()
 
-        joint_state_send.name = ["joint1", "joint2", "joint3", "joint4", "joint5", "joint6", "gripper_controller"]
+        joint_state_send.name = [
+            "joint1",
+            "joint2",
+            "joint3",
+            "joint4",
+            "joint5",
+            "joint6",
+            "gripper_controller",
+        ]
         joint_state_send.velocity = [0]
         joint_state_send.effort = []
         joint_state_send.header.stamp = rospy.Time.now()
-        
-        gripper_rad = (
-            self.gripper_angle * math.pi / 180
-            if self.gripper_angle is not None
-            else 0.0
-        )
 
         # process callback data
         radians_list = [
@@ -75,9 +75,8 @@ class Listener(object):
             data.joint_4 * (math.pi / 180),
             data.joint_5 * (math.pi / 180),
             data.joint_6 * (math.pi / 180),
-            gripper_rad,
+            firmware_gripper_to_joint(self.gripper_angle),
         ]
-        # rospy.loginfo("res: {}".format(radians_list))
 
         joint_state_send.position = radians_list
         self.pub.publish(joint_state_send)
