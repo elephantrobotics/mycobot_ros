@@ -7,6 +7,14 @@ arm_group_controller:
     - joint4
     - joint5
     - joint6
+  constraints:
+    goal_time: 4.0
+    joint1: {goal: 0.01}
+    joint2: {goal: 0.01}
+    joint3: {goal: 0.01}
+    joint4: {goal: 0.01}
+    joint5: {goal: 0.01}
+    joint6: {goal: 0.01}
   gains:
     joint1:
       p: 100
@@ -15,24 +23,28 @@ arm_group_controller:
       i_clamp: 1
     joint2:
       p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
+      d: 20
+      i: 50
+      i_clamp: 20
+      antiwindup: true
     joint3:
       p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
+      d: 20
+      i: 50
+      i_clamp: 20
+      antiwindup: true
     joint4:
       p: 100
       d: 1
-      i: 1
-      i_clamp: 1
+      i: 50
+      i_clamp: 20
+      antiwindup: true
     joint5:
       p: 100
       d: 1
-      i: 1
-      i_clamp: 1
+      i: 50
+      i_clamp: 20
+      antiwindup: true
     joint6:
       p: 100
       d: 1

@@ -3,6 +3,11 @@
      Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot name="Pro630_force_gripper">
+    <link name="world" />
+    <joint name="world_to_dummy" type="fixed">
+        <parent link="world" />
+        <child link="dummy_link" />
+    </joint>
     <link name="dummy_link" />
     <joint name="dummy_joint" type="fixed">
         <parent link="dummy_link" />
@@ -57,13 +62,14 @@
         <parent link="base_link" />
         <child link="J1_Link" />
         <axis xyz="0 0 -1" />
-        <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+        <limit lower="-3.1416" upper="3.1416" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="J2_Link">
         <inertial>
             <origin xyz="-2.29173833957163E-06 0.0341436588560188 0.134627373673515" rpy="0 0 0" />
             <mass value="0.772" />
-            <inertia ixx="0.007356742" ixy="-0.000000105" ixz="-0.000000274" iyy="0.000007461" iyz="-0.000017541" izz="0.000574556" />
+            <inertia ixx="0.00769082" iyy="0.00770846" izz="0.00061282" ixy="0" ixz="0" iyz="0" />
         </inertial>
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
@@ -86,7 +92,8 @@
         <parent link="J1_Link" />
         <child link="J2_Link" />
         <axis xyz="0 1 0" />
-        <limit lower="-0.7854" upper="3.927" effort="0" velocity="0" />
+        <limit lower="-0.7854" upper="3.927" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="J3_Link">
         <inertial>
@@ -115,7 +122,8 @@
         <parent link="J2_Link" />
         <child link="J3_Link" />
         <axis xyz="0 -1 0" />
-        <limit lower="-2.8798" upper="2.8798" effort="0" velocity="0" />
+        <limit lower="-2.8798" upper="2.8798" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="J4_Link">
         <inertial>
@@ -144,7 +152,8 @@
         <parent link="J3_Link" />
         <child link="J4_Link" />
         <axis xyz="0 1 0" />
-        <limit lower="-1.5708" upper="4.7124" effort="0" velocity="0" />
+        <limit lower="-1.5708" upper="4.7124" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="J5_Link">
         <inertial>
@@ -173,7 +182,8 @@
         <parent link="J4_Link" />
         <child link="J5_Link" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+        <limit lower="-3.1416" upper="3.1416" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="J6_Link">
         <inertial>
@@ -202,7 +212,8 @@
         <parent link="J5_Link" />
         <child link="J6_Link" />
         <axis xyz="0 1 0" />
-        <limit lower="-3.1416" upper="3.1416" effort="0" velocity="0" />
+        <limit lower="-3.1416" upper="3.1416" effort="100" velocity="3.14" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <link name="gripper_connection">
         <visual>
@@ -369,50 +380,56 @@
     </joint>
     <joint name="force_gripper_controller" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="0" upper="1" velocity="0" />
+        <limit effort="1000.0" lower="0" upper="1" velocity="1" />
         <parent link="gripper_base" />
         <child link="gripper_left3" />
         <origin xyz="-0.018 0.016 -0.02" rpy="0 0 0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <joint name="gripper_base_to_gripper_left2" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-0.8" upper="0.5" velocity="0" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
         <parent link="gripper_base" />
         <child link="gripper_left2" />
         <origin xyz="-0.0445 -0.004 -0.02" rpy="0 0 0" />
         <mimic joint="force_gripper_controller" multiplier="1.0" offset="0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <joint name="gripper_left3_to_gripper_left1" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-0.5" upper="0.5" velocity="0" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
         <parent link="gripper_left3" />
         <child link="gripper_left1" />
         <origin xyz="0.01 0.06 0.0" rpy="0 0 0" />
         <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <joint name="gripper_base_to_gripper_right3" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="1" upper="0" velocity="0" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
         <parent link="gripper_base" />
         <child link="gripper_right3" />
         <origin xyz="0.018 0.015 -0.0212" rpy="0 0 0" />
         <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <joint name="gripper_base_to_gripper_right2" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-0.5" upper="0.8" velocity="0" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
         <parent link="gripper_base" />
         <child link="gripper_right2" />
         <origin xyz="0.0442 -0.004 -0.02" rpy="0 0 0" />
         <mimic joint="force_gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <joint name="gripper_right3_to_gripper_right1" type="revolute">
         <axis xyz="0 0 1" />
-        <limit effort="1000.0" lower="-0.5" upper="0.5" velocity="0" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
         <parent link="gripper_right3" />
         <child link="gripper_right1" />
         <origin xyz="-0.01 0.061 0.001" rpy="0 0 0" />
         <mimic joint="force_gripper_controller" multiplier="1.0" offset="0" />
+        <dynamics damping="1" friction="0.1" />
     </joint>
     <transmission name="trans_joint1">
         <type>transmission_interface/SimpleTransmission</type>
@@ -535,8 +552,48 @@
         </actuator>
     </transmission>
     <gazebo>
-        <plugin name="gazebo_ros_control">
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name="mimic_gripper_base_to_gripper_left2" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+            <joint>force_gripper_controller</joint>
+            <mimicJoint>gripper_base_to_gripper_left2</mimicJoint>
+            <multiplier>1.0</multiplier>
+            <offset>0</offset>
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name="mimic_gripper_left3_to_gripper_left1" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+            <joint>force_gripper_controller</joint>
+            <mimicJoint>gripper_left3_to_gripper_left1</mimicJoint>
+            <multiplier>-1.0</multiplier>
+            <offset>0</offset>
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name="mimic_gripper_base_to_gripper_right3" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+            <joint>force_gripper_controller</joint>
+            <mimicJoint>gripper_base_to_gripper_right3</mimicJoint>
+            <multiplier>-1.0</multiplier>
+            <offset>0</offset>
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name="mimic_gripper_base_to_gripper_right2" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+            <joint>force_gripper_controller</joint>
+            <mimicJoint>gripper_base_to_gripper_right2</mimicJoint>
+            <multiplier>-1.0</multiplier>
+            <offset>0</offset>
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name="mimic_gripper_right3_to_gripper_right1" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+            <joint>force_gripper_controller</joint>
+            <mimicJoint>gripper_right3_to_gripper_right1</mimicJoint>
+            <multiplier>1.0</multiplier>
+            <offset>0</offset>
         </plugin>
     </gazebo>
 </robot>

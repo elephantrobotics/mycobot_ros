@@ -10,7 +10,7 @@
     </contributor>
     <created>2024-11-28T01:43:39Z</created>
     <modified>2024-11-28T01:43:39Z</modified>
-    <unit meter="0.001" name="Millimeters" />
+    <unit meter="1" name="meter" />
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_cameras>
@@ -610,6 +610,8 @@
   </library_nodes>
   <library_visual_scenes>
     <visual_scene id="VisualSceneNode">
+      <node id="meter_unit_frame" type="NODE">
+        <scale>0.001 0.001 0.001</scale>
       <node id="View-Perspective" name="View-Perspective">
         <matrix>0.866032 -0.249996 0.433002 143.452530 0.499989 0.433018 -0.750004 -160.243171 -0.000000 0.866024 0.500003 131.370980 0.000000 0.000000 0.000000 1.000000</matrix>
         <instance_camera url="#Camera-Perspective" />
@@ -629,6 +631,7 @@
       <node id="instance-def_1-a22e98d1-b4ac-4dff-a927-47dd5e7bc82f" name="instance-def_1-a22e98d1-b4ac-4dff-a927-47dd5e7bc82f">
         <matrix>1.000000 0.000000 0.000000 -39.419954 0.000000 1.000000 0.000000 -25.099915 0.000000 0.000000 1.000000 -2.378701 0.000000 0.000000 0.000000 1.000000</matrix>
         <instance_node url="#instance-def-a22e98d1-b4ac-4dff-a927-47dd5e7bc82f" />
+      </node>
       </node>
     </visual_scene>
   </library_visual_scenes>
