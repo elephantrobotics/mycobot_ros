@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+  <xacro:arg name="with_gripper" default="true"/>
+  <xacro:arg name="gazebo_contact_response" default="true"/>
+  <xacro:arg name="collision_mesh_dir" default="collision_exact"/>
+  <xacro:arg name="gazebo_control" default="false"/>
+  <xacro:include filename="mycobot_pro_630_force_gripper.urdf"/>
+
+  <xacro:macro name="position_transmission" params="joint">
+    <transmission name="${joint}_transmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint}_actuator">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:if value="$(arg gazebo_control)">
+    <xacro:position_transmission joint="joint1_to_base"/>
+    <xacro:position_transmission joint="joint2_to_joint1"/>
+    <xacro:position_transmission joint="joint3_to_joint2"/>
+    <xacro:position_transmission joint="joint4_to_joint3"/>
+    <xacro:position_transmission joint="joint5_to_joint4"/>
+    <xacro:position_transmission joint="joint6_to_joint5"/>
+    <xacro:if value="$(arg with_gripper)">
+      <xacro:position_transmission joint="gripper_controller"/>
+    </xacro:if>
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/</robotNamespace>
+        <robotParam>/gazebo_spawn/robot_description</robotParam>
+        <robotSimType>pro630_gazebo/PositionRobotHWSim</robotSimType>
+        <controlPeriod>0.01</controlPeriod>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+</robot>

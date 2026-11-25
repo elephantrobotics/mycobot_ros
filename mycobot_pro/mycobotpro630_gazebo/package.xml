@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mycobotpro630_gazebo</name>
+  <version>0.1.0</version>
+  <description>Pro630 Gazebo and real robot controls for ROS Noetic.</description>
+  <maintainer email="support@elephantrobotics.com">Elephant Robotics</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>gazebo_dev</build_depend>
+  <depend>gazebo_ros_control</depend>
+  <depend>hardware_interface</depend>
+  <depend>moveit_core</depend>
+  <depend>moveit_msgs</depend>
+  <depend>pluginlib</depend>
+  <depend>roscpp</depend>
+  <depend>transmission_interface</depend>
+  <depend>urdf</depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>controller_manager_msgs</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_planners_chomp</exec_depend>
+  <exec_depend>pilz_industrial_motion_planner</exec_depend>
+  <exec_depend>moveit_kinematics</exec_depend>
+  <exec_depend>moveit_simple_controller_manager</exec_depend>
+  <exec_depend>moveit_ros_visualization</exec_depend>
+  <exec_depend>moveit_setup_assistant</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>rosgraph</exec_depend>
+  <exec_depend>rosnode</exec_depend>
+  <exec_depend>roslaunch</exec_depend>
+  <exec_depend>rosbash</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>shape_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <depend>std_srvs</depend>
+  <exec_depend>python_qt_binding</exec_depend>
+  <exec_depend>python3-rospkg</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <export>
+    <gazebo_ros_control plugin="${prefix}/gazebo_hw_plugins.xml"/>
+    <moveit_core plugin="${prefix}/planning_request_adapters.xml"/>
+  </export>
+</package>

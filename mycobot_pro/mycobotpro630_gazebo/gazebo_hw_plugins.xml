@@ -1,0 +1,7 @@
+<library path="lib/libpro630_gazebo_hw">
+  <class name="pro630_gazebo/PositionRobotHWSim"
+         type="pro630_gazebo::PositionRobotHWSim"
+         base_class_type="gazebo_ros_control::RobotHWSim">
+    <description>Pro630 position mirror, pose seeding and synchronous gripper mimic joints.</description>
+  </class>
+</library>

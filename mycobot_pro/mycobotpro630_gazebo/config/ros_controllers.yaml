@@ -1,0 +1,17 @@
+joint_state_broadcaster:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: [joint1_to_base, joint2_to_joint1, joint3_to_joint2,
+           joint4_to_joint3, joint5_to_joint4, joint6_to_joint5]
+  constraints:
+    # Allow sampled joint velocity to settle after the final Gazebo update.
+    goal_time: 0.5
+    stopped_velocity_tolerance: 0.01
+pro_gripper_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: [gripper_controller]
+  constraints:
+    goal_time: 0.5
+    stopped_velocity_tolerance: 0.01

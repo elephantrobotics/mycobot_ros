@@ -1,0 +1,9 @@
+string token
+string method
+string args_json
+string kwargs_json
+---
+bool success
+string result_json
+string error
+string stamps_json

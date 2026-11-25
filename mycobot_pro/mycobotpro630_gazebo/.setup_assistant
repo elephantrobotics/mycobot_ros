@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mycobotpro630_gazebo
+    relative_path: config/firefighter.urdf.xacro
+    xacro_args: with_gripper:=true
+  SRDF:
+    relative_path: config/firefighter.srdf
+  CONFIG:
+    author_name: Elephant Robotics
+    author_email: support@elephantrobotics.com
+    generated_timestamp: 0

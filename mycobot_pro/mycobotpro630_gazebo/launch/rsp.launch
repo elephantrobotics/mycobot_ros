@@ -1,0 +1,7 @@
+<launch>
+  <arg name="with_gripper" default="auto"/>
+  <node pkg="mycobotpro630_gazebo" type="pro630_auxiliary.py" name="$(anon pro630_rsp)" required="true" output="screen">
+    <param name="tool" value="rsp"/>
+    <param name="with_gripper" value="$(arg with_gripper)" type="str"/>
+  </node>
+</launch>

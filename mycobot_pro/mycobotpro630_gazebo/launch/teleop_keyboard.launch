@@ -1,0 +1,8 @@
+<launch>
+  <arg name="startup_timeout_sec" default="600.0"/>
+  <node pkg="mycobotpro630_gazebo" type="pro630_control_session.py" name="$(anon pro630_keyboard_session)" required="true" output="screen">
+    <param name="feature" value="keyboard"/>
+    <param name="environment" value="real"/>
+    <param name="startup_timeout_sec" value="$(arg startup_timeout_sec)" type="double"/>
+  </node>
+</launch>

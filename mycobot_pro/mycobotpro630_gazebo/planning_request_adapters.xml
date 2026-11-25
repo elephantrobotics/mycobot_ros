@@ -1,0 +1,7 @@
+<library path="lib/libpro630_current_start_adapter">
+  <class name="pro630_gazebo/UseCurrentStartState"
+         type="pro630_gazebo::UseCurrentStartState"
+         base_class_type="planning_request_adapter::PlanningRequestAdapter">
+    <description>Start each new Pro630 plan from the current monitored scene state, preserving the requested goal.</description>
+  </class>
+</library>

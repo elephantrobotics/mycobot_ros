@@ -1,0 +1,583 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:ns0="http://www.ros.org/wiki/xacro" xmlns:xacro="http://www.ros.org/wiki/xacro" name="firefighter">
+    <link name="world" />
+    <joint name="world_to_base" type="fixed">
+        <parent link="world" />
+        <child link="base" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    <ns0:property name="width" value=".2" />
+    <link name="base">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/base.dae" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 0" />
+        </visual>
+        <inertial>
+            <mass value="1.0" />
+            <origin xyz="0 0 0.05" rpy="0 0 0" />
+            <inertia ixx="0.002" iyy="0.002" izz="0.002" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/base_exact.stl" />
+            </geometry>
+            <origin xyz="0 0 0 " rpy=" 0 0 0" />
+        </collision>
+    </link>
+    <link name="link1">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link1.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.045 " rpy="0 0 0" />
+        </visual>
+        <inertial>
+            <mass value="0.2" />
+            <origin xyz="0 0 -0.01" rpy="0 0 0" />
+            <inertia ixx="0.0005" iyy="0.0005" izz="0.0005" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link1_exact.stl" />
+            </geometry>
+            <origin xyz="0 0 -0.045 " rpy="0 0 0" />
+        </collision>
+    </link>
+    <link name="link2">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link2.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.06 " rpy=" 3.14159 0 0" />
+        </visual>
+        <inertial>
+            <mass value="0.3" />
+            <origin xyz="0.12 0 -0.1" rpy="0 0 0" />
+            <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link2_exact.stl" />
+            </geometry>
+            <origin xyz="0 0 -0.06 " rpy=" 3.14159 0 0" />
+        </collision>
+    </link>
+    <link name="link3">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link3.dae" />
+            </geometry>
+            <origin xyz="0 0 -0.06 " rpy=" 0 0 0" />
+        </visual>
+        <inertial>
+            <mass value="0.3" />
+            <origin xyz="0.12 0 0.005" rpy="0 0 0" />
+            <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link3_exact.stl" />
+            </geometry>
+            <origin xyz="0 0 -0.06 " rpy=" 0 0 0" />
+        </collision>
+    </link>
+    <link name="link4">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link4.dae" />
+            </geometry>
+            <origin xyz="0 0 0.039 " rpy=" 3.14159 0 1.5707" />
+        </visual>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0.039" rpy="0 0 0" />
+            <inertia ixx="0.0002" iyy="0.0002" izz="0.0002" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link4_exact.stl" />
+            </geometry>
+            <origin xyz="0 0 0.039 " rpy=" 3.14159 0 1.5707" />
+        </collision>
+    </link>
+    <link name="link5">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link5.dae" />
+            </geometry>
+            <origin xyz="0 0  -0.04 " rpy=" 0  0 3.1415926" />
+        </visual>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 -0.01" rpy="0 0 0" />
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link5_exact.stl" />
+            </geometry>
+            <origin xyz="0 0  -0.04 " rpy=" 0  0 3.1415926" />
+        </collision>
+    </link>
+    <link name="link6">
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/link6.dae" />
+            </geometry>
+            <origin xyz="-0.011 0 0" rpy=" 0 1.5707  0" />
+        </visual>
+        <inertial>
+            <mass value="0.1" />
+            <origin xyz="-0.006 0 0" rpy="0 0 0" />
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/link6_exact.stl" />
+            </geometry>
+            <origin xyz="-0.011 0 0" rpy=" 0 1.5707  0" />
+        </collision>
+    </link>
+    <joint name="joint1_to_base" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.14" />
+        <parent link="base" />
+        <child link="link1" />
+        <origin xyz="0 0 0.205" rpy="0 0 0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <joint name="joint2_to_joint1" type="revolute">
+        <axis xyz="0 0 -1" />
+        <limit effort="1000.0" lower="-3.141592653589793" upper="3.141592653589793" velocity="3.14" />
+        <parent link="link1" />
+        <child link="link2" />
+        <origin xyz="0 0 0" rpy="1.5707 -1.5708 0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <joint name="joint3_to_joint2" type="revolute">
+        <axis xyz=" 0 0 -1" />
+        <limit effort="1000.0" lower="-2.6179938779914944" upper="2.6179938779914944" velocity="3.14" />
+        <parent link="link2" />
+        <child link="link3" />
+        <origin xyz="0.269 0 0 " rpy="0 0 0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <joint name="joint4_to_joint3" type="revolute">
+        <axis xyz=" 0 0 -1" />
+        <limit effort="1000.0" lower="-2.9670597283903604" upper="2.9670597283903604" velocity="3.14" />
+        <parent link="link3" />
+        <child link="link4" />
+        <origin xyz="0.266 0  -0.088" rpy="0 0 1.5708" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <joint name="joint5_to_joint4" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-2.9321531433504737" upper="2.9321531433504737" velocity="3.14" />
+        <parent link="link4" />
+        <child link="link5" />
+        <origin xyz="0 -0.095 0" rpy="1.5707 -1.5707 0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <joint name="joint6_to_joint5" type="revolute">
+        <axis xyz="1 0 0" />
+        <limit effort="1000.0" lower="-3.036872898470133" upper="3.036872898470133" velocity="3.14" />
+        <parent link="link5" />
+        <child link="link6" />
+        <origin xyz="-0.053 0 0" rpy="-3.14159 0 3.14159 " />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_connection">
+        <inertial>
+            <mass value="0.15" />
+            <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0.0" ixz="0.0" iyz="0.0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/mygripper_f100_connection.dae" />
+            </geometry>
+            <origin xyz="-0.03 0.014 0" rpy="0 0 -1.5708" />
+        </visual>
+        <selfCollide>true</selfCollide>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/mygripper_f100_connection_exact.stl" />
+            </geometry>
+            <origin xyz="-0.03 0.014 0" rpy="0 0 -1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_base">
+        <inertial>
+            <mass value="0.12" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.00005" iyy="0.00005" izz="0.00003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_base.dae" />
+            </geometry>
+            <origin xyz="-0.107 0.012 0.0" rpy="1.5708 0 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_base_exact.stl" />
+            </geometry>
+            <origin xyz="-0.107 0.012 0.0" rpy="1.5708 0 1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_left1">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_left1.dae" />
+            </geometry>
+            <origin xyz="-0.047 -0.013 0.044" rpy="1.5708 0 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_left1_exact.stl" />
+            </geometry>
+            <origin xyz="-0.047 -0.013 0.044" rpy="1.5708 0 1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_left2">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_left2.dae" />
+            </geometry>
+            <origin xyz="-0.0 0.03 0.004" rpy="3.14159 0 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_left2_exact.stl" />
+            </geometry>
+            <origin xyz="-0.0 0.03 0.004" rpy="3.14159 0 1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_left3">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_left3.dae" />
+            </geometry>
+            <origin xyz="0 -0.03 0.012" rpy="1.5708 3.14159 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_left3_exact.stl" />
+            </geometry>
+            <origin xyz="0 -0.03 0.012" rpy="1.5708 3.14159 1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_right1">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_right1.dae" />
+            </geometry>
+            <origin xyz="0.047 -0.013 -0.046" rpy="1.5708 3.14 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_right1_exact.stl" />
+            </geometry>
+            <origin xyz="0.047 -0.013 -0.046" rpy="1.5708 3.14 -1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_right2">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_right2.dae" />
+            </geometry>
+            <origin xyz="0 0.03 -0.005" rpy="0 0 1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_right2_exact.stl" />
+            </geometry>
+            <origin xyz="0 0.03 -0.005" rpy="0 0 1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_right3">
+        <inertial>
+            <mass value="0.02" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="0.000005" iyy="0.000005" izz="0.000003" ixy="0.0" ixz="0.0" iyz="0.0" />
+        </inertial>
+        <visual>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/force_control_gripper/pro_gripper_right3.dae" />
+            </geometry>
+            <origin xyz="-0.014 -0.029 0.004" rpy="3.14 0 -1.5708" />
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://mycobotpro630_gazebo/meshes/$(arg collision_mesh_dir)/pro_gripper_right3_exact.stl" />
+            </geometry>
+            <origin xyz="-0.014 -0.029 0.004" rpy="3.14 0 -1.5708" />
+        </collision>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="joint6_to_gripper_connect" type="fixed">
+        <parent link="link6" />
+        <child link="gripper_connection" />
+        <!-- Rotate the complete gripper around the flange center (~22.5 deg)
+             and align the three mounting-hole axes. Preserve axial spacing
+             and all geometry/internal gripper transforms. -->
+        <origin xyz="0.00100009253398768 0.000382689546078907 -0.00092260545579551" rpy="1.57069206326867 -0.3927026643656 1.57083622706422" />
+        <dynamics damping="0.1" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="joint6_to_gripper_base" type="fixed">
+        <parent link="gripper_connection" />
+        <child link="gripper_base" />
+        <origin xyz="0 -0.02 0.0364" rpy="1.5708 0 0" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_controller" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="0" upper="1" velocity="1" />
+        <parent link="gripper_base" />
+        <child link="gripper_left3" />
+        <origin xyz="-0.018 0.016 -0.02" rpy="0 0 0" />
+        <dynamics damping="10" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_base_to_gripper_left2" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+        <parent link="gripper_base" />
+        <child link="gripper_left2" />
+        <origin xyz="-0.0445 -0.004 -0.02" rpy="0 0 0" />
+        <mimic joint="gripper_controller" multiplier="1.0" offset="0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_left3_to_gripper_left1" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+        <parent link="gripper_left3" />
+        <child link="gripper_left1" />
+        <origin xyz="0.01 0.06 0.0" rpy="0 0 0" />
+        <mimic joint="gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_base_to_gripper_right3" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+        <parent link="gripper_base" />
+        <child link="gripper_right3" />
+        <origin xyz="0.018 0.015 -0.0212" rpy="0 0 0" />
+        <mimic joint="gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_base_to_gripper_right2" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+        <parent link="gripper_base" />
+        <child link="gripper_right2" />
+        <origin xyz="0.0442 -0.004 -0.02" rpy="0 0 0" />
+        <mimic joint="gripper_controller" multiplier="-1.0" offset="0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_right3_to_gripper_right1" type="revolute">
+        <axis xyz="0 0 1" />
+        <limit effort="1000.0" lower="-1" upper="1" velocity="1" />
+        <parent link="gripper_right3" />
+        <child link="gripper_right1" />
+        <origin xyz="-0.01 0.061 0.001" rpy="0 0 0" />
+        <mimic joint="gripper_controller" multiplier="1.0" offset="0" />
+        <dynamics damping="1.0" friction="0.1" />
+    </joint>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <link name="gripper_cable_terminal">
+        <collision name="gripper_cable_terminal_collision">
+            <origin xyz="-0.029086814 0.042004446 0.106890604" rpy="-1.570796326795 0 0" />
+            <geometry>
+                <cylinder radius="0.006624266" length="0.025" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="-0.029086814 0.042004446 0.106890604" rpy="0 0 0" />
+            <mass value="0.000001" />
+            <inertia ixx="6.305356e-11" iyy="2.194045e-11" izz="6.305356e-11" ixy="0" ixz="0" iyz="0" />
+        </inertial>
+    </link>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <joint name="gripper_base_to_cable_terminal" type="fixed">
+        <parent link="gripper_base" />
+        <child link="gripper_cable_terminal" />
+        <origin xyz="-0.107 0.012 0.0" rpy="1.5708 0 1.5708" />
+    </joint>
+    </xacro:if>
+    <gazebo reference="base">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link1">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link2">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link3">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link4">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link5">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <gazebo reference="link6">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_connection">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_base">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_left1">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_left2">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_left3">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_right1">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_right2">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_right3">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <xacro:if value="$(arg with_gripper)">
+    <gazebo reference="gripper_cable_terminal">
+        <selfCollide>false</selfCollide>
+        <gravity>false</gravity>
+    </gazebo>
+    </xacro:if>
+    <!--Position-tracking digital twin. Gravity is disabled for uncalibrated inertial dynamics. MoveIt geometric collision checking and external Gazebo contacts remain active.-->
+    <!-- The real mirror follows measured poses. Conservative Gazebo envelopes
+         must not push the model away from those poses; MoveIt collision_exact
+         remains the collision safety check. Pure simulation keeps contacts. -->
+    <xacro:macro name="mirror_no_contacts" params="link">
+        <gazebo reference="${link}">
+            <collision>
+                <surface>
+                    <contact>
+                        <collide_bitmask>0</collide_bitmask>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo>
+    </xacro:macro>
+    <xacro:unless value="$(arg gazebo_contact_response)">
+        <xacro:mirror_no_contacts link="base" />
+        <xacro:mirror_no_contacts link="link1" />
+        <xacro:mirror_no_contacts link="link2" />
+        <xacro:mirror_no_contacts link="link3" />
+        <xacro:mirror_no_contacts link="link4" />
+        <xacro:mirror_no_contacts link="link5" />
+        <xacro:mirror_no_contacts link="link6" />
+        <xacro:if value="$(arg with_gripper)">
+            <xacro:mirror_no_contacts link="gripper_connection" />
+            <xacro:mirror_no_contacts link="gripper_base" />
+            <xacro:mirror_no_contacts link="gripper_cable_terminal" />
+            <xacro:mirror_no_contacts link="gripper_left1" />
+            <xacro:mirror_no_contacts link="gripper_left2" />
+            <xacro:mirror_no_contacts link="gripper_left3" />
+            <xacro:mirror_no_contacts link="gripper_right1" />
+            <xacro:mirror_no_contacts link="gripper_right2" />
+            <xacro:mirror_no_contacts link="gripper_right3" />
+        </xacro:if>
+    </xacro:unless>
+
+</robot>

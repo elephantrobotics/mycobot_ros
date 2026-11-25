@@ -20,18 +20,35 @@ jobs:
   industrial_ci:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         env:
           - { ROS_DISTRO: melodic, ROS_REPO: main }
-          # - { ROS_DISTRO: noetic, ROS_REPO: main }
-      
-      
+          - { ROS_DISTRO: noetic, ROS_REPO: main }
     steps:
-      - name: Setup directories
-        run: mkdir -p ros_ws/src
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          path: ros_ws/src
-      - uses: "ros-industrial/industrial_ci@master"
-        env: ${{ matrix.env }}
+    - name: Setup directories
+      run: mkdir -p ros_ws/src
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        path: ros_ws/src
+    - name: Select packages for this ROS distro
+      shell: bash
+      run: |
+        set -euo pipefail
+        src="ros_ws/src"
+        pkg="$src/mycobot_pro/mycobotpro630_gazebo"
+        if [ "${{ matrix.env.ROS_DISTRO }}" = "melodic" ]; then
+          # This package targets Noetic. rosdep reads package.xml even when
+          # CATKIN_IGNORE is present, so remove it before dependency installation.
+          rm -rf "$pkg"
+        elif [ "${{ matrix.env.ROS_DISTRO }}" = "noetic" ]; then
+          hold="$(mktemp -d)"
+          mv "$pkg" "$hold/mycobotpro630_gazebo"
+          find "$src" -name package.xml -printf '%h\0' | xargs -0 rm -rf
+          mkdir -p "$src/mycobot_pro"
+          mv "$hold/mycobotpro630_gazebo" "$pkg"
+          rm -rf "$hold"
+        fi
+    - uses: "ros-industrial/industrial_ci@master"
+      env: ${{ matrix.env }}

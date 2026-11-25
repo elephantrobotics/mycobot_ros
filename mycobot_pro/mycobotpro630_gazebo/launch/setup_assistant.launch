@@ -1,0 +1,9 @@
+<launch>
+  <arg name="with_gripper" default="auto"/>
+  <arg name="auto_load" default="false"/>
+  <node pkg="mycobotpro630_gazebo" type="pro630_auxiliary.py" name="$(anon pro630_setup_assistant)" required="true" output="screen">
+    <param name="tool" value="setup_assistant"/>
+    <param name="with_gripper" value="$(arg with_gripper)" type="str"/>
+    <param name="auto_load" value="$(arg auto_load)" type="bool"/>
+  </node>
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+  <arg name="environment"/>
+  <node pkg="moveit_ros_move_group" type="move_group" name="move_group" output="screen" required="true">
+    <!-- Both installations expose Gazebo trajectory controllers. The SDK bridge
+         never consumes MoveIt trajectories or controller command topics. -->
+    <param name="allow_trajectory_execution" value="true"/>
+    <param name="planning_scene_monitor/publish_planning_scene" value="true"/>
+    <param name="planning_scene_monitor/publish_geometry_updates" value="true"/>
+    <param name="planning_scene_monitor/publish_state_updates" value="true"/>
+    <param name="planning_scene_monitor/publish_transforms_updates" value="true"/>
+  </node>
+</launch>
