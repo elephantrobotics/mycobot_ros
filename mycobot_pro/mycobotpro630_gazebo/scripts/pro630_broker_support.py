@@ -79,7 +79,7 @@ WRITES = {
     'slider': {'send_angles', 'set_pro_gripper_angle', 'set_pro_gripper_speed', 'stop'},
     'keyboard': {'jog_coord', 'get_coords', 'send_angles', 'set_pro_gripper_angle',
                  'set_pro_gripper_speed', 'stop', 'keyboard_stop'},
-    'drag': {'set_motor_enabled', 'set_pro_gripper_enabled'},
+    'drag': {'set_motor_enabled', 'set_pro_gripper_enabled', 'clear_all_errors'},
 }
 
 

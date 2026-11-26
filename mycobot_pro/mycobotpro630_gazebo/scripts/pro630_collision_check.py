@@ -5,6 +5,8 @@ import time
 
 from moveit_msgs.srv import GetStateValidity
 
+from pro630_scene_support import FLOOR_OBJECT_ID
+
 COLLISION_SAMPLE_STEP = math.radians(1.0)
 MAX_COLLISION_SAMPLES = 400
 DEFAULT_COLLISION_DEPTH_TOLERANCE_M = 0.0001
@@ -28,6 +30,9 @@ class CollisionCheck:
         current_valid, previous_contacts, reason = self._state_is_valid(current)
         if reason:
             return False, reason
+        # A pose already inside the ground is not an escapable contact.
+        if not current_valid and any(FLOOR_OBJECT_ID in pair for pair in previous_contacts):
+            return False, self._format_collision_reason(0.0, previous_contacts)
         escaping_collision = not current_valid
         initial_contacts = dict(previous_contacts)
 

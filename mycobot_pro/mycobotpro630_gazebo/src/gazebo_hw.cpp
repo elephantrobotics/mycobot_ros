@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <map>
 #include <mutex>
@@ -27,6 +28,7 @@ constexpr double kGroundDampingHoldSec = 0.2;
 constexpr double kGroundClearDelaySec = 0.1;
 constexpr double kRigidSwitchSlewRate = 0.5;  // rad/s ramp when handing back to rigid tracking.
 constexpr double kSettleDampingScale = 4.0;    // Extra damping while a STOP hold sheds contact force.
+constexpr unsigned int kGroundCategoryBit = 0x1u;
 const std::map<std::string, double> kSimulationEffortLimits = {
     {"joint1_to_base", 8.0}, {"joint2_to_joint1", 8.0}, {"joint3_to_joint2", 5.0},
     {"joint4_to_joint3", 3.0}, {"joint5_to_joint4", 2.0}, {"joint6_to_joint5", 2.0},
@@ -394,8 +396,9 @@ private:
     }
     std::lock_guard<std::mutex> lock(mode_mutex_);
     desired_limited_ = req.data;
-    if (!req.data)
-      hold_requested_ = false;
+    // Enter limited mode holding the measured pose until the slider confirms
+    // the new controller trajectory. Never track the previous rigid command.
+    hold_requested_ = req.data;
     res.success = true;
     if (req.data)
       res.message = "limited";
@@ -434,6 +437,8 @@ private:
           link->ResetPhysicsStates();
       }
     }
+    // The base keeps its filter. Moving links no longer receive a ground reaction.
+    suspendGroundCollision();
     for (auto& entry : joints_)
     {
       auto& joint = entry.second;
@@ -480,15 +485,12 @@ private:
 
   bool readyForRigidSwitch(const ros::Time& time)
   {
-    if (hasMovingLinkGroundContact())
+    // Stay limited for the whole time a moving link is still inside the floor.
+    // A short clear delay is only the gap after the geometry has come back out.
+    if (movingLinkBelowGround() || hasMovingLinkGroundContact())
     {
       contact_free_since_valid_ = false;
       return false;
-    }
-    if (!movingLinkTouchesGround())
-    {
-      contact_free_since_valid_ = false;
-      return true;
     }
     if (!contact_free_since_valid_)
     {
@@ -501,6 +503,7 @@ private:
 
   void enterRigidRamp()
   {
+    restoreGroundCollision();
     if (model_)
     {
       for (const auto& link : model_->GetLinks())
@@ -576,7 +579,7 @@ private:
     return false;
   }
 
-  bool movingLinkTouchesGround() const
+  bool movingLinkBelowGround() const
   {
     if (!model_)
       return false;
@@ -592,12 +595,85 @@ private:
           return true;
       }
     }
-    return hasMovingLinkGroundContact();
+    return false;
+  }
+
+  void suspendGroundCollision()
+  {
+    if (ground_filters_saved_ || !model_ || !model_->GetWorld())
+      return;
+    const gazebo::physics::ModelPtr ground = model_->GetWorld()->ModelByName(kGroundModel);
+    if (!ground)
+      return;
+    // Give the floor its own category bit, then remove that bit from the
+    // moving links. The fixed base and any other object keep colliding.
+    // Gazebo filters with the surface bitmask, so that field has to change too.
+    for (const auto& link : ground->GetLinks())
+    {
+      if (!link)
+        continue;
+      for (const auto& collision : link->GetCollisions())
+        rememberFilter(collision, kGroundCategoryBit, collisionFilterBits(collision));
+    }
+    for (const auto& link : model_->GetLinks())
+    {
+      if (!link)
+        continue;
+      const std::string name = link->GetName();
+      if (name == "base" || name == "world")
+        continue;
+      for (const auto& collision : link->GetCollisions())
+      {
+        const unsigned int bits = collisionFilterBits(collision);
+        rememberFilter(collision, bits, bits & ~kGroundCategoryBit);
+      }
+    }
+    ground_filters_saved_ = !saved_collision_filters_.empty();
+    if (ground_filters_saved_)
+      ROS_INFO("Pro630 moving links can pass through the ground plane");
+  }
+
+  void restoreGroundCollision()
+  {
+    if (!ground_filters_saved_)
+      return;
+    for (const auto& saved : saved_collision_filters_)
+    {
+      if (!saved.collision)
+        continue;
+      if (saved.collision->GetSurface())
+        saved.collision->GetSurface()->collideBitmask = saved.category_bits;
+      saved.collision->SetCategoryBits(saved.category_bits);
+      saved.collision->SetCollideBits(saved.collide_bits);
+    }
+    saved_collision_filters_.clear();
+    ground_filters_saved_ = false;
+    ROS_INFO("Pro630 restored ground-plane collision");
+  }
+
+  static unsigned int collisionFilterBits(const gazebo::physics::CollisionPtr& collision)
+  {
+    if (!collision || !collision->GetSurface())
+      return 0xFFFFu;
+    return collision->GetSurface()->collideBitmask;
+  }
+
+  void rememberFilter(const gazebo::physics::CollisionPtr& collision,
+                      unsigned int category_bits, unsigned int collide_bits)
+  {
+    if (!collision)
+      return;
+    const unsigned int original = collisionFilterBits(collision);
+    saved_collision_filters_.push_back(CollisionFilter{collision, original, original});
+    if (collision->GetSurface())
+      collision->GetSurface()->collideBitmask = category_bits & collide_bits;
+    collision->SetCategoryBits(category_bits);
+    collision->SetCollideBits(collide_bits);
   }
 
   bool groundDampingHeld(const ros::Time& time)
   {
-    const bool touching = movingLinkTouchesGround();
+    const bool touching = hasMovingLinkGroundContact();
     if (touching != ground_touching_)
     {
       ground_touching_ = touching;
@@ -615,6 +691,13 @@ private:
 
   hardware_interface::JointStateInterface states_;
   hardware_interface::PositionJointInterface positions_;
+  struct CollisionFilter
+  {
+    gazebo::physics::CollisionPtr collision;
+    unsigned int category_bits;
+    unsigned int collide_bits;
+  };
+
   gazebo::physics::ModelPtr model_;
   std::map<std::string, Joint> joints_;
   std::vector<Mimic> mimics_;
@@ -622,7 +705,7 @@ private:
   ros::ServiceServer set_limited_srv_;
   ros::ServiceServer set_hold_srv_;
   std::mutex mode_mutex_;
-  Mode active_mode_ = Mode::Rigid;
+  std::atomic<Mode> active_mode_{Mode::Rigid};
   bool desired_limited_ = false;
   bool hold_requested_ = false;
   bool holding_ = false;
@@ -632,6 +715,8 @@ private:
   ros::Time last_write_time_;
   bool ground_seen_ = false;
   bool ground_touching_ = false;
+  bool ground_filters_saved_ = false;
+  std::vector<CollisionFilter> saved_collision_filters_;
   bool contact_free_since_valid_ = false;
   bool has_last_write_time_ = false;
   bool stopped_ = false;

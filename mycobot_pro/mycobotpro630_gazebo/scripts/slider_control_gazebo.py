@@ -10,6 +10,7 @@ import threading
 import time
 
 import pro630_ros1 as ros
+from control_msgs.srv import QueryTrajectoryState
 from rospy import Duration, Time
 from moveit_msgs.srv import GetStateValidity
 from pro630_ros1 import Node
@@ -42,6 +43,9 @@ MAX_VELOCITY_RAD_S = (1.0,) * 7
 SIMULATION_MAX_VELOCITY_RAD_S = (1.0,) * 7
 MIN_TRAJECTORY_DURATION = 0.5
 STOP_HOLD_DURATION = 0.05
+FORCE_START_LEAD_S = 0.15
+FORCE_HANDOFF_TIMEOUT_S = 2.0
+FORCE_TRACKING_MATCH_RAD = 1e-6
 MAX_TRAJECTORY_DURATION = 600.0
 SPLINE_PEAK_VELOCITY_FACTOR = 1.5
 SIMULATION_ARRIVAL_TOLERANCE = 0.01
@@ -150,6 +154,17 @@ class SliderControl(CollisionCheck, Node):
             self.create_client(SetBool, "/pro630/set_limited_hold")
             if self.mode == 1 else None
         )
+        self.force_trajectory_clients = []
+        if self.mode == 1:
+            self.force_trajectory_clients.append((
+                self.create_client(QueryTrajectoryState, "/arm_controller/query_state"),
+                ARM_JOINTS,
+            ))
+            if self.with_gripper:
+                self.force_trajectory_clients.append((
+                    self.create_client(QueryTrajectoryState, "/pro_gripper_controller/query_state"),
+                    (GRIPPER_JOINT,),
+                ))
         self._limited_tracking = False
         self._hold_lock = threading.Lock()
         self._state_lock = threading.RLock()
@@ -394,7 +409,7 @@ class SliderControl(CollisionCheck, Node):
             self._queue_real_motion(target, speed_scale)
             return
 
-        with self._state_lock:
+        with self._hold_lock, self._state_lock:
             if self._command_active:
                 self._publish_status("Rejected: a command is already being validated/executed.", level="warning")
                 return
@@ -458,16 +473,28 @@ class SliderControl(CollisionCheck, Node):
                 return
 
             if force_collision:
-                self._set_limited_tracking(True)
+                with self._hold_lock:
+                    if self._stop_requested:
+                        self._publish_status("Cancelled before execution.")
+                        return
+                    self._set_limited_tracking(True)
             elif self._get_limited_tracking():
                 with self._state_lock:
                     align = (list(self._current_positions)
                              if self._current_positions is not None else current)
-                self._publish_trajectory(align, 0.05)
+                with self._hold_lock:
+                    if self._stop_requested:
+                        self._publish_status("Cancelled before execution.")
+                        return
+                    self._publish_trajectory(align, 0.05)
                 if self._stop_event.wait(0.07) or self._stop_requested:
                     self._publish_status("Cancelled before execution.")
                     return
-                self._set_limited_tracking(False)
+                with self._hold_lock:
+                    if self._stop_requested:
+                        self._publish_status("Cancelled before execution.")
+                        return
+                    self._set_limited_tracking(False)
                 # Stay on the measured pose until rigid tracking is quiescent,
                 # then let the validated trajectory start from that pose.
                 rigid_deadline = time.monotonic() + 15.0
@@ -486,26 +513,35 @@ class SliderControl(CollisionCheck, Node):
                 duration = self._trajectory_duration(
                     current, target, speed_scale, velocity_limits=SIMULATION_MAX_VELOCITY_RAD_S)
 
-            if self._stop_requested:
+            with self._hold_lock:
+                if self._stop_requested:
+                    self._publish_status("Cancelled before execution.")
+                    return
+                start = Time.now()
+                if force_collision:
+                    with self._state_lock:
+                        if (not self._feedback_valid or self._current_positions is None
+                                or time.monotonic() - self._feedback_time > 1.0):
+                            raise RuntimeError("Gazebo feedback is unavailable for Force Execute.")
+                        current = list(self._current_positions)
+                    duration = self._trajectory_duration(
+                        current, target, speed_scale, velocity_limits=SIMULATION_MAX_VELOCITY_RAD_S)
+                    start += Duration.from_sec(FORCE_START_LEAD_S)
+                    self._publish_trajectory(
+                        target, duration, [0.0] * len(target), start=start, origin=current)
+                else:
+                    self._publish_trajectory(target, duration)
+
+            if force_collision and not self._release_force_hold(start, duration, current, target):
                 self._publish_status("Cancelled before execution.")
                 return
-
-            start = Time.now().to_sec()
-            self._publish_trajectory(target, duration)
-            if force_collision:
-                # Let the new setpoint replace the STOP anchor before tracking it.
-                # The lock keeps a STOP that arrives in this window as the final hold.
-                self._stop_event.wait(0.03)
-                with self._hold_lock:
-                    if not self._stop_requested:
-                        self._set_limited_hold(False)
 
             execution_kind = "FORCE SIMULATION" if force_collision else "Executing"
             self._publish_status(
                 f"{execution_kind} at {speed_scale * 100:.0f}% speed; "
                 f"planned duration {duration:.2f} s."
             )
-            self._wait_for_simulation_arrival(target, start, duration, force_collision)
+            self._wait_for_simulation_arrival(target, start.to_sec(), duration, force_collision)
         except Exception as exc:
             self._publish_status(f"Execution failed: {exc}", level="error")
         finally:
@@ -513,6 +549,47 @@ class SliderControl(CollisionCheck, Node):
                 self._command_active = False
             self._publish_command_busy()
 
+    def _release_force_hold(self, start, duration, current, target):
+        # Query the controller's queued trajectory at two times. A STOP
+        # trajectory may end at the same point but cannot match a moving path.
+        deadline = time.monotonic() + FORCE_HANDOFF_TIMEOUT_S
+        midpoint = start + Duration.from_sec(duration / 2.0)
+        end = start + Duration.from_sec(duration)
+        targets = dict(zip(self.command_joints, target))
+        midpoints = dict(zip(self.command_joints, ((a + b) / 2.0 for a, b in zip(current, target))))
+        while not self._stop_requested:
+            if time.monotonic() >= deadline or Time.now() > start + Duration.from_sec(FORCE_START_LEAD_S):
+                raise RuntimeError("Gazebo did not confirm the Force Execute trajectory in time.")
+            pending = [
+                (names, expected, client.call_async(QueryTrajectoryState._request_class(time=stamp)))
+                for client, names in self.force_trajectory_clients
+                for stamp, expected in ((midpoint, midpoints), (end, targets))
+            ]
+            for names, expected, future in pending:
+                response, _ = self._wait_for_future(
+                    future, max(0.0, deadline - time.monotonic()), "Checking Force Execute trajectory")
+                if response is None or len(response.name) != len(response.position):
+                    break
+                positions = dict(zip(response.name, response.position))
+                if not all(name in positions and math.isclose(
+                    positions[name], expected[name], rel_tol=0.0, abs_tol=FORCE_TRACKING_MATCH_RAD
+                ) for name in names):
+                    break
+            else:
+                while Time.now() < start:
+                    if time.monotonic() >= deadline:
+                        raise RuntimeError("Gazebo clock did not reach the Force Execute start time.")
+                    if self._stop_event.wait(0.005):
+                        return False
+                with self._hold_lock:
+                    if self._stop_requested:
+                        return False
+                    if Time.now() > start + Duration.from_sec(FORCE_START_LEAD_S):
+                        raise RuntimeError("Gazebo missed the Force Execute start time.")
+                    self._set_limited_hold(False)
+                return True
+            self._stop_event.wait(0.01)
+        return False
 
     def _get_limited_tracking(self):
         if self.get_limited_client is None:
@@ -538,7 +615,7 @@ class SliderControl(CollisionCheck, Node):
         request.data = bool(enabled)
         future = self.set_limited_client.call_async(request)
         response, reason = self._wait_for_future(
-            future, 2.0, "Switching Gazebo tracking mode"
+            future, 2.0, "Switching Gazebo tracking mode", cancel_on_stop=False,
         )
         if response is None:
             raise RuntimeError(reason)
@@ -556,7 +633,8 @@ class SliderControl(CollisionCheck, Node):
         request = SetBool._request_class()
         request.data = bool(enabled)
         future = self.set_hold_client.call_async(request)
-        response, reason = self._wait_for_future(future, 2.0, "Holding the current Gazebo pose")
+        response, reason = self._wait_for_future(
+            future, 2.0, "Changing Gazebo hold", cancel_on_stop=False)
         if response is None:
             raise RuntimeError(reason)
         if not response.success:
@@ -604,14 +682,13 @@ class SliderControl(CollisionCheck, Node):
             self._stop_event.wait(0.02)
         self._publish_status("Execution stopped.")
 
-    def _publish_trajectory(self, target, duration, velocities=None):
+    def _publish_trajectory(self, target, duration, velocities=None, *, start=None, origin=None):
         seconds = int(duration)
         nanoseconds = int((duration - seconds) * 1_000_000_000)
 
         arm = JointTrajectory()
-        # Keep the header stamp at zero: trajectory controllers interpret this
-        # as "start now".  This avoids mixing wall time from this node with
-        # Gazebo simulation time used by controller_manager.
+        if start is not None:
+            arm.header.stamp = start
         arm.joint_names = list(ARM_JOINTS)
         arm_point = JointTrajectoryPoint()
         arm_point.positions = list(target[:6])
@@ -619,17 +696,23 @@ class SliderControl(CollisionCheck, Node):
             arm_point.velocities = list(velocities[:6])
         arm_point.time_from_start = Duration(secs=seconds, nsecs=nanoseconds)
         arm.points = [arm_point]
+        if origin is not None:
+            arm.points.insert(0, JointTrajectoryPoint(positions=list(origin[:6]), velocities=[0.0] * 6))
         self.pub_arm.publish(arm)
 
         if self.with_gripper:
-            self._publish_gripper_trajectory(target[6], duration, None if velocities is None else velocities[6])
+            self._publish_gripper_trajectory(
+                target[6], duration, None if velocities is None else velocities[6],
+                start=start, origin=None if origin is None else origin[6])
 
-    def _publish_gripper_trajectory(self, position, duration, velocity=None):
+    def _publish_gripper_trajectory(self, position, duration, velocity=None, *, start=None, origin=None):
         if not self.with_gripper:
             return
         seconds = int(duration)
         nanoseconds = int((duration - seconds) * 1_000_000_000)
         gripper = JointTrajectory()
+        if start is not None:
+            gripper.header.stamp = start
         gripper.joint_names = [GRIPPER_JOINT]
         gripper_point = JointTrajectoryPoint()
         gripper_point.positions = [position]
@@ -637,6 +720,8 @@ class SliderControl(CollisionCheck, Node):
             gripper_point.velocities = [velocity]
         gripper_point.time_from_start = Duration(secs=seconds, nsecs=nanoseconds)
         gripper.points = [gripper_point]
+        if origin is not None:
+            gripper.points.insert(0, JointTrajectoryPoint(positions=[origin], velocities=[0.0]))
         self.pub_gripper.publish(gripper)
 
     def _queue_real_motion(self, target, speed_scale):
@@ -958,35 +1043,37 @@ class SliderControl(CollisionCheck, Node):
                 self._publish_command_busy()
 
     def _stop_cb(self, _msg):
+        if self.mode != 2:
+            with self._hold_lock:
+                self._stop_requested = True
+                self._stop_event.set()
+                limited = self._limited_tracking
+                hold_confirmed = False
+                if limited:
+                    try:
+                        self._set_limited_hold(True)
+                        hold_confirmed = True
+                    except Exception as exc:
+                        self._publish_status(f"STOP hold was not confirmed: {exc}", level="error")
+                with self._state_lock:
+                    current = (
+                        list(self._current_positions)
+                        if self._feedback_valid and self._current_positions is not None
+                        else None
+                    )
+                if current is not None and all(math.isfinite(value) for value in current):
+                    if limited:
+                        self._publish_trajectory(current, STOP_HOLD_DURATION, [0.0] * len(current))
+                    else:
+                        self._publish_trajectory(current, MIN_TRAJECTORY_DURATION)
+                        hold_confirmed = True
+                if hold_confirmed:
+                    self._publish_status("STOP applied; controller commanded to hold current position.")
+                elif not limited:
+                    self._publish_status("STOP hold unavailable: no valid Gazebo feedback.", level="error")
+            return
         self._stop_requested = True
         self._stop_event.set()
-        if self.mode != 2:
-            with self._state_lock:
-                current = (
-                    list(self._current_positions)
-                    if self._current_positions is not None
-                    else None
-                )
-                feedback_valid = self._feedback_valid
-            limited = self._limited_tracking
-            if (
-                feedback_valid
-                and current is not None
-                and all(math.isfinite(value) for value in current)
-            ):
-                if limited:
-                    with self._hold_lock:
-                        try:
-                            self._set_limited_hold(True)
-                        except Exception as exc:
-                            self.get_logger().error(f"Could not hold the current pose: {exc}")
-                        self._publish_trajectory(current, STOP_HOLD_DURATION, [0.0] * len(current))
-                else:
-                    self._publish_trajectory(current, MIN_TRAJECTORY_DURATION)
-            self._publish_status(
-                "STOP applied; controller commanded to hold current position."
-            )
-            return
         if not self._real_motion_enabled:
             self._publish_status(
                 "Simulation STOP applied; real robot remains READ ONLY and received no command."

@@ -173,6 +173,20 @@ class Pro630Client(_VendorClient):
                             self.tcp_client.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
                         except OSError:
                             pass  # Optional Linux latency hint; correctness does not depend on it.
+                    if method == 'read_next_error':
+                        if b':' not in data and b'\n' not in data:
+                            continue
+                        # An empty payload ends the queue. Some firmware
+                        # omits the line terminator, so coalesce queued chunks.
+                        if b'\n' not in data and select.select([self.tcp_client], [], [], .05)[0]:
+                            continue
+                        text = data.decode()
+                        prefix, _, reply = text.partition(':')
+                        reply = reply.strip()
+                        if prefix != method or '\n' in reply or '\r' in reply:
+                            raise RuntimeError(f'Malformed Pro630 error queue response: {text!r}')
+                        self._last_reply, self._received = reply, received
+                        return reply
                     text = data.decode()
                     if ':' in text:
                         reply = text.split(':', 1)[1].strip()
@@ -307,6 +321,16 @@ class Pro630Client(_VendorClient):
 
     def is_moving(self):
         return self._flag('check_running()')
+
+    def clear_all_errors(self):
+        """Drain the SDK error-message queue without resetting the controller."""
+        deadline = time.monotonic() + 1.0
+        for count in range(32):
+            if count and time.monotonic() >= deadline:
+                break
+            if self.read_next_error() == '':
+                return count
+        raise RuntimeError('Pro630 error queue did not empty within the exit clear budget')
 
     def get_error_information(self):
         state = super().get_robot_state().strip()

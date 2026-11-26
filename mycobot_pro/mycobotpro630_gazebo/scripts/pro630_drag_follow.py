@@ -87,10 +87,11 @@ class DragFollow(Node):
         self.stop_event.set()
         if self.worker is not None:
             self.worker.join(timeout=5.0)
+        worker_active = self.worker is not None and self.worker.is_alive()
         if self.sdk is not None:
             try:
                 if self._exit_mode_required:
-                    if self.worker is not None and self.worker.is_alive():
+                    if worker_active:
                         self.log.event('Exit free-move request not confirmed: control worker is still active.', 'error')
                     else:
                         self.log.event(
@@ -106,6 +107,12 @@ class DragFollow(Node):
             except Exception as exc:
                 self.log.event(f'Exit free-move request failed: {exc}', 'error')
             finally:
+                if self._exit_mode_required and not worker_active:
+                    try:
+                        count = self.sdk.clear_all_errors()
+                        self.log.event(f'Exit error queue cleared ({count} messages).')
+                    except Exception as exc:
+                        self.log.event(f'Exit error clear failed: {exc}', 'error')
                 self.sdk.close()
                 self.sdk = None
         self.log.state('closing', True, 'Drag following closed.')

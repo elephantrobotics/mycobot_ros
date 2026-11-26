@@ -8,10 +8,10 @@ from shape_msgs.msg import SolidPrimitive
 FLOOR_OBJECT_ID = "pro630_ground_safety"
 
 class CollisionSceneSupport:
-    def _wait_for_future(self, future, timeout_sec, operation):
+    def _wait_for_future(self, future, timeout_sec, operation, *, cancel_on_stop=True):
         deadline = time.monotonic() + timeout_sec
         while not future.done() and time.monotonic() < deadline:
-            if self._stop_requested:
+            if cancel_on_stop and self._stop_requested:
                 return None, "STOP requested."
             time.sleep(0.01)
         if not future.done():
